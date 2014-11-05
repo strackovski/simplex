@@ -1,4 +1,4 @@
-Simplex Feature List V1
+Simplex CMS
 =========
 
 Features

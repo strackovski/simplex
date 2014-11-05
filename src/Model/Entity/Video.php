@@ -12,11 +12,8 @@
 
 namespace nv\Simplex\Model\Entity;
 
-use Imagine\Image\Box;
-use Imagine\Image\ImagineInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use nv\Simplex\Core\Media\VideoManager;
-use nv\Simplex\Core\Media\MediaManagerInterface;
 
 /**
  * Video class

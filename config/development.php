@@ -10,9 +10,6 @@
  * file that was distributed with this source code or visit the link above.
  */
 
-use Silex\Provider\MonologServiceProvider;
-use Silex\Provider\WebProfilerServiceProvider;
-
 require __DIR__.'/production.php';
 ini_set('display_errors', '1');
 $app['debug'] = true;

@@ -37,10 +37,13 @@ class MediaController
      */
     public function indexAction(Request $request, Application $app)
     {
-        $form = $app['form.factory']->createNamedBuilder(null, 'form',
-            array('test' => ''))
-            ->add('test', 'text')
-            ->getForm();
+        $form = $app['form.factory']->createNamedBuilder(
+            null,
+            'form',
+            array('test' => '')
+        )
+        ->add('test', 'text')
+        ->getForm();
 
         $token = $app['security']->getToken();
 
@@ -160,15 +163,26 @@ class MediaController
         if (!$request->isXmlHttpRequest()) {
             $data['tabs'] = array(
                 'panels' => array(
-                    'settings' => array('active' => false, 'url' => $app['url_generator']->generate('admin/settings')),
-                    'media' => array('active' => true, 'url' => $app['url_generator']->generate('admin/media/settings')),
-                    'themes' => array('active' => false, 'url' => $app['url_generator']->generate('admin/settings/themes')),
-                    'mailing' => array('active' => false, 'url' => $app['url_generator']->generate('admin/settings/mail'))
+                    'settings' => array(
+                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings')
+                    ),
+                    'media' => array(
+                        'active' => true, 'url' => $app['url_generator']->generate('admin/media/settings')
+                    ),
+                    'themes' => array(
+                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings/themes')
+                    ),
+                    'mailing' => array(
+                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings/mail')
+                    )
                 )
             );
         }
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/widgets/media-settings.html.twig', $data);
+        return $app['twig']->render(
+            'admin/'.$app['settings']->getAdminTheme().'/widgets/media-settings.html.twig',
+            $data
+        );
     }
 
     /**

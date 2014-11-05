@@ -70,7 +70,12 @@ class AsseticSimplexBridge
                 ));
 
                 $am->get('styles')->setTargetPath('styles.css');
-                $am->set('jquery', new FileAsset(dirname(__DIR__) . '/../web/templates/admin/' . $adminTheme . '/assets/jquery.js'));
+                $am->set(
+                    'jquery',
+                    new FileAsset(
+                        dirname(__DIR__) . '/../web/templates/admin/' . $adminTheme . '/assets/jquery.js'
+                    )
+                );
                 $am->set('scripts', new AssetCache(
                     new GlobAsset(
                         array(

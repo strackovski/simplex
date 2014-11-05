@@ -15,7 +15,6 @@ namespace nv\Simplex\Model\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 use nv\Simplex\Model\Entity\Settings;
-use nv\Simplex\Model\Entity\User;
 
 /**
  * Settings Entity Repository
@@ -35,10 +34,12 @@ class SettingsRepository extends EntityRepository
     {
         $this->getEntityManager()->persist($settings);
         $file = dirname(dirname(dirname(__DIR__))) .'/config/mailing.json';
-        if (file_exists($file) and array_diff(json_decode(file_get_contents($file), 1), $settings->getMailConfig()) !== 0) {
-            try{
+        if (file_exists($file)
+            and array_diff(json_decode(file_get_contents($file), 1), $settings->getMailConfig()) !== 0) {
+            try {
                 file_put_contents($file, json_encode($settings->getMailConfig()), LOCK_EX);
             } catch (\Exception $e) {
+
             }
         }
         $this->getEntityManager()->flush();
@@ -71,8 +72,7 @@ class SettingsRepository extends EntityRepository
                             } else {
                                 $aString = $authors['author'];
                             }
-                            $results[$name] = ucfirst($name . ' v' . $version .
-                                                      ' by ' . $aString);
+                            $results[$name] = ucfirst($name . ' v' . $version . ' by ' . $aString);
                         } else {
                             $results[$name] = ucfirst($name . ' v' . $version);
                         }
@@ -80,10 +80,8 @@ class SettingsRepository extends EntityRepository
                 }
             } elseif (file_exists($file = $dir . '/theme.json')) {
                 $json = file_get_contents($file);
-                if( is_array($array = json_decode($json, 1))) {
-                    if (array_key_exists('name', $array)
-                        and array_key_exists('version', $array))
-                    {
+                if (is_array($array = json_decode($json, 1))) {
+                    if (array_key_exists('name', $array) and array_key_exists('version', $array)) {
                         if (array_key_exists('authors', $array)) {
                             $authors = '';
                             foreach ($array['authors'] as $author) {
@@ -123,8 +121,10 @@ class SettingsRepository extends EntityRepository
                         $version = (string)$xml->theme->attributes()->version;
                         if (isset($xml->theme->authors->author)) {
                             $authors = (array) $xml->theme->authors;
-                            $results[$name] = ucfirst($name . ' v' . $version .
-                                ' by ' . implode(' & ', $authors['author']));
+                            $results[$name] = ucfirst(
+                                $name . ' v' . $version .
+                                ' by ' . implode(' & ', $authors['author'])
+                            );
                         } else {
                             $results[$name] = ucfirst($name . ' v' . $version);
                         }
@@ -132,10 +132,8 @@ class SettingsRepository extends EntityRepository
                 }
             } elseif (file_exists($file = $dir . '/theme.json')) {
                 $json = file_get_contents($file);
-                if( is_array($array = json_decode($json, 1))) {
-                    if (array_key_exists('name', $array)
-                        and array_key_exists('version', $array))
-                    {
+                if (is_array($array = json_decode($json, 1))) {
+                    if (array_key_exists('name', $array) and array_key_exists('version', $array)) {
                         if (array_key_exists('authors', $array)) {
                             $authors = '';
                             foreach ($array['authors'] as $author) {
@@ -189,8 +187,7 @@ class SettingsRepository extends EntityRepository
             ->setMaxResults(1);
         try {
             return $query = $qb->getQuery()->getSingleResult();
-        }
-        catch (NoResultException $e) {
+        } catch (NoResultException $e) {
             return $this->createNewInstance();
         }
     }
@@ -210,8 +207,7 @@ class SettingsRepository extends EntityRepository
             ->setParameter(1, false);
         try {
             return $query = $qb->getQuery()->getResult();
-        }
-        catch (NoResultException $e) {
+        } catch (NoResultException $e) {
             return $e->getMessage();
         }
     }
@@ -224,7 +220,7 @@ class SettingsRepository extends EntityRepository
     public function createNewInstance()
     {
         $settings = new Settings('you', 'your@email.fake', false, true);
-        if(file_exists($file = dirname(dirname(dirname(__DIR__))) .'/config/mailing.json')) {
+        if (file_exists($file = dirname(dirname(dirname(__DIR__))) .'/config/mailing.json')) {
             $mailConfig = json_decode(file_get_contents($file), 1);
             $settings->setMailConfig($mailConfig);
             $settings->setEnableMailing(true);

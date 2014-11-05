@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class PostController
  *
- *
  * @package nv\Simplex\Controller\Site
  */
 class PostController

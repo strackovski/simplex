@@ -71,7 +71,7 @@ abstract class SetupAbstract
             fopen($this->path . $fileName, 'w');
         }
 
-        try{
+        try {
             file_put_contents($this->path . $fileName, json_encode($content), LOCK_EX);
             print "\nConfiguration saved.";
         } catch (\Exception $e) {
@@ -112,7 +112,7 @@ abstract class SetupAbstract
                                 $db['user'],
                                 $db['password']
                             );
-                           print "\nConnection to MySQL Server successful.";
+                            print "\nConnection to MySQL Server successful.";
 
                             if (!mysqli_select_db($conn, $db['dbname'])) {
 
@@ -166,8 +166,8 @@ abstract class SetupAbstract
                         }
                     }
                     break;
-                }
-                return $db;
+            }
+            return $db;
         }
         trigger_error(
             "Failed retrieving database connection parameters.\n".

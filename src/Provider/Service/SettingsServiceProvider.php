@@ -7,7 +7,6 @@ use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ServiceProviderInterface;
 use Silex\ControllerCollection;
-use nv\Simplex\Model\Repository\PostRepository;
 
 /**
  * Simplex Service Provider
@@ -23,7 +22,7 @@ class SettingsServiceProvider implements ServiceProviderInterface, ControllerPro
      */
     public function register(Application $app)
     {
-        $app['settings.controller'] = $app->share(function() use ($app) {
+        $app['settings.controller'] = $app->share(function () use ($app) {
             return new SettingsController();
         });
     }

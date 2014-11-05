@@ -273,15 +273,19 @@ class Post extends TimestampableAbstract implements ObservableInterface
     }
 
 
-    function registerObserver(ObserverInterface $observer)
+    public function registerObserver(ObserverInterface $observer)
     {
         $this->observers[] = $observer;
     }
 
-    function detachObserver(ObserverInterface $observer)
+    public function detachObserver(ObserverInterface $observer)
     {
         $newobservers = array();
-        foreach($this->observers as $obs) if($obs !== $observer) $newobservers[] = $obs;
+        foreach ($this->observers as $obs) {
+            if ($obs !== $observer) {
+                $newobservers[] = $obs;
+            }
+        }
         $this->observers = $newobservers;
     }
 
@@ -290,7 +294,7 @@ class Post extends TimestampableAbstract implements ObservableInterface
      *
      * @return mixed|void
      */
-    function notifyObservers()
+    public function notifyObservers()
     {
         foreach ($this->observers as $obs) {
             if ($obs instanceof ObserverInterface) {
@@ -340,7 +344,7 @@ class Post extends TimestampableAbstract implements ObservableInterface
     public function hasMediaItems()
     {
         if ($this->mediaItems->count() > 0) {
-           return true;
+            return true;
         }
 
         return false;
@@ -412,12 +416,20 @@ class Post extends TimestampableAbstract implements ObservableInterface
         return $this->tags;
     }
 
-    function getTagsString(){
+    public function getTagsString()
+    {
         $tags = '';
         $tagArr = array();
-        foreach($this->tags as $tagObj) $tagArr[] = $tagObj->getName();
+
+        foreach ($this->tags as $tagObj) {
+            $tagArr[] = $tagObj->getName();
+        }
+
         $last = end($tagArr);
-        foreach($tagArr as $tag){ $tags .= ($tag === $last) ? $tag : $tag . ', '; }
+
+        foreach ($tagArr as $tag) {
+            $tags .= ($tag === $last) ? $tag : $tag . ', ';
+        }
 
         return $tags;
     }
@@ -448,9 +460,10 @@ class Post extends TimestampableAbstract implements ObservableInterface
         return $this;
     }
 
-    function clearTags(){
-        if($this->tags->count() > 0){
-            foreach($this->tags as $tag){
+    public function clearTags()
+    {
+        if ($this->tags->count() > 0) {
+            foreach ($this->tags as $tag) {
                 $this->tags->removeElement($tag);
             }
         }

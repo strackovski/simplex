@@ -12,9 +12,6 @@
 
 namespace nv\Simplex\Model\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use nv\Simplex\Common\TimestampableAbstract;
-
 /**
  * PageQuery class
  *
@@ -178,7 +175,7 @@ class PageQuery
 
         $type = trim(ucfirst($this->getContentType()));
         $ref = new \ReflectionClass($class = "nv\\Simplex\\Model\\Entity\\" . $type);
-        $colTest = "get" . preg_replace('/(?:^|_)(.?)/e',"strtoupper('$1')",$column);
+        $colTest = "get" . preg_replace('/(?:^|_)(.?)/e', "strtoupper('$1')", $column);
 
         if ($ref->hasMethod($colTest) or $ref->getParentClass()->hasMethod($colTest)) {
             return $this->column = $column;

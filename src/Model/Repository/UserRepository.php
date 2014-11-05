@@ -12,7 +12,6 @@
 
 namespace nv\Simplex\Model\Repository;
 
-use Doctrine\Common\PropertyChangedListener;
 use Doctrine\ORM\EntityRepository;
 use nv\Simplex\Model\Entity\User;
 use Doctrine\ORM\Query;
@@ -39,7 +38,7 @@ class UserRepository extends EntityRepository
         return $user;
     }
 
-    public function create($firstName, $lastName, $email, $description, $avatarFile)
+    public function create($firstName, $lastName, $email, $description)
     {
         $user = new User();
         $user->setFirstName($firstName);
@@ -50,6 +49,8 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * Get all users
+     *
      * @param bool $hydrate Hydration to array, default if false
      *
      * @return array
@@ -126,6 +127,8 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * Check if user exists
+     *
      * @param $email
      *
      * @return null|object

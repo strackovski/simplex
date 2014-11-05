@@ -19,5 +19,5 @@ interface ObserverInterface
      *
      * @return mixed
      */
-    function update(ObservableInterface $observable);
+    public function update(ObservableInterface $observable);
 }

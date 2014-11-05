@@ -24,6 +24,7 @@ namespace nv\Simplex\Provider;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Doctrine\DBAL\Connection;
 use Silex\Application;
@@ -166,7 +167,7 @@ class UserProvider implements UserProviderInterface
      *
      * @return boolean
      */
-    function isLoggedIn()
+    public function isLoggedIn()
     {
         $token = $this->app['security']->getToken();
         if (null === $token) {
@@ -176,5 +177,3 @@ class UserProvider implements UserProviderInterface
         return $this->app['security']->isGranted('IS_AUTHENTICATED_REMEMBERED');
     }
 }
-?>
-

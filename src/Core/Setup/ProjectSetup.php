@@ -5,7 +5,7 @@ namespace nv\Simplex\Core\Setup;
 /**
  * Class ProjectSetup
  *
- * Enables project configuration from command line
+ * Manages CLI project configuration (pre-installation)
  *
  * @package nv\Simplex\Core\Setup
  * @author Vladimir Stračkovski <vlado@nv3.org>
@@ -56,7 +56,7 @@ class ProjectSetup extends SetupAbstract
      */
     public function verify()
     {
-        if( ! $this->verifyDatabaseConfiguration('database.json')) {
+        if (!$this->verifyDatabaseConfiguration('database.json')) {
             return false;
         }
 

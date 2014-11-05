@@ -119,7 +119,7 @@ class Page extends TimestampableAbstract implements ObservableInterface
      *
      * @return mixed|void
      */
-    function registerObserver(ObserverInterface $observer)
+    public function registerObserver(ObserverInterface $observer)
     {
         $this->observers[] = $observer;
     }
@@ -129,10 +129,14 @@ class Page extends TimestampableAbstract implements ObservableInterface
      *
      * @return mixed|void
      */
-    function detachObserver(ObserverInterface $observer)
+    public function detachObserver(ObserverInterface $observer)
     {
         $newobservers = array();
-        foreach($this->observers as $obs) if($obs !== $observer) $newobservers[] = $obs;
+        foreach ($this->observers as $obs) {
+            if ($obs !== $observer) {
+                $newobservers[] = $obs;
+            }
+        }
         $this->observers = $newobservers;
     }
 
@@ -141,7 +145,7 @@ class Page extends TimestampableAbstract implements ObservableInterface
      *
      * @return mixed|void
      */
-    function notifyObservers()
+    public function notifyObservers()
     {
         foreach ($this->observers as $obs) {
             if ($obs instanceof ObserverInterface) {

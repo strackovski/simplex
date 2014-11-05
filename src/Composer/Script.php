@@ -53,7 +53,8 @@ class Script
         chown('web/uploads/crops', 'www-data');
         chgrp('web/uploads/crops', 'www-data');
         */
-        print "\nIt is recommended to configure a system mailing account for\nsystem related email messages (logs, user account activation).";
+        print "\nIt is recommended to configure a system mailing account for\n";
+        print "system related email messages (logs, user account activation).";
         passthru('php bin/console mailing:configure');
         chmod('bin/console', 0500);
         print "\nRebuilding the database...";

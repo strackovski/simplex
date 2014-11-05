@@ -37,7 +37,7 @@ class SystemMailer
      */
     public function sendNotificationEmail($address, array $notificationData)
     {
-        try{
+        try {
             $emailMessage = \Swift_Message::newInstance()
                 ->setSubject('[Simplex] Feedback')
                 ->setFrom($this->settings->getAdminEmail())
@@ -50,8 +50,7 @@ class SystemMailer
                     'text/html'
                 );
             $this->mailer->send($emailMessage);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
 
         }
     }

@@ -27,15 +27,15 @@ class MediaServiceProvider implements ServiceProviderInterface, ControllerProvid
     {
         $app->register(new ImagineServiceProvider());
 
-        $app['media.controller'] = $app->share(function() use ($app) {
+        $app['media.controller'] = $app->share(function () use ($app) {
             return new MediaController();
         });
 
-        $app['image.controller'] = $app->share(function() use ($app) {
+        $app['image.controller'] = $app->share(function () use ($app) {
             return new ImageController();
         });
 
-        $app['video.controller'] = $app->share(function() use ($app) {
+        $app['video.controller'] = $app->share(function () use ($app) {
             return new VideoController();
         });
     }

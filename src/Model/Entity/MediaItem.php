@@ -13,8 +13,6 @@
 namespace nv\Simplex\Model\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Imagine\Image\Box;
-use Imagine\Image\ImagineInterface;
 use Imagine\Image\Point;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -223,6 +221,7 @@ abstract class MediaItem extends TimestampableAbstract
     /**
      * Get web path to media file
      *
+     * @param bool $variation
      * @return null|string
      */
     public function getWebPath($variation = false)

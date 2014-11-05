@@ -31,7 +31,7 @@ class PostServiceProvider implements ServiceProviderInterface, ControllerProvide
             'semtools.annotator.options' => array(),
         ));
 
-        $app['post.controller'] = $app->share(function() use ($app) {
+        $app['post.controller'] = $app->share(function () use ($app) {
             return new PostController();
         });
     }

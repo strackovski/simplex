@@ -18,9 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class PageController
  *
- * Use this controller to map routes to corresponding actions
- * in public context.
- *
  * @package nv\Simplex\Controller\Site
  */
 class PageController

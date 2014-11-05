@@ -80,6 +80,11 @@ class PostRepository extends EntityRepository
         return $post;
     }
 
+    /**
+     * Get published posts
+     *
+     * @return array
+     */
     public function getPublished()
     {
         $em = $this->getEntityManager();

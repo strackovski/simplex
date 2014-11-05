@@ -12,7 +12,6 @@
 
 namespace nv\Simplex\Controller\Admin;
 
-use nv\Simplex\Provider\Service\MediaServiceProvider;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,14 +29,6 @@ use nv\Simplex\Model\Entity\Post;
  */
 class PostController
 {
-    /** @var MediaServiceProvider $media */
-    private $media;
-
-    public function __construct()
-    {
-
-    }
-
     /**
      * Index posts
      *
@@ -52,7 +43,10 @@ class PostController
         $data['post'] = $app['repository.post']->getLatest();
         $data['request'] = $request;
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/posts.html.twig', $data);
+        return $app['twig']->render(
+            'admin/'.$app['settings']->getAdminTheme().'/views/posts.html.twig',
+            $data
+        );
     }
 
     /**
@@ -118,7 +112,7 @@ class PostController
                 $tags = $form->get('tags')->getData();
 
                 if (count($tags) > 0) {
-                   $pm->tag($tags);
+                    $pm->tag($tags);
                 }
 
                 if (count($images) > 0) {
@@ -160,7 +154,9 @@ class PostController
     public function editAction(Request $request, Application $app)
     {
         $token = $app['security']->getToken();
+        /** @var Post $post */
         $post = $app['repository.post']->findOneBy(array('id' => $request->get('post')));
+        /** @var \Symfony\Component\Form\FormInterface $form */
         $form = $app['form.factory']->create(new PostType($app['orm.em']), $post);
 
         $pm = new PostManager($post, $app);
@@ -201,7 +197,10 @@ class PostController
             'title' => 'Edit post',
         );
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/post-form.html.twig', $data);
+        return $app['twig']->render(
+            'admin/'.$app['settings']->getAdminTheme().'/views/post-form.html.twig',
+            $data
+        );
     }
 
     /**

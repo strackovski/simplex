@@ -13,7 +13,6 @@
 namespace nv\Simplex\Core\User;
 
 use Imagine\Image\Point;
-use nv\Simplex\Core\Mailer\SystemMailer;
 use nv\Simplex\Core\Simplex;
 use nv\Simplex\Model\Entity\User;
 
@@ -53,9 +52,13 @@ class UserManager
         $this->deactivateAccount();
         $notification = array(
             'title' => 'Account password change requested',
-            'message' => 'You received this email because you requested to change your password. Please follow the link below to change your password.',
+            'message' => 'You received this email because you requested to change '.
+                         'your password. Please follow the link below to change your password.',
             'link' => array(
-                'href' => $this->app['url_generator']->generate('help/reset', array('token' => $this->user->getResetToken())),
+                'href' => $this->app['url_generator']->generate(
+                    'help/reset',
+                    array('token' => $this->user->getResetToken())
+                ),
                 'text' => 'Reset your password'
             )
         );
@@ -77,9 +80,13 @@ class UserManager
         $this->deactivateAccount();
         $notification = array(
             'title' => 'Activate your account',
-            'message' => 'Reactivation is required because you changed your email. Please follow the link below to confirm your new email and activate your account.',
+            'message' => 'Reactivation is required because you changed your email. ' .
+                'Please follow the link below to confirm your new email and activate your account.',
             'link' => array(
-                'href' => $this->app['url_generator']->generate('help/reset', array('token' => $this->user->getResetToken())),
+                'href' => $this->app['url_generator']->generate(
+                    'help/reset',
+                    array('token' => $this->user->getResetToken())
+                ),
                 'text' => 'Reset your password'
             )
         );
@@ -100,7 +107,10 @@ class UserManager
             'title' => 'Activate your account',
             'message' => 'Welcome. Activate your account.',
             'link' => array(
-                'href' => $this->app['url_generator']->generate('help/reset', array('token' => $this->user->getResetToken())),
+                'href' => $this->app['url_generator']->generate(
+                    'help/reset',
+                    array('token' => $this->user->getResetToken())
+                ),
                 'text' => 'Reset your password'
             )
         );

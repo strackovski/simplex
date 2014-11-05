@@ -72,7 +72,8 @@ class Simplex extends Application
     public function registerProviders()
     {
         $self = $this;
-        $this->register(new HttpCacheServiceProvider(),
+        $this->register(
+            new HttpCacheServiceProvider(),
             array(
                 'http_cache.cache_dir' => APPLICATION_ROOT_PATH.'/var/cache/http'
             )
@@ -109,7 +110,7 @@ class Simplex extends Application
          *
          * @todo Fix & enable twig 'asset'
          */
-        $this['twig'] = $this->share($this->extend('twig', function($twig, $app) {
+        $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
             $twig->addFunction(new \Twig_SimpleFunction('asset', function ($asset) use ($app) {
                 $basePath = dirname(dirname(dirname(__FILE__))) . '/web/assets/';
                 $baseUrl = $app['url_generator']->getContext()->getBaseUrl()  . '/assets/';
@@ -134,7 +135,7 @@ class Simplex extends Application
          *
          * @todo Fix & enable twig 'display'
          */
-        $this['twig'] = $this->share($this->extend('twig', function($twig, $app) {
+        $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
             $twig->addFunction(new \Twig_SimpleFunction('display', function ($asset) use ($app) {
                 $basePath = dirname(dirname(dirname(__FILE__))) . '/web/uploads/';
                 $baseUrl = $app['url_generator']->getContext()->getBaseUrl()  . '/uploads/';
@@ -156,7 +157,7 @@ class Simplex extends Application
             'locale_fallbacks' => array('en')
         ));
 
-        $app['user.provider'] = $this->share(function($app) {
+        $app['user.provider'] = $this->share(function ($app) {
             return new UserProvider($app['orm.em']->getConnection(), $app);
         });
 
@@ -203,12 +204,12 @@ class Simplex extends Application
             'monolog.level'   => $this['debug'] ? Logger::DEBUG : Logger::WARNING
         ));
 
-        $this['monolog'] = $this->share($this->extend('monolog', function($monolog, $app) {
+        $this['monolog'] = $this->share($this->extend('monolog', function ($monolog, $app) {
             $monolog->pushHandler(new RotatingFileHandler(
                 $app['monolog.logfile'],
                 2,
-                $this['debug'] ? Logger::DEBUG : Logger::WARNING)
-            );
+                $this['debug'] ? Logger::DEBUG : Logger::WARNING
+            ));
 
             return $monolog;
         }));
@@ -300,6 +301,7 @@ class Simplex extends Application
         /*
          * @todo Post routes to Site/PostController (event. SiteService)
          */
+        /** @var $post \nv\Simplex\Model\Entity\Post */
         foreach ($posts = $self['repository.post']->getPublished() as $post) {
             $this->get('/post/' . $post->getSlug(), function () use ($self, $post) {
 
@@ -317,8 +319,8 @@ class Simplex extends Application
         /*
          * Dynamic page routes and data retrieval
          */
+        /** @var \nv\Simplex\Model\Entity\Page $page */
         foreach ($pages = $self['repository.page']->findAll() as $page) {
-            /** @var \nv\Simplex\Model\Entity\Page $page */
             if ($page->getQueries()) {
                 $this->get('/' . $page->getSlug(), function () use ($self, $page) {
                     $content = array();

@@ -4,7 +4,6 @@ namespace nv\Simplex\Provider\Service;
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use nv\semtools\Classifiers\uClassify\UclassifyReader;
 use nv\semtools\Factory\SemtoolsFactory;
 
 /**
@@ -31,7 +30,7 @@ class SemtoolsServiceProvider implements ServiceProviderInterface
     protected function registerSemtoolsBundle(Application $app)
     {
         $app['semtools.classifier'] = $app->share(function ($app) {
-            try{
+            try {
                 return SemtoolsFactory::create(
                     array(
                         'type' => 'classifier',
@@ -40,8 +39,7 @@ class SemtoolsServiceProvider implements ServiceProviderInterface
                         'options' => $app['semtools.classifier.options']
                     )
                 );
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
 
             }
 
@@ -49,7 +47,7 @@ class SemtoolsServiceProvider implements ServiceProviderInterface
         });
 
         $app['semtools.annotator'] = $app->share(function ($app) {
-            try{
+            try {
                 return SemtoolsFactory::create(
                     array(
                         'type' => 'annotator',
@@ -58,8 +56,7 @@ class SemtoolsServiceProvider implements ServiceProviderInterface
                         'options' => $app['semtools.annotator.options']
                     )
                 );
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
 
             }
 

@@ -48,7 +48,6 @@ class ImageManager implements MediaManagerInterface
      * Options array must be provided with dimension identifier as key:
      * array('large' => array(width, height))
      *
-     *
      * @param ImagineInterface $imagine Image processing library
      * @param array $options Desired thumbnail dimensions
      *
@@ -73,8 +72,7 @@ class ImageManager implements MediaManagerInterface
                             '/web/uploads/thumbnails/' .
                             $dimension . '/' . $this->image->getPath()
                         );
-                }
-                else{
+                } else {
                     $imagine
                         ->open($this->image->getAbsolutePath())
                         ->thumbnail(new Box($width, $height))
@@ -98,27 +96,21 @@ class ImageManager implements MediaManagerInterface
     public function crop(ImagineInterface $imagine, array $options)
     {
         $image = $imagine->open($this->image->getAbsolutePath());
-
         $size = $image->getSize();
 
         list($width, $height) = $options;
-
-
-        $box = new Box(
-            $width, $height
-        );
+        $box = new Box($width, $height);
 
         $point = new Point(
             $size->getWidth() / 2 - $width / 2,
             $size->getHeight() / 2 - $height / 2
         );
 
-
         $image->crop($point, $box)
               ->save(
-                    APPLICATION_ROOT_PATH .
-                        '/web/uploads/crops/' .
-                        $this->image->getPath()
+                  APPLICATION_ROOT_PATH .
+                  '/web/uploads/crops/' .
+                  $this->image->getPath()
               );
     }
 
@@ -131,47 +123,33 @@ class ImageManager implements MediaManagerInterface
     public function autoCrop(ImagineInterface $imagine, array $options = null)
     {
         $image = $imagine->open($this->image->getAbsolutePath());
-
         $size = $image->getSize();
-
         $originalWidth = $size->getWidth();
         $originalHeight = $size->getHeight();
-
         $ratio = $originalWidth/$originalHeight;
 
-        if($ratio < 1) {
+        if ($ratio < 1) {
             $targetHeight = $targetWidth = $originalHeight * $ratio;
-
         } else {
             $targetWidth = $targetHeight = $originalWidth / $ratio;
-
         }
 
-        if($ratio < 1) {
+        if ($ratio < 1) {
             $srcX = 0;
             $srcY = ($originalHeight / 2) - ($originalWidth / 2);
-
         } else {
             $srcY = 0;
             $srcX = ($originalWidth / 2) - ($originalHeight / 2);
-
         }
 
-        $point = new Point(
-            $srcX,
-            $srcY
-        );
-
-        $box = new Box(
-            $targetWidth,
-            $targetHeight
-        );
+        $point = new Point($srcX, $srcY);
+        $box = new Box($targetWidth, $targetHeight);
 
         $image->crop($point, $box)
             ->save(
                 APPLICATION_ROOT_PATH .
-                    '/web/uploads/crops/' .
-                    $this->image->getPath()
+                '/web/uploads/crops/' .
+                $this->image->getPath()
             );
     }
 
@@ -186,7 +164,7 @@ class ImageManager implements MediaManagerInterface
      */
     public function watermark(ImagineInterface $imagine, $pathToWatermark, $watermarkPosition = 'br')
     {
-        if (! file_exists($pathToWatermark)) {
+        if (!file_exists($pathToWatermark)) {
             throw new \InvalidArgumentException("Invalid path to watermark {$pathToWatermark}.");
         }
 
@@ -277,21 +255,22 @@ class ImageManager implements MediaManagerInterface
     private function interpretMetadata()
     {
         $exif = $this->extractMetadata();
-        if(isset($exif['SectionsFound'])) $sections = explode(',', $exif['SectionsFound']);
+        if (isset($exif['SectionsFound'])) {
+            $sections = explode(',', $exif['SectionsFound']);
+        }
         $result = array();
 
-        if(array_key_exists('Make', $exif) && array_key_exists('Model', $exif)) $result['camera'] = $exif['Make'] . ' ' . $exif['Model'];
-        if(array_key_exists('IsColor', $exif['COMPUTED'])) $result['is_color'] = $exif['COMPUTED']['IsColor'];
-        if(array_key_exists('ApertureFNumber', $exif['COMPUTED'])) $result['aperture'] = $exif['COMPUTED']['ApertureFNumber'];
-        if(array_key_exists('ApertureFNumber', $exif['COMPUTED'])) $result['aperture'] = $exif['COMPUTED']['ApertureFNumber'];
-        if(array_key_exists('FocalLength', $exif)) $result['focal_length'] = $exif['FocalLength'];
-        if(array_key_exists('ExposureTime', $exif)) $result['exposure_time'] = $exif['ExposureTime'];
-        if(array_key_exists('DateTimeOriginal', $exif)) $result['time_originated'] = $exif['DateTimeOriginal'];
-
-        if(array_key_exists('GPSLatitude', $exif)) $gps['gps_latitude'] = $exif['GPSLatitude'];
-        if(array_key_exists('GPSLatitudeRef', $exif)) $gps['gps_latitude_ref'] = $exif['GPSLatitudeRef'];
-        if(array_key_exists('GPSLongitude', $exif)) $gps['gps_longitude'] = $exif['GPSLongitude'];
-        if(array_key_exists('GPSLongitudeRef', $exif)) $gps['gps_longitude_ref'] = $exif['GPSLongitudeRef'];
+        if (array_key_exists('Make', $exif) && array_key_exists('Model', $exif)) $result['camera'] = $exif['Make'] . ' ' . $exif['Model'];
+        if (array_key_exists('IsColor', $exif['COMPUTED'])) $result['is_color'] = $exif['COMPUTED']['IsColor'];
+        if (array_key_exists('ApertureFNumber', $exif['COMPUTED'])) $result['aperture'] = $exif['COMPUTED']['ApertureFNumber'];
+        if (array_key_exists('ApertureFNumber', $exif['COMPUTED'])) $result['aperture'] = $exif['COMPUTED']['ApertureFNumber'];
+        if (array_key_exists('FocalLength', $exif)) $result['focal_length'] = $exif['FocalLength'];
+        if (array_key_exists('ExposureTime', $exif)) $result['exposure_time'] = $exif['ExposureTime'];
+        if (array_key_exists('DateTimeOriginal', $exif)) $result['time_originated'] = $exif['DateTimeOriginal'];
+        if (array_key_exists('GPSLatitude', $exif)) $gps['gps_latitude'] = $exif['GPSLatitude'];
+        if (array_key_exists('GPSLatitudeRef', $exif)) $gps['gps_latitude_ref'] = $exif['GPSLatitudeRef'];
+        if (array_key_exists('GPSLongitude', $exif)) $gps['gps_longitude'] = $exif['GPSLongitude'];
+        if (array_key_exists('GPSLongitudeRef', $exif)) $gps['gps_longitude_ref'] = $exif['GPSLongitudeRef'];
 
         $result['has_faces'] = '@todo';
         $result['color_palette'] = '@todo';

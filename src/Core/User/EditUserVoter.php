@@ -90,7 +90,9 @@ class EditUserVoter implements VoterInterface
 
             if ($attribute == 'EDIT_USER') {
                 $user2 = $object;
-                return $this->usersHaveSameId($user, $user2) ? VoterInterface::ACCESS_GRANTED : VoterInterface::ACCESS_DENIED;
+                return $this->usersHaveSameId($user, $user2) ?
+                    VoterInterface::ACCESS_GRANTED :
+                    VoterInterface::ACCESS_DENIED;
             }
 
             if ($attribute == 'EDIT_USER_ID') {
@@ -136,5 +138,4 @@ class EditUserVoter implements VoterInterface
             && $user1->getId() > 0
             && $user1->getId() == $user2->getId();
     }
-
 }

@@ -13,14 +13,9 @@
 namespace nv\Simplex\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Security\Acl\Exception\Exception;
-use Symfony\Component\Validator\Constraints\DateTime;
-use nv\Simplex\Core\Post\PostManager;
 use nv\Simplex\Model\Entity\Page;
-use nv\Simplex\Model\Entity\Post;
 use nv\Simplex\Model\Entity\User;
 
 /**
@@ -69,11 +64,10 @@ class FixturesLoadCommand extends ApplicationAwareCommand
         $homePage = new Page('Home');
         $homePage->setView('index');
         $homePage->setSlug('/');
-        try{
+        try {
             $this->app['orm.em']->persist($homePage);
             $this->app['orm.em']->flush();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             sprintf("An error occured while loading fixtures: <info>%s</info>.", $e->getMessage());
         }
 

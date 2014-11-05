@@ -92,44 +92,32 @@ class VideoManager implements MediaManagerInterface
     public function autoCrop(ImagineInterface $imagine, array $options = null)
     {
         $image = $imagine->open(
-                APPLICATION_ROOT_PATH .
-                    '/web/uploads/thumbnails/large/'. $this->video->getMediaId() . '.jpeg'
-                );
+            APPLICATION_ROOT_PATH .
+            '/web/uploads/thumbnails/large/'. $this->video->getMediaId() . '.jpeg'
+        );
 
         $size = $image->getSize();
-
         $originalWidth = $size->getWidth();
         $originalHeight = $size->getHeight();
-
         $ratio = $originalWidth/$originalHeight;
 
-        if($ratio < 1) {
+        if ($ratio < 1) {
             $targetHeight = $targetWidth = $originalHeight * $ratio;
-
         } else {
             $targetWidth = $targetHeight = $originalWidth / $ratio;
-
         }
 
-        if($ratio < 1) {
+        if ($ratio < 1) {
             $srcX = 0;
             $srcY = ($originalHeight / 2) - ($originalWidth / 2);
-
         } else {
             $srcY = 0;
             $srcX = ($originalWidth / 2) - ($originalHeight / 2);
 
         }
 
-        $point = new Point(
-            $srcX,
-            $srcY
-        );
-
-        $box = new Box(
-            $targetWidth,
-            $targetHeight
-        );
+        $point = new Point($srcX, $srcY);
+        $box = new Box($targetWidth, $targetHeight);
 
         $image->crop($point, $box)
             ->save(
@@ -175,7 +163,7 @@ class VideoManager implements MediaManagerInterface
      */
     public function metadata()
     {
-        try{
+        try {
             $interpreted = $this->interpretMetadata();
             $this->video->setDuration($interpreted['duration']);
         } catch (\Exception $e) {
@@ -265,8 +253,14 @@ class VideoManager implements MediaManagerInterface
             'width'         => $video['width'],
             'height'        => $video['height'],
             'duration'      => $format['duration'],
-            'size'          => array(substr($format['size'], 0, strrpos($format['size'], ' ')), substr($format['size'], strrpos($format['size'], ' ')+1)),
-            'bit_rate'      => array(substr($format['bit_rate'], 0, strrpos($format['bit_rate'], ' ')), substr($format['bit_rate'], strrpos($format['bit_rate'], ' ')+1)),
+            'size'          => array(
+                substr($format['size'], 0, strrpos($format['size'], ' ')),
+                substr($format['size'], strrpos($format['size'], ' ')+1)
+            ),
+            'bit_rate'      => array(
+                substr($format['bit_rate'], 0, strrpos($format['bit_rate'], ' ')),
+                substr($format['bit_rate'], strrpos($format['bit_rate'], ' ')+1)
+            ),
             'video' => array(
                 'codec'         => $video['codec_name'],
                 'codec_tag'     => $video['codec_tag_string'],
@@ -278,7 +272,10 @@ class VideoManager implements MediaManagerInterface
                 'codec'         => $audio['codec_name'],
                 'codec_tag'     => $audio['codec_tag_string'],
                 'sample_format' => $audio['sample_fmt'],
-                'sample_rate'   => array(substr($audio['sample_rate'], 0, strrpos($audio['sample_rate'], ' ')), substr($audio['sample_rate'], strrpos($audio['sample_rate'], ' ')+1)),
+                'sample_rate'   => array(
+                    substr($audio['sample_rate'], 0, strrpos($audio['sample_rate'], ' ')),
+                    substr($audio['sample_rate'], strrpos($audio['sample_rate'], ' ')+1)
+                ),
                 'channels'      => $audio['channels']
             ),
             'audio_stream'  => $audio,
@@ -305,13 +302,15 @@ class VideoManager implements MediaManagerInterface
             2 => array('file', APPLICATION_ROOT_PATH . '/var/logs/service.log', 'a')
         );
 
-        $cmd = "ffmpeg -ss 00:00:01 -i ".APPLICATION_ROOT_PATH.'/web/uploads/'.$this->video->getPath().' -frames:v 1 '.APPLICATION_ROOT_PATH.'/web/uploads/'.$this->video->getMediaId().'.jpeg';
+        $cmd  = "ffmpeg -ss 00:00:01 -i ";
+        $cmd .= APPLICATION_ROOT_PATH.'/web/uploads/'.$this->video->getPath();
+        $cmd .= ' -frames:v 1 '.APPLICATION_ROOT_PATH.'/web/uploads/'.$this->video->getMediaId().'.jpeg';
         $p = proc_open($cmd, $desc, $pipes);
         fclose($pipes[0]);
         fclose($pipes[1]);
         proc_close($p);
 
-        if ( ! file_exists(APPLICATION_ROOT_PATH.'/web/uploads/'.$this->video->getMediaId().'.jpeg')) {
+        if (!file_exists(APPLICATION_ROOT_PATH.'/web/uploads/'.$this->video->getMediaId().'.jpeg')) {
             throw new \Exception('Unable to obtain a video still file.');
         }
 

@@ -35,7 +35,8 @@ abstract class TimestampableAbstract
      *
      * @PrePersist
      */
-    public function setTimeCreated() {
+    public function setTimeCreated()
+    {
         $this->created_at = new \DateTime();
     }
 
@@ -44,7 +45,8 @@ abstract class TimestampableAbstract
      *
      * @PreUpdate
      */
-    public function setTimeModified() {
+    public function setTimeModified()
+    {
         $this->updated_at = new \DateTime();
     }
 
@@ -55,8 +57,9 @@ abstract class TimestampableAbstract
      *
      * @return mixed String if format is defined, DateTime object if null
      */
-    public function getCreatedAt($format = null) {
-        if(is_null($format)){
+    public function getCreatedAt($format = null)
+    {
+        if (is_null($format)) {
             return $this->created_at;
         }
         return $this->created_at->format($format);
@@ -69,8 +72,9 @@ abstract class TimestampableAbstract
      *
      * @return mixed String if format is defined, DateTime object if null
      */
-    public function getUpdatedAt($format = null) {
-        if(is_null($format)){
+    public function getUpdatedAt($format = null)
+    {
+        if (is_null($format)) {
             return $this->updated_at;
         }
         return $this->updated_at->format($format);

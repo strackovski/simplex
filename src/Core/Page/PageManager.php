@@ -15,11 +15,7 @@ namespace nv\Simplex\Core\Page;
 use nv\Simplex\Common\ObservableInterface;
 use nv\Simplex\Common\ObserverInterface;
 use nv\Simplex\Core\Simplex;
-use nv\Simplex\Model\Entity\Metadata;
 use nv\Simplex\Model\Entity\Page;
-use nv\Simplex\Model\Entity\Post;
-use nv\Simplex\Model\Entity\Tag;
-use nv\semtools\Classifiers\uClassify\UclassifyRequest;
 
 /**
  * Page Manager
@@ -64,7 +60,7 @@ class PageManager implements ObserverInterface
     {
         if ($userDefinedSlug) {
             $slug = preg_replace('~[^\\pL\d]+~u', '-', $userDefinedSlug);
-        } elseif($dSlug = $this->page->getSlug()) {
+        } elseif ($dSlug = $this->page->getSlug()) {
             $slug = preg_replace('~[^\\pL\d]+~u', '-', $dSlug);
         } else {
             $slug = preg_replace('~[^\\pL\d]+~u', '-', $this->page->getTitle());
@@ -97,7 +93,9 @@ class PageManager implements ObserverInterface
      */
     public function update(ObservableInterface $observable)
     {
-        if($observable === $this->page) $this->doUpdate($observable);
+        if ($observable === $this->page) {
+            $this->doUpdate($observable);
+        }
     }
 
     /**
@@ -111,5 +109,4 @@ class PageManager implements ObserverInterface
     {
 
     }
-
 }

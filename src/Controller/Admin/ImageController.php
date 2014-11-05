@@ -41,10 +41,13 @@ class ImageController
     public function indexAction(Request $request, Application $app)
     {
         /** @var $form Form */
-        $form = $app['form.factory']->createNamedBuilder(null, 'form',
-            array('test' => ''))
-            ->add('test', 'text')
-            ->getForm();
+        $form = $app['form.factory']->createNamedBuilder(
+            null,
+            'form',
+            array('test' => '')
+        )
+        ->add('test', 'text')
+        ->getForm();
 
         $data['form'] = $form->createView();
         $data['images'] = $app['repository.media']->getLibraryImages();
@@ -88,7 +91,7 @@ class ImageController
             $image->setMetadata($metadata->setData($image->getManager()->metadata()));
             $app['orm.em']->flush();
 
-            try{
+            try {
                 $image->getManager()->thumbnail($app['imagine'], $app['settings']->getImageResizeDimensions());
 
                 $app['settings']->getImageAutoCrop() ?

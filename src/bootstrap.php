@@ -15,10 +15,9 @@ if (!defined('APPLICATION_ROOT_PATH')) {
 
 require_once APPLICATION_ROOT_PATH.'/vendor/autoload.php';
 $app = new nv\Simplex\Core\Simplex();
-try{
+try {
     require APPLICATION_ROOT_PATH.'/config/'.APPLICATION_ENVIRONMENT.'.php';
     $app->init();
-}
-catch(\Exception $e){
+} catch (\Exception $e) {
     return;
 }

@@ -35,18 +35,14 @@ class FileAssetCleanUpCommand extends ApplicationAwareCommand
     {
         $path = APPLICATION_ROOT_PATH . '/web/uploads/';
 
-        foreach(
-            new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator(
-                    $path,
-                    \FilesystemIterator::SKIP_DOTS),
-                    \RecursiveIteratorIterator::CHILD_FIRST
-            ) as $path
-        ) {
+        foreach (new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        ) as $path) {
             $path->isDir() ? rmdir($path->getPathname()) : unlink($path->getPathname());
         }
-        @rmdir($path);
 
+        @rmdir($path);
         $output->writeln('<info>File assets removed.</info>');
     }
 }

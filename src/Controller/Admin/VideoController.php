@@ -37,15 +37,17 @@ class VideoController
      */
     public function indexAction(Request $request, Application $app)
     {
-        $form = $app['form.factory']->createNamedBuilder(null, 'form',
-            array('test' => ''))
-            ->add('test', 'text', array(
-                'required' => false,
-                'attr' => array(
-                    'name' => 'test'
-                )
-            ))
-            ->getForm();
+        $form = $app['form.factory']->createNamedBuilder(
+            null,
+            'form',
+            array('test' => '')
+        )
+        ->add('test', 'text', array(
+            'required' => false,
+            'attr' => array(
+                'name' => 'test'
+            )
+        ))->getForm();
 
         $data['form'] = $form->createView();
         $data['videos'] = $app['repository.media']->getLibraryVideos();
@@ -63,21 +65,30 @@ class VideoController
      */
     public function listVideoAction(Request $request, Application $app)
     {
-        $form = $app['form.factory']->createNamedBuilder(null, 'form',
-            array('test' => ''))
-            ->add('test', 'text', array(
+        $form = $app['form.factory']->createNamedBuilder(
+            null,
+            'form',
+            array('test' => '')
+        )
+        ->add(
+            'test',
+            'text',
+            array(
                 'label' => 'Email',
                 'required' => false,
                 'attr' => array(
                     'name' => 'test'
                 )
-            ))
-            ->getForm();
+            )
+        )->getForm();
 
         $data['form'] = $form->createView();
         $data['videos'] = $app['repository.media']->getVideos();
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/partials/video-list.html.twig', $data);
+        return $app['twig']->render(
+            'admin/'.$app['settings']->getAdminTheme().'/views/partials/video-list.html.twig',
+            $data
+        );
     }
 
     /**
@@ -99,10 +110,9 @@ class VideoController
             $metadata = new Metadata(array('vddata'));
             $app['repository.media']->save($video);
 
-            try{
-               $video->setMetadata($metadata->setData($video->getManager()->metadata()));
-               $app['orm.em']->flush();
-
+            try {
+                $video->setMetadata($metadata->setData($video->getManager()->metadata()));
+                $app['orm.em']->flush();
                 $video->getManager()->thumbnail($app['imagine'], $app['settings']->getImageResizeDimensions());
                 $video->getManager()->autoCrop($app['imagine'], null);
 

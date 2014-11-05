@@ -15,7 +15,6 @@ namespace nv\Simplex\Form;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -28,8 +27,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class PageType extends AbstractType
 {
+    /**
+     * @var EntityManager
+     */
     protected $em;
 
+    /**
+     * @param EntityManager $em
+     */
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
@@ -98,7 +103,9 @@ class PageType extends AbstractType
                 'required' => false,
                 'empty_value' => 'Select a view template...'
             ))
-            ->add('queries', 'collection',
+            ->add(
+                'queries',
+                'collection',
                 array(
                     'mapped' => true,
                     'type' => new PageQueryType(),

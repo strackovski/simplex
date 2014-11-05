@@ -22,7 +22,7 @@ class PageServiceProvider implements ServiceProviderInterface, ControllerProvide
      */
     public function register(Application $app)
     {
-        $app['page.controller'] = $app->share(function() use ($app) {
+        $app['page.controller'] = $app->share(function () use ($app) {
             return new PageController();
         });
     }

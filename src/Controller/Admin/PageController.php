@@ -70,7 +70,8 @@ class PageController
             if ($form->isValid()) {
                 $pm->slug($form->get('slug')->getData());
                 $app['repository.page']->save($page);
-                $message = 'The page <strong>' . $page->getTitle() . '</strong> has been saved. <a href="' . $page->getSlug() . '" target="_blank">See it!</a>';
+                $message = 'The page <strong>' . $page->getTitle() .
+                    '</strong> has been saved. <a href="' . $page->getSlug() . '" target="_blank">See it!</a>';
                 $app['session']->getFlashBag()->add('success', $message);
 
                 $redirect = $app['url_generator']->generate('admin/pages');
@@ -105,7 +106,8 @@ class PageController
             if ($form->isValid()) {
                 $pm->slug($form->get('slug')->getData());
                 $app['repository.page']->save($page);
-                $message = 'Changes to page <strong>' . $page->getTitle() . '</strong> have been saved. <a href="' . $page->getSlug() . '" target="_blank">See it!</a>';
+                $message = 'Changes to page <strong>' . $page->getTitle() . '</strong> have been saved.' .
+                    '<a href="' . $page->getSlug() . '" target="_blank">See it!</a>';
                 $app['session']->getFlashBag()->add('success', $message);
                 $redirect = $app['url_generator']->generate('admin/pages');
 

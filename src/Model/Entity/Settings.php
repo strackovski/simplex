@@ -294,7 +294,9 @@ class Settings extends TimestampableAbstract
                     if ($res = $this->getUserField($probe)) {
                         return $res;
                     }
-                } catch (\InvalidArgumentException $e) {}
+                } catch (\InvalidArgumentException $e) {
+
+                }
             }
         }
 
@@ -845,7 +847,7 @@ class Settings extends TimestampableAbstract
      */
     public function setMailPassword($mailPassword)
     {
-        if (strlen($mailPassword) <= 0){
+        if (strlen($mailPassword) <= 0) {
             return;
         }
 

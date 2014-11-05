@@ -65,5 +65,4 @@ class Image extends MediaItem
     {
         $this->manager = new ImageManager($this);
     }
-
 }

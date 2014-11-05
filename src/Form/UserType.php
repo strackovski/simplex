@@ -14,7 +14,7 @@ namespace nv\Simplex\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

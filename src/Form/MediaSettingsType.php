@@ -12,10 +12,8 @@
 
 namespace nv\Simplex\Form;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use nv\Simplex\Model\Repository\SettingsRepository;
@@ -63,7 +61,10 @@ class MediaSettingsType extends AbstractType
                 )
             ))
 
-            ->add('image_resize_small_width', 'text', array(
+            ->add(
+                'image_resize_small_width',
+                'text',
+                array(
                     'label' => 'Width',
                     'required' => false,
                     'mapped' => false,
@@ -72,7 +73,10 @@ class MediaSettingsType extends AbstractType
                     )
                 )
             )
-            ->add('image_resize_small_height', 'text', array(
+            ->add(
+                'image_resize_small_height',
+                'text',
+                array(
                     'label' => 'Height',
                     'required' => false,
                     'mapped' => false,
@@ -82,7 +86,10 @@ class MediaSettingsType extends AbstractType
                 )
             )
 
-            ->add('image_resize_medium_width', 'text', array(
+            ->add(
+                'image_resize_medium_width',
+                'text',
+                array(
                     'label' => 'Width',
                     'required' => false,
                     'mapped' => false,
@@ -91,7 +98,10 @@ class MediaSettingsType extends AbstractType
                     )
                 )
             )
-            ->add('image_resize_medium_height', 'text', array(
+            ->add(
+                'image_resize_medium_height',
+                'text',
+                array(
                     'label' => 'Height',
                     'required' => false,
                     'mapped' => false,
@@ -101,7 +111,10 @@ class MediaSettingsType extends AbstractType
                 )
             )
 
-            ->add('image_resize_large_width', 'text', array(
+            ->add(
+                'image_resize_large_width',
+                'text',
+                array(
                     'label' => 'Width',
                     'required' => false,
                     'mapped' => false,
@@ -110,7 +123,10 @@ class MediaSettingsType extends AbstractType
                     )
                 )
             )
-            ->add('image_resize_large_height', 'text', array(
+            ->add(
+                'image_resize_large_height',
+                'text',
+                array(
                     'label' => 'Height',
                     'required' => false,
                     'mapped' => false,
@@ -120,7 +136,10 @@ class MediaSettingsType extends AbstractType
                 )
             )
 
-            ->add('image_crop_width', 'text', array(
+            ->add(
+                'image_crop_width',
+                'text',
+                array(
                     'label' => 'Width',
                     'required' => false,
                     'mapped' => false,
@@ -129,7 +148,10 @@ class MediaSettingsType extends AbstractType
                     )
                 )
             )
-            ->add('image_crop_height', 'text', array(
+            ->add(
+                'image_crop_height',
+                'text',
+                array(
                     'label' => 'Height',
                     'required' => false,
                     'mapped' => false,
@@ -138,36 +160,55 @@ class MediaSettingsType extends AbstractType
                     )
                 )
             )
-            ->add('image_auto_crop', 'checkbox', array(
-                'required' => false,
-                'label' => 'Use auto-cropping (recommended)'
-            ))
-            ->add('image_strip_meta', 'checkbox', array(
-                'required' => false,
-                'label' => 'Remove metadata when processing image files'
-            ))
-            ->add('image_keep_original', 'checkbox', array(
-                'required' => false,
-                'label' => 'Keep original image files on upload (recommended)'
-            ))
-
-            ->add('watermarkMedia', 'checkbox', array(
-                'required' => false,
-                'label' => 'Apply watermark to library images'
-            ))
-            ->add('watermark_position', 'choice', array(
-                'empty_value' => 'Choose where to place the watermark',
-                'mapped' => true,
-                'required' => false,
-                'multiple' => false,
-                'choices' => array(
-                    'tl' => 'Top-left',
-                    'tr' => 'Top-right',
-                    'bl' => 'Bottom-left',
-                    'br' => 'Bottom-right',
-                    'cn' => 'Center'
+            ->add(
+                'image_auto_crop',
+                'checkbox',
+                array(
+                    'required' => false,
+                    'label' => 'Use auto-cropping (recommended)'
                 )
-            ))
+            )
+            ->add(
+                'image_strip_meta',
+                'checkbox',
+                array(
+                    'required' => false,
+                    'label' => 'Remove metadata when processing image files'
+                )
+            )
+            ->add(
+                'image_keep_original',
+                'checkbox',
+                array(
+                    'required' => false,
+                    'label' => 'Keep original image files on upload (recommended)'
+                )
+            )
+            ->add(
+                'watermarkMedia',
+                'checkbox',
+                array(
+                    'required' => false,
+                    'label' => 'Apply watermark to library images'
+                )
+            )
+            ->add(
+                'watermark_position',
+                'choice',
+                array(
+                    'empty_value' => 'Choose where to place the watermark',
+                    'mapped' => true,
+                    'required' => false,
+                    'multiple' => false,
+                    'choices' => array(
+                        'tl' => 'Top-left',
+                        'tr' => 'Top-right',
+                        'bl' => 'Bottom-left',
+                        'br' => 'Bottom-right',
+                        'cn' => 'Center'
+                    )
+                )
+            )
             ->add('save', 'submit', array(
                 'attr' => array(
                     'class' => 'btn-save'

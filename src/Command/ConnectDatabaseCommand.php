@@ -13,13 +13,10 @@
 namespace nv\Simplex\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Finder\Finder;
-use nv\Simplex\Model\Entity\User;
 
 /**
  * CreateUserCommand
@@ -111,7 +108,7 @@ class ConnectDatabaseCommand extends ApplicationAwareCommand
             fopen($file, 'w');
         }
 
-        try{
+        try {
             file_put_contents($file, json_encode($config), LOCK_EX);
             $output->writeln('<info>Database configuration saved, trying to connect....</info>');
         } catch (\Exception $e) {
@@ -119,11 +116,10 @@ class ConnectDatabaseCommand extends ApplicationAwareCommand
             return;
         }
 
-        try{
+        try {
             new \mysqli($host, $username, $password, $name);
             $output->writeln('<info>Connection OK.</info>');
-        }
-        catch (\Exception $e){
+        } catch (\Exception $e) {
             $output->writeln('<error>'.$e->getMessage().'</error>');
             file_put_contents($file, null, LOCK_EX);
             return;

@@ -19,7 +19,7 @@ interface ObservableInterface
      *
      * @return mixed
      */
-    function registerObserver(ObserverInterface $observer);
+    public function registerObserver(ObserverInterface $observer);
 
     /**
      * Detach an observer from the observable object
@@ -28,12 +28,12 @@ interface ObservableInterface
      *
      * @return mixed
      */
-    function detachObserver(ObserverInterface $observer);
+    public function detachObserver(ObserverInterface $observer);
 
     /**
      * Notify all registered observers of the observable object
      *
      * @return mixed
      */
-    function notifyObservers();
+    public function notifyObservers();
 }

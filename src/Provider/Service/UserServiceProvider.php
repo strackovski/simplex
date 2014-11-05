@@ -7,7 +7,6 @@ use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ServiceProviderInterface;
 use Silex\ControllerCollection;
-use nv\Simplex\Model\Repository\PostRepository;
 
 /**
  * Simplex Service Provider
@@ -23,7 +22,7 @@ class UserServiceProvider implements ServiceProviderInterface, ControllerProvide
      */
     public function register(Application $app)
     {
-        $app['user.controller'] = $app->share(function() use ($app) {
+        $app['user.controller'] = $app->share(function () use ($app) {
             return new UserController();
         });
     }

@@ -11,24 +11,28 @@
  */
 
 use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 $console = new Application('nv\Simplex', '1.0.0');
-$console->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', 'development'));
+$console->getDefinition()->addOption(
+    new InputOption(
+        '--env',
+        '-e',
+        InputOption::VALUE_REQUIRED,
+        'The Environment name.',
+        'development'
+    )
+);
 $console->setDispatcher($app['dispatcher']);
 
-try{
+try {
     $console->setHelperSet(new Symfony\Component\Console\Helper\HelperSet(array(
         'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($app["db"]),
         'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($app["orm.em"]),
         'question' => new \Symfony\Component\Console\Helper\QuestionHelper(),
         'formatter' => new \Symfony\Component\Console\Helper\FormatterHelper()
     )));
-}
-catch (\Exception $e) {
+} catch (\Exception $e) {
 
 }
 

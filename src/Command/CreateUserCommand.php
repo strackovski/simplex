@@ -13,12 +13,10 @@
 namespace nv\Simplex\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Finder\Finder;
 use nv\Simplex\Model\Entity\User;
 
 /**
@@ -113,7 +111,7 @@ class CreateUserCommand extends ApplicationAwareCommand
         $user->setEncodedPassword($this->app, $password);
         $user->setCreatedAt(new \DateTime('now'));
         $user->setUpdatedAt($user->getCreatedAt());
-        try{
+        try {
             $this->app['orm.em']->persist($user);
             $this->app['orm.em']->flush();
         } catch (\Exception $e) {

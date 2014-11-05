@@ -35,14 +35,14 @@ class CacheClearCommand extends ApplicationAwareCommand
     {
         $pathToCache = APPLICATION_ROOT_PATH . '/var/cache/';
 
-        foreach(
+        foreach (
             new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator(
                     $pathToCache,
-                    \FilesystemIterator::SKIP_DOTS),
-                    \RecursiveIteratorIterator::CHILD_FIRST
-            ) as $path
-        ) {
+                    \FilesystemIterator::SKIP_DOTS
+                ),
+                \RecursiveIteratorIterator::CHILD_FIRST
+            ) as $path) {
             $path->isDir() ? rmdir($path->getPathname()) : unlink($path->getPathname());
         }
         rmdir($pathToCache);

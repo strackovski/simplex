@@ -87,7 +87,10 @@ class UserController
                 'request' => $request
             );
 
-            return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/user-profile.html.twig', $data);
+            return $app['twig']->render(
+                'admin/'.$app['settings']->getAdminTheme().'/views/user-profile.html.twig',
+                $data
+            );
         }
 
         return 0;
@@ -162,7 +165,10 @@ class UserController
                 'title' => 'Edit credentials',
                 'request' => $request
             );
-            return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/user-credentials.html.twig', $data);
+            return $app['twig']->render(
+                'admin/'.$app['settings']->getAdminTheme().'/views/user-credentials.html.twig',
+                $data
+            );
         }
 
         return 0;
@@ -261,7 +267,10 @@ class UserController
             return $app->redirect($redirect);
         }
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/form-public2.html.twig', array('form' => $form->createView()));
+        return $app['twig']->render(
+            'admin/'.$app['settings']->getAdminTheme().'/views/form-public2.html.twig',
+            array('form' => $form->createView())
+        );
     }
 
 
@@ -294,7 +303,7 @@ class UserController
                             if ($uploadedFile['avatarFile'] instanceof UploadedFile) {
                                 $avatar = new Image();
                                 $avatar->setFile($uploadedFile['avatarFile']);
-                                $avatar->setName($uploadedFile->getClientOriginalName());
+                                $avatar->setName($uploadedFile['avatarFile']->getClientOriginalName());
                                 $avatar->setInLibrary(false);
                                 $avatar->setMediaCategory('avatar');
                                 $user->setAvatar($avatar);
@@ -303,14 +312,18 @@ class UserController
                     }
                     $app['repository.user']->save($user);
 
-                    if(isset($avatar) and $avatar instanceof Image){
-                        try{
-                            $avatar->getManager()->thumbnail($app['imagine'], $app['settings']->getImageResizeDimensions());
+                    if (isset($avatar) and $avatar instanceof Image) {
+                        try {
+                            $avatar->getManager()->thumbnail(
+                                $app['imagine'],
+                                $app['settings']->getImageResizeDimensions()
+                            );
                             $avatar->getManager()->autoCrop($app['imagine']);
                         } catch (\Exception $e) {
                             $app['repository.media']->delete($avatar);
                             $app['monolog']->addError(
-                                get_class($this) . " caught exception \"{$e->getMessage()}\" from {$e->getFile()}:{$e->getLine()}"
+                                get_class($this) .
+                                " caught exception \"{$e->getMessage()}\" from {$e->getFile()}:{$e->getLine()}"
                             );
                         }
                     }
@@ -327,7 +340,10 @@ class UserController
                 'user' => $user
             );
 
-            return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/user-profile.html.twig', $data);
+            return $app['twig']->render(
+                'admin/'.$app['settings']->getAdminTheme().'/views/user-profile.html.twig',
+                $data
+            );
         }
 
         return 0;
@@ -429,8 +445,11 @@ class UserController
                 }
                 $app['repository.user']->save($user);
 
-                if (isset($avatar) and $avatar instanceof Image){
-                    $avatar->getManager()->thumbnail($app['imagine'], $app['settings']->getImageResizeDimensions('crop'));
+                if (isset($avatar) and $avatar instanceof Image) {
+                    $avatar->getManager()->thumbnail(
+                        $app['imagine'],
+                        $app['settings']->getImageResizeDimensions('crop')
+                    );
                     $avatar->getManager()->autoCrop($app['imagine']);
                 }
 
@@ -496,7 +515,10 @@ class UserController
                 $app['repository.user']->save($user);
 
                 if (isset($avatar) and $avatar instanceof Image) {
-                    $avatar->getManager()->thumbnail($app['imagine'], $app['settings']->getImageResizeDimensions());
+                    $avatar->getManager()->thumbnail(
+                        $app['imagine'],
+                        $app['settings']->getImageResizeDimensions()
+                    );
                     $avatar->getManager()->autoCrop($app['imagine']);
                 }
                 $message = 'The account for ' . $user->getUsername() . ' has been changed.';
@@ -513,7 +535,10 @@ class UserController
             'title' => 'Edit user',
         );
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/user-form.html.twig', $data);
+        return $app['twig']->render(
+            'admin/'.$app['settings']->getAdminTheme().'/views/user-form.html.twig',
+            $data
+        );
     }
 
     /**

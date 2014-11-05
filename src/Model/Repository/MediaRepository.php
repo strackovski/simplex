@@ -99,6 +99,11 @@ class MediaRepository extends EntityRepository
         return $query = $qb->getQuery()->getResult();
     }
 
+    /**
+     * Get media items in library
+     *
+     * @return array
+     */
     public function getLibraryMedia()
     {
         $em = $this->getEntityManager();
@@ -114,6 +119,11 @@ class MediaRepository extends EntityRepository
         return $query = $qb->getQuery()->getResult();
     }
 
+    /**
+     * Get images in library
+     *
+     * @return array
+     */
     public function getLibraryImages()
     {
         $em = $this->getEntityManager();
@@ -129,6 +139,11 @@ class MediaRepository extends EntityRepository
         return $query = $qb->getQuery()->getResult();
     }
 
+    /**
+     * Get videos in library
+     *
+     * @return array
+     */
     public function getLibraryVideos()
     {
         $em = $this->getEntityManager();
@@ -164,7 +179,7 @@ class MediaRepository extends EntityRepository
 
         $query = $qb->getQuery();
         try {
-            if($max === 1){
+            if ($max === 1) {
                 return $query->getSingleResult();
             }
             return $query->getResult();

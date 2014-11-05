@@ -66,10 +66,9 @@ class PageRepository extends EntityRepository
         $qb->setParameters(array(1 => $slug));
         $q = $qb->getQuery();
 
-        try{
+        try {
             return $q->getSingleResult();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -132,7 +131,7 @@ class PageRepository extends EntityRepository
 
         $query = $qb->getQuery();
         try {
-            if($max === 1){
+            if ($max === 1) {
                 return $query->getSingleResult();
             }
             return $query->getResult();

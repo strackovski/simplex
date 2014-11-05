@@ -71,7 +71,7 @@ class PostManager implements ObserverInterface
         );
         $request->setResponseFormat('json');
 
-        try{
+        try {
             $classifications = $this->app['semtools.classifier']->read($request);
             $annotations = $this->readAnnotations();
 
@@ -101,7 +101,7 @@ class PostManager implements ObserverInterface
         $request = new OpenCalaisRequest(strip_tags($this->post->getBody()));
         $request->setOutputFormat('application/json');
 
-        try{
+        try {
             return $this->app['semtools.annotator']->read($request);
         } catch (\Exception $e) {
 
@@ -150,22 +150,23 @@ class PostManager implements ObserverInterface
 
 
             $tagObjects = array();
-            foreach($tagsInDb as $tagObj) $tagObjects[] = $tagObj->getName();
+            foreach ($tagsInDb as $tagObj) {
+                $tagObjects[] = $tagObj->getName();
+            }
 
-            foreach($tagsArray as $tagItem){
-                if(in_array($tagItem, $tagObjects)){
-                    $matchedTag = $this->app['orm.em']->getRepository('nv\Simplex\Model\Entity\Tag')->findOneBy(array('name' => $tagItem));
-                    if ($matchedTag instanceof Tag)
-                    {
+            foreach ($tagsArray as $tagItem) {
+                if (in_array($tagItem, $tagObjects)) {
+                    $matchedTag = $this->app['orm.em']->getRepository('nv\Simplex\Model\Entity\Tag')
+                        ->findOneBy(array('name' => $tagItem));
+                    if ($matchedTag instanceof Tag) {
                         $this->post->addTag($matchedTag);
                         $matchedTag->addPost($this->post);
                     }
-                }
-                else{
+                } else {
                     $newTag = new Tag($tagItem);
                     $newTag->addPost($this->post);
                     $this->post->addTag($newTag);
-                    try{
+                    try {
                         $this->app['orm.em']->persist($newTag);
                     } catch (\Exception $e) {
                         return $e->getMessage();
@@ -173,7 +174,7 @@ class PostManager implements ObserverInterface
                 }
             }
         }
-        try{
+        try {
             $this->app['orm.em']->persist($this->post);
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -191,14 +192,17 @@ class PostManager implements ObserverInterface
      */
     private function sanitize($tags)
     {
-        if($tags != null){
+        if ($tags != null) {
             $processed = array();
             $tagsarr = explode(',', $tags);
-            foreach($tagsarr as $tag) $processed[] = strtolower(trim($tag));
+            foreach ($tagsarr as $tag) {
+                $processed[] = strtolower(trim($tag));
+            }
 
             return $processed = array_unique($processed);
+        } else {
+            return $processed = null;
         }
-        else { return $processed = null; }
     }
 
     /**
@@ -210,7 +214,9 @@ class PostManager implements ObserverInterface
      */
     public function update(ObservableInterface $observable)
     {
-        if($observable === $this->post) $this->doUpdate($observable);
+        if ($observable === $this->post) {
+            $this->doUpdate($observable);
+        }
     }
 
     /**
@@ -226,5 +232,4 @@ class PostManager implements ObserverInterface
             $this->metadata();
         }
     }
-
 }

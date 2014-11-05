@@ -119,7 +119,7 @@ class AuthenticateMailerCommand extends ApplicationAwareCommand
             fopen($file, 'w');
         }
 
-        try{
+        try {
             file_put_contents($file, json_encode($config), LOCK_EX);
             $output->writeln('<info>Mailing configuration saved.</info>');
         } catch (\Exception $e) {

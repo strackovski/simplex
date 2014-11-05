@@ -6,14 +6,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
-use nv\Simplex\Model\Entity\Image;
 
 /**
  * @Entity(repositoryClass="nv\Simplex\Model\Repository\UserRepository")
  * @Table(name="user",uniqueConstraints={@UniqueConstraint(name="search_email", columns={"email"})})
  * @HasLifecycleCallbacks
  */
-Class User implements UserInterface
+class User implements UserInterface
 {
     /**
      * @Id
@@ -119,7 +118,8 @@ Class User implements UserInterface
      *
      * @return User $this
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->postsAuthored = new ArrayCollection();
         $this->postsEdited = new ArrayCollection();
         return $this;

@@ -52,11 +52,11 @@ class SettingsController
         $exposed = '';
 
         foreach ($posts as $post) {
-            if($post->getExposed()){
+            if ($post->getExposed()) {
                 $exposed[] = $post;
             }
 
-            if($post->getPublished()) {
+            if ($post->getPublished()) {
                 $published[] = $post;
             }
         }
@@ -194,6 +194,7 @@ class SettingsController
      */
     public function saveAction(Request $request, Application $app)
     {
+        /** @var \nv\Simplex\Model\Entity\Settings $archive */
         $archive = clone $app['repository.settings']->getCurrent();
         $archive->setCurrent(false);
         $app['orm.em']->persist($archive);
@@ -212,6 +213,7 @@ class SettingsController
      */
     public function themeSettingsAction(Request $request, Application $app)
     {
+        /** @var \nv\Simplex\Model\Entity\Settings $settings */
         $settings = $app['repository.settings']->getCurrent();
         $form = $app['form.factory']->create(new ThemeSettingsType($app['repository.settings']), $settings);
 
@@ -232,15 +234,26 @@ class SettingsController
         if (!$request->isXmlHttpRequest()) {
             $data['tabs'] = array(
                 'panels' => array(
-                    'settings' => array('active' => false, 'url' => $app['url_generator']->generate('admin/settings')),
-                    'media' => array('active' => false, 'url' => $app['url_generator']->generate('admin/media/settings')),
-                    'themes' => array('active' => true, 'url' => $app['url_generator']->generate('admin/settings/themes')),
-                    'mailing' => array('active' => false, 'url' => $app['url_generator']->generate('admin/settings/mail'))
+                    'settings' => array(
+                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings')
+                    ),
+                    'media' => array(
+                        'active' => false, 'url' => $app['url_generator']->generate('admin/media/settings')
+                    ),
+                    'themes' => array(
+                        'active' => true, 'url' => $app['url_generator']->generate('admin/settings/themes')
+                    ),
+                    'mailing' => array(
+                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings/mail')
+                    )
                 )
             );
         }
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/widgets/theme-settings.html.twig', $data);
+        return $app['twig']->render(
+            'admin/'.$app['settings']->getAdminTheme().'/widgets/theme-settings.html.twig',
+            $data
+        );
     }
 
     /**
@@ -252,6 +265,7 @@ class SettingsController
      */
     public function mailSettingsAction(Request $request, Application $app)
     {
+        /** @var \nv\Simplex\Model\Entity\Settings $settings */
         $settings = $app['repository.settings']->getCurrent();
         $form = $app['form.factory']->create(new MailSettingsType($app['repository.settings']), $settings);
 
@@ -271,15 +285,26 @@ class SettingsController
         if (!$request->isXmlHttpRequest()) {
             $data['tabs'] = array(
                 'panels' => array(
-                    'settings' => array('active' => false, 'url' => $app['url_generator']->generate('admin/settings')),
-                    'media' => array('active' => false, 'url' => $app['url_generator']->generate('admin/media/settings')),
-                    'themes' => array('active' => false, 'url' => $app['url_generator']->generate('admin/settings/themes')),
-                    'mailing' => array('active' => true, 'url' => $app['url_generator']->generate('admin/settings/mail'))
+                    'settings' => array(
+                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings')
+                    ),
+                    'media' => array(
+                        'active' => false, 'url' => $app['url_generator']->generate('admin/media/settings')
+                    ),
+                    'themes' => array(
+                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings/themes')
+                    ),
+                    'mailing' => array(
+                        'active' => true, 'url' => $app['url_generator']->generate('admin/settings/mail')
+                    )
                 )
             );
         }
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/widgets/mail-settings.html.twig', $data);
+        return $app['twig']->render(
+            'admin/'.$app['settings']->getAdminTheme().'/widgets/mail-settings.html.twig',
+            $data
+        );
     }
 
     /**
@@ -290,9 +315,10 @@ class SettingsController
      * @return mixed
      */
     public function editAction(Request $request, Application $app)
-   {
-       $settings = $app['repository.settings']->getCurrent();
-       $form = $app['form.factory']->create(new SettingsType($app['repository.settings']), $settings);
+    {
+        /** @var \nv\Simplex\Model\Entity\Settings $settings */
+        $settings = $app['repository.settings']->getCurrent();
+        $form = $app['form.factory']->create(new SettingsType($app['repository.settings']), $settings);
 
         if ($request->isMethod('POST')) {
             $files = $request->files;
@@ -309,10 +335,9 @@ class SettingsController
                         }
                     }
                 }
-
                 $app['repository.settings']->save($settings);
 
-                if(isset($logo) and $logo instanceof Image){
+                if (isset($logo) and $logo instanceof Image) {
                     $logo->getManager()->thumbnail($app['imagine'], $app['settings']->getImageResizeDimensions());
                     $logo->getManager()->autoCrop($app['imagine']);
                 }
@@ -328,16 +353,24 @@ class SettingsController
             'title' => 'Edit settings',
             'tabs' => array(
                 'panels' => array(
-                    'settings' => array('active' => true, 'url' => $app['url_generator']->generate('admin/settings')),
-                    'media' => array('active' => false, 'url' => $app['url_generator']->generate('admin/media/settings')),
-                    'themes' => array('active' => false, 'url' => $app['url_generator']->generate('admin/settings/themes')),
-                    'mailing' => array('active' => false, 'url' => $app['url_generator']->generate('admin/settings/mail'))
+                    'settings' => array(
+                        'active' => true, 'url' => $app['url_generator']->generate('admin/settings')
+                    ),
+                    'media' => array(
+                        'active' => false, 'url' => $app['url_generator']->generate('admin/media/settings')
+                    ),
+                    'themes' => array(
+                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings/themes')
+                    ),
+                    'mailing' => array(
+                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings/mail')
+                    )
                 )
             )
         );
 
-       return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/widgets/settings.html.twig', $data);
-   }
+        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/widgets/settings.html.twig', $data);
+    }
 
     /**
      * Delete settings instance
@@ -349,6 +382,7 @@ class SettingsController
      */
     public function deleteAction(Request $request, Application $app)
     {
+        /** @var \nv\Simplex\Model\Entity\Settings $set */
         $set = $app['repository.settings']->findOneBy(array('id' => $request->get('id')));
         $app['orm.em']->remove($set);
         $app['orm.em']->flush();
@@ -367,6 +401,7 @@ class SettingsController
      */
     public function activateAction(Request $request, Application $app)
     {
+        /** @var \nv\Simplex\Model\Entity\Settings $set */
         $set = $app['repository.settings']->findOneBy(array('id' => $request->get('id')));
         $current = $app['repository.settings']->getCurrent();
         $current->setCurrent(false);
@@ -391,7 +426,7 @@ class SettingsController
         $files = $request->files;
         $type = $request->get('type');
         foreach ($files as $uploadedFile) {
-            if($uploadedFile instanceof UploadedFile) {
+            if ($uploadedFile instanceof UploadedFile) {
                 $dir = dirname(dirname(dirname(__DIR__))) . '/web/uploads/';
                 $uploadedFile->move($dir, $uploadedFile->getClientOriginalName());
 
@@ -415,10 +450,12 @@ class SettingsController
     public function addThemeAction(Request $request, Application $app)
     {
         $form = $app['form.factory']->createNamedBuilder(null, 'form', array())->getForm();
-
         $data['form'] = $form->createView();
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/widgets/upload-theme-form.html.twig', $data);
+        return $app['twig']->render(
+            'admin/'.$app['settings']->getAdminTheme().'/widgets/upload-theme-form.html.twig',
+            $data
+        );
     }
 
     /**
@@ -458,12 +495,14 @@ class SettingsController
             $creationTimes[$ct]++;
         }
 
+        /** @var \nv\Simplex\Model\Entity\Image $image */
         foreach ($images as $image) {
             $ct = strtoupper($image->getCreatedAt()->format('D'));
 
             $imgCreationTimes[$ct]++;
         }
 
+        /** @var \nv\Simplex\Model\Entity\Video $video */
         foreach ($videos as $video) {
             $ct = strtoupper($video->getCreatedAt()->format('D'));
 

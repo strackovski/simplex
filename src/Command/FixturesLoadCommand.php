@@ -28,6 +28,7 @@ use nv\Simplex\Model\Entity\User;
  *
  * Load data fixtures required to present a basic webpage.
  *
+ * @package nv\Simplex\Command
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class FixturesLoadCommand extends ApplicationAwareCommand

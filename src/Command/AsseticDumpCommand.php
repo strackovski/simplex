@@ -20,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * Dump assets to the filesystem as defined in Assetic configuration.
  *
+ * @package nv\Simplex\Command
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class AsseticDumpCommand extends ApplicationAwareCommand

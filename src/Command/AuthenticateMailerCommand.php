@@ -23,6 +23,7 @@ use Symfony\Component\Console\Question\Question;
  *
  * Create a new user account from user input.
  *
+ * @package nv\Simplex\Command
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class AuthenticateMailerCommand extends ApplicationAwareCommand

@@ -26,6 +26,7 @@ use nv\Simplex\Model\Entity\User;
  *
  * Create a new user account from user input.
  *
+ * @package nv\Simplex\Command
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class CreateUserCommand extends ApplicationAwareCommand

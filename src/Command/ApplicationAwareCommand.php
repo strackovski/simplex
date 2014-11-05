@@ -17,6 +17,10 @@ use Silex\Application;
 
 /**
  * Base for app-aware commands
+ *
+ * @package nv\Simplex\Command
+ * @author Саша Стаменковић <umpirsky@gmail.com>
+ * @url https://github.com/umpirsky/silex-on-steroids
  */
 abstract class ApplicationAwareCommand extends Command
 {

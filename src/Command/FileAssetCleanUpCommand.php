@@ -18,6 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Clears all defined cache stores.
  *
+ * @package nv\Simplex\Command
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class FileAssetCleanUpCommand extends ApplicationAwareCommand

@@ -67,7 +67,7 @@ class Simplex extends Application
     }
 
     /**
-     * Register service providers
+     * Register service providers, mount controllers
      */
     public function registerProviders()
     {
@@ -88,7 +88,7 @@ class Simplex extends Application
             ),
             'twig.path'           => array(
                 __DIR__.'/../../web/templates',
-                __DIR__.'/../../web/templates/admin',
+                __DIR__.'/../../web/templates/admin/',
                 __DIR__.'/../../web/templates/site',
                 __DIR__.'/../../vendor/braincrafted/bootstrap-bundle/Braincrafted/Bundle/BootstrapBundle/Resources/views/Form'
             )
@@ -106,6 +106,8 @@ class Simplex extends Application
         /*
          * Asset: resolve asset path by asset name and type (image, font, ...)
          * Return empty placeholder image when not found
+         *
+         * @todo Fix & enable twig 'asset'
          */
         $this['twig'] = $this->share($this->extend('twig', function($twig, $app) {
             $twig->addFunction(new \Twig_SimpleFunction('asset', function ($asset) use ($app) {
@@ -129,6 +131,8 @@ class Simplex extends Application
          * Display: use {{ display('size:mediaId') }} to resolve to actual media path
          * Size can be any valid media size identifier (cropped, small, large, medium, original)
          * Return empty placeholder image when not found
+         *
+         * @todo Fix & enable twig 'display'
          */
         $this['twig'] = $this->share($this->extend('twig', function($twig, $app) {
             $twig->addFunction(new \Twig_SimpleFunction('display', function ($asset) use ($app) {
@@ -294,8 +298,7 @@ class Simplex extends Application
         }
 
         /*
-         * @todo Post routes to Site/PostController
-         * Register here, or create a SiteService?
+         * @todo Post routes to Site/PostController (event. SiteService)
          */
         foreach ($posts = $self['repository.post']->getPublished() as $post) {
             $this->get('/post/' . $post->getSlug(), function () use ($self, $post) {
@@ -324,7 +327,6 @@ class Simplex extends Application
                         if (($op = $query->getOperator()) == 'between') {
                             $op = 'eq';
                         }
-
                         $content = $self['repository.post']->getPostsBy(
                             $query->getColumn(),
                             $query->getValue(),

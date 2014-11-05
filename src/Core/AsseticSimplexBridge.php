@@ -11,7 +11,9 @@ use Assetic\Filter\JSMinFilter;
 
 /**
  * Class AsseticSimplexBridge
+ *
  * @package nv\Simplex\Core
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class AsseticSimplexBridge
 {
@@ -30,7 +32,7 @@ class AsseticSimplexBridge
     }
 
     /**
-     *
+     * Assetic configuration
      */
     private function register()
     {
@@ -50,7 +52,6 @@ class AsseticSimplexBridge
 
         $this->app['assetic.asset_manager'] = $this->app->share(
             $this->app->extend('assetic.asset_manager', function ($am, $app) {
-
                 try {
                     $adminTheme = $app['settings']->getAdminTheme();
                 } catch (\Exception $e) {
@@ -69,7 +70,6 @@ class AsseticSimplexBridge
                 ));
 
                 $am->get('styles')->setTargetPath('styles.css');
-
                 $am->set('jquery', new FileAsset(dirname(__DIR__) . '/../web/templates/admin/' . $adminTheme . '/assets/jquery.js'));
                 $am->set('scripts', new AssetCache(
                     new GlobAsset(
@@ -88,5 +88,4 @@ class AsseticSimplexBridge
             })
         );
     }
-
-} 
+}

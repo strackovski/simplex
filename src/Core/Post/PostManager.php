@@ -59,7 +59,6 @@ class PostManager implements ObserverInterface
      */
     public function metadata()
     {
-        // @todo add sanitize filter
         $request = new UclassifyRequest(
             strip_tags($this->post->getBody()),
             array(

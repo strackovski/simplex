@@ -23,7 +23,7 @@ class ProjectSetup extends SetupAbstract
         print "\n\n*** WELCOME TO SIMPLEX ***\n";
         print "\nThis will pre-configure your Simplex application instance.";
         print "\nIn case you already configured it by hand, you can skip this step.";
-        print "\nEnter 'n(o)' to skip this step if application is already configured.";
+        print "\nEnter 'n(o)' to skip this step if application is already configured.\n";
         $value = $this->promptUser("\nWould you like to continue? ");
         if ($value !== 'y' and $value !== 'yes') {
             $this->verify();
@@ -32,7 +32,7 @@ class ProjectSetup extends SetupAbstract
 
         print "\nPlease provide the following database server parameters:";
         $dbOptions = array(
-            'driver' => 'Database driver (mysqli)',
+            'driver' => 'Database driver',
             'host' => 'SQL server hostname',
             'user' => 'Username',
             'password' => 'Password',

@@ -132,7 +132,7 @@
                         {% for query in form.queries %}
                             {% include 'admin/default/widgets/edit-query-form.html.twig' with {form: query.vars.form} %}
                         {% endfor %}
-                        <div class="add-pq-form" data-proto="{% filter escape %}{% include 'admin/default2/widgets/add-query-form.html.twig' %}{% endfilter %}"></div>
+                        <div class="add-pq-form" data-proto="{% filter escape %}{% include 'admin/default/widgets/add-query-form.html.twig' %}{% endfilter %}"></div>
 
                         <div class="form-group">
                             <div class="col-xs-3 text-right">

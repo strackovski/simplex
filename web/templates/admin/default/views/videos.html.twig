@@ -3,23 +3,23 @@
 {% form_theme form "bootstrap.html.twig" %}
 
 {% block content %}
-{% block videos %}
-        <div class="row thumbnails">
-            <div class="progress hidden">
-                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 4%">
+    {% block videos %}
+            <div class="row thumbnails">
+                <div class="progress hidden">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 4%">
+                    </div>
                 </div>
+                <form method="post" enctype="multipart/form-data" action="{{ app.url_generator.generate('admin/video/upload') }}">
+                    <div class="vd-dropzone vd-dropzone-clickable dropzone clearfix col-lg-12">
+                        {% include "admin/default/widgets/video-grid.html.twig" %}
+                    </div>
+                    <div class="col-lg-12 form-group hidden">
+                        <h5 class="page-header">Click anywhere or drag new videos here</h5>
+                        {{ form_row(form._token) }}
+                        <input type="submit" class="btn btn-primary btn-save" />
+                    </div>
+                </form>
+                <div class="loading hidden">loading</div>
             </div>
-            <form method="post" enctype="multipart/form-data" action="{{ app.url_generator.generate('admin/video/upload') }}">
-                <div class="vd-dropzone vd-dropzone-clickable dropzone clearfix col-lg-12">
-                    {% include "admin/default2/widgets/video-grid.html.twig" %}
-                </div>
-                <div class="col-lg-12 form-group hidden">
-                    <h5 class="page-header">Click anywhere or drag new videos here</h5>
-                    {{ form_row(form._token) }}
-                    <input type="submit" class="btn btn-primary btn-save" />
-                </div>
-            </form>
-            <div class="loading hidden">loading</div>
-        </div>
-{% endblock %}
+    {% endblock %}
 {% endblock %}

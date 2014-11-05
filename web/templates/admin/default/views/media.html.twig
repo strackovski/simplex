@@ -5,9 +5,9 @@
 {% block content %}
     {% if app.request.isXmlHttpRequest %}
         {% if images is defined %}
-            {% include "admin/default2/widgets/image-grid.html.twig" %}
+            {% include "admin/default/widgets/image-grid.html.twig" %}
         {% elseif videos is defined %}
-            {% include "admin/default2/widgets/video-grid.html.twig" %}
+            {% include "admin/default/widgets/video-grid.html.twig" %}
         {% endif %}
     {% else %}
         <div class="main-content affix-content">
@@ -54,7 +54,7 @@
                             </div>
                             <form method="post" enctype="multipart/form-data" action="{{ app.url_generator.generate('admin/media/upload') }}">
                                 <div class="im-dropzone im-dropzone-clickable dropzone clearfix col-lg-12">
-                                    {% include "admin/default2/widgets/image-grid.html.twig" %}
+                                    {% include "admin/default/widgets/image-grid.html.twig" %}
                                 </div>
                                 <div class="col-lg-12 form-group hidden">
                                     <h5 class="page-header">Click anywhere or drag new images here</h5>

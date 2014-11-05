@@ -1,4 +1,4 @@
-{% extends app.request.isXmlHttpRequest ? "admin/default/masters/layout-tabs-panel.html.twig" : "admin/default2/views/settings.html.twig" %}
+{% extends app.request.isXmlHttpRequest ? "admin/default/masters/layout-tabs-panel.html.twig" : "admin/default/views/settings.html.twig" %}
 
 {% block tabPaneHeader %}
     <div class="controls-group">
@@ -29,7 +29,6 @@
                 </div>
             </div>
         </div>
-
         <div class="accordion-header">
             <label>Server</label>
             <span>{{ settings.getMailHost }}</span>
@@ -80,7 +79,6 @@
                 </div>
             </div>
         </div>
-
         <div class="accordion-header">
             {{ form_label(form.mailEncryption) }}
             <span>{{ settings.getMailEncryption }}</span>
@@ -96,7 +94,6 @@
                 </div>
             </div>
         </div>
-
         <div class="accordion-header">
             {{ form_label(form.mailAuthMode) }}
             <span>{{ settings.getMailAuthMode }}</span>
@@ -110,10 +107,8 @@
                     {{ form_widget(form.mailAuthMode) }}
                     {{ form_errors(form.mailAuthMode) }}
                 </div>
-
             </div>
         </div>
-
         <div class="form-action">
             {{ form_row(form.save) }}
             {{ form_row(form.cancel) }}

@@ -1,0 +1,55 @@
+{% extends app.request.isXmlHttpRequest ? "admin/default/masters/layout-tabs-panel.html.twig" : "admin/default2/views/settings.html.twig" %}
+
+{% block tabPaneHeader %}
+<div class="controls-group">
+    <div class="controls-group">
+        <div class="left-controls">
+            <h4>Theme settings</h4>
+        </div>
+        <div class="right-controls">
+            <div class="btn-group">
+                <a class="btn btn-cmd cmd-upload-theme btn-round btn-round-sm" href="{{ app.url_generator.generate('admin/settings/themes/add') }}"><i class="fa fa-plus"></i> Upload theme</a>
+                <a class="btn btn-round btn-round-sm" href="#"><i class="fa fa-question"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block tabPaneContent %}
+<div class="accordion">
+    {{ form_start(form) }}
+    <div class="accordion-header">
+        {{ form_label(form.public_theme) }}
+        <span>{{ settings.getPublicTheme }}</span>
+        <a href="#"><i class="fa fa-pencil"></i> Edit</a>
+    </div>
+    <div class="accordion-body">
+        <div class="ab-content">
+            <p class="form-helper">When changing the resampling quality, existing media items do not get resampled. To unify quality off all media items in your library, you can resample all items with a click below.</p>
+            <div class="form-group field field-small option">
+                {{ form_widget(form.public_theme) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-header">
+        {{ form_label(form.admin_theme) }}
+        <span>{{ settings.getAdminTheme }}</span>
+        <a href="#"><i class="fa fa-pencil"></i> Edit</a>
+    </div>
+    <div class="accordion-body">
+        <div class="ab-content">
+            <p class="form-helper">When changing the resampling quality, existing media items do not get resampled. To unify quality off all media items in your library, you can resample all items with a click below.</p>
+            <div class="form-group field field-small option">
+                {{ form_widget(form.admin_theme) }}
+            </div>
+        </div>
+    </div>
+    <div class="form-action">
+        {{ form_row(form.save) }}
+        {{ form_row(form.cancel) }}
+    </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

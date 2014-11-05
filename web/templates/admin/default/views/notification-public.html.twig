@@ -1,0 +1,10 @@
+{% extends app.request.isXmlHttpRequest ? "admin/default/masters/layout-ajax.html.twig" : "admin/default/masters/layout-base.html.twig" %}
+
+{% block content %}
+<div class="main-content">
+    <h2 class="page-header top">Some fomr title</h2>
+    <div class="col-xs-12 npl">
+        {{ message }}
+    </div>
+</div>
+{% endblock %}

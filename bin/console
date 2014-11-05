@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+
+set_time_limit(0);
+
+define('APPLICATION_ENVIRONMENT', 'development');
+
+require __DIR__.'/../src/bootstrap.php';
+
+$console = require __DIR__.'/../src/console.php';
+$console->run();

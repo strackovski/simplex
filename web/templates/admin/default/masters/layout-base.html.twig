@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?xml version="1.0" encoding="utf-8"?>
+    <meta charset="utf-8">
+    <title>NV3 Admin</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="application programming, web development, mobile application development, PHP, Javascript, iOS">
+    <meta name="author" content="Vladimir Stračkovski">
+    <link href="{{ app.request.basepath }}/assets/build/styles.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build/jquery.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build/scripts.js"></script>
+</head>
+<body>
+<div class="container-full admin login-screen">
+
+    {% block content %}
+    {% endblock %}
+
+    <div id="site-modal-sm" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <p>One fine body&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn-confirm btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="site-modal-md" class="modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <p>One fine body&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-confirm btn-primary">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>
+
+</body>
+</html>

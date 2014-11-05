@@ -1,0 +1,15 @@
+{% extends "admin/default/masters/layout-admin.html.twig" %}
+
+
+{% form_theme form "bootstrap.html.twig" %}
+
+{% block content %}
+    <div class="main-content">
+        <h2>Form</h2>
+        <form method="post" enctype="multipart/form-data" action="">
+
+        {{ form_widget(form) }}
+
+        </form>
+    </div>
+{% endblock %}

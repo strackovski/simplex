@@ -1,0 +1,79 @@
+{% if videos|length > 0 %}
+    {#
+    <div class="dz-message">
+        <h4 class="page-header">Drop files here to add</h4>
+    </div>
+    <div class="btn-group">
+        <a href="#" class="btn btn-default btn-cmd cmd-multiselect"><span class="glyphicon glyphicon-unchecked"></span></a>
+    </div>
+    <div class="btn-group selected-menu">
+        <a href="{{ app.url_generator.generate('admin/media/delete') }}" class="btn btn-default btn-cmd cmd-remove-multiple"><span class="glyphicon glyphicon-remove"></span> Delete selected</a>
+    </div>
+    #}
+
+    <div class="controls-group">
+        <div class="dz-message">
+            <h4>Drop files here to add</h4>
+        </div>
+
+        {#<div class="right-controls">
+            <div class="btn-group selected-menu">
+             <a href="{{ app.url_generator.generate('admin/media/delete') }}" class="btn btn-primary btn-round btn-round-sm btn-cmd cmd-remove-multiple"><span class="glyphicon glyphicon-remove"></span> Delete selected</a>
+            </div>
+
+            <div class="btn-group">
+             <a class="btn btn-primary btn-round btn-round-sm btn-cmd cmd-multiselect" href="#"><i class="fa fa-square-o"></i> Select all</a>
+            </div>
+        </div>#}
+    </div>
+
+    <div class="tiles container-fluid">
+        {% for video in videos %}
+            <div class="tb-col removable">
+                <div class="thumbnail block">
+                    <div class="state">
+                        <div><i class="fa fa-check"></i></div>
+                    </div>
+                    <img src="{{ app.request.basepath ~ '/uploads/thumbnails/medium/' ~ video.getMediaId ~ '.jpeg' }}">
+                    <input type="checkbox" name="delete_items[]" value="{{ video.getId }}" />
+                    <div class="description">
+                        <a class="bottomleft btn-cmd cmd-remove" href="{{ app.url_generator.generate('admin/media/delete', {id:video.getId}) }}"><i class="fa fa-times"></i></a>
+                        <a class="toptop btn-cmd cmd-view-modal" href="{{ app.url_generator.generate('admin/media/view', {id:video.getId}) }}"><i class="fa fa-search"></i></a>
+                        <a class="bottomright" href="#"><i class="fa fa-square-o"></i></a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="dz-message">
+        <div class="jumbotron jumbo-clear">
+            <h1 class="page-header">No videos</h1>
+            <p class="page-type">Drag and drop image files here to add or click anywhere to open the file selection box.</p>
+            <div class="holder">
+                <div class="video">
+                    <div class="case">
+                        <div class="v-lens"></div>
+                        <div class="v-tube"></div>
+                        <div class="v-holder"></div>
+                    </div>
+                    <div class="l-wheel wheel">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="r-wheel wheel">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tiles container-fluid">
+
+    </div>
+{% endif %}

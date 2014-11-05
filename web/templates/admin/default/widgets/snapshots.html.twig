@@ -1,0 +1,54 @@
+{% if snapshots|length < 1 %}
+    <div class="jumbotron jumbo-clear">
+        <h3 class="page-header"><i class="fa fa-history"></i> Welcome to Snapshots!</h3>
+        <p>Snapshots allow you to save a snapshot of application settings.</p>
+        <br>
+        <a href="{{ app.url_generator.generate('admin/settings/save') }}" class="btn btn-lg btn-cmd cmd-populate-parent btn-primary">Snap a shot now</a>
+    </div>
+{% else %}
+
+    <div class="controls-group">
+        <div class="left-controls">
+            <h4>Settings Snapshots</h4>
+        </div>
+        <div class="right-controls">
+            <div class="btn-group">
+                <a class="btn btn-round btn-round-sm" href="{{ app.url_generator.generate('admin/settings/save') }}"><i class="fa fa-refresh"></i> New snapshot</a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-condensed table-justified table-small table-styled">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Created</th>
+            <th>Updated</th>
+            <th>Comment</th>
+            <th>Options</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for shot in snapshots %}
+            <tr class="removable">
+                <td><span>{{ shot.getId }}</span></td>
+                <td><span>{{ shot.getCreatedAt.format('Y-m-d H:i:s') }}</span></td>
+                <td>
+                    {% if shot.getUpdatedAt %}
+                        <span>{{ shot.getUpdatedAt.format('Y-m-d H:i:s') }}</span>
+                    {% else %}
+                        <span>-</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <span>Comment if any</span>
+                </td>
+                <td class="td-with-btn">
+                    <a href="{{ app.url_generator.generate('admin/settings/activate', {id: shot.getId}) }}" class="btn btn-round btn-round-sm btn-cmd cmd-toggle"><span class="glyphicon glyphicon-ok"></span> Activate</a>
+                    <a href="{{ app.url_generator.generate('admin/settings/delete', {id: shot.getId}) }}" class="btn btn-round btn-round-sm btn-delete btn-cmd cmd-remove"><span class="glyphicon glyphicon-trash"></span> Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

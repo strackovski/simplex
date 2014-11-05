@@ -1,0 +1,36 @@
+<div class="modal-header clear">
+    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    <h4 class="modal-title">Theme Manager</h4>
+</div>
+<div class="modal-body">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#site" role="tab" data-toggle="tab"><i class="fa fa-globe"></i> Site Themes</a></li>
+        <li><a href="#admin" role="tab" data-toggle="tab"><i class="fa fa-gavel"></i> Administration Area Themes</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="tab-pane active" id="site">
+            <form method="post" id="theme-dropzone-site" enctype="multipart/form-data" action="{{ app.url_generator.generate('admin/settings/theme/upload', {type: 'site'}) }}">
+                <div class="col-lg-12 form-group hidden">
+                    {{ form_row(form._token) }}
+                </div>
+                <div class="dz-result">
+                    <h3>Drop themes (zip packages) here to upload <span>or click to open the file menu</span></h3>
+                </div>
+            </form>
+        </div>
+        <div class="tab-pane" id="admin">
+            <form method="post" id="theme-dropzone-admin" enctype="multipart/form-data" action="{{ app.url_generator.generate('admin/settings/theme/upload', {type: 'admin'}) }}">
+                <div class="col-lg-12 form-group hidden">
+                    {{ form_row(form._token) }}
+                </div>
+                <div class="dz-result">
+                    <h3>Drop admin themes (zip packages) here to upload <span>or click to open the file menu</span></h3>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-cancel btn-default" data-dismiss="modal">Close</button>
+</div>

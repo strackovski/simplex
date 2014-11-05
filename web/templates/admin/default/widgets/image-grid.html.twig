@@ -1,0 +1,45 @@
+{% if images|length > 0 %}
+    <div class="controls-group">
+        <div class="dz-message">
+            <h4>Drop files here to add</h4>
+        </div>
+    </div>
+    <div class="container-fluid tiles">
+        {% for image in images %}
+            <div class="tb-col removable col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="thumbnail">
+                    <img src="{{ app.request.basepath ~ '/uploads/' ~ image.getWebPath('crop') }}">
+                    <input type="checkbox" name="delete_items[]" value="{{ image.getId }}" />
+                    <div class="state">
+                        <div href="#"><i class="fa fa-check"></i></div>
+                    </div>
+                    <div class="description">
+                        <a class="text-center bottomleft btn-cmd cmd-remove" href="{{ app.url_generator.generate('admin/media/delete', {id:image.getId}) }}"><i class="fa fa-times"></i></a>
+                        <a class="text-center toptop btn-cmd cmd-view-modal" href="{{ app.url_generator.generate('admin/media/view', {id:image.getId}) }}"><i class="fa fa-search"></i></a>
+                        <a class="text-center bottomright" href="#"><i class="fa fa-square-o"></i></a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="dz-message">
+        <div class="jumbotron jumbo-clear">
+            <h1 class="page-header">No images</h1>
+            <p class="page-type">Drag and drop image files here to add or click anywhere to open the file selection box.</p>
+            <div class="holder">
+                <div class="camera">
+                    <div class="left-button"></div>
+                    <div class="middle-button"></div>
+                    <div class="right-button"></div>
+                    <div class="camera-lens">
+                        <div class="camera-lens-inner"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tiles container-fluid">
+
+    </div>
+{% endif %}

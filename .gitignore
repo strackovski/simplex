@@ -1,0 +1,13 @@
+.idea/
+.DS_Store
+._.DS_Store
+config/database.json
+config/mailing.json
+/vendor/
+web/assets/build/*
+web/assets/dev
+web/uploads/*
+web/index_dev.php
+composer.lock
+var/cache
+var/logs

@@ -1,0 +1,81 @@
+{% extends app.request.isXmlHttpRequest ? "admin/default/masters/layout-ajax.html.twig" : "admin/default/masters/layout-admin.html.twig" %}
+
+{% block content %}
+<div class="main-content affix-content">
+    <div class="flash-messages">
+        {% for message in app.session.getFlashBag.get('success') %}
+            <span class="alert alert-flash-message alert-success">{{ message|raw }}</span>
+        {% endfor %}
+    </div>
+
+    {% if users|length < 1 %}
+        <span class="label label-error">impossibru</span>
+    {% else %}
+        <div class="affixed">
+            <div class="row">
+                <div class="col-xs-4 affix-left-controls">
+                    <div class="btn-group">
+                        <a href="{{ app.url_generator.generate('admin/user/add') }}" class="btn btn-round btn-action tooltipped" data-toggle="tooltip" data-placement="right" title="Create a new user"><i class="fa fa-plus"></i></a>
+                    </div>
+                </div>
+                <div class="col-xs-4 text-center">
+                    <h5>Users</h5>
+                </div>
+                <div class="col-xs-4 text-right affix-right-controls">
+                    <div class="btn-group">
+                        <a href="#" class="btn-round cmd-view-help btn-cmd btn btn-help tooltipped" data-toggle="tooltip" data-placement="bottom" title="Show help"><i class="fa fa-question"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-help alert-exposed row">
+        <div class="col-xs-12">
+            <h3><i class="fa fa-book"></i> A little help with user management</h3>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <p class="text-lead">Administrator and Editor roles have access to the administration interface. Users with editor roles are granted access to content interfaces, while administrators in addition have access to application settings and user management.</p>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            <h5>Your group: Administrators</h5>
+            <p>As an administrator you can manage users for this application instance by creating, editing and removing user accounts. Removing a user account will not remove content published by that user, but instead set the content author to ‘unknown author’.</p>
+        </div>
+        <div class="col-xs-12">
+            <br>
+            <a href="#" class="btn btn-success pull-right">OK, I got it.</a>
+        </div>
+    </div>
+
+    <div class="collection xhr-container affix-collection">
+        <div class="row">
+            {% for user in users%}
+                <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">
+                    <div class="thumbnail tb-default text-center">
+                        {% if user.getAvatar %}
+                            <div class="usr-avatar usr-avatar-md">
+                                <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ user.getAvatar }}" alt="" width="100" />
+                            </div>
+                        {% else %}
+                            <div class="usr-avatar usr-avatar-md">
+                                <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt="" width="100" />
+                            </div>
+                        {% endif %}
+                        <div class="caption">
+                            <h4>{{ user.displayName|upper }}</h4>
+                            {% for role in user.getRoles %}
+                                <span class="label label-status tooltipped" data-toggle="tooltip" data-placement="bottom" title="User role">{{ role|slice(5) }}</span>
+                            {% endfor %}
+                            <p class="small">Joined: {{ user.getCreatedAt|date('M d \'y h:i') }}</p>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{{  app.url_generator.generate('admin/user/edit', {user:user.getId}) }}" class="btn btn-round btn-round-sm tooltipped" data-toggle="tooltip" data-placement="bottom" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a href="{{  app.url_generator.generate('admin/user/delete', {user:user.getId}) }}" class="btn btn-round btn-round-sm btn-delete tooltipped btn-cmd cmd-remove" data-toggle="tooltip" data-placement="bottom" title="Remove"><span class="glyphicon glyphicon-trash"></span></a>
+                                <a href="mailto:{{ user.getEmail }}" class="btn btn-round btn-round-sm tooltipped" data-toggle="tooltip" data-placement="bottom" title="Send email"><span class="glyphicon glyphicon-envelope"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

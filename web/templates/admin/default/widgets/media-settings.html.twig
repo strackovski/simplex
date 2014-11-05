@@ -1,0 +1,236 @@
+{% extends app.request.isXmlHttpRequest ? "admin/default/masters/layout-tabs-panel.html.twig" : "admin/default2/views/settings.html.twig" %}
+
+{% block tabPaneHeader %}
+    <div class="controls-group">
+        <div class="left-controls">
+            <h4>Media processing options</h4>
+        </div>
+        <div class="right-controls">
+            <div class="btn-group">
+                <a class="btn btn-round btn-round-sm btn-cmd cmd-resample-media" href="{{ app.url_generator.generate('admin/media/resample') }}"><i class="fa fa-refresh"></i> Resample library</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tabPaneContent %}
+    <div class="accordion">
+        {{ form_start(form) }}
+        <div class="accordion-header">
+            {{ form_label(form.imageResampleQuality) }}
+            <span>{{ settings.getImageResampleQuality }}</span>
+            <a href="#"><i class="fa fa-pencil"></i> Edit</a>
+        </div>
+        <div class="accordion-body">
+            <div class="ab-content">
+                <p class="form-helper">When changing the resampling quality, existing media items do not get resampled. To unify quality off all media items in your library, you can resample all items with a click below.</p>
+                {{ form_widget(form.imageResampleQuality) }}
+                <div id="imageResampleQuality-slider" class="slider-wrapper"><div class="ui-left-addition"></div><span class="ticks"></span><div class="ui-right-addition"></div></div>
+                {{ form_errors(form.imageResampleQuality) }}
+            </div>
+        </div>
+
+        <div class="accordion-header">
+            <label>Image resample settings</label>
+            <span>{{ settings.getImageResizeDimensions('small').0 }}</span>
+            <a href="#"><i class="fa fa-pencil"></i> Edit</a>
+        </div>
+        <div class="accordion-body">
+            <div class="ab-content">
+                <p class="form-helper">Images in the library are automatically resized to various sizes and cropped. The resize procedure creates three size variations, while the crop procedure extracts a portion of the original image. You can customize the behaviour of both processes. All units are in pixels.</p>
+
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-7 field field-small text-right">
+                                <p>Small</p>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="form-group field field-small text-center">
+                                    {{ form_label(form.image_resize_small_width) }}
+                                    {{ form_widget(form.image_resize_small_width, {value: settings.getImageResizeDimensions('small').0 }) }}
+                                    {{ form_errors(form.image_resize_small_width) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="form-group field field-small text-center">
+                                    {{ form_label(form.image_resize_small_height) }}
+                                    {{ form_widget(form.image_resize_small_height, {value: settings.getImageResizeDimensions('small').1 }) }}
+                                    {{ form_errors(form.image_resize_small_height) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-7 field field-small text-right">
+                                <p>Medium</p>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="form-group field field-small text-center">
+                                    {{ form_label(form.image_resize_medium_width) }}
+                                    {{ form_widget(form.image_resize_medium_width, {value: settings.getImageResizeDimensions('medium').0 }) }}
+                                    {{ form_errors(form.image_resize_medium_width) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="form-group field field-small text-center">
+                                    {{ form_label(form.image_resize_medium_height) }}
+                                    {{ form_widget(form.image_resize_medium_height, {value: settings.getImageResizeDimensions('medium').1 }) }}
+                                    {{ form_errors(form.image_resize_medium_height) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-7 field field-small text-right">
+                                <p>Large</p>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="form-group field field-small text-center">
+                                    {{ form_label(form.image_resize_large_width) }}
+                                    {{ form_widget(form.image_resize_large_width, {value: settings.getImageResizeDimensions('large').0 }) }}
+                                    {{ form_errors(form.image_resize_large_width) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="form-group field field-small text-center">
+                                    {{ form_label(form.image_resize_large_height) }}
+                                    {{ form_widget(form.image_resize_large_height, {value: settings.getImageResizeDimensions('large').1 }) }}
+                                    {{ form_errors(form.image_resize_large_height) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <p class="form-helper">Specify the target width and height for the cropped image. This can result in undesirable behaviour like blank edges on images on size mismatch. The auto-cropping feature uses relative measure to crop the image according to a common library aspect ratio, and is immune to such errors. It is recommended to enable auto-cropping.</p>
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-7 field field-small text-right">
+                                <p>Croperando</p>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="form-group field field-small text-center">
+                                    {{ form_label(form.image_crop_width) }}
+                                    {% if settings.getImageResizeDimensions('crop') %}
+                                        {{ form_widget(form.image_crop_width, {value: settings.getImageResizeDimensions('crop').0 }) }}
+                                    {% else %}
+                                        {{ form_widget(form.image_crop_width) }}
+                                    {% endif %}
+                                    {{ form_errors(form.image_crop_width) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="form-group field field-small text-center">
+                                    {{ form_label(form.image_crop_height) }}
+                                    {% if settings.getImageResizeDimensions('crop') %}
+                                        {{ form_widget(form.image_crop_height, {value: settings.getImageResizeDimensions('crop').1 }) }}
+                                    {% else %}
+                                        {{ form_widget(form.image_crop_height) }}
+                                    {% endif %}
+                                    {{ form_errors(form.image_crop_height) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="field field-small option">
+                                    {{ form_row(form.image_auto_crop) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-header">
+            <label>Watermarking</label>
+            {% if settings.getWatermark %}
+                <span><img src="{{ app.request.getBasePath() ~ '/uploads/' ~ settings.getWatermark }}" /></span>
+            {% else %}
+                <span>No watermark file</span>
+            {% endif %}
+            <a href="#"><i class="fa fa-pencil"></i> Edit</a>
+        </div>
+        <div class="accordion-body">
+            <div class="ab-content">
+                <p class="form-helper">To enable watermarking, upload an image to use as a watermark. The uploaded watermark image is used as is, and is not processed any further (like resized or cropped). Note that watermarking must be explicitly enabled.</p>
+                {% if settings.getWatermark %}
+                    <div class="single-item-box select-image">
+                        <div class="select-overlay">Change file</div>
+                        <img src="{{ app.request.getBasePath() ~ '/uploads/' ~ settings.getWatermark }}" width="80" />
+                    </div>
+                {% endif %}
+                <div class="watermark-file">
+                    {{ form_label(form.watermark) }}
+                    {{ form_widget(form.watermark) }}
+                    {{ form_errors(form.watermark) }}
+                </div>
+                <div class="select-file select-watermark">Choose file</div>
+
+                <div class="field field-small option">
+                    {{ form_row(form.watermarkMedia) }}
+                </div>
+
+                <div class="form-group field field-small">
+                    {{ form_label(form.watermark_position) }}
+                    {{ form_widget(form.watermark_position) }}
+                    {{ form_errors(form.watermark_position) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-header">
+            <label>File handling</label>
+            <span></span>
+            <a href="#"><i class="fa fa-pencil"></i> Edit</a>
+        </div>
+        <div class="accordion-body">
+            <div class="ab-content">
+                <p class="form-helper">By default the original image is saved and left unmodified on the server. This is convenient when you change the resampling settings and then wish to resample existing items in your library.</p>
+
+                <div class="field field-small option">
+                    {{ form_row(form.image_keep_original) }}
+                </div>
+                <p class="form-helper">Metadata is saved to Simplex prior to processing, and the file's metadata is left untouched. After image processing, the metadata remains stored in the processed images, meaning it is readable by your site's visitors. To remove metadata from processed images, select the option below.</p>
+                <div class="field field-small option">
+                    {{ form_row(form.image_strip_meta) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-action">
+            {{ form_row(form.save) }}
+            {{ form_row(form.cancel) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

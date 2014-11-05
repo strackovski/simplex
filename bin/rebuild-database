@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+./bin/console orm:schema-tool:drop --force
+./bin/console orm:schema-tool:create
+./bin/console orm:generate-proxies

@@ -1,0 +1,58 @@
+{% extends "admin/default/masters/layout-admin.html.twig" %}
+
+{% block content %}
+    <div class="main-content single active affix-content">
+        <div class="affixed">
+            <div class="row">
+                <div class="col-xs-8 affix-left-controls">
+                    <h1>{{ post.getTitle }}</h1>
+
+                </div>
+                <div class="col-xs-4 affix-right-controls text-right">
+                    <div class="btn-group" role="toolbar">
+                        <a href="{{ app.url_generator.generate('admin/post/edit', {post:post.getId}) }}" class="btn btn-round"><i class="fa fa-pencil"></i></a>
+                        <a href="#togglemetadata" class="open hide-meta btn tooltipped btn btn-round" data-toggle="tooltip" data-placement="left" title="Toggle metadata">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="affix-collection">
+            <div class="col-xs-7 viewable-content fixo">
+                <div class="content-scrollbar"></div>
+                <div class="content-inner-container fixo">
+                    <div class="content-scrollable fixo">
+                        <div class="content-wrap">
+                            {{ post.getBody|raw }}
+                            {% if post.getMediaItems.count > 0 %}
+                                <div class="viewable-media">
+                                    <div class="inner">
+                                        <ul class="media-slider">
+                                            {% for media in post.getMediaItems %}
+                                                <li><img src="{{ app.request.basepath ~ '/uploads/crops/' ~ media.getPath }}" alt=""/></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-5 stats viewable-meta fixo">
+                <div class="scrollbar"></div>
+                <div class="inner-container">
+                    <div class="scrollable element fixo">
+                        {% include 'admin/default/widgets/post-metadata.html.twig' %}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}

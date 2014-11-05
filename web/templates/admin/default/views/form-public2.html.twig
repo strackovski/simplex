@@ -1,0 +1,31 @@
+{% extends app.request.isXmlHttpRequest ? "admin/default/masters/layout-ajax.html.twig" : "admin/default/masters/layout-base.html.twig" %}
+
+{% form_theme form "bootstrap.html.twig" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row instructions">
+            <div class="col-xs-12 ">
+                <h3 class="text-center">Account activation</h3>
+            </div>
+
+            <div class="col-xs-8 col-xs-offset-2 text-center">
+                <p>Please choose your new password to log into Simplex.</p>
+
+            </div>
+            {{ form_start(form) }}
+            <div class="col-xs-6 col-xs-offset-3 npl">
+                <div class="form-group field">
+                    {{ form_widget(form.password) }}
+                </div>
+
+                <div class="text-center">
+                    {{ form_widget(form.save) }}
+
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?xml version="1.0" encoding="utf-8"?>
+    <meta charset="utf-8">
+    <title>NV3 Admin</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="application programming, web development, mobile application development, PHP, Javascript, iOS">
+    <meta name="author" content="Vladimir Stračkovski">
+    <link href="{{ app.request.basepath }}/assets/build/styles.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build/jquery.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build/scripts.js"></script>
+</head>
+<body>
+    <div class="container-full admin">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="sidebar">
+                    <ul class="nav nav-sidebar">
+                        <li class="{% if 'dashboard' in app.request.attributes.get('_route') %}active{% endif %} tooltipped" data-placement="right" title="Simplex">
+                            {% if app.settings.getSiteLogo %}
+                                <a class="brand" href="{{ app.url_generator.generate('admin/dashboard') }}"><img src="{{ app.request.basepath ~ '/uploads/' ~ app.settings.getSiteLogo.getPath }}" class="logo-img" alt="logo"/><span>Simplex</span></a>
+                            {% else %}
+                                <a class="brand" href="{{ app.url_generator.generate('admin/dashboard') }}"><img src="{{ app.request.basepath ~ '/assets/images/tetra_gray.png' }}" class="logo-img" alt="logo"/><span>Simplex</span></a>
+                            {% endif %}
+                        </li>
+                        <li class="{% if 'post' in app.request.attributes.get('_route') %}active{% endif %} tooltipped sc-posts" data-placement="right" title="Posts"><a href="{{ app.url_generator.generate('admin/posts') }}"><img src="{{ app.request.getBasePath() }}/assets/images/ico-post.png" alt="" width="24" /> <span>Posts</span></a></li>
+                        <li class="{% if 'media' in app.request.attributes.get('_route') %}active{% endif %} tooltipped sc-media" data-placement="right" title="Media"><a href="{{ app.url_generator.generate('admin/media') }}"><img src="{{ app.request.getBasePath() }}/assets/images/ico-media.png" alt="" width="24" /> <span>Media</span></a></li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="{% if 'page' in app.request.attributes.get('_route') %}active{% endif %} tooltipped sc-pages" data-placement="right" title="Pages"><a href="{{ app.url_generator.generate('admin/pages') }}"><img src="{{ app.request.getBasePath() }}/assets/images/ico-pages.png" alt="" width="24" /> <span>Pages</span></a></li>
+                            <li class="{% if 'settings' in app.request.attributes.get('_route') %}active{% endif %} tooltipped sc-settings" data-placement="right" title="Settings"><a href="{{ app.url_generator.generate('admin/settings') }}"><img src="{{ app.request.getBasePath() }}/assets/images/ico-settings.png" alt="" width="24" /> <span>Settings</span></a></li>
+                            <li class="{% if 'users' in app.request.attributes.get('_route') %}active{% endif %} tooltipped sc-users" data-placement="right" title="Users"><a href="{{ app.url_generator.generate('admin/users') }}"><img src="{{ app.request.getBasePath() }}/assets/images/ico-users.png" alt="" width="24" /> <span>Users</span></a></li>
+                        {% endif %}
+                    </ul>
+
+                    <ul class="nav nav-sidebar nav-2nd">
+                        {% if app.settings.getLive == 1 %}
+                            <li class="tooltipped" data-placement="right" title="Page is live">
+                                <a href="{{ app.request.getBaseURL() }}">
+                                    <img src="{{ app.request.getBasePath() }}/assets/images/ico-tick.png" alt="" width="24" />
+                                    <span>Page online</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="tooltipped" data-placement="right" title="Page is offline">
+                                <a href="{{ app.request.getBaseURL() }}">
+                                    <img src="{{ app.request.getBasePath() }}/assets/images/ico-cross.png" alt="" width="24" />
+                                    <span>Page offline</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+
+                    <ul class="nav nav-sidebar nav-user">
+                        <li>
+                            <a href="#" tabindex="1" data-trigger="focus" class="user-toggle" data-container="body" data-toggle="popover" data-placement="right" data-title="{{ app.security.token ? app.security.token.user.displayName : null }}" data-content="{% filter escape|raw %}{% include 'admin/default/widgets/user-menu.html.twig' %}{% endfilter %}">
+                                {% if app.security.token and app.security.token.user.getAvatar %}
+                                    <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ app.security.token.user.getAvatar }}" alt="" class="profile-img" />
+                                {% else %}
+                                    <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt="" class="profile-img" />
+                                {% endif %}
+                                <span>{{ app.security.token ? app.security.token.user.displayName : null }}</span>
+                                <div class="pull-right ddr-caret"><i class="fa fa-angle-right"></i></div>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav nav-sidebar nav-side-bottom">
+                        <li><a href="#toggle" class="text-center">
+                                <img src="{{ app.request.basepath ~ '/assets/images/logo.png' }}" alt="NVNVNV" width="50"/>
+                        </a></li>
+                    </ul>
+                    <ul class="nav nav-sidebar toggle-control">
+                        <li><a href="#toggle" class="text-center"><i class="fa fa-angle-double-right"></i> <span></span></a></li>
+                    </ul>
+                </div>
+                {% block content %}
+
+                {% endblock %}
+            </div>
+        </div>
+
+        <div id="site-modal-sm" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>One fine body&hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn-confirm btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="site-modal-md" class="modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>One fine body&hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-cancel btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-confirm btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal media-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <img src="" alt=""/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="col-xs-4">i</div>
+                <div class="col-xs-4 title"></div>
+                <div class="col-xs-4"><a href="#" class="popover-link" data-toggle="popover" title="Share this" data-content="Share links..."><i class="fa fa-share"></i></a></div>
+            </div>
+
+            <div class="modal-close" data-dismiss="modal"><span>Escape to close </span><span class="glyphicon glyphicon-remove"></span></div>
+            <div class="modal-prev modal-controls"><i class="fa fa-angle-left fa-4x"></i></div>
+            <div class="modal-next modal-controls"><i class="fa fa-angle-right fa-4x"></i></div>
+        </div>
+
+    </div>
+</body>
+</html>

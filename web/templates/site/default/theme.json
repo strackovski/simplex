@@ -1,0 +1,13 @@
+{
+    "name": "default",
+    "version": "1",
+    "description": "Default Simplex Site Theme",
+    "authors": [
+        {
+            "name": "Neja Dolinar"
+        },
+        {
+            "name": "Vladimir Stračkovski"
+        }
+    ]
+}

@@ -1,0 +1,53 @@
+{
+    "name": "nv/Simplex",
+    "version": "1.0.4",
+    "description": "Simplex web CMS",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vladimir Stračkovski",
+            "email": "vlado@nv3.org",
+            "homepage": "http://www.nv3.org"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "silex/silex": "~1.1",
+        "silex/web-profiler": "~1.0",
+        "symfony/browser-kit": "~2.3",
+        "symfony/class-loader": "~2.3",
+        "symfony/config": "~2.3",
+        "symfony/console": "~2.5",
+        "symfony/css-selector": "~2.3",
+        "symfony/debug": "~2.3",
+        "symfony/finder": "~2.3",
+        "symfony/form": "2.4",
+        "symfony/monolog-bridge": "~2.3",
+        "symfony/process": "~2.3",
+        "symfony/security": "~2.3",
+        "symfony/translation": "~2.3",
+        "symfony/twig-bridge": "~2.3",
+        "symfony/doctrine-bridge": "2.5.3",
+        "symfony/validator": "~2.3",
+        "doctrine/dbal": "2.*",
+        "dflydev/doctrine-orm-service-provider": "1.0.6",
+        "mheap/Silex-Assetic": "*",
+        "lmammino/jsmin4assetic": "1.0.*",
+        "patchwork/jsqueeze": "dev-master",
+        "natxet/CssMin": "dev-master",
+        "braincrafted/bootstrap-bundle": "2.0.0",
+        "mjohnson/type-converter": "2.0.0",
+        "imagine/imagine": "~0.5.0",
+        "neutron/silex-imagine-provider": "dev-master",
+        "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
+        "nv/semtools": "dev-master"
+    },
+    "scripts": {
+        "pre-install-cmd": "nv\\Simplex\\Composer\\Script::preInstall",
+        "post-install-cmd": "nv\\Simplex\\Composer\\Script::postInstall"
+    },
+    "autoload": {
+        "psr-4": { "nv\\Simplex\\": "src/" }
+    }
+}

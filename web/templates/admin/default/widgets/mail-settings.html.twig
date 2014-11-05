@@ -1,0 +1,123 @@
+{% extends app.request.isXmlHttpRequest ? "admin/default/masters/layout-tabs-panel.html.twig" : "admin/default2/views/settings.html.twig" %}
+
+{% block tabPaneHeader %}
+    <div class="controls-group">
+        <div class="left-controls">
+            <h4>Mailing configuration</h4>
+        </div>
+        <div class="right-controls">
+            <div class="btn-group">
+                <a class="btn btn-primary btn-round btn-round-sm" href="#"><i class="fa fa-question"></i></a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tabPaneContent %}
+    <div class="accordion">
+        {{ form_start(form) }}
+        <div class="accordion-header">
+            <label for="">Enable mailing</label>
+            <span>{% if settings.getEnableMailing %} <i class="fa fa-check"></i> {% else %} <i class="fa fa-times"></i> {% endif %} </span>
+            <a href="#"><i class="fa fa-pencil"></i> Edit</a>
+        </div>
+        <div class="accordion-body">
+            <div class="ab-content">
+                <p class="form-helper">The mailing system is required for user account activation, automated user credentials support, and email logging. It is recommended you enable and configure your system mailing account.</p>
+                <div class="form-group field field-small option">
+                    {{ form_row(form.enableMailing) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-header">
+            <label>Server</label>
+            <span>{{ settings.getMailHost }}</span>
+            <a href="#"><i class="fa fa-pencil"></i> Edit</a>
+        </div>
+        <div class="accordion-body">
+            <div class="ab-content">
+                <p class="form-helper">Server configuration parameters are provided by your mail/hosting service provider.</p>
+
+                <div class="form-group field field-small">
+                    {{ form_label(form.mailTransport) }}
+                    {{ form_widget(form.mailTransport) }}
+                    {{ form_errors(form.mailTransport) }}
+                </div>
+                <div class="form-group field field-small">
+                    {{ form_label(form.mailHost) }}
+                    {{ form_widget(form.mailHost) }}
+                    {{ form_errors(form.mailHost) }}
+                </div>
+                <div class="form-group field field-small">
+                    {{ form_label(form.mailPort) }}
+                    {{ form_widget(form.mailPort) }}
+                    {{ form_errors(form.mailPort) }}
+                </div>
+            </div>
+        </div>
+        <div class="accordion-header">
+            <label for="">Authentication credentials</label>
+            <span></span>
+            <a href="#"><i class="fa fa-pencil"></i> Edit</a>
+        </div>
+        <div class="accordion-body">
+            <div class="ab-content">
+                <p class="form-helper">Account credentials provided by mail service provider.</p>
+                <div class="form-group">
+                    <div class="form-group field field-small">
+                        {{ form_label(form.mailPassword) }}
+                        {{ form_widget(form.mailPassword) }}
+                        {{ form_errors(form.mailPassword) }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group field field-small">
+                        {{ form_label(form.mailUsername) }}
+                        {{ form_widget(form.mailUsername) }}
+                        {{ form_errors(form.mailUsername) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-header">
+            {{ form_label(form.mailEncryption) }}
+            <span>{{ settings.getMailEncryption }}</span>
+            <a href="#"><i class="fa fa-pencil"></i> Edit</a>
+        </div>
+        <div class="accordion-body">
+            <div class="ab-content">
+                <p class="form-helper">Enc</p>
+                <div class="form-group field field-small">
+                    {{ form_label(form.mailEncryption) }}
+                    {{ form_widget(form.mailEncryption) }}
+                    {{ form_errors(form.mailEncryption) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-header">
+            {{ form_label(form.mailAuthMode) }}
+            <span>{{ settings.getMailAuthMode }}</span>
+            <a href="#"><i class="fa fa-pencil"></i> Edit</a>
+        </div>
+        <div class="accordion-body">
+            <div class="ab-content">
+                <p class="form-helper">Enc</p>
+                <div class="form-group field field-small">
+                    {{ form_label(form.mailAuthMode) }}
+                    {{ form_widget(form.mailAuthMode) }}
+                    {{ form_errors(form.mailAuthMode) }}
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-action">
+            {{ form_row(form.save) }}
+            {{ form_row(form.cancel) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

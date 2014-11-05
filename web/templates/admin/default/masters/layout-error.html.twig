@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?xml version="1.0" encoding="utf-8"?>
+    <meta charset="utf-8">
+    <title>NV3 Admin</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="application programming, web development, mobile application development, PHP, Javascript, iOS">
+    <meta name="author" content="Vladimir Stračkovski">
+    <link href='http://fonts.googleapis.com/css?family=Actor|Oswald:400,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Arvo|Shadows+Into+Light|Open+Sans+Condensed:300|Titillium+Web:400,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Nixie+One|Neucha|Chewy|Satisfy' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Nova+Round|Yanone+Kaffeesatz:400,700|Audiowide|Amaranth:400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lekton|Puritan|Anaheim|Magra|Antic|Advent+Pro' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Domine:400,700|Antic+Slab|Playfair+Display:400,700|Poiret+One|Bitter:400,700|PT+Serif:400,700|Kreon:400,700|Rokkitt:400,700|Droid+Serif:400,700|Roboto+Slab:400,300|Bree+Serif|Changa+One|Squada+One|Playball|Righteous' rel='stylesheet' type='text/css'>
+
+    <link href="{{ app.request.basepath }}/assets/build/styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="container-full admin">
+    {% block content %}
+    {% endblock %}
+</div>
+<script type="text/javascript" src="{{ app.request.basepath }}/assets/build/jquery.js"></script>
+
+</body>
+</html>

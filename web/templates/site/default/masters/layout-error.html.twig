@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?xml version="1.0" encoding="utf-8"?>
+    <meta charset="utf-8">
+    <title>NV3</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <link href="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/styles/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/styles/styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="container-full">
+        {% block content %}{% endblock %}
+        <div class="page page01 footer">
+            <div class="container">
+                <div class="wrapper">
+                    <p class="kreon">nv3 2014 | All rights reserved</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build/jquery.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build/scripts.js"></script>
+</body>
+</html>

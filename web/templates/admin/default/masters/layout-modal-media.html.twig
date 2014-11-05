@@ -1,0 +1,18 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-body">
+            {% block body %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <div class="col-xs-4">{% block header %}{% endblock %}</div>
+    <div class="col-xs-4 title"></div>
+    <div class="col-xs-4"><a href="#" class="popover-link" data-toggle="popover" title="Share this" data-content="Share links..."><i class="fa fa-share"></i></a></div>
+</div>
+
+<div class="modal-close" data-dismiss="modal"><span>Escape to close </span><span class="glyphicon glyphicon-remove"></span></div>
+<div class="modal-prev modal-controls"><i class="fa fa-angle-left fa-4x"></i></div>
+<div class="modal-next modal-controls"><i class="fa fa-angle-right fa-4x"></i></div>

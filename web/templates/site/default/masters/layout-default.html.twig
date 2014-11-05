@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?xml version="1.0" encoding="utf-8"?>
+    <meta charset="utf-8">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <link href="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/styles/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/styles/styles.css" rel="stylesheet" type="text/css" />
+    <link href='http://fonts.googleapis.com/css?family=Bree+Serif|Open+Sans:400,300,600&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+</head>
+<body>
+<div class="container">
+    <nav>
+        {% for page in menu %}
+            <a href="{{ app.request.baseUrl ~ '/' ~ page.getSlug }}">{{ page.getTitle }}</a>
+        {% endfor %}
+    </nav>
+</div>
+<div class="jumbotron text-center">
+    <h1>My page title</h1>
+    <p class="lead page-description">
+        GFM Markdown table syntax is quite simple. It does not allow row or cell spanning as well
+        as putting multi-line text in a cell.
+    </p>
+</div>
+<div class="container">
+    <div class="row">
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
+</body>
+</html>

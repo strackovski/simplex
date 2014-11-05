@@ -1,0 +1,114 @@
+{% extends "admin/default/masters/layout-admin.html.twig" %}
+
+{% block content %}
+
+<div class="main-content affix-content">
+    <div class="flash-messages">
+        {% for message in app.session.getFlashBag.get('success') %}
+            <span class="alert alert-flash-message alert-success">{{ message|raw }}</span>
+        {% endfor %}
+    </div>
+
+    {% if pages|length < 1 %}
+        <div class="jumbotron jumbo-clear">
+            <h1 class="page-header text-center">Hay páginas</h1>
+            <p class="text-center">No se encontraron páginas aquí negrito!</p>
+            <div class="holder holder-post">
+                <div class="p-main">
+                    <div class="p-header">
+                        <div class="p-flag"></div>
+                        <div class="p-title"></div>
+                    </div>
+                    <div class="p-content">
+                        <ul class="p-insides">
+                            <li class="img"></li>
+                            <li class="line"></li>
+                            <li class="line"></li>
+                            <li class="line"></li>
+                            <li class="line"></li>
+                            <li class="line"></li>
+                            <li class="line"></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <p class="text-center"><a href="{{ app.url_generator.generate('admin/post/add') }}" class="btn btn-primary btn-action btn-lg" role="button">Add a post now</a></p>
+        </div>
+    {% else %}
+        <div class="affixed">
+            <div class="row">
+                <div class="col-xs-4 affix-left-controls">
+                    <div class="btn-group">
+                        <a href="{{ app.url_generator.generate('admin/page/add') }}" class="btn btn-round btn-action tooltipped" data-toggle="tooltip" data-placement="right" title="Create new page"><i class="fa fa-plus"></i></a>
+                    </div>
+                </div>
+                <div class="col-xs-4 text-center">
+                    <h5>Pages</h5>
+                </div>
+                <div class="col-xs-4 text-right affix-right-controls">
+                    <div class="btn-group">
+                        <a href="#" class="btn-round btn-help cmd-view-help btn-cmd btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Show help"><i class="fa fa-question"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-help alert-exposed row">
+            <div class="col-xs-12">
+                <h3><i class="fa fa-book"></i> Help with Pages</h3>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <p class="text-lead">Pages are here to help you with the following things:</p>
+                <ul>
+                    <li>expose a human-friendly URL for each of your pages (slug),</li>
+                    <li>attach content such as posts or media to your page (via PageQuery objects),</li>
+                    <li>define the view-template to display the data in to the user</li>
+                </ul>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <h5>Comprehending page lists</h5>
+                <p>Post indicators let you know the state of each post in the list: published posts are marked with <i class="fa fa-eye"></i>, and exposed posts with <i class="fa fa-star"></i> icons.</p>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <h5>Creating pages</h5>
+                <p>
+                    To create a new page, click on the plus icon on your upper left. Edit or remove a single page by clicking on one of its list icons.
+                </p>
+            </div>
+            <div class="col-xs-12">
+                <br>
+                <a href="#" class="btn btn-success pull-right">OK, I got it.</a>
+            </div>
+        </div>
+
+        <div class="collection xhr-container affix-collection">
+            {% for page in pages %}
+                <div class="panel panel-lg panel-default border-less removable">
+                    <div class="panel-heading clearfix">
+                        <div class="title">
+                            <p class="small">URL: <a href="{# {{ app.url_generator.generate(page.getSlug) }} #}#" target="_blank" class="tooltipped" data-toggle="tooltip" data-placement="bottom" title="Page URL">{# {{ app.url_generator.generate(page.getSlug) }} #}#</a></p>
+                            {% if page.getSlug == '/' %}
+                                <div class="panel-title icon"><i class="fa fa-2x fa-circle-thin"></i> <h3>{{ page.getTitle }}</h3></div>
+                            {% else %}
+                                <div class="panel-title icon"><i class="fa fa-2x fa-circle-thin icon-{{ page.getTypeColor }}"></i> <h3>{{ page.getTitle }}</h3></div>
+                            {% endif %}
+                        </div>
+                        <div class="pull-right">
+                            <div class="btn-group btn-group-sm">
+                                {% if page.getInMenu == 1 %}
+                                    <span class="label label-status tooltipped" data-toggle="tooltip" data-placement="bottom" title="Included in menu."><i class="fa fa-sitemap"></i></span>
+                                {% endif %}
+
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{{ app.url_generator.generate('admin/page/edit', {page:page.getId}) }}" class="btn btn-round btn-round-sm btn-invert btn-delete tooltipped" data-toggle="tooltip" data-placement="bottom" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a href="{{ app.url_generator.generate('admin/page/delete', {page:page.getId}) }}" class="btn btn-round btn-round-sm btn-cmd btn-delete cmd-remove tooltipped" data-toggle="tooltip" data-placement="bottom" title="Remove"><span class="glyphicon glyphicon-trash"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

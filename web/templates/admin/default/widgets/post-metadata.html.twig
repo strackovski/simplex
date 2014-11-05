@@ -1,0 +1,19 @@
+<ul class="nav nav-pills pills-small" role="tablist">
+    <li class="active"><a href="#summary" role="tab" data-toggle="tab">Summary</a></li>
+    <li><a href="#classification" role="tab" data-toggle="tab">Class</a></li>
+    <li><a href="#annotations" role="tab" data-toggle="tab">Annotations</a></li>
+</ul>
+
+<div class="tab-content tabs-small">
+    <div class="tab-pane active" id="summary">
+        {% include 'admin/default/widgets/post-meta-summ.html.twig' %}
+    </div>
+
+    <div class="tab-pane" id="classification">
+        {% include 'admin/default/widgets/post-meta-class.html.twig' %}
+    </div>
+
+    <div class="tab-pane" id="annotations">
+        {% include 'admin/default/widgets/post-meta-annot.html.twig' %}
+    </div>
+</div>

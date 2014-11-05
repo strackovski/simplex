@@ -1,0 +1,7 @@
+{% extends page is defined ? "site/default/masters/" ~ page.getMaster ~ ".html.twig" : "site/default/masters/layout-default.html.twig" %}
+
+{% block content %}
+    {% for media in content %}
+
+    {% endfor %}
+{% endblock %}

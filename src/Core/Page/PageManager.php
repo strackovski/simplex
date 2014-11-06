@@ -22,7 +22,7 @@ use nv\Simplex\Model\Entity\Page;
  *
  * Manages objects of type page.
  *
- * @package nv\Simplex\Core\Post
+ * @package nv\Simplex\Core\Page
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class PageManager implements ObserverInterface

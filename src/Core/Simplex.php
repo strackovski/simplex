@@ -173,16 +173,18 @@ class Simplex extends Application
                     'target_url' => '/login'
                 ),
                 'remember_me' => array(
-                    'key'                => 'SDFSDFDS34343sFDDSFSFS',
+                    'key'                => 'S9pp1cD2Ax64g1VxZ8Yl6K5IWkY5rSOB',
                     'always_remember_me' => false,
                 ),
                 'users' => $app['user.provider']
             ),
         );
 
+        // Simple role access rules, will be replaced by ACL
         $this['security.access_rules'] = array(
             array('^/admin/pages', 'ROLE_ADMIN'),
             array('^/admin/settings', 'ROLE_ADMIN'),
+            array('^/admin/media/settings', 'ROLE_ADMIN'),
             array('^/admin/users', 'ROLE_ADMIN'),
             array('^/admin/user*', array('ROLE_EDITOR', 'ROLE_ADMIN')),
             array('^/admin/posts', array('ROLE_EDITOR', 'ROLE_ADMIN')),

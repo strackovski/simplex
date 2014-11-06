@@ -227,7 +227,7 @@ class Settings extends TimestampableAbstract
     protected $mailEncryption;
 
     /**
-     * @Column(type="mail_auth_mode", type="string", length=255, nullable=true)
+     * @Column(name="mail_auth_mode", type="string", length=255, nullable=true)
      */
     protected $mailAuthMode;
 
@@ -238,7 +238,7 @@ class Settings extends TimestampableAbstract
      *
      * @var string
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @Column(name="public_theme", type="string", length=255, nullable=true)
      */
     protected $publicTheme;
 
@@ -249,7 +249,7 @@ class Settings extends TimestampableAbstract
      *
      * @var string
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @Column(name="admin_theme", type="string", length=255, nullable=true)
      */
     protected $adminTheme;
 

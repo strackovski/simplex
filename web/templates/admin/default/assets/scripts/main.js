@@ -473,7 +473,7 @@ function querySelection() {
         } else if (column == 'created_at' || column == 'updated_at') {
 
             // hide valueField field
-            columnField.closest('.row').next().next().find('.data-group').addClass('hidden');
+            columnField.closest('.row').next().find('.col-xs-8').addClass('hidden');
 
             // show 'after', 'before' and 'between' options in operandField
             operatorField.find('option[value="before"]').removeClass('hidden');

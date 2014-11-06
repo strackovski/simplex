@@ -46,7 +46,7 @@ class AsseticSimplexBridge
                 //$fm->set('css_min', new \Assetic\Filter\CssMinFilter());
                 $fm->set('css_min', new \Assetic\Filter\Yui\CssCompressorFilter(dirname(__FILE__) . '/../../bin/yuicompressor-2.4.7.jar'));
                 $fm->set('js_min', new \Assetic\Filter\JSMinFilter());
-
+				
                 return $fm;
             })
         );
@@ -89,7 +89,7 @@ class AsseticSimplexBridge
                 ));
                 $am->get('scripts')->setTargetPath('scripts.js');
                 $am->get('jquery')->setTargetPath('jquery.js');
-
+											
                 return $am;
             })
         );

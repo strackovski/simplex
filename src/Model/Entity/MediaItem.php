@@ -160,13 +160,13 @@ abstract class MediaItem extends TimestampableAbstract
     abstract public function getType();
 
     /**
-     * Return media item path
+     * Return media ID
      *
      * @return string
      */
     public function __toString()
     {
-        return $this->getPath();
+        return $this->getMediaId();
     }
 
     /**
@@ -215,6 +215,11 @@ abstract class MediaItem extends TimestampableAbstract
             : $this->getUploadRootDir().'/'.$this->path;
     }
 
+    /**
+     * Available media item variations
+     *
+     * @return array
+     */
     public function getVariations()
     {
         return array(

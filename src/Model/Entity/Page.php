@@ -82,6 +82,8 @@ class Page extends TimestampableAbstract implements ObservableInterface
     protected $description;
 
     /**
+     * Attached page queries
+     *
      * @ManyToMany(targetEntity="PageQuery", orphanRemoval=true, cascade={"persist"})
      * @JoinTable(name="pages_queries",
      *      joinColumns={@JoinColumn(name="page_id", referencedColumnName="id")},

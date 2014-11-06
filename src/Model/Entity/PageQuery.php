@@ -75,7 +75,10 @@ class PageQuery
      */
     public function __toString()
     {
-        return 'sql query'; // @todo SQL in PageQuery
+        return 'sql query'; // @todo return SQL
+
+
+
     }
 
     /**

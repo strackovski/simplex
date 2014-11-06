@@ -42,6 +42,8 @@ class Image extends MediaItem
     protected $file;
 
     /**
+     * Return item type
+     *
      * @return string
      */
     public function getType()

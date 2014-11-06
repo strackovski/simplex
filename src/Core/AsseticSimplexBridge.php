@@ -43,7 +43,8 @@ class AsseticSimplexBridge
         );
         $this->app['assetic.filter_manager'] = $this->app['assetic.filter_manager'] = $this->app->share(
             $this->app->extend('assetic.filter_manager', function ($fm, $app) {
-                $fm->set('css_min', new \Assetic\Filter\CssMinFilter());
+                //$fm->set('css_min', new \Assetic\Filter\CssMinFilter());
+                $fm->set('css_min', new \Assetic\Filter\Yui\CssCompressorFilter(dirname(__FILE__) . '/../../bin/yuicompressor-2.4.7.jar'));
                 $fm->set('js_min', new \Assetic\Filter\JSMinFilter());
 
                 return $fm;

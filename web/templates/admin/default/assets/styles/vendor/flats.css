@@ -39,7 +39,7 @@
 .field > input, .field > textarea, .field > select {
     box-shadow: none;
     border: 2px solid #d3d8db;
-    border-radius: 6px;
+    border-radius: 6px !important;
     line-height: 16px;
     color: #444;
 }

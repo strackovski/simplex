@@ -114,6 +114,16 @@ class User implements UserInterface
     }
 
     /**
+     * Return user's display name
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->displayName();
+    }
+
+    /**
      * __construct
      *
      * @return User $this

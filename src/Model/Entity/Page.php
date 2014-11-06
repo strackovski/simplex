@@ -115,6 +115,16 @@ class Page extends TimestampableAbstract implements ObservableInterface
     }
 
     /**
+     * Return page title
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getTitle();
+    }
+
+    /**
      * @param ObserverInterface $observer
      *
      * @return mixed|void

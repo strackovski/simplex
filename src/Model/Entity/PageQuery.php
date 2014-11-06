@@ -69,7 +69,17 @@ class PageQuery
     protected $limitMax;
 
     /**
+     * Return query in SQL format
      *
+     * @return string
+     */
+    public function __toString()
+    {
+        return 'sql query'; // @todo SQL in PageQuery
+    }
+
+    /**
+     * Constructor
      */
     public function __construct()
     {

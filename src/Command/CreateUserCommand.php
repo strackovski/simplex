@@ -108,15 +108,17 @@ class CreateUserCommand extends ApplicationAwareCommand
         $user->setEmail($email);
         $user->setRoles($role);
         $user->setSalt($user->getEmail());
+        $user->setIsActive(true);
         $user->setEncodedPassword($this->app, $password);
         $user->setCreatedAt(new \DateTime('now'));
         $user->setUpdatedAt($user->getCreatedAt());
+
         try {
             $this->app['orm.em']->persist($user);
             $this->app['orm.em']->flush();
         } catch (\Exception $e) {
             $output->writeln('<error>An error occured, account creation failed.</error>');
         }
-        $output->writeln('<info>User account added.</info>');
+        $output->writeln('<info>User account added. The user can now log in, no activation is required.</info>');
     }
 }

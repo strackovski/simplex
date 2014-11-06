@@ -112,12 +112,10 @@
 }
 
 .media-modal .modal-prev {
-    left: 150px;
     left: 0;
 }
 
 .media-modal .modal-next {
-    right: 150px;
     right: 0;
 }
 

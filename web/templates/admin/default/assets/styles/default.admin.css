@@ -1059,6 +1059,10 @@ ul.media-tabs > li > a > i.fa {
     color: #5d8ba6;
     background-color: transparent;
     border-color: #5d8ba6;
+    -webkit-transition: background-color .2s;
+    -moz-transition: background-color .2s;
+    -ms-transition: background-color .2s;
+    -o-transition: background-color .2s;
     transition: background-color .2s;
     box-shadow: none;
 }
@@ -1094,6 +1098,10 @@ ul.media-tabs > li > a > i.fa {
     border: 1px solid #999;
     color: #999;
     background: transparent;
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -ms-transition: all .3s;
+    -o-transition: all .3s;
     transition: all .3s;
     width: 35px;
     height: 35px;
@@ -1190,6 +1198,10 @@ ul.media-tabs > li > a > i.fa {
 .admin .btn-round.btn-round-sm.btn-delete > span,
 .admin .btn-round.btn-round-sm.btn-delete > i {
     border: none;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    -ms-transition: all .2s;
+    -o-transition: all .2s;
     transition: all .2s;
 }
 .admin .btn-round.btn-round-sm.btn-delete:hover > span,
@@ -1201,6 +1213,10 @@ ul.media-tabs > li > a > i.fa {
 .admin .btn-round.btn-round-sm.btn-invert > span,
 .admin .btn-round.btn-round-sm.btn-invert > i {
     border: none;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    -ms-transition: all .2s;
+    -o-transition: all .2s;
     transition: all .2s;
 }
 .admin .btn-round.btn-round-sm.btn-invert:hover > span,
@@ -1224,10 +1240,18 @@ ul.media-tabs > li > a > i.fa {
     margin-left: 10px;
     border: 1px solid #fff;
     background-color: none;
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -ms-transition: all .3s;
+    -o-transition: all .3s;
     transition: all .3s;
 }
 .admin .btn-cancel:hover,
 .admin .btn-cancel:focus {
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -ms-transition: all .3s;
+    -o-transition: all .3s;
     transition: all .3s;
     border: none;
     background-color: none;
@@ -1451,7 +1475,7 @@ ul.media-tabs > li > a > i.fa {
     z-index: 20000;
     text-align: center;
     width: 100%;
-}
+}/*
 .spinner {
     margin: 0 auto;
     width: 70px;
@@ -1466,7 +1490,6 @@ ul.media-tabs > li > a > i.fa {
     display: inline-block;
     -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
     animation: bouncedelay 1.4s infinite ease-in-out;
-    /* Prevent first frame from flickering when animation starts */
     -webkit-animation-fill-mode: both;
     animation-fill-mode: both;
 }
@@ -1491,7 +1514,7 @@ ul.media-tabs > li > a > i.fa {
         transform: scale(1.0);
         -webkit-transform: scale(1.0);
     }
-}
+}*/
 .thumbnail .description {
     display: none;
     position: absolute;

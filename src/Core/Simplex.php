@@ -19,6 +19,7 @@ use Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapLabelExtension;
 use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
+use nv\Simplex\Provider\Service\SiteServiceProvider;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\FormServiceProvider;
@@ -63,7 +64,6 @@ class Simplex extends Application
     {
         $this->registerProviders();
         $this->registerErrorRoutes();
-        $this->registerDynamicRoutes();
     }
 
     /**
@@ -246,6 +246,9 @@ class Simplex extends Application
         $this->match('/account/activate', 'nv\Simplex\Controller\Admin\UserController::activateAccountAction')
             ->bind('account/activate');
 
+        $this->register($siteProvider = new SiteServiceProvider());
+        $this->mount('/', $siteProvider);
+
         $this->register($settingsProvider = new SettingsServiceProvider());
         $this->mount('/admin', $settingsProvider);
 
@@ -282,79 +285,5 @@ class Simplex extends Application
 
             return new Response($this['twig']->resolveTemplate($templates)->render(array('code' => $code)), $code);
         });
-    }
-
-    /**
-     * Register dynamic site routes
-     *
-     * Binds public site routing
-     */
-    public function registerDynamicRoutes()
-    {
-        /*
-         * Home route
-         */
-        $self = $this;
-        if (is_null($self['repository.page']->findOneBy(array('slug' => '/')))) {
-            $this->get('/', 'nv\Simplex\Controller\Site\PageController::indexAction')
-            ->bind('/');
-        }
-
-        /*
-         * @todo Post routes to Site/PostController (event. SiteService)
-         */
-        /** @var $post \nv\Simplex\Model\Entity\Post */
-        foreach ($posts = $self['repository.post']->getPublished() as $post) {
-            $this->get('/post/' . $post->getSlug(), function () use ($self, $post) {
-
-                $data['content'] = $post;
-                $data['menu'] = $self['repository.page']->getMenuPages();
-                $data['settings'] = $self['settings'];
-
-                return $self['twig']->render(
-                    'site/'.$data['settings']->getPublicTheme().'/views/post.html.twig',
-                    $data
-                );
-            })->bind('/post/'.$post->getSlug());
-        }
-
-        /*
-         * Dynamic page routes and data retrieval
-         */
-        /** @var \nv\Simplex\Model\Entity\Page $page */
-        foreach ($pages = $self['repository.page']->findAll() as $page) {
-            if ($page->getQueries()) {
-                $this->get('/' . $page->getSlug(), function () use ($self, $page) {
-                    $content = array();
-                    foreach ($page->getQueries() as $query) {
-
-                        // @todo check operator defaults for page queries
-                        if (($op = $query->getOperator()) == 'between') {
-                            $op = 'eq';
-                        }
-                        $content = $self['repository.post']->getPostsBy(
-                            $query->getColumn(),
-                            $query->getValue(),
-                            $op,
-                            $query->getSortBy(),
-                            $query->getLimitMax() ? $query->getLimitMax() : false
-                        );
-
-
-                        // @todo use this $content = $query->getManager()->buildQuery($self['orm.em'])->getResult();
-                    }
-
-                    $data['content'] = $content;
-                    $data['page'] = $page;
-                    $data['menu'] = $self['repository.page']->getMenuPages();
-                    $data['settings'] = $self['settings'];
-
-                    return $self['twig']->render(
-                        'site/'.$data['settings']->getPublicTheme().'/views/'.$page->getView().'.html.twig',
-                        $data
-                    );
-                })->bind('/'.$page->getSlug());
-            }
-        }
     }
 }

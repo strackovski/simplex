@@ -48,8 +48,28 @@ class PageController
      */
     public function viewAction(Request $request, Application $app)
     {
-        $data['page'] = $app['repository.page']->findOneBy(array('id' => $request->get('id')));
+        /** @var \nv\Simplex\Model\Entity\Page $page */
+        $page = $app['repository.page']->findOneBy(array('slug' => $request->get('slug')));
 
-        return $app['twig']->render('public/test/views/page.html.twig', $data);
+        /** @var  \nv\Simplex\Model\Entity\Settings $settings */
+        $settings = $app['settings'];
+
+        $content = array();
+
+        if ($page->getQueries()) {
+            foreach ($page->getQueries() as $query) {
+                $content = $query->getManager()->buildQuery($app['orm.em'])->getResult();
+            }
+        }
+
+        return $app['twig']->render(
+            'site/'.$settings->getPublicTheme().'/views/'.$page->getView().'.html.twig',
+            array(
+                'content' => $content,
+                'page' => $page,
+                'settings' => $settings,
+                'menu' => $app['repository.page']->getMenuPages()
+            )
+        );
     }
 }

@@ -47,8 +47,13 @@ class PostController
      */
     public function viewAction(Request $request, Application $app)
     {
-        $data['post'] = $app['repository.post']->findOneBy(array('id' => $request->get('id')));
+        $data['content'] = $app['repository.post']->findOneBy(array('slug' => $request->get('slug')));
+        $data['menu'] = $app['repository.page']->getMenuPages();
+        $data['settings'] = $app['settings'];
 
-        return $app['twig']->render('public/post.html.twig', $data);
+        return $app['twig']->render(
+            'site/'.$data['settings']->getPublicTheme().'/views/post.html.twig',
+            $data
+        );
     }
 }

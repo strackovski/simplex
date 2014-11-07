@@ -12,6 +12,7 @@
 
 namespace nv\Simplex\Controller\Site;
 
+use nv\Simplex\Model\Entity\Page;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -32,11 +33,16 @@ class PageController
      */
     public function indexAction(Request $request, Application $app)
     {
-        $data['pages'] = $app['repository.page']->findAll();
-        $data['settings'] = $app['repository.settings']->getPublicSettings();
+        $pages = $app['repository.page']->findAll();
+        $settings = $app['repository.settings']->getPublicSettings();
 
-        return $app['twig']->render('site/'.$data['settings']->getPublicTheme().'/views/index.html.twig', $data);
-
+        return $app['twig']->render(
+            'site/'.$settings->getPublicTheme().'/views/sitemap.html.twig',
+            array(
+                'pages' => $pages,
+                'settings' => $settings
+            )
+        );
     }
 
     /**
@@ -50,26 +56,24 @@ class PageController
     {
         /** @var \nv\Simplex\Model\Entity\Page $page */
         $page = $app['repository.page']->findOneBy(array('slug' => $request->get('slug')));
-
-        /** @var  \nv\Simplex\Model\Entity\Settings $settings */
-        $settings = $app['settings'];
-
         $content = array();
 
-        if ($page->getQueries()) {
+        if ($page instanceof Page and $page->getQueries()) {
             foreach ($page->getQueries() as $query) {
                 $content = $query->getManager()->buildQuery($app['orm.em'])->getResult();
             }
+
+            return $app['twig']->render(
+                'site/'.$app['settings']->getPublicTheme().'/views/'.$page->getView().'.html.twig',
+                array(
+                    'content' => $content,
+                    'page' => $page,
+                    'settings' => $app['settings'],
+                    'menu' => $app['repository.page']->getMenuPages()
+                )
+            );
         }
 
-        return $app['twig']->render(
-            'site/'.$settings->getPublicTheme().'/views/'.$page->getView().'.html.twig',
-            array(
-                'content' => $content,
-                'page' => $page,
-                'settings' => $settings,
-                'menu' => $app['repository.page']->getMenuPages()
-            )
-        );
+        return $app->abort(404, 'Page not found.');
     }
 }

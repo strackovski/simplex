@@ -106,8 +106,7 @@ class PageController
             if ($form->isValid()) {
                 $pm->slug($form->get('slug')->getData());
                 $app['repository.page']->save($page);
-                $message = 'Changes to page <strong>' . $page->getTitle() . '</strong> have been saved.' .
-                    '<a href="' . $page->getSlug() . '" target="_blank">See it!</a>';
+                $message = 'Changes to page <strong>' . $page->getTitle() . '</strong> have been saved.';
                 $app['session']->getFlashBag()->add('success', $message);
                 $redirect = $app['url_generator']->generate('admin/pages');
 

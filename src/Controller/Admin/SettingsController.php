@@ -42,9 +42,6 @@ class SettingsController
      */
     public function dashboardAction(Request $request, Application $app)
     {
-        $q = $app['orm.em']->find('nv\Simplex\Model\Entity\PageQuery', 1);
-        return count($q->getManager()->buildQuery($app['orm.em'])->getResult());
-
         $posts = $app['repository.post']->findAll();
         $latest['posts'] = $app['repository.post']->getLatest(5);
         $latest['media'] = $app['repository.media']->getLatest(5);

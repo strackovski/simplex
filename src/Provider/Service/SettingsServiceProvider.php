@@ -37,10 +37,7 @@ class SettingsServiceProvider implements ServiceProviderInterface, ControllerPro
         /** @var $controllers ControllerCollection */
         $controllers = $app['controllers_factory'];
 
-        $controllers->match('', 'settings.controller:dashboardAction')
-            ->bind('/admin');
-
-        $controllers->match('/', 'settings.controller::dashboardAction')
+        $controllers->match('/', 'settings.controller:dashboardAction')
             ->bind('/admin/');
 
         $controllers->match('/dashboard', 'settings.controller:dashboardAction')

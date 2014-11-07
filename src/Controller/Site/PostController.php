@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Request;
 class PostController
 {
     /**
-     * Controller home
+     * View post list
      *
      * @param Request     $request
      * @param Application $app
@@ -32,10 +32,17 @@ class PostController
      */
     public function indexAction(Request $request, Application $app)
     {
-        $data['posts'] = $app['repository.post']->findAll();
-        $data['request'] = $request;
+        $content = $app['repository.post']->getPublished();
+        $menu = $app['repository.page']->getMenuPages();
 
-        return $app['twig']->render('public/posts.html.twig', $data);
+        return $app['twig']->render(
+            'site/'.$app['settings']->getPublicTheme().'/views/posts.html.twig',
+            array(
+                'content' => $content,
+                'menu' => $menu,
+                'settings' => $app['settings']
+            )
+        );
     }
 
     /**
@@ -47,13 +54,16 @@ class PostController
      */
     public function viewAction(Request $request, Application $app)
     {
-        $data['content'] = $app['repository.post']->findOneBy(array('slug' => $request->get('slug')));
-        $data['menu'] = $app['repository.page']->getMenuPages();
-        $data['settings'] = $app['settings'];
+        $content = $app['repository.post']->findOneBy(array('slug' => $request->get('slug')));
+        $menu = $app['repository.page']->getMenuPages();
 
         return $app['twig']->render(
-            'site/'.$data['settings']->getPublicTheme().'/views/post.html.twig',
-            $data
+            'site/'.$app['settings']->getPublicTheme().'/views/post.html.twig',
+            array(
+                'content' => $content,
+                'menu' => $menu,
+                'settings' => $app['settings']
+            )
         );
     }
 }

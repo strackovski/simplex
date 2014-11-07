@@ -122,9 +122,6 @@ class Settings extends TimestampableAbstract
     /**
      * Enable 3rd party annotations and content integration
      *
-     * @todo Camelcase
-     *
-     *
      * @var bool
      * @Column(name="enable_annotations", type="boolean")
      */
@@ -133,44 +130,32 @@ class Settings extends TimestampableAbstract
     /**
      * Image resampling quality factor
      *
-     * @todo Camelcase
-     *
      * @var int
      * @Column(name="image_resample_quality", type="integer")
      */
     protected $imageResampleQuality = 75;
 
     /**
-     * @todo Camelcase
-     *
      * @Column(name="image_resize_dimensions", type="json_array", nullable=true)
      */
     protected $imageResizeDimensions;
 
     /**
-     * @todo Camelcase
-     *
      * @Column(name="image_keep_original", type="boolean", nullable=true)
      */
     protected $imageKeepOriginal;
 
     /**
-     * @todo Camelcase
-     *
      * @Column(name="image_strip_meta", type="boolean", nullable=true)
      */
     protected $imageStripMeta;
 
     /**
-     * @todo Camelcase
-     *
      * @Column(name="image_auto_crop", type="boolean", nullable=true)
      */
     protected $imageAutoCrop;
 
     /**
-     * @todo Camelcase
-     *
      * Enable/disable media item watermarking
      *
      * @var bool
@@ -185,8 +170,6 @@ class Settings extends TimestampableAbstract
     protected $watermark;
 
     /**
-     * @todo Camelcase
-     *
      * @Column(name="watermark_position", type="string", length=255, nullable=true)
      */
     protected $watermarkPosition;
@@ -232,8 +215,6 @@ class Settings extends TimestampableAbstract
     protected $mailAuthMode;
 
     /**
-     * @todo Camelcase
-     *
      * Public theme
      *
      * @var string
@@ -243,8 +224,6 @@ class Settings extends TimestampableAbstract
     protected $publicTheme;
 
     /**
-     * @todo Camelcase
-     *
      * Public theme
      *
      * @var string

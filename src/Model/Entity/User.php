@@ -22,14 +22,18 @@ class User implements UserInterface
     protected $id;
 
     /**
+     * @todo Camelcase
+     *
      * @Column(type="string", length=255)
      */
-    protected $first_name;
+    protected $firstName;
 
     /**
+     * @todo Camelcase
+     *
      * @Column(type="string", length=255)
      */
-    protected $last_name;
+    protected $lastName;
 
     /**
      * @Column(type="text", nullable=true, unique=false)
@@ -57,11 +61,15 @@ class User implements UserInterface
     protected $roles;
 
     /**
+     * @todo Camelcase (interface)
+     *
      * @Column(type="datetime")
      */
     protected $created_at;
 
     /**
+     * @todo Camelcase (interface)
+     *
      * @Column(type="datetime")
      */
     protected $updated_at;
@@ -111,6 +119,16 @@ class User implements UserInterface
     public function getAvatar()
     {
         return $this->avatar;
+    }
+
+    /**
+     * Return user's display name
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->displayName();
     }
 
     /**
@@ -201,16 +219,26 @@ class User implements UserInterface
     {
     }
 
+    /**
+     * @param $description
+     */
     public function setDescription($description)
     {
         $this->description = $description;
     }
 
+    /**
+     * @return mixed
+     */
     public function getDescription()
     {
         return $this->description;
     }
 
+    /**
+     * @param $container
+     * @param $password
+     */
     public function setEncodedPassword($container, $password)
     {
         if (!$container['security.encoder.digest']->isPasswordValid($this->password, $password, $this->getSalt())) {
@@ -222,8 +250,6 @@ class User implements UserInterface
             $this->setPassword($container['security.encoder.digest']->encodePassword($password, $this->getSalt()));
         }
     }
-
-
 
     /**
      * Get id
@@ -243,7 +269,7 @@ class User implements UserInterface
      */
     public function setFirstName($firstName)
     {
-        $this->first_name = $firstName;
+        $this->firstName = $firstName;
 
         return $this;
     }
@@ -255,7 +281,7 @@ class User implements UserInterface
      */
     public function getFirstName()
     {
-        return $this->first_name;
+        return $this->firstName;
     }
 
     /**
@@ -266,7 +292,7 @@ class User implements UserInterface
      */
     public function setLastName($lastName)
     {
-        $this->last_name = $lastName;
+        $this->lastName = $lastName;
 
         return $this;
     }
@@ -278,7 +304,7 @@ class User implements UserInterface
      */
     public function getLastName()
     {
-        return $this->last_name;
+        return $this->lastName;
     }
 
     /**

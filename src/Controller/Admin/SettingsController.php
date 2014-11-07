@@ -42,6 +42,9 @@ class SettingsController
      */
     public function dashboardAction(Request $request, Application $app)
     {
+        $q = $app['orm.em']->find('nv\Simplex\Model\Entity\PageQuery', 1);
+        return count($q->getManager()->buildQuery($app['orm.em'])->getResult());
+
         $posts = $app['repository.post']->findAll();
         $latest['posts'] = $app['repository.post']->getLatest(5);
         $latest['media'] = $app['repository.media']->getLatest(5);
@@ -51,6 +54,7 @@ class SettingsController
         $published = '';
         $exposed = '';
 
+        /** @var \nv\Simplex\Model\Entity\Post $post */
         foreach ($posts as $post) {
             if ($post->getExposed()) {
                 $exposed[] = $post;

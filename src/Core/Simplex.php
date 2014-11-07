@@ -327,6 +327,7 @@ class Simplex extends Application
                 $this->get('/' . $page->getSlug(), function () use ($self, $page) {
                     $content = array();
                     foreach ($page->getQueries() as $query) {
+
                         // @todo check operator defaults for page queries
                         if (($op = $query->getOperator()) == 'between') {
                             $op = 'eq';
@@ -338,6 +339,9 @@ class Simplex extends Application
                             $query->getSortBy(),
                             $query->getLimitMax() ? $query->getLimitMax() : false
                         );
+
+
+                        // @todo use this $content = $query->getManager()->buildQuery($self['orm.em'])->getResult();
                     }
 
                     $data['content'] = $content;

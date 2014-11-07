@@ -151,6 +151,15 @@ class Post extends TimestampableAbstract implements ObservableInterface
         return $this;
     }
 
+    /**
+     * Return post title
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getTitle();
+    }
 
     /**
      * @return mixed
@@ -535,7 +544,7 @@ class Post extends TimestampableAbstract implements ObservableInterface
     }
 
     /**
-     *
+     * Clear attached media items
      */
     public function clearMedia()
     {

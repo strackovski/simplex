@@ -12,11 +12,14 @@
 
 namespace nv\Simplex\Model\Entity;
 
+use nv\Simplex\Core\Page\QueryManager;
+
 /**
  * PageQuery class
  *
  * Defines a set of parameters to execute data queries.
  *
+ * @HasLifecycleCallbacks
  * @Entity
  * @Table(name="queries")
  *
@@ -69,12 +72,34 @@ class PageQuery
     protected $limitMax;
 
     /**
-     *
+     * @var QueryManager
+     */
+    protected $manager;
+
+    /**
+     * Constructor
      */
     public function __construct()
     {
         $this->sortBy = 'ASC';
         $this->sortColumn = 'created_at';
+        $this->manager = new QueryManager($this);
+    }
+
+    /**
+     * @return QueryManager
+     */
+    public function getManager()
+    {
+        return $this->manager;
+    }
+
+    /**
+     * @param QueryManager $manager
+     */
+    public function setManager($manager)
+    {
+        $this->manager = $manager;
     }
 
     /**
@@ -241,5 +266,13 @@ class PageQuery
             throw new \Exception('Invalid sort parameter.');
         }
         $this->sortBy = $option;
+    }
+
+    /**
+     * @PostLoad()
+     */
+    public function postLoad()
+    {
+        $this->manager = new QueryManager($this);
     }
 }

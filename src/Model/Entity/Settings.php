@@ -122,46 +122,61 @@ class Settings extends TimestampableAbstract
     /**
      * Enable 3rd party annotations and content integration
      *
+     * @todo Camelcase
+     *
+     *
      * @var bool
      * @Column(name="enable_annotations", type="boolean")
      */
-    protected $enable_annotations = false;
+    protected $enableAnnotations = false;
 
     /**
      * Image resampling quality factor
      *
+     * @todo Camelcase
+     *
      * @var int
      * @Column(name="image_resample_quality", type="integer")
      */
-    protected $image_resample_quality = 75;
+    protected $imageResampleQuality = 75;
 
     /**
+     * @todo Camelcase
+     *
      * @Column(name="image_resize_dimensions", type="json_array", nullable=true)
      */
-    protected $image_resize_dimensions;
+    protected $imageResizeDimensions;
 
     /**
+     * @todo Camelcase
+     *
      * @Column(name="image_keep_original", type="boolean", nullable=true)
      */
-    protected $image_keep_original;
+    protected $imageKeepOriginal;
 
     /**
+     * @todo Camelcase
+     *
      * @Column(name="image_strip_meta", type="boolean", nullable=true)
      */
-    protected $image_strip_meta;
+    protected $imageStripMeta;
 
     /**
+     * @todo Camelcase
+     *
      * @Column(name="image_auto_crop", type="boolean", nullable=true)
      */
-    protected $image_auto_crop;
+    protected $imageAutoCrop;
 
     /**
+     * @todo Camelcase
+     *
      * Enable/disable media item watermarking
      *
      * @var bool
      * @Column(name="watermark_media", type="boolean")
      */
-    protected $watermark_media = false;
+    protected $watermarkMedia = false;
 
     /**
      * @ManyToOne(targetEntity="Image", cascade="persist")
@@ -170,9 +185,11 @@ class Settings extends TimestampableAbstract
     protected $watermark;
 
     /**
+     * @todo Camelcase
+     *
      * @Column(name="watermark_position", type="string", length=255, nullable=true)
      */
-    protected $watermark_position;
+    protected $watermarkPosition;
 
     /**
      * @Column(name="enable_mailing", type="boolean", nullable=true)
@@ -210,27 +227,31 @@ class Settings extends TimestampableAbstract
     protected $mailEncryption;
 
     /**
-     * @Column(type="mail_auth_mode", type="string", length=255, nullable=true)
+     * @Column(name="mail_auth_mode", type="string", length=255, nullable=true)
      */
     protected $mailAuthMode;
 
     /**
+     * @todo Camelcase
+     *
      * Public theme
      *
      * @var string
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @Column(name="public_theme", type="string", length=255, nullable=true)
      */
-    protected $public_theme;
+    protected $publicTheme;
 
     /**
+     * @todo Camelcase
+     *
      * Public theme
      *
      * @var string
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @Column(name="admin_theme", type="string", length=255, nullable=true)
      */
-    protected $admin_theme;
+    protected $adminTheme;
 
     /**
      * Constructor
@@ -248,19 +269,19 @@ class Settings extends TimestampableAbstract
         $this->adminEmail = $email;
         $this->language = 'en';
         $this->current = $current;
-        $this->admin_theme = 'default';
-        $this->public_theme = 'default';
+        $this->adminTheme = 'default';
+        $this->publicTheme = 'default';
 
         $this->allowPublicUserRegistration = false;
         $this->enableQueryStringAccess = false;
-        $this->watermark_media = false;
-        $this->enable_annotations = true;
+        $this->watermarkMedia = false;
+        $this->enableAnnotations = true;
         $this->enableMailing = true;
 
-        $this->image_auto_crop = true;
-        $this->image_keep_original = true;
-        $this->image_resample_quality = 80;
-        $this->image_strip_meta = true;
+        $this->imageAutoCrop = true;
+        $this->imageKeepOriginal = true;
+        $this->imageResampleQuality = 80;
+        $this->imageStripMeta = true;
 
         $this->setImageResizeDimensions(array(
             'small' => array(240,160),
@@ -509,7 +530,7 @@ class Settings extends TimestampableAbstract
      */
     public function setEnableAnnotations($enable_annotations)
     {
-        $this->enable_annotations = $enable_annotations;
+        $this->enableAnnotations = $enable_annotations;
     }
 
     /**
@@ -519,7 +540,7 @@ class Settings extends TimestampableAbstract
      */
     public function getEnableAnnotations()
     {
-        return $this->enable_annotations;
+        return $this->enableAnnotations;
     }
 
     /**
@@ -529,7 +550,7 @@ class Settings extends TimestampableAbstract
      */
     public function setImageResampleQuality($image_resample_quality)
     {
-        $this->image_resample_quality = $image_resample_quality;
+        $this->imageResampleQuality = $image_resample_quality;
     }
 
     /**
@@ -539,7 +560,7 @@ class Settings extends TimestampableAbstract
      */
     public function getImageResampleQuality()
     {
-        return $this->image_resample_quality;
+        return $this->imageResampleQuality;
     }
 
     /**
@@ -567,7 +588,7 @@ class Settings extends TimestampableAbstract
      */
     public function setWatermarkMedia($watermark_media)
     {
-        $this->watermark_media = $watermark_media;
+        $this->watermarkMedia = $watermark_media;
     }
 
     /**
@@ -575,7 +596,7 @@ class Settings extends TimestampableAbstract
      */
     public function getWatermarkMedia()
     {
-        return $this->watermark_media;
+        return $this->watermarkMedia;
     }
 
     /**
@@ -583,7 +604,7 @@ class Settings extends TimestampableAbstract
      */
     public function setPublicTheme($public_theme)
     {
-        $this->public_theme = $public_theme;
+        $this->publicTheme = $public_theme;
     }
 
     /**
@@ -591,11 +612,11 @@ class Settings extends TimestampableAbstract
      */
     public function getPublicTheme()
     {
-        if ($this->public_theme == null) {
+        if ($this->publicTheme == null) {
             return 'default';
         }
 
-        return $this->public_theme;
+        return $this->publicTheme;
     }
 
     /**
@@ -603,7 +624,7 @@ class Settings extends TimestampableAbstract
      */
     public function getAdminTheme()
     {
-        return $this->admin_theme;
+        return $this->adminTheme;
     }
 
     /**
@@ -611,7 +632,7 @@ class Settings extends TimestampableAbstract
      */
     public function setAdminTheme($admin_theme)
     {
-        $this->admin_theme = $admin_theme;
+        $this->adminTheme = $admin_theme;
     }
 
 
@@ -664,7 +685,7 @@ class Settings extends TimestampableAbstract
      */
     public function setImageAutoCrop($image_auto_crop)
     {
-        $this->image_auto_crop = $image_auto_crop;
+        $this->imageAutoCrop = $image_auto_crop;
     }
 
     /**
@@ -672,7 +693,7 @@ class Settings extends TimestampableAbstract
      */
     public function getImageAutoCrop()
     {
-        return $this->image_auto_crop;
+        return $this->imageAutoCrop;
     }
 
     /**
@@ -680,7 +701,7 @@ class Settings extends TimestampableAbstract
      */
     public function setImageKeepOriginal($image_keep_original)
     {
-        $this->image_keep_original = $image_keep_original;
+        $this->imageKeepOriginal = $image_keep_original;
     }
 
     /**
@@ -688,7 +709,7 @@ class Settings extends TimestampableAbstract
      */
     public function getImageKeepOriginal()
     {
-        return $this->image_keep_original;
+        return $this->imageKeepOriginal;
     }
 
     /**
@@ -696,7 +717,7 @@ class Settings extends TimestampableAbstract
      */
     public function setImageStripMeta($image_strip_meta)
     {
-        $this->image_strip_meta = $image_strip_meta;
+        $this->imageStripMeta = $image_strip_meta;
     }
 
     /**
@@ -704,7 +725,7 @@ class Settings extends TimestampableAbstract
      */
     public function getImageStripMeta()
     {
-        return $this->image_strip_meta;
+        return $this->imageStripMeta;
     }
 
     /**
@@ -712,7 +733,7 @@ class Settings extends TimestampableAbstract
      */
     public function setImageResizeDimensions(array $image_resize_dimensions)
     {
-        $this->image_resize_dimensions = $image_resize_dimensions;
+        $this->imageResizeDimensions = $image_resize_dimensions;
     }
 
     /**
@@ -722,12 +743,12 @@ class Settings extends TimestampableAbstract
     public function getImageResizeDimensions($size = false)
     {
         if ($size and in_array($size = strtolower($size), array('small', 'medium', 'large', 'crop'))) {
-            if (array_key_exists($size, $this->image_resize_dimensions)) {
-                return $this->image_resize_dimensions[$size];
+            if (array_key_exists($size, $this->imageResizeDimensions)) {
+                return $this->imageResizeDimensions[$size];
             }
             return false;
         }
-        return $this->image_resize_dimensions;
+        return $this->imageResizeDimensions;
     }
 
     /**
@@ -735,7 +756,7 @@ class Settings extends TimestampableAbstract
      */
     public function setWatermarkPosition($watermark_position)
     {
-        $this->watermark_position = $watermark_position;
+        $this->watermarkPosition = $watermark_position;
     }
 
     /**
@@ -743,7 +764,7 @@ class Settings extends TimestampableAbstract
      */
     public function getWatermarkPosition()
     {
-        return $this->watermark_position;
+        return $this->watermarkPosition;
     }
 
     /**

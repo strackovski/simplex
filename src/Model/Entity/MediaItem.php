@@ -115,6 +115,8 @@ abstract class MediaItem extends TimestampableAbstract
     protected $file;
 
     /**
+     * Extracted metadata
+     *
      * @OneToOne(targetEntity="Metadata", cascade={"persist"})
      * @JoinColumn(name="metadata_id", referencedColumnName="id")
      **/
@@ -143,24 +145,28 @@ abstract class MediaItem extends TimestampableAbstract
     protected $mediaCategory;
 
     /**
-     * @return mixed
-     */
-    abstract public function getType();
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getPath();
-    }
-
-    /**
-     *
+     * Constructor
      */
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+    }
+
+    /**
+     * Return media type
+     *
+     * @return string
+     */
+    abstract public function getType();
+
+    /**
+     * Return media ID
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getMediaId();
     }
 
     /**
@@ -209,6 +215,11 @@ abstract class MediaItem extends TimestampableAbstract
             : $this->getUploadRootDir().'/'.$this->path;
     }
 
+    /**
+     * Available media item variations
+     *
+     * @return array
+     */
     public function getVariations()
     {
         return array(

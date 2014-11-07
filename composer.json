@@ -32,6 +32,7 @@
         "symfony/validator": "~2.3",
         "doctrine/dbal": "2.*",
         "dflydev/doctrine-orm-service-provider": "1.0.6",
+        "knplabs/doctrine-behaviors": "dev-master",
         "mheap/Silex-Assetic": "*",
         "lmammino/jsmin4assetic": "1.0.*",
         "patchwork/jsqueeze": "dev-master",

@@ -5,9 +5,11 @@ namespace nv\Simplex\Core;
 use Assetic\Asset\AssetCache;
 use Assetic\Asset\FileAsset;
 use Assetic\Asset\GlobAsset;
+use Assetic\AssetManager;
 use Assetic\Factory\AssetFactory;
 use Assetic\Filter\CssMinFilter;
 use Assetic\Filter\JSMinFilter;
+use Assetic\FilterManager;
 
 /**
  * Class AsseticSimplexBridge
@@ -41,8 +43,10 @@ class AsseticSimplexBridge
             'formulae_cache_dir' => __DIR__ . '/../../var/cache/assetic',
             'debug' => $this->app['debug']
         );
+
         $this->app['assetic.filter_manager'] = $this->app['assetic.filter_manager'] = $this->app->share(
             $this->app->extend('assetic.filter_manager', function ($fm, $app) {
+                /** @var FilterManager $fm */
                 $fm->set('css_min', new \Assetic\Filter\CssMinFilter());
                 $fm->set('js_min', new \Assetic\Filter\JSMinFilter());
 
@@ -58,6 +62,7 @@ class AsseticSimplexBridge
                     $adminTheme = 'default';
                 }
 
+                /** @var AssetManager $am */
                 $am->set('styles', new AssetCache(
                     new GlobAsset(
                         array(

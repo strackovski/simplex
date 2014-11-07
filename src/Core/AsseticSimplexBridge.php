@@ -7,7 +7,6 @@ use Assetic\Asset\FileAsset;
 use Assetic\Asset\GlobAsset;
 use Assetic\AssetManager;
 use Assetic\Factory\AssetFactory;
-use Assetic\Filter\CssMinFilter;
 use Assetic\Filter\JSMinFilter;
 use Assetic\FilterManager;
 

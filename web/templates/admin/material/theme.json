@@ -1,0 +1,10 @@
+{
+    "name": "material",
+    "version": "1.0.0",
+    "description": "Admin theme for Simplex using Material design language by Google.",
+    "authors": [
+        {
+            "name": "NV3"
+        }
+    ]
+}

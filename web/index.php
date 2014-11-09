@@ -12,7 +12,7 @@
 
 define('APPLICATION_ENVIRONMENT', 'production');
 
-if (!file_exists(dirname(__DIR__) . '/config/database.json')) {
+if (!file_exists(dirname(__DIR__) . '/config/parameters.json')) {
     header('HTTP/1.0 404 Not found');
     exit('Invalid configuration. Check manual for more information.');
 }

@@ -28,15 +28,42 @@ class MediaServiceProvider implements ServiceProviderInterface, ControllerProvid
         $app->register(new ImagineServiceProvider());
 
         $app['media.controller'] = $app->share(function () use ($app) {
-            return new MediaController();
+            return new MediaController(
+                $app['repository.media'],
+                $app['settings'],
+                $app['twig'],
+                $app['form.factory'],
+                $app['security'],
+                $app['session'],
+                $app['url_generator']
+            );
         });
 
         $app['image.controller'] = $app->share(function () use ($app) {
-            return new ImageController();
+            return new ImageController(
+                $app['repository.media'],
+                $app['imagine'],
+                $app['settings'],
+                $app['twig'],
+                $app['form.factory'],
+                $app['security'],
+                $app['session'],
+                $app['url_generator'],
+                $app['page.manager']
+            );
         });
 
         $app['video.controller'] = $app->share(function () use ($app) {
-            return new VideoController();
+            return new VideoController(
+                $app['repository.media'],
+                $app['imagine'],
+                $app['settings'],
+                $app['twig'],
+                $app['form.factory'],
+                $app['security'],
+                $app['session'],
+                $app['url_generator']
+            );
         });
     }
 

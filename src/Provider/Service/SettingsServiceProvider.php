@@ -23,7 +23,15 @@ class SettingsServiceProvider implements ServiceProviderInterface, ControllerPro
     public function register(Application $app)
     {
         $app['settings.controller'] = $app->share(function () use ($app) {
-            return new SettingsController();
+            return new SettingsController(
+                $app['settings'],
+                $app['repository.settings'],
+                $app['twig'],
+                $app['form.factory'],
+                $app['security'],
+                $app['session'],
+                $app['url_generator']
+            );
         });
     }
 

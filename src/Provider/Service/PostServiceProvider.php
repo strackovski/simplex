@@ -3,6 +3,8 @@
 namespace nv\Simplex\Provider\Service;
 
 use nv\Simplex\Controller\Admin\PostController;
+use nv\Simplex\Core\Post\PostManager;
+use nv\Simplex\Model\Repository\TagRepository;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ServiceProviderInterface;
@@ -11,7 +13,7 @@ use Silex\ControllerCollection;
 /**
  * Simplex Service Provider
  *
- * Provides Simplex functionality to Silex applications
+ * Provides Post service to Simplex application
  *
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
@@ -31,8 +33,34 @@ class PostServiceProvider implements ServiceProviderInterface, ControllerProvide
             'semtools.annotator.options' => array(),
         ));
 
+        $app['repository.tag'] = $app->share(function ($app) {
+            return new TagRepository(
+                $app['orm.em'],
+                $app['orm.em']->getClassMetadata('nv\Simplex\Model\Entity\Tag')
+            );
+        });
+
+        $app['post.manager'] = $app->share(function ($app) {
+            return new PostManager(
+                $app['semtools'],
+                $app['repository.post'],
+                $app['repository.tag']
+            );
+        });
+
         $app['post.controller'] = $app->share(function () use ($app) {
-            return new PostController();
+            return new PostController(
+                $app['repository.post'],
+                $app['repository.media'],
+                $app['repository.tag'],
+                $app['settings'],
+                $app['twig'],
+                $app['form.factory'],
+                $app['security'],
+                $app['session'],
+                $app['url_generator'],
+                $app['post.manager']
+            );
         });
     }
 

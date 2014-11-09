@@ -3,6 +3,7 @@
 namespace nv\Simplex\Provider\Service;
 
 use nv\Simplex\Controller\Admin\PageController;
+use nv\Simplex\Core\Page\PageManager;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ServiceProviderInterface;
@@ -22,8 +23,23 @@ class PageServiceProvider implements ServiceProviderInterface, ControllerProvide
      */
     public function register(Application $app)
     {
+        $app['page.manager'] = $app->share(function ($app) {
+            return new PageManager(
+                $app['repository.page']
+            );
+        });
+
         $app['page.controller'] = $app->share(function () use ($app) {
-            return new PageController();
+            return new PageController(
+                $app['repository.page'],
+                $app['settings'],
+                $app['twig'],
+                $app['form.factory'],
+                $app['security'],
+                $app['session'],
+                $app['url_generator'],
+                $app['page.manager']
+            );
         });
     }
 

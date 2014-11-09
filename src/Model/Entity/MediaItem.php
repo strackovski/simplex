@@ -238,8 +238,6 @@ abstract class MediaItem extends TimestampableAbstract
     public function getWebPath($variation = false)
     {
         if ($this->getType() === 'image' and $variation !== false and $this->path !== null) {
-
-            // @todo Improve variation selection
             switch ($variation) {
                 case 'small':
                     $var = 'thumbnails/small/';
@@ -261,7 +259,6 @@ abstract class MediaItem extends TimestampableAbstract
                     $var = 'thumbnails/medium/';
                     break;
             }
-
 
             return $var.$this->path;
         }

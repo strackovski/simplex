@@ -21,6 +21,8 @@ use Symfony\Component\Console\Question\Question;
 /**
  * CreateUserCommand
  *
+ * @todo This file needs to be updated to use parameters.json instead of database.json
+ *
  * Create a new user account from user input.
  *
  * @package nv\Simplex\Command
@@ -108,7 +110,6 @@ class ConnectDatabaseCommand extends ApplicationAwareCommand
             'driver' => $driver,
         );
 
-        // @todo fix
         $file = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'parameters.json';
         if (!file_exists($file)) {
             fopen($file, 'w');

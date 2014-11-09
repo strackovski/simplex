@@ -15,7 +15,6 @@ class ProjectSetup extends SetupAbstract
     /**
      * Pre-Configure application
      *
-     * @todo Improve data collection
      * Collect and save database configuration parameters
      */
     public function configure()
@@ -25,7 +24,7 @@ class ProjectSetup extends SetupAbstract
         $this->writeLine('Checking application configuration...');
         if (!$this->verify()) {
             $this->writeLine('Some parameters are missing or invalid, please provide them.', 'info');
-            $this->writeLine('Enter the database connection parameters.', '');
+            $this->writeLine('Enter the database connection parameters.');
             $dbOptions = array(
                 'driver' => 'Database driver',
                 'host' => 'SQL server hostname',

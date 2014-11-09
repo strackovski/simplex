@@ -33,6 +33,7 @@ class SettingsRepository extends EntityRepository
     public function save(Settings $settings)
     {
         $this->getEntityManager()->persist($settings);
+        // @todo Fix mailing config retrieval from parameters.json (now mailing.json)
         $file = dirname(dirname(dirname(__DIR__))) .'/config/mailing.json';
         if (file_exists($file)
             and array_diff(json_decode(file_get_contents($file), 1), $settings->getMailConfig()) !== 0) {
@@ -226,6 +227,7 @@ class SettingsRepository extends EntityRepository
     public function createNewInstance()
     {
         $settings = new Settings('you', 'your@email.fake', false, true);
+        // @todo Fix mailing config write to parameters.json (now mailing.json)
         if (file_exists($file = dirname(dirname(dirname(__DIR__))) .'/config/mailing.json')) {
             $mailConfig = json_decode(file_get_contents($file), 1);
             $settings->setMailConfig($mailConfig);

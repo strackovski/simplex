@@ -13,14 +13,15 @@
 namespace nv\Simplex\Core\Post;
 
 use nv\semtools\Annotators\OpenCalais\OpenCalaisResponse;
-use nv\Simplex\Common\ObservableInterface;
-use nv\Simplex\Common\ObserverInterface;
-use nv\Simplex\Core\Simplex;
+use nv\semtools\Classifiers\uClassify\UclassifyResponse;
 use nv\Simplex\Model\Entity\Metadata;
 use nv\Simplex\Model\Entity\Post;
 use nv\Simplex\Model\Entity\Tag;
 use nv\semtools\Annotators\OpenCalais\OpenCalaisRequest;
 use nv\semtools\Classifiers\uClassify\UclassifyRequest;
+use nv\Simplex\Model\Repository\PostRepository;
+use nv\Simplex\Model\Repository\TagRepository;
+use nv\Simplex\Provider\Service\Semtools;
 
 /**
  * Post Manager
@@ -30,37 +31,63 @@ use nv\semtools\Classifiers\uClassify\UclassifyRequest;
  * @package nv\Simplex\Core\Post
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
-class PostManager implements ObserverInterface
+class PostManager
 {
-    /**
-     * Post instance
-     *
-     * @var \nv\Simplex\Model\Entity\Post
-     */
-    private $post;
+    /** @var Semtools  */
+    private $semtools;
 
-    /**
-     * Simplex application
-     *
-     * @var \nv\Simplex\Core\Simplex
-     */
-    private $app;
+    /** @var PostRepository  */
+    private $posts;
 
-    public function __construct(Post $post, Simplex $app)
+    /** @var TagRepository  */
+    private $tags;
+
+    public function __construct(Semtools $semtools, PostRepository $postRepository, TagRepository $tagRepository)
     {
-        $this->post = $post;
-        $this->app = $app;
+        $this->semtools = $semtools;
+        $this->posts = $postRepository;
+        $this->tags = $tagRepository;
     }
 
     /**
      * Collect available metadata
      *
+     * @param Post $post
      * @return array
      */
-    public function metadata()
+    public function metadata(Post $post)
+    {
+        try {
+            $collectedMeta = array();
+            $classifications = $this->readClassifiers($post);
+            $annotations = $this->readAnnotations($post);
+
+            if ($classifications instanceof UclassifyResponse) {
+                $collectedMeta['c'] = json_decode($classifications->getResponse(), 1);
+            }
+
+            if ($annotations instanceof OpenCalaisResponse) {
+                $collectedMeta['a'] = json_decode($annotations->getResponse(), 1);
+            }
+
+            return $post->setMetadata(new Metadata($collectedMeta));
+        } catch (\Exception $e) {
+
+        }
+
+        return false;
+    }
+
+    /**
+     * Read annotations from annotations provider
+     *
+     * @param Post $post
+     * @return array
+     */
+    private function readClassifiers(Post $post)
     {
         $request = new UclassifyRequest(
-            strip_tags($this->post->getBody()),
+            strip_tags($post->getBody()),
             array(
                 'prfekt/Myers Briggs Attitude',
                 'prfekt/Mood',
@@ -72,18 +99,7 @@ class PostManager implements ObserverInterface
         $request->setResponseFormat('json');
 
         try {
-            $classifications = $this->app['semtools.classifier']->read($request);
-            $annotations = $this->readAnnotations();
-
-            $a = array(
-                'c' => json_decode($classifications->getResponse(), 1)
-            );
-
-            if ($annotations instanceof OpenCalaisResponse) {
-                $a['a'] = json_decode($annotations->getResponse(), 1);
-            }
-
-            return $this->post->setMetadata(new Metadata($a));
+            return $this->semtools->getClassifier()->read($request);
         } catch (\Exception $e) {
 
         }
@@ -94,15 +110,16 @@ class PostManager implements ObserverInterface
     /**
      * Read annotations from annotations provider
      *
+     * @param Post $post
      * @return array
      */
-    private function readAnnotations()
+    private function readAnnotations(Post $post)
     {
-        $request = new OpenCalaisRequest(strip_tags($this->post->getBody()));
+        $request = new OpenCalaisRequest(strip_tags($post->getBody()));
         $request->setOutputFormat('application/json');
 
         try {
-            return $this->app['semtools.annotator']->read($request);
+            return $this->semtools->getAnnotator()->read($request);
         } catch (\Exception $e) {
 
         }
@@ -112,10 +129,11 @@ class PostManager implements ObserverInterface
 
     /**
      * Generate unique slug for the post
+     * @param Post $post
      */
-    public function slug()
+    public function slug(Post $post)
     {
-        $slug = preg_replace('~[^\\pL\d]+~u', '-', $this->post->getTitle());
+        $slug = preg_replace('~[^\\pL\d]+~u', '-', $post->getTitle());
         $slug = trim($slug, '-');
         $slug = iconv('utf-8', 'us-ascii//TRANSLIT', $slug);
         $slug = strtolower($slug);
@@ -124,30 +142,30 @@ class PostManager implements ObserverInterface
         $i = 1;
         $baseSlug = $slug;
         while (
-            $check = $this->app['repository.post']->slugExists($slug) and
-            $check !== $this->post
+            $check = $this->posts->slugExists($slug) and
+            $check !== $post
         ) {
             $slug = $baseSlug . "-" . $i++;
         }
 
-        $this->post->setSlug($slug);
+        $post->setSlug($slug);
     }
 
     /**
      * Tag the post or clear tags
      *
+     * @param Post $post
      * @param null $tags
      *
      * @return Post|string
      */
-    public function tag($tags = null)
+    public function tag(Post $post, $tags = null)
     {
-        $this->post->clearTags();
+        $post->clearTags();
 
         if (!is_null($tags)) {
             $tagsArray = $this->sanitize($tags);
-            $tagsInDb  = $this->app['orm.em']->getRepository('nv\Simplex\Model\Entity\Tag')->findAll();
-
+            $tagsInDb  = $this->tags->findAll();
 
             $tagObjects = array();
             foreach ($tagsInDb as $tagObj) {
@@ -156,31 +174,26 @@ class PostManager implements ObserverInterface
 
             foreach ($tagsArray as $tagItem) {
                 if (in_array($tagItem, $tagObjects)) {
-                    $matchedTag = $this->app['orm.em']->getRepository('nv\Simplex\Model\Entity\Tag')
-                        ->findOneBy(array('name' => $tagItem));
+                    $matchedTag = $this->tags->findOneBy(array('name' => $tagItem));
                     if ($matchedTag instanceof Tag) {
-                        $this->post->addTag($matchedTag);
-                        $matchedTag->addPost($this->post);
+                        $post->addTag($matchedTag);
+                        $matchedTag->addPost($post);
                     }
                 } else {
                     $newTag = new Tag($tagItem);
-                    $newTag->addPost($this->post);
-                    $this->post->addTag($newTag);
+                    $newTag->addPost($post);
+                    $post->addTag($newTag);
                     try {
-                        $this->app['orm.em']->persist($newTag);
+                        // $this->app['orm.em']->persist($newTag);
+                        $this->tags->save($newTag);
                     } catch (\Exception $e) {
                         return $e->getMessage();
                     }
                 }
             }
         }
-        try {
-            $this->app['orm.em']->persist($this->post);
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
 
-        return $this->post;
+        return $post;
     }
 
     /**
@@ -194,6 +207,7 @@ class PostManager implements ObserverInterface
     {
         if ($tags != null) {
             $processed = array();
+            $tags = preg_replace('/\s+/', '', $tags);
             $tagsarr = explode(',', $tags);
             foreach ($tagsarr as $tag) {
                 $processed[] = strtolower(trim($tag));
@@ -202,34 +216,6 @@ class PostManager implements ObserverInterface
             return $processed = array_unique($processed);
         } else {
             return $processed = null;
-        }
-    }
-
-    /**
-     * Update
-     *
-     * @param ObservableInterface $observable
-     *
-     * @return mixed|void
-     */
-    public function update(ObservableInterface $observable)
-    {
-        if ($observable === $this->post) {
-            $this->doUpdate($observable);
-        }
-    }
-
-    /**
-     * doUpdate
-     *
-     * @param \nv\Simplex\Model\Entity\Post $content
-     *
-     * @return mixed
-     */
-    private function doUpdate(Post $content)
-    {
-        if ($this->app['settings']->getEnableAnnotations()) {
-            $this->metadata();
         }
     }
 }

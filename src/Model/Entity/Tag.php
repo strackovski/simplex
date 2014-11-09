@@ -17,7 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Tag class
  *
- * @Entity
+ * @Entity(repositoryClass="nv\Simplex\Model\Repository\TagRepository")
  * @Table(name="tags")
  * @package nv\Simplex\Model\Entity
  * @author Vladimir Stračkovski <vlado@nv3.org>

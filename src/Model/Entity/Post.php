@@ -136,7 +136,7 @@ class Post extends TimestampableAbstract implements ObservableInterface
      */
     public function prePersist()
     {
-        $this->notifyObservers();
+
     }
 
     /**
@@ -307,7 +307,7 @@ class Post extends TimestampableAbstract implements ObservableInterface
     {
         foreach ($this->observers as $obs) {
             if ($obs instanceof ObserverInterface) {
-                $obs->update($this);
+
             }
         }
     }

@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class PostType extends AbstractType
 {
-    /** @var array */
+    /** @var array Library media items */
     private $media;
 
     public function __construct(array $media)

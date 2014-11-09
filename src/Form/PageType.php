@@ -13,6 +13,10 @@
 namespace nv\Simplex\Form;
 
 use Doctrine\ORM\EntityManager;
+use nv\Simplex\Model\Entity\Settings;
+use nv\Simplex\Model\Repository\PageRepository;
+use nv\Simplex\Model\Repository\TagRepository;
+use nv\Simplex\Model\Repository\UserRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -27,17 +31,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class PageType extends AbstractType
 {
-    /**
-     * @var EntityManager
-     */
-    protected $em;
+    /** @var PageRepository  */
+    private $pages;
 
-    /**
-     * @param EntityManager $em
-     */
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
+    /** @var Settings */
+    private $settings;
+
+    public function __construct(
+        PageRepository $pageRepository,
+        Settings $settings
+    ) {
+        $this->pages = $pageRepository;
+        $this->settings = $settings;
     }
 
     /**
@@ -48,23 +53,23 @@ class PageType extends AbstractType
     {
         $files = array();
         $masters = array();
-        $settings = $this->em->getRepository('nv\Simplex\Model\Entity\Settings')->getCurrent();
+        $tplDir = __DIR__ . '/../../web/templates/site/';
 
-        foreach (glob(__DIR__ . '/../../web/templates/site/'.$settings->getPublicTheme().'/masters/*.twig') as $file) {
+        foreach (glob($tplDir . $this->settings->getPublicTheme().'/masters/*.twig') as $file) {
             $masters[basename($file, '.html.twig')] = ucfirst(basename($file, '.html.twig'));
         }
 
-        foreach (glob(__DIR__ . '/../../web/templates/site/'.$settings->getPublicTheme().'/views/*.twig') as $file) {
+        foreach (glob($tplDir .$this->settings->getPublicTheme().'/views/*.twig') as $file) {
             $files[basename($file, '.html.twig')] = ucfirst(basename($file, '.html.twig'));
         }
 
-        $authors = $this->em->getRepository('nv\Simplex\Model\Entity\User')->getUsers();
+        $authors = $this->pages->getAuthors();
         $authorItems = array();
         foreach ($authors as $author) {
             $authorItems[$author->getId()] = $author->displayName();
         }
 
-        $tags = $this->em->getRepository('nv\Simplex\Model\Entity\Tag')->findAll();
+        $tags = $this->pages->getTags();
         $tagItems = array();
         foreach ($tags as $tag) {
             $tagItems[$tag->getId()] = $tag->getName();

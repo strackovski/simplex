@@ -27,18 +27,7 @@ use nv\Simplex\Model\Repository\SettingsRepository;
  */
 class MediaSettingsType extends AbstractType
 {
-    /** @var \nv\Simplex\Model\Repository\SettingsRepository */
-    private $settings;
-
-    /**
-     * @param \nv\Simplex\Model\Repository\SettingsRepository $repository
-     */
-    public function __construct(SettingsRepository $repository)
-    {
-        $this->settings = $repository;
-    }
-
-    /**
+/**
      * @param FormBuilderInterface $builder
      * @param array                $options
      */

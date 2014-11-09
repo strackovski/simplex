@@ -19,6 +19,8 @@ use Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapLabelExtension;
 use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
+use nv\Simplex\Provider\LoginControllerProvider;
+use nv\Simplex\Provider\LoginServiceProvider;
 use nv\Simplex\Provider\Service\SiteServiceProvider;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
@@ -36,7 +38,7 @@ use Silex\Provider\UrlGeneratorServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
 use SilexAssetic\AsseticServiceProvider;
-use Symfony\Component\BrowserKit\Response;
+use Symfony\Component\HttpFoundation\Response;
 use nv\Simplex\Core\Mailer\SystemMailer;
 use nv\Simplex\Provider\Service\MediaServiceProvider;
 use nv\Simplex\Provider\Service\PageServiceProvider;
@@ -46,6 +48,7 @@ use nv\Simplex\Provider\Service\SimplexServiceProvider;
 use nv\Simplex\Provider\Service\UserServiceProvider;
 use nv\Simplex\Provider\UserProvider;
 use nv\Simplex\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Simplex

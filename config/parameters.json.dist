@@ -1,0 +1,19 @@
+{
+    "database":
+    {
+        "driver":"",
+        "host":"",
+        "user":"",
+        "password":"",
+        "dbname":""
+    },
+    "mailing":
+    {
+        "mail_host":"",
+        "mail_port":"",
+        "mail_user":"",
+        "mail_password":"",
+        "mail_auth_mode":"",
+        "mail_encryption":""
+    }
+}

@@ -17,7 +17,9 @@ $app['http_cache.cache_dir'] = APPLICATION_ROOT_PATH.'/var/cache/http';
 $app['assetic.path_to_cache'] = APPLICATION_ROOT_PATH.'/var/cache/assetic';
 $app['assetic.path_to_web'] = APPLICATION_ROOT_PATH.'/web/assets';
 
-$app['db.options'] = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR .'database.json'), 1);
+$config = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR .'parameters.json'), 1);
+
+$app['db.options'] = $config['database'];
 $app['orm.options'] = array(
     'orm.proxies_dir'          => APPLICATION_ROOT_PATH.'/var/cache/doctrine/proxy',
     'orm.em.options' => array(

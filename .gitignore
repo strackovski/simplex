@@ -1,5 +1,5 @@
 .idea/
-.npm-debug.log
+npm-debug.log
 .DS_Store
 ._.DS_Store
 config/database.json

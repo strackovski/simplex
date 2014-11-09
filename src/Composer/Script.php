@@ -27,9 +27,8 @@ class Script
      */
     public static function postInstall(Event $event)
     {
-        print "\n** Starting Simplex Installer **\n\n";
         passthru('php bin/console assets:clean-up');
-        print "Setting up directories...\n";
+        print "Setting up directories...";
         self::mkdir('var', 0777);
         self::mkdir('var/cache', 0777);
         self::mkdir('var/logs', 0777);
@@ -40,34 +39,23 @@ class Script
         self::mkdir('web/uploads/thumbnails/small', 0777);
         self::mkdir('web/uploads/crops', 0777);
         self::mkdir('web/assets', 0777);
-        /*
-        print "Setting up permissions...\n";
-        chown('web/uploads/thumbnails', 'www-data');
-        chgrp('web/uploads/thumbnails', 'www-data');
-        chown('web/uploads/thumbnails/large', 'www-data');
-        chgrp('web/uploads/thumbnails/large', 'www-data');
-        chown('web/uploads/thumbnails/medium', 'www-data');
-        chgrp('web/uploads/thumbnails/medium', 'www-data');
-        chown('web/uploads/thumbnails/small', 'www-data');
-        chgrp('web/uploads/thumbnails/small', 'www-data');
-        chown('web/uploads/crops', 'www-data');
-        chgrp('web/uploads/crops', 'www-data');
-        */
-        print "\nIt is recommended to configure a system mailing account for\n";
-        print "system related email messages (logs, user account activation).";
-        passthru('php bin/console mailing:configure');
+        print "\033[32mDONE\033[0m\n";
         chmod('bin/console', 0500);
-        print "\nRebuilding the database...";
+        print "Rebuilding the database...";
         exec('bin/rebuild-database');
-        print "\nDumping assets...";
+        print "\033[32mDONE\033[0m\n";
+        print "Dumping assets...";
         exec('php bin/console assetic:dump');
-        print "\nLoading fixtures...";
+        print "\033[32mDONE\033[0m\n";
+        print "Loading fixtures...";
         exec('php bin/console fixtures:load');
-        print "\nInstallation complete. \n";
-        print "\nTo use the application you should create the first user account now.\n";
-        print "You can create the account later by using the security:create-user command.\n";
+        print "\033[32mDONE\033[0m\n";
+        print "\n\033[32m*** USER ACCOUNT CREATION ***\033[0m\n";
+        print "\nTo use the application you must create an account for the administrative user. ";
+        print "If you do not wish to create an account now, ";
+        print "you can create it later by running security:create-user.\n\n";
         passthru('php bin/console security:create-user');
-        print "\nYour application is ready!\n\n";
+        print "\n\033[44mYour application is ready!\033[0m\n\n";
     }
 
     /**
@@ -79,6 +67,7 @@ class Script
      */
     public static function preInstall(Event $event)
     {
+        passthru('clear');
         $setup = new ProjectSetup(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR);
         $setup->configure();
     }

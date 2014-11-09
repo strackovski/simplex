@@ -27,14 +27,17 @@ class CacheClearCommand extends ApplicationAwareCommand
     {
         $this
             ->setName('cache:clear')
-            ->setDescription('Clear all registered cache stores.')
-        ;
+            ->setDescription('Clear all registered cache stores.');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $pathToCache = APPLICATION_ROOT_PATH . '/var/cache/';
-
         foreach (
             new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator(

@@ -25,14 +25,21 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class AsseticDumpCommand extends ApplicationAwareCommand
 {
+    /**
+     *
+     */
     protected function configure()
     {
         $this
             ->setName('assetic:dump')
-            ->setDescription('Writes all registered assets to the filesystem.')
-        ;
+            ->setDescription('Writes all registered assets to the filesystem.');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dumper = $this->app['assetic.dumper'];

@@ -28,6 +28,9 @@ use Symfony\Component\Console\Question\Question;
  */
 class AuthenticateMailerCommand extends ApplicationAwareCommand
 {
+    /**
+     *
+     */
     protected function configure()
     {
         $this
@@ -35,7 +38,11 @@ class AuthenticateMailerCommand extends ApplicationAwareCommand
             ->setDescription('Configure system mailing account.');
     }
 
-
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $helper = $this->getHelper('question');

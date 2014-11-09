@@ -53,10 +53,41 @@ abstract class SetupAbstract
      */
     protected function promptUser($message)
     {
-        print "\n".$message;
+        print $this->formatText($message, 'prompt');
         $handle = fopen("php://stdin", "r");
 
         return trim(fgets($handle));
+    }
+
+    protected function formatText($text, $format)
+    {
+        $formats = array(
+            'red' => "\033[0;31m%s\033[0m",
+            'light-red' => "\033[1;31m%s\033[0m",
+            'green' => "\033[0;32m%s\033[0m",
+            'blue' => "\033[0;34m%s\033[0m",
+            'purple' => "\033[0;35m%s\033[0m",
+            'error' => "\033[41m%s\033[0m",
+            'success' => "\033[42m%s\033[0m",
+            'warning' => "\033[30m\033[43m%s\033[0m",
+            'info' => "\033[44m%s\033[0m",
+            'prompt' => "\033[34m\033[1;34m%s\033[0m",
+        );
+
+        if ($format) {
+            return sprintf($formats[$format], $text);
+        }
+
+        return $text;
+    }
+
+    public function writeLine($message, $format = false)
+    {
+        if ($format) {
+            return print "\n" . $this->formatText($message, $format) . "\n";
+        }
+
+        return print "\n" . $message . "\n";
     }
 
     /**
@@ -80,22 +111,51 @@ abstract class SetupAbstract
         }
     }
 
+    protected function setParameters(array $parameters, $config)
+    {
+        $file = $this->path . 'parameters.json';
+        if (!file_exists($file)) {
+            fopen($file, 'w');
+        }
+
+        $params = json_decode(file_get_contents($file), 1);
+
+        foreach ($parameters as $name => $value) {
+            if (array_key_exists($config, $params)) {
+                if (array_key_exists($name, $params[$config])) {
+                    $params[$config][$name] = $value;
+                }
+            }
+        }
+
+        try {
+            file_put_contents($file, json_encode($params), LOCK_EX);
+            print "\nConfiguration saved.";
+            return true;
+        } catch (\Exception $e) {
+            print "\nAn error occured while writing configuration file.";
+            return false;
+        }
+    }
+
     /**
      * Verifies database connection configuration
      *
-     * @param $configFile
      * @return bool|array Array of database connection parameters or false on error
      */
-    protected function verifyDatabaseConfiguration($configFile)
+    protected function verifyDatabaseConfiguration()
     {
+        $configFile = 'parameters.json';
+
         if (!file_exists($this->path . $configFile)) {
-            trigger_error("Irrecoverable error: Required configuration file $configFile not found.");
+            fopen($this->path . $configFile, 'w');
+            return false;
         }
 
-        $db = json_decode(file_get_contents($this->path . $configFile), 1);
+        $config = json_decode(file_get_contents($this->path . $configFile), 1);
 
-        if (isset($db) and is_array($db)) {
-
+        if (isset($config) and is_array($config['database'])) {
+            $db = $config['database'];
             foreach (array('driver', 'host', 'user', 'password', 'dbname') as $key) {
                 if (!array_key_exists($key, $db)) {
                     trigger_error("Irrecoverable error: Invalid database configuration file.\n");
@@ -112,22 +172,26 @@ abstract class SetupAbstract
                                 $db['user'],
                                 $db['password']
                             );
-                            print "\nConnection to MySQL Server successful.";
+                            print "\n * Connection to MySQL Server successful.";
 
                             if (!mysqli_select_db($conn, $db['dbname'])) {
-
-                                print "\nSchema {$db['dbname']} not found, trying to create it now...";
+                                print $this->formatText(
+                                    "\n * Schema {$db['dbname']} not found, trying to create it now...",
+                                    'light-red'
+                                );
 
                                 if (!mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS {$db['dbname']};")) {
+                                    print $this->formatText("FAIL.\n", 'red');
                                     trigger_error('Irrecoverable error: Schema creation failed.');
                                 }
-                                print "\nSchema {$db['dbname']} created successfully.";
+                                print $this->formatText("DONE.\n", 'green');
                             }
-
-                            print "\nDatabase configuration OK";
+                            print $this->formatText("\nDatabase configuration OK.\n", 'green');
 
                         } catch (\ErrorException $e) {
-                            trigger_error("\nError: " . $e->getMessage());
+                            $this->writeLine($e->getMessage(), 'error');
+                            $this->writeLine("Setup will now restart...\n");
+                            return false;
                         }
                     }
                     break;
@@ -136,7 +200,7 @@ abstract class SetupAbstract
                     if (function_exists("pg_connect")) {
                         pg_connect(
                             "host={$db['host']} ".
-                            "dbname={$db['dbname']} ".
+                            "dbname={$db['name']} ".
                             "user={$db['user']} ".
                             "password={$db['password']}"
                         )
@@ -149,8 +213,8 @@ abstract class SetupAbstract
                         $server = "{$db['host']}{$db['dbname']}";
                         $connection = mssql_connect(
                             $server,
-                            $db['user'],
-                            $db['password']
+                            $db['duser'],
+                            $db['dpassword']
                         );
                         if (!$connection) {
                             trigger_error("\nError: Something went wrong while connecting to MSSQL");
@@ -166,13 +230,32 @@ abstract class SetupAbstract
                         }
                     }
                     break;
+                default:
+                    return false;
             }
             return $db;
         }
-        trigger_error(
-            "Failed retrieving database connection parameters.\n".
-            "Make sure parameters are set in configuration file."
+
+        $config = array(
+            'database' => array(
+                'driver' => '',
+                'host' => '',
+                'user' => '',
+                'password' => '',
+                'dbname' => ''
+            ),
+            'mailing' => array(
+                'mail_host' => '',
+                'mail_port' => '',
+                'mail_username' => '',
+                'mail_password' => '',
+                'mail_auth_mode' => '',
+                'mail_encryption' => ''
+            )
         );
+
+        $this->writeConfigFile('parameters.json', $config);
+
         return false;
     }
 }

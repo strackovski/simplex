@@ -22,7 +22,7 @@ use nv\Simplex\Model\Entity\User;
 /**
  * CreateUserCommand
  *
- * Create a new user account from user input.
+ * Create a new user account.
  *
  * @package nv\Simplex\Command
  * @author Vladimir Stračkovski <vlado@nv3.org>
@@ -36,10 +36,15 @@ class CreateUserCommand extends ApplicationAwareCommand
             ->setDescription('Create a new user account.');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion("Would you like to create a new user account now?", false);
+        $question = new ConfirmationQuestion("<info>Would you like to create a new user account now?</info>", false);
         if (!$helper->ask($input, $output, $question)) {
             return;
         }

@@ -20,31 +20,42 @@ class ProjectSetup extends SetupAbstract
      */
     public function configure()
     {
-        print "\n\n*** WELCOME TO SIMPLEX ***\n";
-        print "\nThis will pre-configure your Simplex application instance.";
-        print "\nIn case you already configured it by hand, you can skip this step.";
-        print "\nEnter 'n(o)' to skip this step if application is already configured.\n";
-        $value = $this->promptUser("\nWould you like to continue? ");
-        if ($value !== 'y' and $value !== 'yes') {
-            $this->verify();
-            return;
-        }
+        $this->writeLine('*** WELCOME TO SIMPLEX ***', 'info');
 
-        print "\nPlease provide the following database server parameters:";
-        $dbOptions = array(
-            'driver' => 'Database driver',
-            'host' => 'SQL server hostname',
-            'user' => 'Username',
-            'password' => 'Password',
-            'dbname' => 'Schema (database) name'
-        );
-        $dbConfig = array();
-        foreach ($dbOptions as $key => $name) {
-            $dbConfig[$key] = $this->promptUser($name.": ");
+        $this->writeLine('Checking application configuration...');
+        if (!$this->verify()) {
+            $this->writeLine('Some parameters are missing or invalid, please provide them.', 'info');
+            $this->writeLine('Enter the database connection parameters.', '');
+            $dbOptions = array(
+                'driver' => 'Database driver',
+                'host' => 'SQL server hostname',
+                'user' => 'Username',
+                'password' => 'Password',
+                'dbname' => 'Schema (database) name'
+            );
+            $dbConfig = array();
+            foreach ($dbOptions as $key => $name) {
+                $dbConfig[$key] = $this->promptUser($name.": ");
+            }
+            $this->setParameters($dbConfig, 'database');
+
+            $this->writeLine('Enter connection parameters for the system mailing account.');
+            $mailingOptions = array(
+                'mail_host' => 'host',
+                'mail_port' => 'port',
+                'mail_username' => 'Username',
+                'mail_password' => 'Password',
+                'mail_auth_mode' => 'auth',
+                'mail_encryption' => 'Enc'
+            );
+            $mailingCfg = array();
+            foreach ($mailingOptions as $key => $name) {
+                $mailingCfg[$key] = $this->promptUser($name.": ");
+            }
+            $this->setParameters($mailingCfg, 'mailing');
+
+            return $this->verify();
         }
-        $file = 'database.json';
-        $this->writeConfigFile($file, $dbConfig);
-        $this->verify();
 
         return;
     }
@@ -56,7 +67,7 @@ class ProjectSetup extends SetupAbstract
      */
     public function verify()
     {
-        if (!$this->verifyDatabaseConfiguration('database.json')) {
+        if (!$this->verifyDatabaseConfiguration()) {
             return false;
         }
 

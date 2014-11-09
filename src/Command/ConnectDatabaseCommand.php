@@ -35,6 +35,11 @@ class ConnectDatabaseCommand extends ApplicationAwareCommand
             ->setDescription('Configure database connection.');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $helper = $this->getHelper('question');
@@ -103,7 +108,8 @@ class ConnectDatabaseCommand extends ApplicationAwareCommand
             'driver' => $driver,
         );
 
-        $file = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'database.json';
+        // @todo fix
+        $file = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'parameters.json';
         if (!file_exists($file)) {
             fopen($file, 'w');
         }

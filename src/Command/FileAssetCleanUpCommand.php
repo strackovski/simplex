@@ -27,12 +27,17 @@ class FileAssetCleanUpCommand extends ApplicationAwareCommand
     {
         $this
             ->setName('assets:clean-up')
-            ->setDescription('Remove all user-created file assets.')
-        ;
+            ->setDescription('Remove all user-created file assets.');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $output->write('Removing orphaned assets...');
         $path = APPLICATION_ROOT_PATH . '/web/uploads/';
 
         foreach (new \RecursiveIteratorIterator(
@@ -43,6 +48,6 @@ class FileAssetCleanUpCommand extends ApplicationAwareCommand
         }
 
         @rmdir($path);
-        $output->writeln('<info>File assets removed.</info>');
+        $output->writeln('<info>DONE</info>');
     }
 }

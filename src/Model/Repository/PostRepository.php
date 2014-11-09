@@ -15,6 +15,7 @@ namespace nv\Simplex\Model\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use nv\Simplex\Model\Entity\Post;
+use nv\Simplex\Model\Entity\Tag;
 
 /**
  * Post Entity Repository
@@ -271,25 +272,5 @@ class PostRepository extends EntityRepository
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-    }
-
-    /**
-     * @param bool $hydrate
-     * @return array
-     */
-    public function getTags($hydrate = false)
-    {
-        $em = $this->getEntityManager();
-        $qb = $em->createQueryBuilder();
-
-        $qb->select(array('u'))
-            ->from('nv\Simplex\Model\Entity\Tag', 'u');
-
-        $query = $qb->getQuery();
-
-        if ($hydrate) {
-            return $query->getResult(Query::HYDRATE_ARRAY);
-        }
-        return $query->getResult();
     }
 }

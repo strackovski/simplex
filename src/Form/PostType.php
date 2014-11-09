@@ -12,7 +12,6 @@
 
 namespace nv\Simplex\Form;
 
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -27,11 +26,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class PostType extends AbstractType
 {
-    protected $em;
+    /** @var array */
+    private $media;
 
-    public function __construct(EntityManager $em)
+    public function __construct(array $media)
     {
-        $this->em = $em;
+        $this->media = $media;
     }
 
     /**
@@ -40,10 +40,9 @@ class PostType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $media = $this->em->getRepository('nv\Simplex\Model\Entity\MediaItem')->getLibraryMedia();
         $mediaList = array();
 
-        foreach ($media as $item) {
+        foreach ($this->media as $item) {
             $mediaList[$item->getId()] = $item->getMediaId();
         }
 

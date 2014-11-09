@@ -179,6 +179,12 @@ class Simplex extends Application
                 ),
                 'users' => $app['user.provider']
             ),
+            'api' => array(
+                'pattern' => '^/api*',
+                'http' => true,
+                'stateless' => true,
+                'users' => $app['user.provider']
+            )
         );
 
         // Simple role access rules, will be replaced by ACL

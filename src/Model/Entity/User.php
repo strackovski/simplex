@@ -22,15 +22,11 @@ class User implements UserInterface
     protected $id;
 
     /**
-     * @todo Camelcase
-     *
      * @Column(type="string", length=255)
      */
     protected $firstName;
 
     /**
-     * @todo Camelcase
-     *
      * @Column(type="string", length=255)
      */
     protected $lastName;
@@ -61,15 +57,11 @@ class User implements UserInterface
     protected $roles;
 
     /**
-     * @todo Camelcase (interface)
-     *
      * @Column(type="datetime")
      */
     protected $created_at;
 
     /**
-     * @todo Camelcase (interface)
-     *
      * @Column(type="datetime")
      */
     protected $updated_at;
@@ -90,7 +82,7 @@ class User implements UserInterface
      **/
     protected $postsAuthored;
 
-    /**
+    /** 
      * @OneToMany(targetEntity="Post", mappedBy="editor")
      **/
     protected $postsEdited;

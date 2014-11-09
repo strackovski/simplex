@@ -12,10 +12,19 @@
 
 namespace nv\Simplex\Controller\Admin;
 
+use nv\Simplex\Controller\ActionControllerAbstract;
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
-use nv\Simplex\Form\PageType;
+use nv\Simplex\Model\Entity\Settings;
 use nv\Simplex\Model\Entity\Page;
+use nv\Simplex\Form\PageType;
+use nv\Simplex\Core\Page\PageManager;
+use nv\Simplex\Model\Repository\PageRepository;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * Class PageController
@@ -24,58 +33,92 @@ use nv\Simplex\Model\Entity\Page;
  *
  * @package nv\Simplex\Controller\Admin
  */
-class PageController
+class PageController extends ActionControllerAbstract
 {
+    /** @var PageRepository */
+    private $pages;
+
+    /** @var PageManager */
+    private $manager;
+
+    public function __construct(
+        PageRepository $pageRepository,
+        Settings $settings,
+        \Twig_Environment $twig,
+        FormFactoryInterface $formFactory,
+        SecurityContext $security,
+        Session $session,
+        UrlGenerator $url,
+        PageManager $pageManager
+    ) {
+        parent::__construct($settings, $twig, $formFactory, $security, $session, $url);
+        $this->pages = $pageRepository;
+        $this->manager = $pageManager;
+    }
+
     /**
      * Index pages
      *
-     * @param Request     $request
-     * @param Application $app
-     *
      * @return mixed
      */
-    public function indexAction(Request $request, Application $app)
+    public function indexAction()
     {
+        /*
         $data['pages'] = $app['repository.page']->findAll();
         return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/pages.html.twig', $data);
+        */
+
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/views/pages.html.twig',
+            array('pages' => $this->pages->findAll())
+        );
     }
 
    /**
      * View single page
      *
-     * @param Request     $request
-     * @param Application $app
      * @return mixed
      */
-    public function viewAction(Request $request, Application $app)
+    public function viewAction()
     {
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/pages.html.twig');
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/pages.html.twig');
     }
 
     /**
      * Add page
      *
      * @param Request $request
-     * @param Application $app
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function addAction(Request $request, Application $app)
+    public function addAction(Request $request)
     {
         $page = new Page($request->request->get('title'), $request->request->get('slug'));
-        $page->registerObserver($pm = new \nv\Simplex\Core\Page\PageManager($page, $app));
-        $form = $app['form.factory']->create(new PageType($app['orm.em']), $page);
+
+
+        // $page->registerObserver($pm = new \nv\Simplex\Core\Page\PageManager($page, $app));
+
+
+        $form = $this->form->create(new PageType($this->pages, $this->settings), $page);
+
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
-                $pm->slug($form->get('slug')->getData());
-                $app['repository.page']->save($page);
+
+                $this->manager->slug($page, $form->get('slug')->getData());
+
+                $this->pages->save($page);
+
                 $message = 'The page <strong>' . $page->getTitle() .
                     '</strong> has been saved. <a href="' . $page->getSlug() . '" target="_blank">See it!</a>';
-                $app['session']->getFlashBag()->add('success', $message);
 
-                $redirect = $app['url_generator']->generate('admin/pages');
-                return $app->redirect($redirect);
+                $this->session->getFlashBag()->add('success', $message);
+
+                $redirect = $this->url->generate('admin/pages');
+
+                return new RedirectResponse($redirect);
+
+                //return $app->redirect($redirect);
             }
         }
 
@@ -84,33 +127,30 @@ class PageController
             'title' => 'Add new page',
         );
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/page-form.html.twig', $data);
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/page-form.html.twig', $data);
     }
 
     /**
      * Edit page
      *
      * @param Request     $request
-     * @param Application $app
      * @return mixed
      */
-    public function editAction(Request $request, Application $app)
+    public function editAction(Request $request)
     {
-        $page = $app['repository.page']->findOneBy(array('id' => $request->get('page')));
-        $form = $app['form.factory']->create(new PageType($app['orm.em']), $page);
-
-        $pm = new \nv\Simplex\Core\Page\PageManager($page, $app);
+        $page = $this->pages->findOneBy(array('id' => $request->get('page')));
+        $form = $this->form->create(new PageType($this->pages, $this->settings), $page);
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
-                $pm->slug($form->get('slug')->getData());
-                $app['repository.page']->save($page);
+                $this->manager->slug($page, $form->get('slug')->getData());
+                $this->pages->save($page);
                 $message = 'Changes to page <strong>' . $page->getTitle() . '</strong> have been saved.';
-                $app['session']->getFlashBag()->add('success', $message);
-                $redirect = $app['url_generator']->generate('admin/pages');
+                $this->session->getFlashBag()->add('success', $message);
+                $redirect = $this->url->generate('admin/pages');
 
-                return $app->redirect($redirect);
+                return new RedirectResponse($redirect);
             }
         }
         $data = array(
@@ -119,24 +159,24 @@ class PageController
             'title' => 'Edit page',
         );
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/page-form.html.twig', $data);
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/page-form.html.twig', $data);
     }
 
     /**
      * Delete page
      *
      * @param Request     $request
-     * @param Application $app
      *
      * @return mixed
      */
-    public function deleteAction(Request $request, Application $app)
+    public function deleteAction(Request $request)
     {
-        $post = $app['repository.page']->findOneBy(array('id' => $request->get('page')));
-        $app['orm.em']->remove($post);
-        $app['orm.em']->flush();
-        $redirect = $app['url_generator']->generate('admin/pages');
+        $page = $this->pages->findOneBy(array('id' => $request->get('page')));
+        if ($page instanceof Page) {
+            $this->pages->delete($page);
+        }
+        $redirect = $this->url->generate('admin/pages');
 
-        return $app->redirect($redirect);
+        return new RedirectResponse($redirect);
     }
 }

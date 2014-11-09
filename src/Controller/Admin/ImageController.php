@@ -12,6 +12,8 @@
 
 namespace nv\Simplex\Controller\Admin;
 
+use Imagine\Image\ImagineInterface;
+use nv\Simplex\Controller\ActionControllerAbstract;
 use Silex\Application;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,6 +22,13 @@ use nv\Simplex\Form\ImageType;
 use nv\Simplex\Model\Entity\Image;
 use nv\Simplex\Model\Entity\Metadata;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use nv\Simplex\Model\Entity\Settings;
+use nv\Simplex\Model\Repository\MediaRepository;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * Class ImageController
@@ -28,8 +37,29 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  * @package nv\Simplex\Controller
  */
-class ImageController
+class ImageController extends ActionControllerAbstract
 {
+    /** @var MediaRepository */
+    private $media;
+
+    /** @var  ImagineInterface */
+    private $imageLib;
+
+    public function __construct(
+        MediaRepository $mediaRepository,
+        ImagineInterface $imageLib,
+        Settings $settings,
+        \Twig_Environment $twig,
+        FormFactoryInterface $formFactory,
+        SecurityContext $security,
+        Session $session,
+        UrlGenerator $url
+    ) {
+        parent::__construct($settings, $twig, $formFactory, $security, $session, $url);
+        $this->media = $mediaRepository;
+        $this->imageLib = $imageLib;
+    }
+
     /**
      * Index image items: display all images with images template
      *
@@ -41,7 +71,7 @@ class ImageController
     public function indexAction(Request $request, Application $app)
     {
         /** @var $form Form */
-        $form = $app['form.factory']->createNamedBuilder(
+        $form = $this->form->createNamedBuilder(
             null,
             'form',
             array('test' => '')
@@ -50,9 +80,9 @@ class ImageController
         ->getForm();
 
         $data['form'] = $form->createView();
-        $data['images'] = $app['repository.media']->getLibraryImages();
+        $data['images'] = $this->media->getLibraryImages();
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/images.html.twig', $data);
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/images.html.twig', $data);
 
     }
 
@@ -65,7 +95,7 @@ class ImageController
      */
     public function viewAction(Request $request, Application $app)
     {
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/image.html.twig');
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/image.html.twig');
     }
 
 
@@ -87,30 +117,27 @@ class ImageController
             $image->setFile($uploadedFile);
             $image->setName($uploadedFile->getClientOriginalName());
             $image->setMetadata($metadata = new Metadata());
-            $app['repository.media']->save($image);
+            $this->media->save($image);
             $image->setMetadata($metadata->setData($image->getManager()->metadata()));
-            $app['orm.em']->flush();
+            $this->media->save($image);
 
             try {
-                $image->getManager()->thumbnail($app['imagine'], $app['settings']->getImageResizeDimensions());
+                $image->getManager()->thumbnail($this->imageLib, $this->settings->getImageResizeDimensions());
 
-                $app['settings']->getImageAutoCrop() ?
-                    $image->getManager()->autoCrop($app['imagine'], null) :
-                    $image->getManager()->crop($app['imagine'], $app['settings']->getImageResizeDimensions('crop'));
+                $this->settings->getImageAutoCrop() ?
+                    $image->getManager()->autoCrop($this->imageLib, null) :
+                    $image->getManager()->crop($this->imageLib, $this->settings->getImageResizeDimensions('crop'));
 
-                if ($app['settings']->getWatermarkMedia() and $app['settings']->getWatermark()) {
+                if ($this->settings->getWatermarkMedia() and $this->settings->getWatermark()) {
                     $image->getManager()->watermark(
-                        $app['imagine'],
-                        APPLICATION_ROOT_PATH . '/web/uploads/' . $app['settings']->getWatermark(),
-                        $app['settings']->getWatermarkPosition()
+                        $this->imageLib,
+                        APPLICATION_ROOT_PATH . '/web/uploads/' . $this->settings->getWatermark(),
+                        $this->settings->getWatermarkPosition()
                     );
                 }
-                $image->getManager()->cleanUp($app['settings']->getImageKeepOriginal());
+                $image->getManager()->cleanUp($this->settings->getImageKeepOriginal());
             } catch (\Exception $e) {
-                $app['repository.media']->delete($image);
-                $app['monolog']->addError(
-                    get_class($this) . " caught exception \"{$e->getMessage()}\" from {$e->getFile()}:{$e->getLine()}"
-                );
+                $this->media->delete($image);
             }
         }
 
@@ -128,19 +155,19 @@ class ImageController
     {
         $image = new Image();
         /** @var $form Form */
-        $form = $app['form.factory']->create(new ImageType(), $image);
+        $form = $this->form->create(new ImageType(), $image);
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
                 $files = $request->files->get($form->getName());
                 $image->setFile($files['file']);
-                $app['repository.media']->save($image);
+                $this->media->save($image);
                 $message = 'The post ' . $image->getTitle() . ' has been saved.';
-                $app['session']->getFlashBag()->add('success', $message);
-                $redirect = $app['url_generator']->generate('admin/posts', array('new_post' => $image->getId()));
+                $this->session->getFlashBag()->add('success', $message);
+                $redirect = $this->url->generate('admin/posts', array('new_post' => $image->getId()));
 
-                return $app->redirect($redirect);
+                return new RedirectResponse($redirect);
             }
         }
 
@@ -149,6 +176,6 @@ class ImageController
             'title' => 'Add new image',
         );
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/form.html.twig', $data);
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/form.html.twig', $data);
     }
 }

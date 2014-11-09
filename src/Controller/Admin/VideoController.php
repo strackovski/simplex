@@ -12,21 +12,50 @@
 
 namespace nv\Simplex\Controller\Admin;
 
+use Imagine\Image\ImagineInterface;
+use nv\Simplex\Controller\ActionControllerAbstract;
+use nv\Simplex\Model\Entity\Settings;
+use nv\Simplex\Model\Repository\MediaRepository;
 use Silex\Application;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use nv\Simplex\Model\Entity\Metadata;
 use nv\Simplex\Model\Entity\Video;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Security\Core\SecurityContext;
 
 /**
- * Class ImageController
+ * Class VideoController
  *
  * Defines actions to perform on requests regarding Post objects.
  *
  * @package nv\Simplex\Controller
  */
-class VideoController
+class VideoController extends ActionControllerAbstract
 {
+    /** @var MediaRepository */
+    private $media;
+
+    /** @var  ImagineInterface */
+    private $imageLib;
+
+    public function __construct(
+        MediaRepository $mediaRepository,
+        ImagineInterface $imageLib,
+        Settings $settings,
+        \Twig_Environment $twig,
+        FormFactoryInterface $formFactory,
+        SecurityContext $security,
+        Session $session,
+        UrlGenerator $url
+    ) {
+        parent::__construct($settings, $twig, $formFactory, $security, $session, $url);
+        $this->media = $mediaRepository;
+        $this->imageLib = $imageLib;
+    }
+
     /**
      * Index image items
      *
@@ -37,7 +66,7 @@ class VideoController
      */
     public function indexAction(Request $request, Application $app)
     {
-        $form = $app['form.factory']->createNamedBuilder(
+        $form = $this->form->createNamedBuilder(
             null,
             'form',
             array('test' => '')
@@ -50,9 +79,9 @@ class VideoController
         ))->getForm();
 
         $data['form'] = $form->createView();
-        $data['videos'] = $app['repository.media']->getLibraryVideos();
+        $data['videos'] = $this->media->getLibraryVideos();
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/videos.html.twig', $data);
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/videos.html.twig', $data);
     }
 
     /**
@@ -65,7 +94,7 @@ class VideoController
      */
     public function listVideoAction(Request $request, Application $app)
     {
-        $form = $app['form.factory']->createNamedBuilder(
+        $form = $this->form->createNamedBuilder(
             null,
             'form',
             array('test' => '')
@@ -83,10 +112,10 @@ class VideoController
         )->getForm();
 
         $data['form'] = $form->createView();
-        $data['videos'] = $app['repository.media']->getVideos();
+        $data['videos'] = $this->media->getVideos();
 
-        return $app['twig']->render(
-            'admin/'.$app['settings']->getAdminTheme().'/views/partials/video-list.html.twig',
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/views/partials/video-list.html.twig',
             $data
         );
     }
@@ -108,22 +137,19 @@ class VideoController
             $video->setFile($uploadedFile);
             $video->setName($uploadedFile->getClientOriginalName());
             $metadata = new Metadata(array('vddata'));
-            $app['repository.media']->save($video);
+            $this->media->save($video);
 
             try {
                 $video->setMetadata($metadata->setData($video->getManager()->metadata()));
-                $app['orm.em']->flush();
-                $video->getManager()->thumbnail($app['imagine'], $app['settings']->getImageResizeDimensions());
-                $video->getManager()->autoCrop($app['imagine'], null);
+                $this->media->save($video);
+                $video->getManager()->thumbnail($this->imageLib, $this->settings->getImageResizeDimensions());
+                $video->getManager()->autoCrop($this->imageLib, null);
 
                 if (strtolower(pathinfo($video->getAbsolutePath(), PATHINFO_EXTENSION)) == 'avi') {
                     $video->getManager()->recode();
                 }
             } catch (\Exception $e) {
-                $app['repository.media']->delete($video);
-                $app['monolog']->addError(
-                    get_class($this) . " caught exception \"{$e->getMessage()}\" from {$e->getFile()}:{$e->getLine()}"
-                );
+                $this->media->delete($video);
             }
         }
 

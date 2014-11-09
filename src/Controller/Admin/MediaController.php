@@ -12,11 +12,19 @@
 
 namespace nv\Simplex\Controller\Admin;
 
+use nv\Simplex\Controller\ActionControllerAbstract;
 use nv\Simplex\Form\MediaSettingsType;
+use nv\Simplex\Model\Entity\Settings;
+use nv\Simplex\Model\Repository\MediaRepository;
 use Silex\Application;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use nv\Simplex\Model\Entity\Image;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * Class MediaController
@@ -25,8 +33,24 @@ use nv\Simplex\Model\Entity\Image;
  *
  * @package nv\Simplex\Controller\Admin
  */
-class MediaController
+class MediaController extends ActionControllerAbstract
 {
+    /** @var MediaRepository */
+    private $media;
+
+    public function __construct(
+        MediaRepository $mediaRepository,
+        Settings $settings,
+        \Twig_Environment $twig,
+        FormFactoryInterface $formFactory,
+        SecurityContext $security,
+        Session $session,
+        UrlGenerator $url
+    ) {
+        parent::__construct($settings, $twig, $formFactory, $security, $session, $url);
+        $this->media = $mediaRepository;
+    }
+
     /**
      * Index media items
      *
@@ -37,7 +61,7 @@ class MediaController
      */
     public function indexAction(Request $request, Application $app)
     {
-        $form = $app['form.factory']->createNamedBuilder(
+        $form = $this->form->createNamedBuilder(
             null,
             'form',
             array('test' => '')
@@ -45,16 +69,16 @@ class MediaController
         ->add('test', 'text')
         ->getForm();
 
-        $token = $app['security']->getToken();
+        $token = $this->security->getToken();
 
         if (null !== $token) {
             $data['user'] = $token->getUser();
         }
 
-        $data['images'] = $app['repository.media']->getLibraryImages();
+        $data['images'] = $this->media->getLibraryImages();
         $data['form'] = $form->createView();
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/media.html.twig', $data);
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/media.html.twig', $data);
     }
 
     /**
@@ -75,13 +99,13 @@ class MediaController
         }
 
         foreach ($objectIds as $objectId) {
-            $item = $app['repository.media']->filter(array('id' => $objectId));
+            $item = $this->media->filter(array('id' => $objectId));
             $type = $item instanceof Image ? 'images' : 'videos';
-            $app['repository.media']->delete($item);
+            $this->media->delete($item);
         }
-        $redirect = $app['url_generator']->generate("admin/media/{$type}");
+        $redirect = $this->url->generate("admin/media/{$type}");
 
-        return $app->redirect($redirect);
+        return new RedirectResponse($redirect);
     }
 
     /**
@@ -94,10 +118,10 @@ class MediaController
      */
     public function viewAction(Request $request, Application $app)
     {
-        $item = $app['repository.media']->filter(array('id' => $request->get('id')));
+        $item = $this->media->filter(array('id' => $request->get('id')));
 
-        return $app['twig']->render(
-            'admin/'.$app['settings']->getAdminTheme().'/views/media-view.html.twig',
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/views/media-view.html.twig',
             array('item' => $item)
         );
     }
@@ -111,8 +135,7 @@ class MediaController
      */
     public function settingsAction(Request $request, Application $app)
     {
-        $settings = $app['repository.settings']->getCurrent();
-        $form = $app['form.factory']->create(new MediaSettingsType($app['repository.settings']), $settings);
+        $form = $this->form->create(new MediaSettingsType(), $this->settings);
 
         if ($request->isMethod('POST')) {
             $files = $request->files;
@@ -137,7 +160,7 @@ class MediaController
                     )
                 );
 
-                $settings->setImageResizeDimensions($dimensions);
+                $this->settings->setImageResizeDimensions($dimensions);
 
                 foreach ($files as $uploadedFile) {
                     if (array_key_exists('watermark', $uploadedFile)) {
@@ -146,17 +169,17 @@ class MediaController
                             $wm->setFile($uploadedFile['watermark']);
                             $wm->setInLibrary(false);
                             $wm->setMediaCategory('watermark');
-                            $settings->setWatermark($wm);
+                            $this->settings->setWatermark($wm);
                         }
                     }
                 }
-                $app['repository.settings']->saves($settings);
+                $app['repository.settings']->save($this->settings);
             }
         }
 
         $data = array(
             'form' => $form->createView(),
-            'settings' => $settings,
+            'settings' => $this->settings,
             'title' => 'Edit settings',
         );
 
@@ -164,23 +187,23 @@ class MediaController
             $data['tabs'] = array(
                 'panels' => array(
                     'settings' => array(
-                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings')
+                        'active' => false, 'url' => $this->url->generate('admin/settings')
                     ),
                     'media' => array(
-                        'active' => true, 'url' => $app['url_generator']->generate('admin/media/settings')
+                        'active' => true, 'url' => $this->url->generate('admin/media/settings')
                     ),
                     'themes' => array(
-                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings/themes')
+                        'active' => false, 'url' => $this->url->generate('admin/settings/themes')
                     ),
                     'mailing' => array(
-                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings/mail')
+                        'active' => false, 'url' => $this->url->generate('admin/settings/mail')
                     )
                 )
             );
         }
 
-        return $app['twig']->render(
-            'admin/'.$app['settings']->getAdminTheme().'/widgets/media-settings.html.twig',
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/widgets/media-settings.html.twig',
             $data
         );
     }
@@ -194,11 +217,9 @@ class MediaController
      */
     public function resampleMediaLibraryAction(Request $request, Application $app)
     {
-        $current = $app['repository.settings']->getCurrent();
-
-        return $app['twig']->render(
-            'admin/'.$app['settings']->getAdminTheme().'/widgets/library-resample.html.twig',
-            array('settings' => $current)
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/widgets/library-resample.html.twig',
+            array('settings' => $this->settings)
         );
     }
 }

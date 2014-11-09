@@ -14,14 +14,21 @@ namespace nv\Simplex\Controller\Admin;
 
 use nv\Simplex\Form\MailSettingsType;
 use nv\Simplex\Form\ThemeSettingsType;
+use nv\Simplex\Model\Entity\Settings;
+use nv\Simplex\Model\Repository\SettingsRepository;
 use Silex\Application;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use mjohnson\utility\TypeConverter;
 use nv\Simplex\Form\SettingsType;
 use nv\Simplex\Model\Entity\Image;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * Class SettingsController
@@ -32,6 +39,45 @@ use nv\Simplex\Model\Entity\Image;
  */
 class SettingsController
 {
+    /** @var Settings */
+    private $settings;
+
+    /** @var SettingsRepository */
+    private $settingsRepository;
+
+    /** @var \Twig_Environment  */
+    private $twig;
+
+    /** @var FormFactoryInterface  */
+    private $form;
+
+    /** @var SecurityContext  */
+    private $security;
+
+    /** @var Session  */
+    private $session;
+
+    /** @var UrlGenerator */
+    private $url;
+
+    public function __construct(
+        Settings $settings,
+        SettingsRepository $settingsRepository,
+        \Twig_Environment $twig,
+        FormFactoryInterface $formFactory,
+        SecurityContext $security,
+        Session $session,
+        UrlGenerator $url
+    ) {
+        $this->settings = $settings;
+        $this->settingsRepository = $settingsRepository;
+        $this->twig = $twig;
+        $this->form = $formFactory;
+        $this->security = $security;
+        $this->session = $session;
+        $this->url = $url;
+    }
+
     /**
      * Administration panel home
      *
@@ -46,7 +92,7 @@ class SettingsController
         $latest['posts'] = $app['repository.post']->getLatest(5);
         $latest['media'] = $app['repository.media']->getLatest(5);
         $latest['pages'] = $app['repository.page']->getLatest(5);
-        $settings = $app['repository.settings']->getCurrent();
+        $settings = $this->settingsRepository->getCurrent();
 
         $published = '';
         $exposed = '';
@@ -76,7 +122,7 @@ class SettingsController
             $data['user'] = $app['security']->getToken()->getUser();
         }
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/dashboard.html.twig', $data);
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/dashboard.html.twig', $data);
     }
 
     /**
@@ -89,14 +135,14 @@ class SettingsController
      */
     public function indexAction(Request $request, Application $app)
     {
-        $settings = $app['repository.settings']->getCurrent();
-
-        $data = array(
-            'settings' => $settings,
-            'title' => 'Settings',
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/views/settings.html.twig',
+            array(
+                'settings' => $this->settings,
+                'title' => 'Settings',
+            )
         );
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/settings.html.twig', $data);
     }
 
     /**
@@ -109,14 +155,14 @@ class SettingsController
      */
     public function snapshotsIndexAction(Request $request, Application $app)
     {
-        $settings = $app['repository.settings']->getSnapshots();
+        $settings = $this->settingsRepository->getSnapshots();
 
         $data = array(
             'snapshots' => $settings,
             'title' => 'Snapshots',
         );
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/widgets/snapshots.html.twig', $data);
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/widgets/snapshots.html.twig', $data);
     }
 
     /**
@@ -131,7 +177,7 @@ class SettingsController
      */
     public function exportAction(Request $request, Application $app)
     {
-        $settingsArray = $app['repository.settings']->getCurrent()->getSettings();
+        $settingsArray = $this->settings->getSettings();
         $exportFilename = 'settings-export_' . time();
         $response = new Response();
 
@@ -196,13 +242,13 @@ class SettingsController
     public function saveAction(Request $request, Application $app)
     {
         /** @var \nv\Simplex\Model\Entity\Settings $archive */
-        $archive = clone $app['repository.settings']->getCurrent();
+        $archive = clone $this->settingsRepository->getCurrent();
         $archive->setCurrent(false);
         $app['orm.em']->persist($archive);
         $app['orm.em']->flush();
 
-        $redirect = $app['url_generator']->generate('admin/settings');
-        return $app->redirect($redirect);
+        $redirect = $this->url->generate('admin/settings');
+        return new RedirectResponse($redirect);
     }
 
     /**
@@ -215,14 +261,14 @@ class SettingsController
     public function themeSettingsAction(Request $request, Application $app)
     {
         /** @var \nv\Simplex\Model\Entity\Settings $settings */
-        $settings = $app['repository.settings']->getCurrent();
-        $form = $app['form.factory']->create(new ThemeSettingsType($app['repository.settings']), $settings);
+        $settings = $this->settingsRepository->getCurrent();
+        $form = $this->form->create(new ThemeSettingsType($this->settingsRepository), $settings);
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
 
-                $app['repository.settings']->save($settings);
+                $this->settingsRepository->save($settings);
             }
         }
 
@@ -236,23 +282,23 @@ class SettingsController
             $data['tabs'] = array(
                 'panels' => array(
                     'settings' => array(
-                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings')
+                        'active' => false, 'url' => $this->url->generate('admin/settings')
                     ),
                     'media' => array(
-                        'active' => false, 'url' => $app['url_generator']->generate('admin/media/settings')
+                        'active' => false, 'url' => $this->url->generate('admin/media/settings')
                     ),
                     'themes' => array(
-                        'active' => true, 'url' => $app['url_generator']->generate('admin/settings/themes')
+                        'active' => true, 'url' => $this->url->generate('admin/settings/themes')
                     ),
                     'mailing' => array(
-                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings/mail')
+                        'active' => false, 'url' => $this->url->generate('admin/settings/mail')
                     )
                 )
             );
         }
 
-        return $app['twig']->render(
-            'admin/'.$app['settings']->getAdminTheme().'/widgets/theme-settings.html.twig',
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/widgets/theme-settings.html.twig',
             $data
         );
     }
@@ -267,13 +313,13 @@ class SettingsController
     public function mailSettingsAction(Request $request, Application $app)
     {
         /** @var \nv\Simplex\Model\Entity\Settings $settings */
-        $settings = $app['repository.settings']->getCurrent();
-        $form = $app['form.factory']->create(new MailSettingsType($app['repository.settings']), $settings);
+        $settings = $this->settingsRepository->getCurrent();
+        $form = $this->form->create(new MailSettingsType($this->settingsRepository), $settings);
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
-                $app['repository.settings']->save($settings);
+                $this->settingsRepository->save($settings);
             }
         }
 
@@ -287,23 +333,23 @@ class SettingsController
             $data['tabs'] = array(
                 'panels' => array(
                     'settings' => array(
-                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings')
+                        'active' => false, 'url' => $this->url->generate('admin/settings')
                     ),
                     'media' => array(
-                        'active' => false, 'url' => $app['url_generator']->generate('admin/media/settings')
+                        'active' => false, 'url' => $this->url->generate('admin/media/settings')
                     ),
                     'themes' => array(
-                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings/themes')
+                        'active' => false, 'url' => $this->url->generate('admin/settings/themes')
                     ),
                     'mailing' => array(
-                        'active' => true, 'url' => $app['url_generator']->generate('admin/settings/mail')
+                        'active' => true, 'url' => $this->url->generate('admin/settings/mail')
                     )
                 )
             );
         }
 
-        return $app['twig']->render(
-            'admin/'.$app['settings']->getAdminTheme().'/widgets/mail-settings.html.twig',
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/widgets/mail-settings.html.twig',
             $data
         );
     }
@@ -318,8 +364,8 @@ class SettingsController
     public function editAction(Request $request, Application $app)
     {
         /** @var \nv\Simplex\Model\Entity\Settings $settings */
-        $settings = $app['repository.settings']->getCurrent();
-        $form = $app['form.factory']->create(new SettingsType($app['repository.settings']), $settings);
+        $settings = $this->settingsRepository->getCurrent();
+        $form = $this->form->create(new SettingsType($this->settingsRepository), $settings);
 
         if ($request->isMethod('POST')) {
             $files = $request->files;
@@ -336,15 +382,15 @@ class SettingsController
                         }
                     }
                 }
-                $app['repository.settings']->save($settings);
+                $this->settingsRepository->save($settings);
 
                 if (isset($logo) and $logo instanceof Image) {
-                    $logo->getManager()->thumbnail($app['imagine'], $app['settings']->getImageResizeDimensions());
+                    $logo->getManager()->thumbnail($app['imagine'], $this->settings->getImageResizeDimensions());
                     $logo->getManager()->autoCrop($app['imagine']);
                 }
 
-                $redirect = $app['url_generator']->generate('admin/settings');
-                return $app->redirect($redirect);
+                $redirect = $this->url->generate('admin/settings');
+                return new RedirectResponse($redirect);
             }
         }
 
@@ -355,22 +401,22 @@ class SettingsController
             'tabs' => array(
                 'panels' => array(
                     'settings' => array(
-                        'active' => true, 'url' => $app['url_generator']->generate('admin/settings')
+                        'active' => true, 'url' => $this->url->generate('admin/settings')
                     ),
                     'media' => array(
-                        'active' => false, 'url' => $app['url_generator']->generate('admin/media/settings')
+                        'active' => false, 'url' => $this->url->generate('admin/media/settings')
                     ),
                     'themes' => array(
-                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings/themes')
+                        'active' => false, 'url' => $this->url->generate('admin/settings/themes')
                     ),
                     'mailing' => array(
-                        'active' => false, 'url' => $app['url_generator']->generate('admin/settings/mail')
+                        'active' => false, 'url' => $this->url->generate('admin/settings/mail')
                     )
                 )
             )
         );
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/widgets/settings.html.twig', $data);
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/widgets/settings.html.twig', $data);
     }
 
     /**
@@ -384,12 +430,15 @@ class SettingsController
     public function deleteAction(Request $request, Application $app)
     {
         /** @var \nv\Simplex\Model\Entity\Settings $set */
-        $set = $app['repository.settings']->findOneBy(array('id' => $request->get('id')));
+        $set = $this->settingsRepository->findOneBy(array('id' => $request->get('id')));
+        $this->settingsRepository->delete($set);
+
+        /*
         $app['orm.em']->remove($set);
         $app['orm.em']->flush();
-
-        $redirect = $app['url_generator']->generate('admin/settings');
-        return $app->redirect($redirect);
+        */
+        $redirect = $this->url->generate('admin/settings');
+        return new RedirectResponse($redirect);
     }
 
     /**
@@ -403,26 +452,31 @@ class SettingsController
     public function activateAction(Request $request, Application $app)
     {
         /** @var \nv\Simplex\Model\Entity\Settings $set */
-        $set = $app['repository.settings']->findOneBy(array('id' => $request->get('id')));
-        $current = $app['repository.settings']->getCurrent();
+        $set = $this->settingsRepository->findOneBy(array('id' => $request->get('id')));
+        $current = $this->settingsRepository->getCurrent();
         $current->setCurrent(false);
         $set->setCurrent(true);
+
+        $this->settingsRepository->save($current);
+        $this->settingsRepository->save($set);
+
+        /*
         $app['orm.em']->persist($current);
         $app['orm.em']->persist($set);
         $app['orm.em']->flush();
+        */
 
-        $redirect = $app['url_generator']->generate('admin/settings');
-        return $app->redirect($redirect);
+        $redirect = $this->url->generate('admin/settings');
+        return new RedirectResponse($redirect);
     }
 
     /**
      * Theme file uploader
      *
      * @param Request $request
-     * @param Application $app
      * @return JsonResponse
      */
-    public function uploadThemeFile(Request $request, Application $app)
+    public function uploadThemeFile(Request $request)
     {
         $files = $request->files;
         $type = $request->get('type');
@@ -444,17 +498,15 @@ class SettingsController
     /**
      * Add new themes form
      *
-     * @param Request $request
-     * @param Application $app
      * @return mixed
      */
-    public function addThemeAction(Request $request, Application $app)
+    public function addThemeAction()
     {
-        $form = $app['form.factory']->createNamedBuilder(null, 'form', array())->getForm();
+        $form = $this->form->createNamedBuilder(null, 'form', array())->getForm();
         $data['form'] = $form->createView();
 
-        return $app['twig']->render(
-            'admin/'.$app['settings']->getAdminTheme().'/widgets/upload-theme-form.html.twig',
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/widgets/upload-theme-form.html.twig',
             $data
         );
     }

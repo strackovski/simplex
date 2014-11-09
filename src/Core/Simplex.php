@@ -19,8 +19,6 @@ use Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapLabelExtension;
 use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
-use nv\Simplex\Provider\LoginControllerProvider;
-use nv\Simplex\Provider\LoginServiceProvider;
 use nv\Simplex\Provider\Service\SiteServiceProvider;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;

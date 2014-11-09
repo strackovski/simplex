@@ -62,6 +62,16 @@ class SemtoolsServiceProvider implements ServiceProviderInterface
 
             return false;
         });
+
+        $app['semtools'] = $app->share(function ($app) {
+            try {
+                return new Semtools($app['semtools.classifier'], $app['semtools.annotator']);
+            } catch (\Exception $e) {
+
+            }
+
+            return false;
+        });
     }
 
     /**

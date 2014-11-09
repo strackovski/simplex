@@ -47,6 +47,12 @@ class SettingsRepository extends EntityRepository
         return $settings;
     }
 
+    public function delete(Settings $settings)
+    {
+        $this->getEntityManager()->remove($settings);
+        $this->getEntityManager()->flush();
+    }
+
     /**
      * Get available admin themes
      *

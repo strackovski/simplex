@@ -43,6 +43,22 @@ class PostRepository extends EntityRepository
     }
 
     /**
+     * Delete post and associated objects
+     *
+     * @param Post $post
+     */
+    public function delete(Post $post)
+    {
+        if ($post->getMetadata()) {
+            $this->getEntityManager()->remove($post->getMetadata());
+            $post->setMetadata(null);
+        }
+
+        $this->getEntityManager()->remove($post);
+        $this->getEntityManager()->flush();
+    }
+
+    /**
      * @param $slug
      *
      * @return bool
@@ -100,6 +116,8 @@ class PostRepository extends EntityRepository
     }
 
     /**
+     * @todo Remove GetPostsBy, use QM
+     *
      * @param $filterColumn
      * @param $filterValue
      * @param string $filterOperand

@@ -38,6 +38,17 @@ class PageRepository extends EntityRepository
     }
 
     /**
+     * Delete page and associated objects
+     *
+     * @param Page $page
+     */
+    public function delete(Page $page)
+    {
+        $this->getEntityManager()->remove($page);
+        $this->getEntityManager()->flush();
+    }
+
+    /**
      * @param      $title
      * @param bool $slug
      *
@@ -85,8 +96,8 @@ class PageRepository extends EntityRepository
             ->from('nv\Simplex\Model\Entity\Page', 'u')
             ->where($qb->expr()->eq('u.inMenu', '?1'));
         $qb->setParameters(array(1 => true));
-
         $query = $qb->getQuery();
+
         return $query->getResult();
     }
 
@@ -112,6 +123,7 @@ class PageRepository extends EntityRepository
         if ($hydration == 'array') {
             return $query->getSingleResult(Query::HYDRATE_ARRAY);
         }
+
         return $query->getSingleResult();
     }
 
@@ -134,6 +146,44 @@ class PageRepository extends EntityRepository
             if ($max === 1) {
                 return $query->getSingleResult();
             }
+            return $query->getResult();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * @return array|mixed|string
+     */
+    public function getAuthors()
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select(array('u'))
+            ->from('nv\Simplex\Model\Entity\User', 'u');
+
+        $query = $qb->getQuery();
+        try {
+            return $query->getResult();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * @return array|mixed|string
+     */
+    public function getTags()
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select(array('u'))
+            ->from('nv\Simplex\Model\Entity\Tag', 'u');
+
+        $query = $qb->getQuery();
+        try {
             return $query->getResult();
         } catch (\Exception $e) {
             return $e->getMessage();

@@ -4,6 +4,7 @@ npm-debug.log
 ._.DS_Store
 config/database.json
 config/mailing.json
+config/parameters.json
 /vendor/
 web/assets/build/*
 web/assets/dev

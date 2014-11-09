@@ -16,6 +16,7 @@ use nv\Simplex\Common\ObservableInterface;
 use nv\Simplex\Common\ObserverInterface;
 use nv\Simplex\Core\Simplex;
 use nv\Simplex\Model\Entity\Page;
+use nv\Simplex\Model\Repository\PageRepository;
 
 /**
  * Page Manager
@@ -25,45 +26,35 @@ use nv\Simplex\Model\Entity\Page;
  * @package nv\Simplex\Core\Page
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
-class PageManager implements ObserverInterface
+class PageManager
 {
     /**
-     * Page instance
-     *
-     * @var \nv\Simplex\Model\Entity\Page
+     * @var PageRepository
      */
-    private $page;
+    private $pages;
 
     /**
-     * Simplex application
-     *
-     * @var \nv\Simplex\Core\Simplex
+     * @param PageRepository $pages
      */
-    private $app;
-
-    /**
-     * @param Page    $page
-     * @param Simplex $app
-     */
-    public function __construct(Page $page, Simplex $app)
+    public function __construct(PageRepository $pages)
     {
-        $this->page = $page;
-        $this->app = $app;
+        $this->pages = $pages;
     }
 
     /**
      * Generate a unique slug for the page
      *
+     * @param Page $page
      * @param bool $userDefinedSlug
      */
-    public function slug($userDefinedSlug = false)
+    public function slug(Page $page, $userDefinedSlug = false)
     {
         if ($userDefinedSlug) {
             $slug = preg_replace('~[^\\pL\d]+~u', '-', $userDefinedSlug);
-        } elseif ($dSlug = $this->page->getSlug()) {
+        } elseif ($dSlug = $page->getSlug()) {
             $slug = preg_replace('~[^\\pL\d]+~u', '-', $dSlug);
         } else {
-            $slug = preg_replace('~[^\\pL\d]+~u', '-', $this->page->getTitle());
+            $slug = preg_replace('~[^\\pL\d]+~u', '-', $page->getTitle());
         }
 
         $slug = trim($slug, '-');
@@ -75,38 +66,12 @@ class PageManager implements ObserverInterface
         $baseSlug = $slug;
 
         while (
-            $check = $this->app['repository.page']->slugExists($slug) and
-            $check !== $this->page
+            $check = $this->pages->slugExists($slug) and
+            $check !== $page
         ) {
             $slug = $baseSlug . "-" . $i++;
         }
 
-        $this->page->setSlug($slug);
-    }
-
-    /**
-     * Update the page
-     *
-     * @param ObservableInterface $observable
-     *
-     * @return mixed|void
-     */
-    public function update(ObservableInterface $observable)
-    {
-        if ($observable === $this->page) {
-            $this->doUpdate($observable);
-        }
-    }
-
-    /**
-     * doUpdate
-     *
-     * @param \nv\Simplex\Model\Entity\Page $page
-     *
-     * @return mixed
-     */
-    private function doUpdate(Page $page)
-    {
-
+        $page->setSlug($slug);
     }
 }

@@ -155,7 +155,7 @@ class PostController extends ActionControllerAbstract
                 }
 
                 $this->manager->slug($post);
-                //$this->manager->metadata($post);
+                $this->manager->metadata($post);
                 $this->posts->save($post);
                 $message = 'The post <strong>' . $post->getTitle() . '</strong> has been saved.';
                 $this->session->getFlashBag()->add('success', $message);

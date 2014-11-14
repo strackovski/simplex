@@ -1,5 +1,5 @@
 <div class="content-section">
-    {% if post.getMetadata %}
+    {% if post.getMetadata and post.getMetadata.getData(1)|length > 0 %}
         {% for data in post.getMetadata.getData(1).c %}
             <table class="table table-condensed table-vertical">
                 {% if data.classifier is defined %}

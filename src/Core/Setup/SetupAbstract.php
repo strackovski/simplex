@@ -121,9 +121,11 @@ abstract class SetupAbstract
         $params = json_decode(file_get_contents($file), 1);
 
         foreach ($parameters as $name => $value) {
-            if (array_key_exists($config, $params)) {
-                if (array_key_exists($name, $params[$config])) {
-                    $params[$config][$name] = $value;
+            if (is_array($params)) {
+                if (array_key_exists($config, $params)) {
+                    if (array_key_exists($name, $params[$config])) {
+                        $params[$config][$name] = $value;
+                    }
                 }
             }
         }

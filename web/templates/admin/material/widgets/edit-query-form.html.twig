@@ -1,0 +1,46 @@
+<div class="addQuery-form editQuery-form">
+    <div class="data-group">
+        <div class="form-group form-element">
+            {{ form_label(form.contentType) }}
+            {{ form_widget(form.contentType) }}
+            {{ form_errors(form.contentType) }}
+        </div>
+    </div>
+
+    <div class="data-group">
+        <div class="form-group form-element">
+            {{ form_label(form.column) }}
+            {{ form_widget(form.column) }}
+            {{ form_errors(form.column) }}
+        </div>
+    </div>
+
+    <div class="data-group">
+        <div class="form-group form-element">
+            {{ form_label(form.operator) }}
+            {{ form_widget(form.operator) }}
+            {{ form_errors(form.operator) }}
+        </div>
+    </div>
+    <div class="data-group">
+        <div class="form-group form-element">
+            {{ form_label(form.value) }}
+            {{ form_widget(form.value) }}
+            {{ form_errors(form.value) }}
+        </div>
+    </div>
+    <div class="data-group">
+        <div class="form-group form-element">
+            {{ form_label(form.sortBy) }}
+            {{ form_widget(form.sortBy) }}
+            {{ form_errors(form.sortBy) }}
+        </div>
+    </div>
+    <div class="data-group">
+        <div class="form-group form-element">
+            {{ form_label(form.limitMax) }}
+            {{ form_widget(form.limitMax) }}
+            {{ form_errors(form.limitMax) }}
+        </div>
+    </div>
+</div>

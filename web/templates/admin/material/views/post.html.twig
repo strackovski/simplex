@@ -1,0 +1,51 @@
+{% extends "admin/material/masters/layout-admin.html.twig" %}
+
+{% block pageHeader %}
+    <header class="">
+        <div class="header-wrapper">
+            <div class="inner-header-wrapper">
+                <div class="top-header-wrapper">
+                    <div class="header-title">
+                        <span>Post</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block rightBlock %}
+    <nav class="">
+        <div class="right-toolbar">
+            <a href="{{ app.url_generator.generate('admin/posts') }}" class="paper-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Back"><i class="fa fa-times"></i></a>
+            <a href="#" class="paper-btn meta-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Metadata"><i class="fa fa-pie-chart"></i></a>
+            <a href="#" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="grid">
+        <div class="grid-outer paper">
+            <a class="paper-btn float-btn tooltipped" data-toggle="tooltip" data-placement="top" title="Edit post" href="{{ app.url_generator.generate('admin/post/edit', {post:post.getId}) }}">
+                <i class="fa fa-pencil"></i>
+            </a>
+            <h1 class="paper-title">
+                {{ post.getTitle }}
+            </h1>
+
+            <div class="paper-intro">
+                <p>{{ post.getSubtitle }}</p>
+            </div>
+
+            <div class="paper-content">
+                {{ post.getBody|raw }}
+            </div>
+        </div>
+    </div>
+
+    <div class="right-bar">
+        {% include 'admin/material/widgets/post-metadata.html.twig' %}
+    </div>
+
+{% endblock %}

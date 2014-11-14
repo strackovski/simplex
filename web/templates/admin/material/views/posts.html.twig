@@ -1,0 +1,49 @@
+{% extends "admin/material/masters/layout-admin.html.twig" %}
+
+{% block pageHeader %}
+    <header class="">
+        <div class="header-wrapper">
+            <div class="inner-header-wrapper">
+                <div class="top-header-wrapper">
+                    <div class="header-title">
+                        <span>Posts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block content %}
+    <div class="grid grid-clear">
+        <div class="grid-outer-full">
+            <a class="paper-btn float-btn tooltipped" data-toggle="tooltip" data-placement="top" title="New post" href="{{ app.url_generator.generate('admin/post/add') }}">
+                <i class="fa fa-plus"></i>
+            </a>
+            <div class="grid-content">
+
+                {% if posts|length < 1 %}
+                    no posts
+                {% else %}
+                    {% include 'admin/material/widgets/post-list.html.twig' %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="right-bar">
+        <div class="right-bar-header">
+            <div class="top-header">
+                <div class="right-aux-toolbar">
+                    <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fa fa-times"></i></a>
+                    <a href="#" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
+                    <a href="newpost.html" class="paper-btn edit-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="fa fa-pencil"></i></a>
+                    <a href="post.html" class="paper-btn view-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="View"><i class="fa fa-binoculars"></i></a>
+                </div>
+            </div>
+            <div class="bottom-header">
+                <h4>Post Title</h4>
+            </div>
+        </div>
+    </div>
+{% endblock %}

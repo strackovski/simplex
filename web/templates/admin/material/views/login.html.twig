@@ -1,0 +1,55 @@
+{% extends app.request.isXmlHttpRequest ? "admin/default/masters/layout-ajax.html.twig" : "admin/default/masters/layout-base.html.twig" %}
+
+{% block content %}
+
+    <div class="flash-messages">
+        {% for message in app.session.getFlashBag.get('success') %}
+            <span class="alert alert-flash-message alert-success">{{ message|raw }}</span>
+        {% endfor %}
+    </div>
+
+    <div class="login-wrap">
+        <form class="form-signin" action="{{ path('admin_login_check') }}" method="post">
+
+            <h4 class="text-center">Sign in to Simplex</h4>
+            <div class="text-center">
+                <img src="{{ app.request.basepath ~ '/assets/images/tetra_gray.png' }}" alt="logo" width="50"/>
+            </div>
+
+
+            <div class="form-group form-element">
+                <label for="email_"></label>
+                <input type="text" id="email_" class="form-control" placeholder="Your email" name="_username" value="{{ last_username }}" />
+            </div>
+
+            <div class="form-group form-element">
+                <label for="password_"></label>
+                <input type="password" id="password_" class="form-control" placeholder="Your password" name="_password" value="" />
+            </div>
+
+
+
+                <div class="text-center">
+                    <button type="submit" class="form-btn btn btn-block btn-default">Login</button>
+                </div>
+            <div class="form-group field option pull-left">
+                <div class="checkbox">
+                    <label for="remember_">
+                        <input type="checkbox" name="_remember_me" id="remember_"/>
+                        <span class="checksquare"></span>
+                        Remember me
+                    </label>
+                </div>
+
+            </div>
+            <span class="forgot-password text-right pull-right small"><a href="{{ path('help/password') }}"><i class="fa fa-question-circle"></i> Hilfe</a></span>
+
+
+
+
+            {{ error }}
+
+           <!--<input type="submit" class="btn btn-lg btn-primary btn-block" />-->
+        </form>
+    </div>
+{% endblock %}

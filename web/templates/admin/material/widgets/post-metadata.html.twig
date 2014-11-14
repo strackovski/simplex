@@ -1,0 +1,40 @@
+<div class="right-bar-header">
+    <div class="top-header">
+        <div class="right-aux-toolbar">
+            <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fa fa-times"></i></a>
+        </div>
+    </div>
+
+    <div class="bottom-header">
+        <div class="tabs tabs-mini">
+            <ul>
+                <li class="active">
+                    <a href="#summary" role="tab" data-toggle="tab">Summary</a>
+                </li>
+                <li>
+                    <a href="#class" role="tab" data-toggle="tab">Class</a>
+                </li>
+
+                <li>
+                    <a href="#annotations" role="tab" data-toggle="tab">Annotations</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="right-bar-content">
+    <div class="tab-content">
+        <div id="summary" class="tab-pane fade in active">
+            {% include 'admin/material/widgets/post-meta-summ.html.twig' %}
+        </div>
+
+        <div id="class" class="tab-pane fade">
+            {% include 'admin/material/widgets/post-meta-class.html.twig' %}
+        </div>
+
+        <div id="annotations" class="tab-pane fade">
+            {% include 'admin/material/widgets/post-meta-annot.html.twig' %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>NV3 Admin</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/font-awesome-4.2.0/css/font-awesome.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/reset.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/bootstrap.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/jquery-ui.structure.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/modal.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/flats.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/main.css"/>
+
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/jquery-1.11.1.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/jquery-ui.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/bootstrap.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/main.js"></script>
+</head>
+
+<body class="initial-pad">
+
+{% block pageHeader %}
+    <header class="">
+        <div class="header-wrapper">
+            <div class="inner-header-wrapper">
+                <div class="top-header-wrapper">
+                    <div class="header-title">
+                        <span>New Page</span>
+                    </div>
+                </div>
+                <div class="bottom-header-wrapper">
+                    <div class="big-tabs tabs">
+                        <ul>
+                            <li class="active">
+                                <a class="active" href="#page" role="tab" data-toggle="tab">Page</a>
+                            </li>
+                            <li>
+                                <a href="#data" role="tab" data-toggle="tab">Data</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+<nav class="page-nav">
+    <div class="paper-btn nav-btn">
+        <i class="fa fa-bars"></i>
+    </div>
+</nav>
+
+<nav class="">
+    <div class="right-toolbar">
+        <a href="pages.html" class="paper-btn back-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Back"><i class="fa fa-times"></i></a>
+    </div>
+</nav>
+
+<div class="side-nav">
+    <div class="side-nav-wrapper">
+        <span class="logo">
+            <img src="http://192.168.64.13/simplexNejaFix/web/assets/images/tetra_gray.png" alt="Simplex Logo"/>
+            Simplex
+        </span>
+
+        <nav>
+            <a href="{{ app.url_generator.generate('admin/dashboard') }}">Simplex</a>
+            <a href="{{ app.url_generator.generate('admin/posts') }}">Posts</a>
+            <a href="{{ app.url_generator.generate('admin/media') }}">Media</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ app.url_generator.generate('admin/pages') }}">Pages</a>
+                <a href="{{ app.url_generator.generate('admin/settings') }}">Settings</a>
+                <a href="{{ app.url_generator.generate('admin/users') }}">Users</a>
+            {% endif %}
+        </nav>
+    </div>
+</div>
+
+{% block content %}
+{% endblock %}
+
+<div class="modal media-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img src="halloween_pumpkin.png" alt="alt"/>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="col-xs-4"></div>
+        <div class="col-xs-4 title">
+            <div class="paper-btn modal-prev"><i class="fa fa-arrow-left"></i></div>
+            <div class="paper-btn modal-next"><i class="fa fa-arrow-right"></i></div>
+        </div>
+        <div class="col-xs-4"><a href="#" class="popover-link" data-toggle="popover" title="Share this" data-content="Share links..."><i class="fa fa-share"></i></a></div>
+    </div>
+</div>
+
+<div class="modal fade upload-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="dropzone">
+                    <div class="dz-message">
+                        <i class="fa fa-upload fa-3x"></i>
+                        <p>
+                            Drag items here or click to open the file browser.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary form-btn">Done</button>
+                <button type="button" class="btn btn-default form-btn" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal confirm-modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Confirm action</h4>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to remove the selected items?</p>
+                <p>The items you delete cannot be restored.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary form-btn">Remove</button>
+                <button type="button" class="btn btn-default form-btn" data-dismiss="modal">Cancel</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div class="page-mask"></div>
+
+</body>
+</html>

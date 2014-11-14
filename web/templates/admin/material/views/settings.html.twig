@@ -1,0 +1,74 @@
+{% extends "admin/material/masters/layout-admin.html.twig" %}
+
+{% form_theme form with ['bootstrap.html.twig', 'admin/material/masters/flat-form.html.twig', _self] %}
+
+{% block radio_widget %}
+    {% spaceless %}
+        <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+        <span class="radiobox {% if checked %} radiobox-selected{% endif %}"></span>
+        {% if value is defined %}
+            {% if value != '' %}
+                <div class="radio-img">
+                    <img height="140" src="{{ app.request.basepath }}/templates/admin/{{ value }}/theme.jpg" alt="{{ value }}"/>
+                </div>
+            {% else %}
+                <div class="radio-img">
+                    <img height="140" src="{{ app.request.basepath }}/assets/images/default-user-icon-profile.png" alt="{{ value }}"/>
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endspaceless %}
+{% endblock radio_widget %}
+
+{% block pageHeader %}
+    <header class="">
+        <div class="header-wrapper">
+            <div class="inner-header-wrapper">
+                <div class="top-header-wrapper">
+                    <div class="header-title">
+                        <span>Settings</span>
+                    </div>
+                </div>
+                <div class="bottom-header-wrapper">
+                    <div class="big-tabs tabs settings-tabs">
+                        <ul>
+                            {% for key, panel in tabs.panels %}
+                                <li class="{{ panel.active ? 'active' : '' }}"><a href="#{{ key }}" role="tab" data-url="{{ panel.url }}" data-toggle="tab">{{ key|capitalize }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block rightBlock %}
+    <nav class="">
+        <div class="right-toolbar">
+            <a href="pages.html" class="paper-btn snapshot-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Make a snapshot"><i class="fa fa-history"></i></a>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+<div class="grid grid-clear">
+        <div class="grid-outer-full grid-settings">
+            <div class="tab-content">
+                {% for key, panel in tabs.panels %}
+                    {% if panel.active %}
+                        <div class="tab-pane active" id="{{ key }}">
+                            {% block tabPaneHeader %}
+                            {% endblock %}
+                            {% block tabPaneContent %}
+                            {% endblock %}
+                        </div>
+                    {% else %}
+                        <div class="tab-pane" id="{{ key }}">
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

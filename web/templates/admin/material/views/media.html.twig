@@ -1,0 +1,88 @@
+{% extends "admin/material/masters/layout-admin.html.twig" %}
+
+{% form_theme form with ['bootstrap.html.twig', 'admin/material/masters/flat-form.html.twig', _self] %}
+
+{% block pageHeader %}
+    <header class="">
+        <div class="header-wrapper">
+            <div class="inner-header-wrapper">
+                <div class="top-header-wrapper">
+                    <div class="header-title">
+                        <span>Media</span>
+                    </div>
+                </div>
+                <div class="bottom-header-wrapper">
+                    <div class="tabs media-tabs">
+                        <ul>
+                            <li class="active">
+                                <a href="#images" role="tab" data-toggle="tab">Images</a>
+                            </li>
+                            <li class="">
+                                <a href="#videos" role="tab" data-toggle="tab">Videos</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block rightBlock %}
+    <nav class="">
+        <div class="right-toolbar">
+            <a href="#upload" class="paper-btn upload-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Upload"><i class="fa fa-upload"></i></a>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="grid">
+        <div class="grid-outer-full">
+            <div class="tab-content">
+                <div id="images" class="tab-pane fade in active">
+                    {% block images %}
+                    <div class="thumbnails">
+                        <div class="media-actions">
+                            <div class="mas">
+                                <span class="media-count">0 selected</span>
+                            </div>
+                            <div class="mas">
+                                <a class="paper-btn media-select-all">Select</a>
+                                <a class="paper-btn media-deselect-all">Deselect</a>
+                            </div>
+
+                            <div class="mas">
+                                <a href="{{ app.url_generator.generate('admin/media/delete') }}" class="paper-btn delete-btn"><i class="fa fa-trash"></i> Delete</a>
+                            </div>
+                        </div>
+                        <div class="tiles">
+                            {% include "admin/material/widgets/image-grid.html.twig" %}
+                        </div>
+                    </div>
+                    {% endblock %}
+                </div>
+
+                <div id="videos" class="tab-pane fade">
+                    {% block videos %}
+
+                    {% endblock %}
+                </div>
+        </div>
+    </div>
+    <div class="right-bar">
+        <div class="right-bar-header">
+            <div class="top-header">
+                <div class="right-aux-toolbar">
+                    <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fa fa-times"></i></a>
+                    <a href="#" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
+                </div>
+            </div>
+            <div class="bottom-header">
+                <h4>Image Title</h4>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

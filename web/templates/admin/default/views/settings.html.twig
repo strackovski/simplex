@@ -55,16 +55,6 @@
                     {% endfor %}
                 </ul>
 
-                {#
-                <ul class="nav nav-tabs" role="tablist">
-                    <li class="active"><a href="#settings" role="tab" data-url="{{ app.url_generator.generate('admin/settings') }}" data-toggle="tab"><i class="fa fa-cog"></i> General</a></li>
-                    <li><a href="#media" role="tab" data-url="{{ app.url_generator.generate('admin/media/settings') }}" data-toggle="tab"><i class="fa fa-photo"></i></span> Media</a></li>
-                    <li><a href="#themes" role="tab" data-url="{{ app.url_generator.generate('admin/settings/themes') }}" data-toggle="tab"><i class="fa fa-leaf"></i> Themes</a></li>
-                    <li><a href="#mailing" role="tab" data-url="{{ app.url_generator.generate('admin/settings/mail') }}" data-toggle="tab"><i class="fa fa-envelope"></i> Mailing</a></li>
-                    <li><a href="#snapshots" role="tab" data-toggle="tab"><i class="fa fa-history"></i> Snapshots</a></li>
-                </ul>
-                #}
-
             {% endblock %}
             <div class="tab-content">
 
@@ -81,25 +71,6 @@
                         </div>
                     {% endif %}
                 {% endfor %}
-
-
-                {#
-                <div class="tab-pane active" id="settings">
-                    {% include "admin/default/widgets/settings.html.twig" %}
-                </div>
-
-                <div class="tab-pane" id="media">
-                </div>
-
-                <div class="tab-pane" id="themes">
-                </div>
-
-                <div class="tab-pane" id="mailing">
-                </div>
-
-                <div class="tab-pane" id="snapshots">
-                </div>
-                #}
             </div>
         </div>
 

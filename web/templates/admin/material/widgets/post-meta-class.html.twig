@@ -1,0 +1,71 @@
+<div class="content-section">
+    {% if post.getMetadata %}
+        {% for data in post.getMetadata.getData(1).c %}
+            <table class="table table-condensed table-vertical">
+                {% if data.classifier is defined %}
+                    <tr class="title-col">
+                        <td>
+                            <div class="meta-header">
+                                <span class="small">{{ data.classifier }}</span>
+                                {% if data.textCoverage >= 0 and data.textCoverage <= 0.25 %}
+                                    <span class="label label-danger pull-right">{{ data.textCoverage|round(2, 'floor') }}</span>
+                                {% elseif data.textCoverage > 0.25 and data.textCoverage <= 0.50 %}
+                                    <span class="label label-success pull-right">{{ data.textCoverage|round(2, 'floor') }}</span>
+                                {% elseif data.textCoverage > 0.50 and data.textCoverage <= 0.75 %}
+                                    <span class="label label-success pull-right">{{ data.textCoverage|round(2,'floor') }}</span>
+                                {% elseif data.textCoverage > 0.75 and data.textCoverage <= 1 %}
+                                    <span class="label label-success pull-right">{{ data.textCoverage|round(2, 'floor') }}</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <ul class="list-group list-group-clear">
+                                {% if data.classes|length == 2 %}
+                                    <li class="list-group-item">
+                                        <div class="progress">
+                                            {% for className, classValue in data.classes %}
+                                                {% if loop.last %}
+                                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ classValue|round(2, 'floor') }}" aria-valuemin="0" aria-valuemax="1" style="width: {{ classValue * 100 }}%;">
+                                                        {{ className ~ " " ~ classValue|round(2, 'floor') }}
+                                                    </div>
+                                                {% else %}
+                                                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ classValue|round(2, 'floor') }}" aria-valuemin="0" aria-valuemax="1" style="width: {{ classValue * 100 }}%;">
+                                                        {{ className ~ " " ~ classValue|round(2, 'floor') }}
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </li>
+                                {% else %}
+                                    {% for className, classValue in data.classes %}
+                                        <li class="list-group-item">
+                                            <div class="progress">
+                                                <div class="progress-bar" role="progressbar" aria-valuenow="{{ classValue|round(2, 'floor') }}" aria-valuemin="0" aria-valuemax="1" style="width: {{ classValue * 100 }}%;">
+                                                    {{ className ~ " " ~ classValue|round(2, 'floor') }}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </td>
+                    </tr>
+                {% endif %}
+            </table>
+        {% endfor %}
+    {% else %}
+        <div class="section-title">
+            Classification
+        </div>
+
+        <div class="section-entity">
+            <div class="text-center">
+                <i class="fa fa-3x fa-cubes"></i>
+                <p>This post has no auto metadata</p>
+            </div>
+        </div>
+    {% endif %}
+</div>

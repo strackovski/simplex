@@ -1,0 +1,28 @@
+{% if videos|length > 0 %}
+    {% for video in videos %}
+        <div class="tb-col removable col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <div class="thumbnail">
+                <img src="{{ app.request.basepath ~ '/uploads/thumbnails/medium/' ~ video.getMediaId ~ '.jpeg' }}">
+                <input type="checkbox" name="delete_items[]" value="{{ video.getId }}" />
+                <a class="text-center thumb-action thumb-check" href="#"><i class="fa fa-check"></i></a>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="empty-msg">
+        <h1>No videos here</h1>
+        <p>Click the button at the top right to upload some.</p>
+        <div class="holder">
+            <div class="camera">
+                <div class="left-button"></div>
+                <div class="middle-button"></div>
+                <div class="right-button"></div>
+                <div class="camera-lens">
+                    <div class="camera-lens-inner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tiles container-fluid">
+    </div>
+{% endif %}

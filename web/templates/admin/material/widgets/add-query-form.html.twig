@@ -1,0 +1,50 @@
+<div class="addQuery-form new-query-form">
+
+    <div class="data-group">
+        <div class="form-group form-element select">
+            {{ form_label(form.queries.vars.prototype.contentType) }}
+            {{ form_widget(form.queries.vars.prototype.contentType) }}
+            {{ form_errors(form.queries.vars.prototype.contentType) }}
+        </div>
+    </div>
+
+    <div class="data-group">
+        <div class="form-group form-element select">
+            {{ form_label(form.queries.vars.prototype.column) }}
+            {{ form_widget(form.queries.vars.prototype.column) }}
+            {{ form_errors(form.queries.vars.prototype.column) }}
+        </div>
+    </div>
+
+    <div class="data-group">
+        <div class="form-group form-element select">
+            {{ form_label(form.queries.vars.prototype.operator) }}
+            {{ form_widget(form.queries.vars.prototype.operator) }}
+            {{ form_errors(form.queries.vars.prototype.operator) }}
+        </div>
+    </div>
+
+    <div class="data-group">
+        <div class="form-group form-element">
+            {{ form_label(form.queries.vars.prototype.value) }}
+            {{ form_widget(form.queries.vars.prototype.value) }}
+            {{ form_errors(form.queries.vars.prototype.value) }}
+        </div>
+    </div>
+
+    <div class=" data-group">
+        <div class="form-group form-element select">
+            {{ form_label(form.queries.vars.prototype.sortBy) }}
+            {{ form_widget(form.queries.vars.prototype.sortBy) }}
+            {{ form_errors(form.queries.vars.prototype.sortBy) }}
+        </div>
+    </div>
+
+    <div class="data-group">
+        <div class="form-group form-element">
+            {{ form_label(form.queries.vars.prototype.limitMax) }}
+            {{ form_widget(form.queries.vars.prototype.limitMax) }}
+            {{ form_errors(form.queries.vars.prototype.limitMax) }}
+        </div>
+    </div>
+</div>

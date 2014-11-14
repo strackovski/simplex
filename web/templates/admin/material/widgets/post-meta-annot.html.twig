@@ -1,0 +1,40 @@
+<div class="content-section">
+    {% if post.getMetadata and post.getMetadata.getData(1).a is defined %}
+        <table class="table table-condensed table-vertical">
+            <ul class="list-group list-group-clear">
+                {% for dataKey, data in post.getMetadata.getData(1).a %}
+                    {% if dataKey == 'doc' %}
+                        {% set lang = data.meta.language %}
+                    {% endif %}
+
+                    {% if dataKey != 'doc' %}
+                        {% if data._typeGroup == 'language' %}
+                            <li class="list-group-item">
+                                <a class="href" href="{{ data.language }}"><i class="fa fa-globe"></i> Detected language <span class="pull-right">{{ lang }}</span></a>
+                            </li>
+                        {% elseif data._typeGroup == 'socialTag' %}
+                            <li class="list-group-item">
+                                <a class="href" href="{{ dataKey }}"><i class="fa fa-tag"></i> {{ data.name }} <span class="pull-right"><span class="label label-success">{{ data.importance }}</span></span></a>
+                            </li>
+                        {% elseif data._typeGroup == 'entities' %}
+                            <li class="list-group-item">
+                                <a class="href" href="{{ data._typeReference }}"><i class="fa fa-cube"></i> {{ data._type }} [{{ data.name }}] <span class="pull-right"><span class="label label-success">{{ data.relevance|round(2, 'floor') }}</span></span></a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </table>
+    {% else %}
+        <div class="section-title">
+            Annotations
+        </div>
+
+        <div class="section-entity">
+            <div class="text-center">
+                <i class="fa fa-3x fa-cubes"></i>
+                <p>This post has no auto metadata</p>
+            </div>
+        </div>
+    {% endif %}
+</div>

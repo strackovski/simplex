@@ -8,51 +8,27 @@
     <meta name="description" content="">
     <meta name="keywords" content="application programming, web development, mobile application development, PHP, Javascript, iOS">
     <meta name="author" content="Vladimir Stračkovski">
-    <link href="{{ app.request.basepath }}/assets/build/styles.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build/jquery.js"></script>
-    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build/scripts.js"></script>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/font-awesome-4.2.0/css/font-awesome.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/reset.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/bootstrap.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/jquery-ui.structure.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/modal.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/flats.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/main.css"/>
+
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/jquery-1.11.1.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/jquery-ui.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/bootstrap.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/dropzone.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/main.js"></script>
 </head>
 <body>
-<div class="container-full admin login-screen">
-
-    {% block content %}
-    {% endblock %}
-
-    <div id="site-modal-sm" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title">Modal title</h4>
-                </div>
-                <div class="modal-body">
-                    <p>One fine body&hellip;</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn-confirm btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
+<div class="login-grid">
+    <div class="grid-outer">
+        {% block content %}
+        {% endblock %}
     </div>
-
-    <div id="site-modal-md" class="modal">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title">Modal title</h4>
-                </div>
-                <div class="modal-body">
-                    <p>One fine body&hellip;</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-cancel btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-confirm btn-primary">Save changes</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 </div>
 
 </body>

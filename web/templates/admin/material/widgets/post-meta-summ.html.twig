@@ -135,7 +135,7 @@
         Classification Results
     </div>
     <div class="section-entity">
-        {% if post.getMetadata %}
+        {% if post.getMetadata and post.getMetadata.getData(1)|length > 0 %}
             {% if post.getMetadata.getData(1).c|length > 0 %}
                 <ul class="list-group list-group-clear">
                     {% for data in post.getMetadata.getData(1).c %}

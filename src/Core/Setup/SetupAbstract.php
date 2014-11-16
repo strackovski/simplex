@@ -132,7 +132,7 @@ abstract class SetupAbstract
 
         try {
             file_put_contents($file, json_encode($params), LOCK_EX);
-            print "\nConfiguration saved.";
+            print "\nConfiguration saved [{$config}].";
             return true;
         } catch (\Exception $e) {
             print "\nAn error occured while writing configuration file.";

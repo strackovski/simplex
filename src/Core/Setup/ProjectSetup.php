@@ -24,7 +24,7 @@ class ProjectSetup extends SetupAbstract
         $this->writeLine('Checking application configuration...');
         if (!$this->verify()) {
             $this->writeLine('Some parameters are missing or invalid, please provide them.', 'info');
-            $this->writeLine('Enter the database connection parameters.');
+            $this->writeLine('Enter database connection parameters.');
             $dbOptions = array(
                 'driver' => 'Database driver',
                 'host' => 'SQL server hostname',
@@ -40,12 +40,12 @@ class ProjectSetup extends SetupAbstract
 
             $this->writeLine('Enter connection parameters for the system mailing account.');
             $mailingOptions = array(
-                'mail_host' => 'host',
-                'mail_port' => 'port',
-                'mail_username' => 'Username',
-                'mail_password' => 'Password',
-                'mail_auth_mode' => 'auth',
-                'mail_encryption' => 'Enc'
+                'mail_host' => 'Mail server host address',
+                'mail_port' => 'Mail server port',
+                'mail_username' => 'Mail account username',
+                'mail_password' => 'Mail account username',
+                'mail_auth_mode' => 'Authentication mode',
+                'mail_encryption' => 'Authentication encryption mode'
             );
             $mailingCfg = array();
             foreach ($mailingOptions as $key => $name) {

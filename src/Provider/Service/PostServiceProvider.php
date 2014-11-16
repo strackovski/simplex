@@ -89,6 +89,9 @@ class PostServiceProvider implements ServiceProviderInterface, ControllerProvide
         $controllers->match('/post/view/{post}', 'post.controller:viewAction')
             ->bind('admin/post/view');
 
+        $controllers->get('/post/get/{post}', 'post.controller:getAction')
+            ->bind('admin/post/get');
+
         $controllers->match('/posts/filter/{filter_key}/{filter_val}', 'post.controller:filterAction')
             ->bind('admin/posts/filter');
 

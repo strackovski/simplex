@@ -85,6 +85,23 @@ class PageController extends ActionControllerAbstract
     }
 
     /**
+     * Get single page
+     *
+     * @param Request     $request
+     * @return mixed
+     */
+    public function getAction(Request $request)
+    {
+        $page = $this->pages->findOneBy(array('id' => $request->get('page')));
+        $data = array(
+            'page' => $page,
+            'request' => $request
+        );
+
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/widgets/page-detail.html.twig', $data);
+    }
+
+    /**
      * Add page
      *
      * @param Request $request

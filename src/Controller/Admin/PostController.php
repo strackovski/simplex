@@ -100,7 +100,6 @@ class PostController extends ActionControllerAbstract
         return new JsonResponse($tags, 200);
     }
 
-
     /**
      * View single post
      *
@@ -116,6 +115,23 @@ class PostController extends ActionControllerAbstract
         );
 
         return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/post.html.twig', $data);
+    }
+
+    /**
+     * View single post
+     *
+     * @param Request     $request
+     * @return mixed
+     */
+    public function getAction(Request $request)
+    {
+        $post = $this->posts->findOneBy(array('id' => $request->get('post')));
+        $data = array(
+            'post' => $post,
+            'request' => $request
+        );
+
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/widgets/post-detail.html.twig', $data);
     }
 
     /**

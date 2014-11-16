@@ -52,6 +52,9 @@ class UserServiceProvider implements ServiceProviderInterface, ControllerProvide
         $controllers->match('/user/edit/{user}', 'user.controller:editAction')
             ->bind('admin/user/edit');
 
+        $controllers->get('/user/get/{user}', 'user.controller:getAction')
+            ->bind('admin/user/get');
+
         $controllers->match('/user/delete/{user}', 'user.controller:deleteAction')
             ->bind('admin/user/delete');
 

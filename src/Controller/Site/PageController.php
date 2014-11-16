@@ -37,7 +37,7 @@ class PageController
         $settings = $app['repository.settings']->getPublicSettings();
 
         return $app['twig']->render(
-            'site/'.$settings->getPublicTheme().'/views/sitemap.html.twig',
+            'site/'.$settings->getPublicTheme().'/views/index.html.twig',
             array(
                 'pages' => $pages,
                 'settings' => $settings

@@ -70,6 +70,24 @@ class UserController
     }
 
     /**
+     * Get single user
+     *
+     * @param Request     $request
+     * @return mixed
+     */
+    public function getAction(Request $request, Application $app)
+    {
+        $user = $app['repository.user']->findOneBy(array('id' => $request->get('user')));
+        $data = array(
+            'user' => $user,
+            'request' => $request
+        );
+
+        return $app['twig']->render('admin/'.$app['setting']->getAdminTheme().'/widgets/user-detail.html.twig', $data);
+    }
+
+
+    /**
      * View single user
      *
      * @param Request     $request

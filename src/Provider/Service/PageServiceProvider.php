@@ -62,6 +62,9 @@ class PageServiceProvider implements ServiceProviderInterface, ControllerProvide
         $controllers->match('/page/edit/{page}', 'page.controller:editAction')
             ->bind('admin/page/edit');
 
+        $controllers->get('/page/get/{page}', 'page.controller:getAction')
+            ->bind('admin/page/get');
+
         $controllers->match('/page/delete/{page}', 'page.controller:deleteAction')
             ->bind('admin/page/delete');
 

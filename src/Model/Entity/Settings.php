@@ -636,12 +636,12 @@ class Settings extends TimestampableAbstract
      */
     public function setMailConfig(array $config)
     {
-        $this->setMailHost($config['host']);
-        $this->setMailPort($config['port']);
-        $this->setMailUsername($config['username']);
-        $this->setMailPassword($config['password']);
-        $this->setMailAuthMode($config['auth_mode']);
-        $this->setMailEncryption($config['encryption']);
+        $this->setMailHost($config['mail_host']);
+        $this->setMailPort($config['mail_port']);
+        $this->setMailUsername($config['mail_username']);
+        $this->setMailPassword($config['mail_password']);
+        $this->setMailAuthMode($config['mail_auth_mode']);
+        $this->setMailEncryption($config['mail_encryption']);
     }
 
     /**
@@ -717,7 +717,7 @@ class Settings extends TimestampableAbstract
 
     /**
      * @param bool $size
-     * @return string
+     * @return array
      */
     public function getImageResizeDimensions($size = false)
     {

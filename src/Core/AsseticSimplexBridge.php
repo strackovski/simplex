@@ -46,7 +46,6 @@ class AsseticSimplexBridge
         $this->app['assetic.filter_manager'] = $this->app['assetic.filter_manager'] = $this->app->share(
             $this->app->extend('assetic.filter_manager', function ($fm, $app) {
                 /** @var FilterManager $fm */
-                //$fm->set('css_min', new \Assetic\Filter\CssMinFilter());
                 $fm->set(
                     'css_min',
                     new \Assetic\Filter\Yui\CssCompressorFilter(
@@ -99,7 +98,7 @@ class AsseticSimplexBridge
                 ));
                 $am->get('scripts')->setTargetPath('scripts.js');
                 $am->get('jquery')->setTargetPath('jquery.js');
-											
+
                 return $am;
             })
         );

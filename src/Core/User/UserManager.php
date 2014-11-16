@@ -13,8 +13,12 @@
 namespace nv\Simplex\Core\User;
 
 use Imagine\Image\Point;
+use nv\Simplex\Core\Mailer\SystemMailer;
 use nv\Simplex\Core\Simplex;
 use nv\Simplex\Model\Entity\User;
+use nv\Simplex\Model\Repository\UserRepository;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 /**
  * User Manager
@@ -24,20 +28,53 @@ use nv\Simplex\Model\Entity\User;
  */
 class UserManager
 {
-    /** @var \nv\Simplex\Model\Entity\User $user */
-    private $user;
+    /** @var SystemMailer */
+    private $mailer;
 
-    /** @var \nv\Simplex\Core\Simplex $app */
-    private $app;
+    /** @var UrlGenerator */
+    private $url;
+
+    /** @var UserRepository */
+    private $users;
+
+    /** @var MessageDigestPasswordEncoder */
+    private $encoder;
 
     /**
-     * @param User    $user
-     * @param Simplex $app
+     * @param UserRepository $users
+     * @param UrlGenerator $url
+     * @param SystemMailer $mailer
+     * @param MessageDigestPasswordEncoder $encoder
      */
-    public function __construct(User $user, Simplex $app)
+    public function __construct(
+        UserRepository $users,
+        UrlGenerator $url,
+        SystemMailer $mailer,
+        MessageDigestPasswordEncoder $encoder
+    ) {
+        $this->users = $users;
+        $this->mailer = $mailer;
+        $this->url = $url;
+        $this->encoder = $encoder;
+    }
+
+    public function getEncoder()
     {
-        $this->user = $user;
-        $this->app = $app;
+        return $this->encoder;
+    }
+
+    /**
+     * @param User $user
+     * @param $password
+     * @return bool
+     */
+    public function verifyCredentials(User $user, $password)
+    {
+        if (!$this->encoder->isPasswordValid($user->getPassword(), $password, $user->getSalt())) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -46,24 +83,25 @@ class UserManager
      * Reset user password by requiring account reactivation and therefor
      * the user can choose a new password upon activation. Activation link
      * is sent by email.
+     * @param User $user
      */
-    public function resetPassword()
+    public function resetPassword(User $user)
     {
-        $this->deactivateAccount();
+        $this->deactivateAccount($user);
         $notification = array(
             'title' => 'Account password change requested',
             'message' => 'You received this email because you requested to change '.
                          'your password. Please follow the link below to change your password.',
             'link' => array(
-                'href' => $this->app['url_generator']->generate(
+                'href' => $this->url->generate(
                     'help/reset',
-                    array('token' => $this->user->getResetToken())
+                    array('token' => $user->getResetToken())
                 ),
                 'text' => 'Reset your password'
             )
         );
 
-        $this->app['system.mailer']->sendNotificationEmail($this->user->getEmail(), $notification);
+        $this->mailer->sendNotificationEmail($user->getEmail(), $notification);
     }
 
     /**
@@ -72,68 +110,72 @@ class UserManager
      * Change user email, generate password reset token, send email with the
      * reset link to the new email
      *
+     * @param User $user
      * @param $newEmail
      */
-    public function changeEmail($newEmail)
+    public function changeEmail(User $user, $newEmail)
     {
-        $this->user->setEmail($newEmail);
-        $this->deactivateAccount();
+        $user->setEmail($newEmail);
+        $this->deactivateAccount($user);
         $notification = array(
             'title' => 'Activate your account',
             'message' => 'Reactivation is required because you changed your email. ' .
                 'Please follow the link below to confirm your new email and activate your account.',
             'link' => array(
-                'href' => $this->app['url_generator']->generate(
+                'href' => $this->url->generate(
                     'help/reset',
-                    array('token' => $this->user->getResetToken())
+                    array('token' => $user->getResetToken())
                 ),
                 'text' => 'Reset your password'
             )
         );
 
-        $this->app['system.mailer']->sendNotificationEmail($this->user->getEmail(), $notification);
+        $this->mailer->sendNotificationEmail($user->getEmail(), $notification);
     }
 
     /**
      * Send account activation email to user's email address
+     * @param User $user
      */
-    public function sendActivationNotification()
+    public function sendActivationNotification(User $user)
     {
-        if ($this->user->getIsActive()) {
-            $this->deactivateAccount();
+        if ($user->getIsActive()) {
+            $this->deactivateAccount($user);
         }
 
         $notification = array(
             'title' => 'Activate your account',
             'message' => 'Welcome. Activate your account.',
             'link' => array(
-                'href' => $this->app['url_generator']->generate(
+                'href' => $this->url->generate(
                     'help/reset',
-                    array('token' => $this->user->getResetToken())
+                    array('token' => $user->getResetToken())
                 ),
                 'text' => 'Reset your password'
             )
         );
 
-        $this->app['system.mailer']->sendNotificationEmail($this->user->getEmail(), $notification);
+        $this->mailer->sendNotificationEmail($user->getEmail(), $notification);
     }
 
     /**
      * Deactivate account
+     * @param User $user
      */
-    public function deactivateAccount()
+    public function deactivateAccount(User $user)
     {
-        $this->user->setIsActive(false);
-        $this->setResetToken();
+        $user->setIsActive(false);
+        $this->setResetToken($user);
     }
 
     /**
      * Activate account
+     * @param User $user
      */
-    public function activateAccount()
+    public function activateAccount(User $user)
     {
-        $this->invalidateResetToken();
-        $this->user->setIsActive(true);
+        $this->invalidateResetToken($user);
+        $user->setIsActive(true);
     }
 
     /**
@@ -148,33 +190,35 @@ class UserManager
 
     /**
      * Set reset token to allow password reset
+     * @param User $user
      */
-    private function setResetToken()
+    private function setResetToken(User $user)
     {
-        if (!$this->validateResetToken()) {
+        if (!$this->validateResetToken($user)) {
             $token = $this->generateResetToken();
 
-            while ($this->app['repository.user']->findOneBy(array('resetToken' => $token))) {
+            while ($this->users->findOneBy(array('resetToken' => $token))) {
                 $token = $this->generateResetToken();
             }
 
-            $this->user->setResetTokenExpirationDate((new \DateTime())->add(new \DateInterval('P1D')));
-            $this->user->setResetToken($token);
+            $user->setResetTokenExpirationDate((new \DateTime())->add(new \DateInterval('P1D')));
+            $user->setResetToken($token);
         }
     }
 
     /**
      * Validate reset token
      *
+     * @param User $user
      * @return bool
      */
-    public function validateResetToken()
+    public function validateResetToken(User $user)
     {
-        if (is_null($this->user->getResetToken())) {
+        if (is_null($user->getResetToken())) {
             return false;
         }
 
-        if ($this->user->getResetTokenExpirationDate() < new \DateTime('now')) {
+        if ($user->getResetTokenExpirationDate() < new \DateTime('now')) {
             return false;
         }
 
@@ -183,12 +227,13 @@ class UserManager
 
     /**
      * Invalidate reset token
+     * @param User $user
      */
-    public function invalidateResetToken()
+    public function invalidateResetToken(User $user)
     {
-        if (!is_null($this->user->getResetToken())) {
-            $this->user->setResetToken(null);
-            $this->user->setResetTokenExpirationDate(null);
+        if (!is_null($user->getResetToken())) {
+            $user->setResetToken(null);
+            $user->setResetTokenExpirationDate(null);
         }
     }
 }

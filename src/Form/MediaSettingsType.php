@@ -27,7 +27,7 @@ use nv\Simplex\Model\Repository\SettingsRepository;
  */
 class MediaSettingsType extends AbstractType
 {
-/**
+    /**
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
@@ -42,14 +42,12 @@ class MediaSettingsType extends AbstractType
                     'class' => ''
                 )
             ))
-
             ->add('imageResampleQuality', 'text', array(
                 'required' => false,
                 'attr' => array(
                     'class' => 'form-slider'
                 )
             ))
-
             ->add(
                 'image_resize_small_width',
                 'text',
@@ -74,7 +72,6 @@ class MediaSettingsType extends AbstractType
                     )
                 )
             )
-
             ->add(
                 'image_resize_medium_width',
                 'text',
@@ -99,7 +96,6 @@ class MediaSettingsType extends AbstractType
                     )
                 )
             )
-
             ->add(
                 'image_resize_large_width',
                 'text',

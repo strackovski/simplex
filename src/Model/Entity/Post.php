@@ -21,6 +21,7 @@ use nv\Simplex\Common\ObserverInterface;
  * Post class
  *
  * @Entity(repositoryClass="nv\Simplex\Model\Repository\PostRepository")
+ * @EntityListeners({"nv\Simplex\Model\Listener\PostListener"})
  * @Table(name="posts")
  * @HasLifecycleCallbacks
  *

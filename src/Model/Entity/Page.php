@@ -25,6 +25,7 @@ use nv\Simplex\Common\TimestampableAbstract;
  * @Entity(repositoryClass="nv\Simplex\Model\Repository\PageRepository")
  * @Table(name="pages")
  * @HasLifecycleCallbacks
+ * @EntityListeners({"nv\Simplex\Model\Listener\PageListener"})
  *
  * @package nv\Simplex\Model\Entity
  * @author Vladimir Stračkovski <vlado@nv3.org>

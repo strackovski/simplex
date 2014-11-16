@@ -53,7 +53,7 @@ class FixturesLoadCommand extends ApplicationAwareCommand
             $user->setDescription("This is the test user.");
             $user->setSalt($user->getEmail());
             $user->setIsActive(true);
-            $user->setEncodedPassword($this->app, 'testing');
+            $user->setEncodedPassword($this->app['security.encoder.digest'], 'testing');
             $user->setCreatedAt(new \DateTime('now'));
             $user->setUpdatedAt($user->getCreatedAt());
             $this->app['orm.em']->persist($user);

@@ -51,20 +51,4 @@ class Image extends MediaItem
         return 'image';
     }
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->manager = new ImageManager($this);
-    }
-
-    /**
-     * @PostLoad()
-     */
-    public function postLoad()
-    {
-        $this->manager = new ImageManager($this);
-    }
 }

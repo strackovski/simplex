@@ -12,10 +12,16 @@
 
 namespace nv\Simplex\Controller\Admin;
 
+use Imagine\Image\ImagineInterface;
+use nv\Simplex\Controller\ActionControllerAbstract;
+use nv\Simplex\Core\Mailer\SystemMailer;
+use nv\Simplex\Model\Entity\Settings;
 use Silex\Application;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use nv\Simplex\Core\User\UserManager;
 use nv\Simplex\Form\UserCredentialsType;
@@ -23,6 +29,11 @@ use nv\Simplex\Form\UserProfileType;
 use nv\Simplex\Form\UserType;
 use nv\Simplex\Model\Entity\Image;
 use nv\Simplex\Model\Entity\User;
+use nv\Simplex\Model\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * Class PostController
@@ -31,23 +42,68 @@ use nv\Simplex\Model\Entity\User;
  *
  * @package nv\Simplex\Controller\Admin
  */
-class UserController
+class UserController extends ActionControllerAbstract
 {
+    /** @var UserRepository */
+    private $users;
+
+    /** @var SystemMailer */
+    private $mailer;
+
+    /** @var ImagineInterface */
+    private $imagine;
+
+    /** @var UserManager */
+    private $manager;
+
+    /**
+     * @param UserRepository $users
+     * @param Settings $settings
+     * @param \Twig_Environment $twig
+     * @param FormFactoryInterface $formFactory
+     * @param SecurityContext $security
+     * @param Session $session
+     * @param UrlGenerator $url
+     * @param SystemMailer $mailer
+     * @param ImagineInterface $imagine
+     * @param UserManager $manager
+     */
+    public function __construct(
+        UserRepository $users,
+        Settings $settings,
+        \Twig_Environment $twig,
+        FormFactoryInterface $formFactory,
+        SecurityContext $security,
+        Session $session,
+        UrlGenerator $url,
+        SystemMailer $mailer,
+        ImagineInterface $imagine,
+        UserManager $manager
+    ) {
+        parent::__construct($settings, $twig, $formFactory, $security, $session, $url, $imagine);
+        $this->users = $users;
+        $this->mailer = $mailer;
+        $this->imagine = $imagine;
+        $this->manager = $manager;
+    }
+
     /**
      * Index users
      *
      * @param Request     $request
-     * @param Application $app
      *
      * @return mixed
      */
-    public function indexAction(Request $request, Application $app)
+    public function indexAction(Request $request)
     {
-        if ($app['security']->isGranted('ROLE_ADMIN')) {
-            $data['users'] = $app['repository.user']->findAll();
-            $data['request'] = $request;
-
-            return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/users.html.twig', $data);
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return $this->twig->render(
+                'admin/'.$this->settings->getAdminTheme().'/views/users.html.twig',
+                array(
+                    'users' => $this->users->findAll(),
+                    'request' => $request
+                )
+            );
         }
 
         return false;
@@ -55,15 +111,15 @@ class UserController
 
     /**
      * @param Request $request
-     * @param Application $app
      * @return bool|JsonResponse
      */
-    public function usersListAction(Request $request, Application $app)
+    public function usersListAction(Request $request)
     {
-        if ($app['security']->isGranted('ROLE_ADMIN')) {
-            $users = $app['repository.user']->getUsers(true);
-
-            return new JsonResponse($users, 200);
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return new JsonResponse(
+                $this->users->getUsers(true),
+                200
+            );
         }
 
         return false;
@@ -75,15 +131,17 @@ class UserController
      * @param Request     $request
      * @return mixed
      */
-    public function getAction(Request $request, Application $app)
+    public function getAction(Request $request)
     {
-        $user = $app['repository.user']->findOneBy(array('id' => $request->get('user')));
-        $data = array(
-            'user' => $user,
-            'request' => $request
-        );
+        $user = $this->users->findOneBy(array('id' => $request->get('user')));
 
-        return $app['twig']->render('admin/'.$app['setting']->getAdminTheme().'/widgets/user-detail.html.twig', $data);
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/widgets/user-detail.html.twig',
+            array(
+                'user' => $user,
+                'request' => $request
+            )
+        );
     }
 
 
@@ -91,23 +149,20 @@ class UserController
      * View single user
      *
      * @param Request     $request
-     * @param Application $app
      * @return mixed
      */
-    public function profileViewAction(Request $request, Application $app)
+    public function profileViewAction(Request $request)
     {
-        $token = $app['security']->getToken();
+        $token = $this->security->getToken();
         if (null !== $token) {
             $user = $token->getUser();
 
-            $data = array(
-                'user' => $user,
-                'request' => $request
-            );
-
-            return $app['twig']->render(
-                'admin/'.$app['settings']->getAdminTheme().'/views/user-profile.html.twig',
-                $data
+            return $this->twig->render(
+                'admin/'.$this->settings->getAdminTheme().'/views/user-profile.html.twig',
+                array(
+                    'user' => $user,
+                    'request' => $request
+                )
             );
         }
 
@@ -117,12 +172,11 @@ class UserController
     /**
      *
      * @param Request     $request
-     * @param Application $app
      * @return mixed
      */
-    public function credentialsAction(Request $request, Application $app)
+    public function credentialsAction(Request $request)
     {
-        $token = $app['security']->getToken();
+        $token = $this->security->getToken();
 
         if (null !== $token) {
             /** @var $user User */
@@ -131,49 +185,43 @@ class UserController
             $currentPwd = $user->getPassword();
 
             /** @var $form Form */
-            $form = $app['form.factory']->create(new UserCredentialsType(), $user);
+            $form = $this->form->create(new UserCredentialsType(), $user);
 
             if ($request->isMethod('POST')) {
                 $files = $request->files;
                 $form->bind($request);
                 if ($form->isValid()) {
-                    $um = new UserManager($user, $app);
+                    // $um = new UserManager($user, $this->users, $this->url, $this->mailer);
                     $email = $form->get('email')->getData();
                     $password = $form->get('password')->getData();
-
-                    // @todo Remove and test
-                    foreach ($files as $uploadedFile) {
-                        if ($files instanceof UploadedFile) {
-                            $user->setAvatarFile($uploadedFile['avatarFile']);
-                        }
-                    }
-
                     $emailChanged = false;
 
-                    if (!$app['security.encoder.digest']->isPasswordValid($currentPwd, $password, $user->getSalt())) {
-                        $redirect = $app['url_generator']->generate('admin_logout');
-                        return $app->redirect($redirect);
+                    if (!$this->manager->verifyCredentials($user, $password)) {
+                        return new RedirectResponse($this->url->generate('admin_logout'));
                     }
+
 
                     if ($currentEmail !== $user->getEmail()) {
                         $emailChanged = 1;
                     }
 
+                    /*
                     if ($emailChanged === 1) {
-                        $um->changeEmail($email);
+                        $this->manager->changeEmail($user, $email);
                     }
+                    */
 
-                    $app['repository.user']->save($user);
+                    $this->users->save($user);
                     $message = 'The account for ' . $user->getUsername() . ' has been changed and must be reactivated.';
-                    $app['session']->getFlashBag()->add('success', $message);
+                    $this->session->getFlashBag()->add('success', $message);
 
                     if ($emailChanged) {
-                        $redirect = $app['url_generator']->generate('admin_logout');
+                        $redirect = $this->url->generate('admin_logout');
                     } else {
-                        $redirect = $app['url_generator']->generate('admin/users');
+                        $redirect = $this->url->generate('admin/users');
                     }
 
-                    return $app->redirect($redirect);
+                    return new RedirectResponse($redirect);
                 }
             }
 
@@ -183,8 +231,8 @@ class UserController
                 'title' => 'Edit credentials',
                 'request' => $request
             );
-            return $app['twig']->render(
-                'admin/'.$app['settings']->getAdminTheme().'/views/user-credentials.html.twig',
+            return $this->twig->render(
+                'admin/'.$this->settings->getAdminTheme().'/views/user-credentials.html.twig',
                 $data
             );
         }
@@ -197,14 +245,13 @@ class UserController
      * username/email is provided. The password link is sent to user's email.
      *
      * @param Request     $request
-     * @param Application $app
      *
      * @return mixed
      * @throws \Exception When username/email not found
      */
-    public function forgotPasswordAction(Request $request, Application $app)
+    public function forgotPasswordAction(Request $request)
     {
-        $form = $app['form.factory']->createBuilder('form', array())
+        $form = $this->form->createBuilder('form', array())
             ->add('email')
             ->add('save', 'submit', array(
                 'label' =>  'Send'
@@ -221,22 +268,25 @@ class UserController
         if ($form->isValid()) {
             $data = $form->getData();
 
-            if (is_null($user = $app['repository.user']->userExists($form->get('email')->getData()))) {
+            /** @var $user User */
+            if (is_null($user = $this->users->userExists($form->get('email')->getData()))) {
                 throw new \Exception("The user with email {$form->get('email')->getData()} does not exist.");
             }
 
-            $um = new UserManager($user, $app);
-            $um->resetPassword();
-            $app['repository.user']->save($user);
+           // $um = new UserManager($user, $this->users, $this->url, $this->mailer);
+            // $um->resetPassword();
 
-            return $app['twig']->render(
-                'admin/'.$app['settings']->getAdminTheme().'/views/notification-public.html.twig',
+            $this->manager->resetPassword($user);
+            $this->users->save($user);
+
+            return $this->twig->render(
+                'admin/'.$this->settings->getAdminTheme().'/views/notification-public.html.twig',
                 array('message' => 'WE SENT YOU YOUR PASSWORD IN PLAIN TEXT! CHECK YOUR MAIL!')
             );
         }
 
-        return $app['twig']->render(
-            'admin/'.$app['settings']->getAdminTheme().'/views/form-public.html.twig',
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/views/form-public.html.twig',
             array('form' => $form->createView())
         );
     }
@@ -246,27 +296,27 @@ class UserController
      * reset token.
      *
      * @param Request     $request
-     * @param Application $app
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Exception If token is invalid, unmatched or missing
      */
-    public function resetPasswordAction(Request $request, Application $app)
+    public function resetPasswordAction(Request $request)
     {
         if (is_null($receivedToken = $request->query->get('token'))) {
             throw new \Exception('Missing parameter(s)');
         }
 
-        if (is_null($user = $app['repository.user']->findOneBy(array('resetToken' => $receivedToken)))) {
+        /** @var $user User */
+        if (is_null($user = $this->users->findOneBy(array('resetToken' => $receivedToken)))) {
             throw new \Exception('User not found');
         }
 
-        if (!$app['repository.user']->validateResetToken($user)) {
+        if (!$this->users->validateResetToken($user)) {
             throw new \Exception('Old token eeeh');
         }
 
         /** @var $form Form */
-        $form = $app['form.factory']->createBuilder('form', array(), array('method' => 'post'))
+        $form = $this->form->createBuilder('form', array(), array('method' => 'post'))
             ->add('password', 'password')
             ->add('save', 'submit')
             ->getForm();
@@ -275,18 +325,20 @@ class UserController
 
         if ($form->isValid()) {
             $pass = $form->get('password')->getData();
-            $user->setEncodedPassword($app, $pass);
+            // $user->setEncodedPassword($app, $pass);
+            $user->setEncodedPassword($this->manager->getEncoder(), $pass);
 
-            $um = new UserManager($user, $app);
-            $um->activateAccount();
-            $app['repository.user']->save($user);
 
-            $redirect = $app['url_generator']->generate('login');
-            return $app->redirect($redirect);
+            //$um = new UserManager($user, $this->users, $this->url, $this->mailer);
+            // $um->activateAccount();
+            $this->manager->activateAccount($user);
+            $this->users->save($user);
+
+            return new RedirectResponse($this->url->generate('login'));
         }
 
-        return $app['twig']->render(
-            'admin/'.$app['settings']->getAdminTheme().'/views/form-public2.html.twig',
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/views/form-public2.html.twig',
             array('form' => $form->createView())
         );
     }
@@ -294,18 +346,17 @@ class UserController
 
     /**
      * @param Request     $request
-     * @param Application $app
      *
      * @return int|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function editProfileAction(Request $request, Application $app)
+    public function editProfileAction(Request $request)
     {
-        $token = $app['security']->getToken();
+        $token = $this->security->getToken();
         if (null !== $token) {
             /** @var $user User */
             $user = $token->getUser();
             /** @var $form Form */
-            $form = $app['form.factory']->create(new UserProfileType($app['orm.em']), $user);
+            $form = $this->form->create(new UserProfileType(), $user);
 
             if ($request->isMethod('POST')) {
                 $files = $request->files;
@@ -328,26 +379,10 @@ class UserController
                             }
                         }
                     }
-                    $app['repository.user']->save($user);
+                    $this->users->save($user);
+                    $redirect = $this->url->generate('admin/user/profile');
 
-                    if (isset($avatar) and $avatar instanceof Image) {
-                        try {
-                            $avatar->getManager()->thumbnail(
-                                $app['imagine'],
-                                $app['settings']->getImageResizeDimensions()
-                            );
-                            $avatar->getManager()->autoCrop($app['imagine']);
-                        } catch (\Exception $e) {
-                            $app['repository.media']->delete($avatar);
-                            $app['monolog']->addError(
-                                get_class($this) .
-                                " caught exception \"{$e->getMessage()}\" from {$e->getFile()}:{$e->getLine()}"
-                            );
-                        }
-                    }
-                    $redirect = $app['url_generator']->generate('admin/user/profile');
-
-                    return $app->redirect($redirect);
+                    return new RedirectResponse($redirect);
                 }
             }
 
@@ -358,8 +393,8 @@ class UserController
                 'user' => $user
             );
 
-            return $app['twig']->render(
-                'admin/'.$app['settings']->getAdminTheme().'/views/user-profile.html.twig',
+            return $this->twig->render(
+                'admin/'.$this->settings->getAdminTheme().'/views/user-profile.html.twig',
                 $data
             );
         }
@@ -371,27 +406,27 @@ class UserController
      * Enables account activation by providing a valid reset token
      *
      * @param Request     $request
-     * @param Application $app
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Exception If token is invalid, unmatched or missing
      */
-    public function activateAccountAction(Request $request, Application $app)
+    public function activateAccountAction(Request $request)
     {
         if (is_null($receivedToken = $request->query->get('token'))) {
             throw new \Exception('Missing parameter(s)');
         }
 
-        if (is_null($user = $app['repository.user']->findOneBy(array('resetToken' => $receivedToken)))) {
+        /** @var $user User */
+        if (is_null($user = $this->users->findOneBy(array('resetToken' => $receivedToken)))) {
             throw new \Exception('Unmatched parameter(s)');
         }
 
-        if (!$app['repository.user']->validateResetToken($user)) {
+        if (!$this->users->validateResetToken($user)) {
             throw new \Exception('Invalid parameter(s)');
         }
 
         /** @var $form Form */
-        $form = $app['form.factory']->createBuilder('form', array(), array('method' => 'post'))
+        $form = $this->form->createBuilder('form', array(), array('method' => 'post'))
             ->add('password')
             ->add('save', 'submit')
             ->add('cancel', 'button', array(
@@ -403,14 +438,16 @@ class UserController
         $form->handleRequest($request);
         if ($form->isValid()) {
             $pass = $form->get('password')->getData();
-            $user->setEncodedPassword($app, $pass);
+            $user->setEncodedPassword($this->manager->getEncoder(), $pass);
 
-            $um = new UserManager($user, $app);
-            $um->activateAccount();
-            $app['repository.user']->save($user);
-            $redirect = $app['url_generator']->generate('login');
 
-            return $app->redirect($redirect);
+            //$um = new UserManager($user, $this->users, $this->url, $this->mailer);
+            // $um->activateAccount();
+
+            $this->manager->activateAccount($user);
+            $this->users->save($user);
+
+            return new RedirectResponse($this->url->generate('login'));
         }
 
         $data = array(
@@ -419,22 +456,21 @@ class UserController
             'request' => $request
         );
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/form-public.html.twig', $data);
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/form-public.html.twig', $data);
     }
 
     /**
      * Add new user
      *
      * @param Request     $request
-     * @param Application $app
      * @return mixed
      */
-    public function addAction(Request $request, Application $app)
+    public function addAction(Request $request)
     {
         /** @var $user User */
         $user = new User();
         /** @var $form Form */
-        $form = $app['form.factory']->create(new UserType($app['orm.em']), $user);
+        $form = $this->form->create(new UserType(), $user);
 
         if ($request->isMethod('POST')) {
             $files = $request->files;
@@ -461,25 +497,16 @@ class UserController
                         }
                     }
                 }
-                $app['repository.user']->save($user);
+                $this->users->save($user);
 
-                if (isset($avatar) and $avatar instanceof Image) {
-                    $avatar->getManager()->thumbnail(
-                        $app['imagine'],
-                        $app['settings']->getImageResizeDimensions('crop')
-                    );
-                    $avatar->getManager()->autoCrop($app['imagine']);
-                }
-
-                $app['repository.user']->setResetToken($user);
+                $this->users->setResetToken($user);
                 $message  = 'The account for ' . $user->getUsername() . ' has been created. ';
                 $message .= 'It must be activated prior to login.';
-                $app['session']->getFlashBag()->add('success', $message);
-                $um = new UserManager($user, $app);
-                $um->sendActivationNotification();
-                $redirect = $app['url_generator']->generate('admin/users');
+                $this->session->getFlashBag()->add('success', $message);
+                $this->manager->sendActivationNotification($user);
+                $redirect = $this->url->generate('admin/users');
 
-                return $app->redirect($redirect);
+                return new RedirectResponse($redirect);
             }
         }
 
@@ -488,35 +515,35 @@ class UserController
             'title' => 'Add new user'
         );
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/user-form.html.twig', $data);
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/user-form.html.twig', $data);
     }
 
     /**
      * Edit user
      *
      * @param Request     $request
-     * @param Application $app
      * @return mixed
      */
-    public function editAction(Request $request, Application $app)
+    public function editAction(Request $request)
     {
         /** @var $user User */
-        $user = $app['repository.user']->findOneBy(array('id' => $request->get('user')));
+        $user = $this->users->findOneBy(array('id' => $request->get('user')));
         /** @var $form Form */
-        $form = $app['form.factory']->create(new UserType($app['orm.em']), $user);
+        $form = $this->form->create(new UserType(), $user);
         $userEmail = $user->getEmail();
 
         if ($request->isMethod('POST')) {
             $files = $request->files;
             $form->bind($request);
             if ($form->isValid()) {
-                $um = new UserManager($user, $app);
-                $email = $form->get('email')->getData();
+                // $email = $form->get('email')->getData();
                 $user->setRoles($form->get('roles')->getData());
 
+                /*
                 if ($email !== $userEmail) {
-                    $um->changeEmail($email);
+                    $this->manager->changeEmail($user, $email);
                 }
+                */
 
                 foreach ($files as $uploadedFile) {
                     if (array_key_exists('avatarFile', $uploadedFile)) {
@@ -530,20 +557,13 @@ class UserController
                         }
                     }
                 }
-                $app['repository.user']->save($user);
+                $this->users->save($user);
 
-                if (isset($avatar) and $avatar instanceof Image) {
-                    $avatar->getManager()->thumbnail(
-                        $app['imagine'],
-                        $app['settings']->getImageResizeDimensions()
-                    );
-                    $avatar->getManager()->autoCrop($app['imagine']);
-                }
                 $message = 'The account for ' . $user->getUsername() . ' has been changed.';
-                $app['session']->getFlashBag()->add('success', $message);
-                $redirect = $app['url_generator']->generate('admin/users');
+                $this->session->getFlashBag()->add('success', $message);
+                $redirect = $this->url->generate('admin/users');
 
-                return $app->redirect($redirect);
+                return new RedirectResponse($redirect);
             }
         }
         $data = array(
@@ -553,8 +573,8 @@ class UserController
             'title' => 'Edit user',
         );
 
-        return $app['twig']->render(
-            'admin/'.$app['settings']->getAdminTheme().'/views/user-form.html.twig',
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/views/user-form.html.twig',
             $data
         );
     }
@@ -569,13 +589,14 @@ class UserController
      */
     public function deleteAction(Request $request, Application $app)
     {
-        $user = $app['repository.user']->findOneBy(array('id' => $request->get('user')));
+        $user = $this->users->findOneBy(array('id' => $request->get('user')));
         if ($user instanceof User) {
+            //  @todo pass to repo
             $app['orm.em']->remove($user);
             $app['orm.em']->flush();
         }
-        $redirect = $app['url_generator']->generate('admin/users');
+        $redirect = $this->url->generate('admin/users');
 
-        return $app->redirect($redirect);
+        return new RedirectResponse($redirect);
     }
 }

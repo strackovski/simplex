@@ -73,18 +73,16 @@ class PostController extends ActionControllerAbstract
      * Index posts
      *
      * @param Request     $request
-     * @param Application $app
-     *
      * @return mixed
      */
-    public function indexAction(Request $request, Application $app)
+    public function indexAction(Request $request)
     {
-        $data['posts'] = $app['repository.post']->get();
-        $data['post'] = $app['repository.post']->getLatest();
+        $data['posts'] = $this->posts->get();
+        $data['post'] = $this->posts->getLatest();
         $data['request'] = $request;
 
-        return $app['twig']->render(
-            'admin/'.$app['settings']->getAdminTheme().'/views/posts.html.twig',
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/views/posts.html.twig',
             $data
         );
     }
@@ -170,12 +168,6 @@ class PostController extends ActionControllerAbstract
                     $post->setAuthor($token->getUser());
                 }
 
-                $this->manager->slug($post);
-
-                if ($this->settings->getEnableAnnotations()) {
-                    $this->manager->metadata($post);
-                }
-
                 $this->posts->save($post);
                 $message = 'The post <strong>' . $post->getTitle() . '</strong> has been saved.';
                 $this->session->getFlashBag()->add('success', $message);
@@ -226,12 +218,6 @@ class PostController extends ActionControllerAbstract
                     $post->setEditor($token->getUser());
                 }
 
-                $this->manager->slug($post);
-
-                if ($this->settings->getEnableAnnotations()) {
-                    $this->manager->metadata($post);
-                }
-
                 $this->posts->save($post);
                 $message = 'Changes saved to ' . $post->getTitle() . '.';
                 $this->session->getFlashBag()->add('success', $message);
@@ -266,14 +252,6 @@ class PostController extends ActionControllerAbstract
         $post = $this->posts->findOneBy(array('id' => $request->get('post')));
         if ($post instanceof Post) {
             $this->posts->delete($post);
-            /*
-            if ($post->getMetadata() instanceof Metadata) {
-                $app['orm.em']->remove($post->getMetadata());
-                $post->setMetadata(null);
-            }
-            $app['orm.em']->remove($post);
-            $app['orm.em']->flush();
-            */
         }
         $redirect = $this->url->generate('admin/posts');
 

@@ -19,6 +19,12 @@ use Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapLabelExtension;
 use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
+use nv\Simplex\Core\Media\ImageListener;
+use nv\Simplex\Core\Media\MediaListener;
+use nv\Simplex\Core\Post\PostListener;
+use nv\Simplex\Core\User\UserListener;
+use nv\Simplex\Model\Listener\EntityListenerResolver;
+use nv\Simplex\Model\Listener\PageListener;
 use nv\Simplex\Provider\Service\SiteServiceProvider;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
@@ -199,8 +205,16 @@ class Simplex extends Application
         );
 
         $this->register(new FormServiceProvider());
+
+        $this['listener.resolver'] = $this->share(function ($app) {
+            return new EntityListenerResolver($app);
+        });
+
         $this->register(new DoctrineServiceProvider(), $this['orm.options']);
-        $this->register(new DoctrineOrmServiceProvider());
+        $this->register(
+            new DoctrineOrmServiceProvider(),
+            array('orm.entity_listener_resolver' => $this['listener.resolver'])
+        );
 
         if ($this['debug']) {
             $this->register(new AsseticServiceProvider());

@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Clears all defined cache stores.
+ * Removes file assets.
  *
  * @package nv\Simplex\Command
  * @author Vladimir Stračkovski <vlado@nv3.org>
@@ -40,14 +40,15 @@ class FileAssetCleanUpCommand extends ApplicationAwareCommand
         $output->write('Removing orphaned assets...');
         $path = APPLICATION_ROOT_PATH . '/web/uploads/';
 
-        foreach (new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        ) as $path) {
-            $path->isDir() ? rmdir($path->getPathname()) : unlink($path->getPathname());
+        if (file_exists($path)) {
+            foreach (new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
+                \RecursiveIteratorIterator::CHILD_FIRST
+            ) as $path) {
+                $path->isDir() ? rmdir($path->getPathname()) : unlink($path->getPathname());
+            }
+            @rmdir($path);
         }
-
-        @rmdir($path);
         $output->writeln('<info>DONE</info>');
     }
 }

@@ -114,7 +114,7 @@ class CreateUserCommand extends ApplicationAwareCommand
         $user->setRoles($role);
         $user->setSalt($user->getEmail());
         $user->setIsActive(true);
-        $user->setEncodedPassword($this->app, $password);
+        $user->setEncodedPassword($this->app['security.encoder.digest'], $password);
         $user->setCreatedAt(new \DateTime('now'));
         $user->setUpdatedAt($user->getCreatedAt());
 

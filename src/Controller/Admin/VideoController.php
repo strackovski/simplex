@@ -12,15 +12,14 @@
 
 namespace nv\Simplex\Controller\Admin;
 
-use Imagine\Image\ImagineInterface;
 use nv\Simplex\Controller\ActionControllerAbstract;
+use nv\Simplex\Core\Media\VideoManager;
 use nv\Simplex\Model\Entity\Settings;
 use nv\Simplex\Model\Repository\MediaRepository;
 use Silex\Application;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use nv\Simplex\Model\Entity\Metadata;
 use nv\Simplex\Model\Entity\Video;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -38,12 +37,12 @@ class VideoController extends ActionControllerAbstract
     /** @var MediaRepository */
     private $media;
 
-    /** @var  ImagineInterface */
-    private $imageLib;
+    /** @var  VideoManager */
+    private $manager;
 
     public function __construct(
         MediaRepository $mediaRepository,
-        ImagineInterface $imageLib,
+        VideoManager $manager,
         Settings $settings,
         \Twig_Environment $twig,
         FormFactoryInterface $formFactory,
@@ -53,18 +52,16 @@ class VideoController extends ActionControllerAbstract
     ) {
         parent::__construct($settings, $twig, $formFactory, $security, $session, $url);
         $this->media = $mediaRepository;
-        $this->imageLib = $imageLib;
+        $this->manager = $manager;
     }
 
     /**
      * Index image items
      *
      * @param Request     $request
-     * @param Application $app
-     *
      * @return mixed
      */
-    public function indexAction(Request $request, Application $app)
+    public function indexAction(Request $request)
     {
         $form = $this->form->createNamedBuilder(
             null,
@@ -88,11 +85,9 @@ class VideoController extends ActionControllerAbstract
      * Index image items
      *
      * @param Request     $request
-     * @param Application $app
-     *
      * @return mixed
      */
-    public function listVideoAction(Request $request, Application $app)
+    public function listVideoAction(Request $request)
     {
         $form = $this->form->createNamedBuilder(
             null,
@@ -124,11 +119,9 @@ class VideoController extends ActionControllerAbstract
      * Upload video
      *
      * @param Request     $request
-     * @param Application $app
-     *
      * @return JsonResponse
      */
-    public function uploadAction(Request $request, Application $app)
+    public function uploadAction(Request $request)
     {
         $files = $request->files;
         foreach ($files as $uploadedFile) {
@@ -136,18 +129,9 @@ class VideoController extends ActionControllerAbstract
             $video->setInLibrary(true);
             $video->setFile($uploadedFile);
             $video->setName($uploadedFile->getClientOriginalName());
-            $metadata = new Metadata(array('vddata'));
-            $this->media->save($video);
 
             try {
-                $video->setMetadata($metadata->setData($video->getManager()->metadata()));
                 $this->media->save($video);
-                $video->getManager()->thumbnail($this->imageLib, $this->settings->getImageResizeDimensions());
-                $video->getManager()->autoCrop($this->imageLib, null);
-
-                if (strtolower(pathinfo($video->getAbsolutePath(), PATHINFO_EXTENSION)) == 'avi') {
-                    $video->getManager()->recode();
-                }
             } catch (\Exception $e) {
                 $this->media->delete($video);
             }

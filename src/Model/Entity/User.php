@@ -2,6 +2,7 @@
 
 namespace nv\Simplex\Model\Entity;
 
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -10,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @Entity(repositoryClass="nv\Simplex\Model\Repository\UserRepository")
  * @Table(name="user",uniqueConstraints={@UniqueConstraint(name="search_email", columns={"email"})})
  * @HasLifecycleCallbacks
+ * @EntityListeners({"nv\Simplex\Model\Listener\UserListener"})
  */
 class User implements UserInterface
 {
@@ -227,11 +229,25 @@ class User implements UserInterface
     }
 
     /**
-     * @param $container
+     * @param MessageDigestPasswordEncoder $encoder
      * @param $password
+     *
+     * @internal param $container
+     * @todo test
      */
-    public function setEncodedPassword($container, $password)
+    // public function setEncodedPassword($container, $password)
+    public function setEncodedPassword(MessageDigestPasswordEncoder $encoder, $password)
     {
+        if (!$encoder->isPasswordValid($this->password, $password, $this->getSalt())) {
+
+            if ($this->password !== null) {
+                // notify
+            }
+
+            $this->setPassword($encoder->encodePassword($password, $this->getSalt()));
+        }
+
+        /*
         if (!$container['security.encoder.digest']->isPasswordValid($this->password, $password, $this->getSalt())) {
 
             if ($this->password !== null) {
@@ -240,6 +256,7 @@ class User implements UserInterface
 
             $this->setPassword($container['security.encoder.digest']->encodePassword($password, $this->getSalt()));
         }
+        */
     }
 
     /**

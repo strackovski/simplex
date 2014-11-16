@@ -55,11 +55,9 @@ class MediaController extends ActionControllerAbstract
      * Index media items
      *
      * @param Request     $request
-     * @param Application $app
-     *
      * @return mixed
      */
-    public function indexAction(Request $request, Application $app)
+    public function indexAction(Request $request)
     {
         $form = $this->form->createNamedBuilder(
             null,
@@ -85,11 +83,10 @@ class MediaController extends ActionControllerAbstract
      * Delete media item
      *
      * @param Request     $request
-     * @param Application $app
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction(Request $request, Application $app)
+    public function deleteAction(Request $request)
     {
         $objectIds = array($request->get('id'));
         $type = '';
@@ -112,11 +109,10 @@ class MediaController extends ActionControllerAbstract
      * View/play media item
      *
      * @param Request     $request
-     * @param Application $app
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function viewAction(Request $request, Application $app)
+    public function viewAction(Request $request)
     {
         $item = $this->media->filter(array('id' => $request->get('id')));
 
@@ -173,6 +169,7 @@ class MediaController extends ActionControllerAbstract
                         }
                     }
                 }
+                // @todo check repo
                 $app['repository.settings']->save($this->settings);
             }
         }
@@ -212,10 +209,9 @@ class MediaController extends ActionControllerAbstract
      * Resample existing media in library
      *
      * @param Request $request
-     * @param Application $app
      * @return mixed
      */
-    public function resampleMediaLibraryAction(Request $request, Application $app)
+    public function resampleMediaLibraryAction(Request $request)
     {
         return $this->twig->render(
             'admin/'.$this->settings->getAdminTheme().'/widgets/library-resample.html.twig',

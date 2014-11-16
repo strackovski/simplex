@@ -41,6 +41,16 @@ class PageController extends ActionControllerAbstract
     /** @var PageManager */
     private $manager;
 
+    /**
+     * @param PageRepository $pageRepository
+     * @param Settings $settings
+     * @param \Twig_Environment $twig
+     * @param FormFactoryInterface $formFactory
+     * @param SecurityContext $security
+     * @param Session $session
+     * @param UrlGenerator $url
+     * @param PageManager $pageManager
+     */
     public function __construct(
         PageRepository $pageRepository,
         Settings $settings,
@@ -63,11 +73,6 @@ class PageController extends ActionControllerAbstract
      */
     public function indexAction()
     {
-        /*
-        $data['pages'] = $app['repository.page']->findAll();
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/pages.html.twig', $data);
-        */
-
         return $this->twig->render(
             'admin/'.$this->settings->getAdminTheme().'/views/pages.html.twig',
             array('pages' => $this->pages->findAll())
@@ -110,11 +115,6 @@ class PageController extends ActionControllerAbstract
     public function addAction(Request $request)
     {
         $page = new Page($request->request->get('title'), $request->request->get('slug'));
-
-
-        // $page->registerObserver($pm = new \nv\Simplex\Core\Page\PageManager($page, $app));
-
-
         $form = $this->form->create(new PageType($this->pages, $this->settings), $page);
 
 

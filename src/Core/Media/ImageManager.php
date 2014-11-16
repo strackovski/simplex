@@ -16,6 +16,7 @@ use Imagine\Image\Box;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Point;
 use nv\Simplex\Model\Entity\Image;
+use nv\Simplex\Model\Entity\MediaItem;
 
 /**
  * Image Manager
@@ -25,22 +26,17 @@ use nv\Simplex\Model\Entity\Image;
  */
 class ImageManager implements MediaManagerInterface
 {
-    private $image;
-    private $debug;
+    /** @var ImagineInterface */
+    private $imagine;
 
     /**
-     * Constructor
-     *
-     * @param Image $image
-     * @param bool  $debug
-     *
-     * @throws \InvalidArgumentException
+     * @param ImagineInterface $imagine
      */
-    public function __construct(Image $image, $debug = false)
+    public function __construct(ImagineInterface $imagine)
     {
-        $this->image = $image;
-        $this->debug = $debug;
+        $this->imagine = $imagine;
     }
+
 
     /**
      * Generate thumbnails
@@ -48,55 +44,54 @@ class ImageManager implements MediaManagerInterface
      * Options array must be provided with dimension identifier as key:
      * array('large' => array(width, height))
      *
-     * @param ImagineInterface $imagine Image processing library
+     * @param MediaItem $image
      * @param array $options Desired thumbnail dimensions
      *
      * @param bool $stripMetadata
      * @return mixed|Image
      */
-    public function thumbnail(ImagineInterface $imagine, array $options = null, $stripMetadata = true)
+    public function thumbnail(MediaItem $image, array $options = null, $stripMetadata = true)
     {
         foreach ($options as $dimension => $values) {
 
             if (in_array($dimension, array('small', 'medium', 'large'))) {
-
                 list($width, $height) = $values;
-
                 if ($stripMetadata) {
-                    $imagine
-                        ->open($this->image->getAbsolutePath())
+                    $this->imagine
+                        ->open($image->getAbsolutePath())
                         ->thumbnail(new Box($width, $height))
                         ->strip()
                         ->save(
                             APPLICATION_ROOT_PATH .
                             '/web/uploads/thumbnails/' .
-                            $dimension . '/' . $this->image->getPath()
+                            $dimension . '/' . $image->getPath()
                         );
                 } else {
-                    $imagine
-                        ->open($this->image->getAbsolutePath())
+                    $this->imagine
+                        ->open($image->getAbsolutePath())
                         ->thumbnail(new Box($width, $height))
                         ->save(
                             APPLICATION_ROOT_PATH .
                             '/web/uploads/thumbnails/' .
-                            $dimension . '/' . $this->image->getPath()
+                            $dimension . '/' . $image->getPath()
                         );
                 }
             }
         }
-        return $this->image;
+
+        return $image;
     }
 
     /**
      * Crop a rectangle of predefined size from center of image
      *
-     * @param ImagineInterface $imagine
-     * @param array            $options
+     * @param MediaItem $image
+     * @param array $options
      */
-    public function crop(ImagineInterface $imagine, array $options)
+    public function crop(MediaItem $image, array $options)
     {
-        $image = $imagine->open($this->image->getAbsolutePath());
-        $size = $image->getSize();
+        $imageTemp = $this->imagine->open($image->getAbsolutePath());
+        $size = $imageTemp->getSize();
 
         list($width, $height) = $options;
         $box = new Box($width, $height);
@@ -106,24 +101,24 @@ class ImageManager implements MediaManagerInterface
             $size->getHeight() / 2 - $height / 2
         );
 
-        $image->crop($point, $box)
+        $imageTemp->crop($point, $box)
               ->save(
                   APPLICATION_ROOT_PATH .
                   '/web/uploads/crops/' .
-                  $this->image->getPath()
+                  $image->getPath()
               );
     }
 
     /**
      * Crop a rectangle of relative size from center of image
      *
-     * @param ImagineInterface $imagine
-     * @param array            $options
+     * @param MediaItem $image
+     * @param array $options
      */
-    public function autoCrop(ImagineInterface $imagine, array $options = null)
+    public function autoCrop(MediaItem $image, array $options = null)
     {
-        $image = $imagine->open($this->image->getAbsolutePath());
-        $size = $image->getSize();
+        $imageTemp = $this->imagine->open($image->getAbsolutePath());
+        $size = $imageTemp->getSize();
         $originalWidth = $size->getWidth();
         $originalHeight = $size->getHeight();
         $ratio = $originalWidth/$originalHeight;
@@ -145,36 +140,35 @@ class ImageManager implements MediaManagerInterface
         $point = new Point($srcX, $srcY);
         $box = new Box($targetWidth, $targetHeight);
 
-        $image->crop($point, $box)
+        $imageTemp->crop($point, $box)
             ->save(
                 APPLICATION_ROOT_PATH .
                 '/web/uploads/crops/' .
-                $this->image->getPath()
+                $image->getPath()
             );
     }
 
     /**
      * Watermark image
      *
-     * @param ImagineInterface $imagine Image processing library
+     * @param MediaItem $image
      * @param string $pathToWatermark Absolute path to watermark file
      * @param string $watermarkPosition Watermark position in pixels, (0,0) is top-left corner
      *
      * @return $this
      */
-    public function watermark(ImagineInterface $imagine, $pathToWatermark, $watermarkPosition = 'br')
+    public function watermark(MediaItem $image, $pathToWatermark, $watermarkPosition = 'br')
     {
         if (!file_exists($pathToWatermark)) {
             throw new \InvalidArgumentException("Invalid path to watermark {$pathToWatermark}.");
         }
 
-        $targets = $this->image->getVariations();
-        $watermark = $imagine->open($pathToWatermark);
+        $targets = $image->getVariations();
+        $watermark = $this->imagine->open($pathToWatermark);
 
         foreach ($targets as $targetName => $targetPath) {
-
-            $image     = $imagine->open($targetPath);
-            $size      = $image->getSize();
+            $imageTemp = $this->imagine->open($targetPath);
+            $size      = $imageTemp->getSize();
             $wSize     = $watermark->getSize();
 
             switch ($watermarkPosition) {
@@ -215,46 +209,49 @@ class ImageManager implements MediaManagerInterface
                     );
                     break;
             }
-            $image->paste($watermark, $pos)->save($targetPath);
+            $imageTemp->paste($watermark, $pos)->save($targetPath);
         }
         return $this;
     }
 
-    public function cleanUp($keepOriginal = true)
+    public function cleanUp(Image $image, $keepOriginal = true)
     {
         if ($keepOriginal == false) {
-            unlink($this->image->getAbsolutePath());
+            unlink($image->getAbsolutePath());
         }
     }
 
     /**
      * Get metadata
      *
+     * @param MediaItem $image
      * @return array
      */
-    public function metadata()
+    public function metadata(MediaItem $image)
     {
-        return $this->interpretMetadata();
+        return $this->interpretMetadata($image);
     }
 
     /**
      * Extract metadata if EXIF available
      *
+     * @param Image $image
      * @return array
      */
-    private function extractMetadata()
+    private function extractMetadata(Image $image)
     {
-        return exif_read_data(APPLICATION_ROOT_PATH.'/web/uploads/'.$this->image->getPath());
+        return exif_read_data(APPLICATION_ROOT_PATH.'/web/uploads/'.$image->getPath());
     }
 
     /**
      * Interpret EXIF to application usable format
      *
+     * @param Image $image
      * @return array
      */
-    private function interpretMetadata()
+    private function interpretMetadata(Image $image)
     {
-        $exif = $this->extractMetadata();
+        $exif = $this->extractMetadata($image);
         if (isset($exif['SectionsFound'])) {
             $sections = explode(',', $exif['SectionsFound']);
         }

@@ -4,6 +4,7 @@ namespace nv\Simplex\Provider\Service;
 
 use nv\Simplex\Controller\Admin\PageController;
 use nv\Simplex\Core\Page\PageManager;
+use nv\Simplex\Model\Listener\PageListener;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ServiceProviderInterface;
@@ -27,6 +28,10 @@ class PageServiceProvider implements ServiceProviderInterface, ControllerProvide
             return new PageManager(
                 $app['repository.page']
             );
+        });
+
+        $app['page.listener'] = $app->share(function ($app) {
+            return new PageListener($app['page.manager'], $app['settings']);
         });
 
         $app['page.controller'] = $app->share(function () use ($app) {

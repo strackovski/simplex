@@ -50,21 +50,4 @@ class Video extends MediaItem
     {
         return 'video';
     }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->manager = new VideoManager($this);
-    }
-
-    /**
-     * @PostLoad()
-     */
-    public function postLoad()
-    {
-        $this->manager = new VideoManager($this);
-    }
 }

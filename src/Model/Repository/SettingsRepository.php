@@ -33,19 +33,57 @@ class SettingsRepository extends EntityRepository
     public function save(Settings $settings)
     {
         $this->getEntityManager()->persist($settings);
-        // @todo Fix mailing config retrieval from parameters.json (now mailing.json)
-        $file = dirname(dirname(dirname(__DIR__))) .'/config/mailing.json';
-        if (file_exists($file)
-            and array_diff(json_decode(file_get_contents($file), 1), $settings->getMailConfig()) !== 0) {
-            try {
-                file_put_contents($file, json_encode($settings->getMailConfig()), LOCK_EX);
-            } catch (\Exception $e) {
+        $file =  dirname(dirname(dirname(__DIR__))) .'/config/parameters.json';
+        if (file_exists($file)) {
+            $config = json_decode(file_get_contents($file), 1);
+            if (array_key_exists('mailing', $config) and is_array($config['mailing'])) {
+                if (array_diff($config['mailing'], $settings->getMailConfig()) !== 0) {
+                    try {
+                        $this->setConfigParameters($settings->getMailConfig(), $file, 'mailing');
+                    } catch (\Exception $e) {
 
+                    }
+                }
             }
         }
         $this->getEntityManager()->flush();
 
         return $settings;
+    }
+
+    /**
+     * @param array $parameters
+     * @param $file
+     * @param $level
+     * @internal param $config
+     * @return bool
+     */
+    protected function setConfigParameters(array $parameters, $file, $level)
+    {
+        if (!file_exists($file)) {
+            fopen($file, 'w');
+        }
+
+        $params = json_decode(file_get_contents($file), 1);
+        if (is_array($params) and array_key_exists($level, $params)) {
+            $prefix = '';
+            if ($level === 'mailing') {
+                $prefix = 'mail_';
+            }
+
+            foreach ($parameters as $name => $value) {
+                if (array_key_exists($prefix . $name, $params[$level])) {
+                    $params[$level][$prefix . $name] = $value;
+                }
+            }
+        }
+
+        try {
+            file_put_contents($file, json_encode($params), LOCK_EX);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     public function delete(Settings $settings)
@@ -227,11 +265,12 @@ class SettingsRepository extends EntityRepository
     public function createNewInstance()
     {
         $settings = new Settings('you', 'your@email.fake', false, true);
-        // @todo Fix mailing config write to parameters.json (now mailing.json)
-        if (file_exists($file = dirname(dirname(dirname(__DIR__))) .'/config/mailing.json')) {
-            $mailConfig = json_decode(file_get_contents($file), 1);
-            $settings->setMailConfig($mailConfig);
-            $settings->setEnableMailing(true);
+        if (file_exists($file = dirname(dirname(dirname(__DIR__))) .'/config/parameters.json')) {
+            $config= json_decode(file_get_contents($file), 1);
+            if (array_key_exists('mailing', $config)) {
+                $settings->setMailConfig($config['mailing']);
+                $settings->setEnableMailing(true);
+            }
         }
 
         $this->getEntityManager()->persist($settings);

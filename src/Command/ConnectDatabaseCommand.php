@@ -19,11 +19,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
 /**
- * CreateUserCommand
- *
- * @todo This file needs to be updated to use parameters.json instead of database.json
- *
- * Create a new user account from user input.
+ * ConnectDatabaseCommand
  *
  * @package nv\Simplex\Command
  * @author Vladimir Stračkovski <vlado@nv3.org>

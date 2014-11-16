@@ -15,6 +15,7 @@ namespace nv\Simplex\Core\Media;
 use Imagine\Image\Box;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Point;
+use nv\Simplex\Model\Entity\MediaItem;
 use nv\Simplex\Model\Entity\Video;
 
 /**
@@ -25,24 +26,20 @@ use nv\Simplex\Model\Entity\Video;
  */
 class VideoManager implements MediaManagerInterface
 {
-    /** @var Video */
-    private $video;
-
-    /** @var bool */
-    private $debug;
+    /** @var ImagineInterface */
+    private $imagine;
 
     /**
      * Constructor
      *
-     * @param Video $video The video object
-     * @param bool  $debug
+     * @param ImagineInterface $imagine
+     * @param bool $debug
      *
-     * @throws \InvalidArgumentException
+     * @internal param Video $video The video object
      */
-    public function __construct(Video $video, $debug = false)
+    public function __construct(ImagineInterface $imagine, $debug = false)
     {
-        $this->video = $video;
-        $this->debug = $debug;
+        $this->imagine = $imagine;
     }
 
     /**
@@ -51,33 +48,33 @@ class VideoManager implements MediaManagerInterface
      * Options array must be provided with dimension identifier as key:
      * array('large' => array(width, height))
      *
+     * @param MediaItem $video
+     * @param array $options Desired thumbnail dimensions
      *
-     * @param ImagineInterface $imagine Image processing library
-     * @param array            $options Desired thumbnail dimensions
-     *
+     * @throws \Exception
      * @return mixed|Video
      */
-    public function thumbnail(ImagineInterface $imagine, array $options = null)
+    public function thumbnail(MediaItem $video, array $options = null)
     {
-        if ($this->getStillFrame()) {
+        if ($this->getStillFrame($video)) {
             foreach ($options as $dimension => $values) {
                 if (in_array($dimension, array('small', 'medium', 'large'))) {
                     list($width, $height) = $values;
-                    $imagine
+                    $this->imagine
                         ->open(
                             APPLICATION_ROOT_PATH .
-                            '/web/uploads/'. $this->video->getMediaId() . '.jpeg'
+                            '/web/uploads/'. $video->getMediaId() . '.jpeg'
                         )
                         ->thumbnail(new Box($width, $height))
                         ->save(
                             APPLICATION_ROOT_PATH .
                             '/web/uploads/thumbnails/' .
-                            $dimension . '/' . $this->video->getMediaId() . '.jpeg'
+                            $dimension . '/' . $video->getMediaId() . '.jpeg'
                         );
                 }
             }
 
-            return $this->video;
+            return $video;
         }
 
         return false;
@@ -86,14 +83,14 @@ class VideoManager implements MediaManagerInterface
     /**
      * Crop a rectangle of relative size from center of image
      *
-     * @param ImagineInterface $imagine
-     * @param array            $options
+     * @param MediaItem|Video $video
+     * @param array $options
      */
-    public function autoCrop(ImagineInterface $imagine, array $options = null)
+    public function autoCrop(MediaItem $video, array $options = null)
     {
-        $image = $imagine->open(
+        $image = $this->imagine->open(
             APPLICATION_ROOT_PATH .
-            '/web/uploads/thumbnails/large/'. $this->video->getMediaId() . '.jpeg'
+            '/web/uploads/thumbnails/large/'. $video->getMediaId() . '.jpeg'
         );
 
         $size = $image->getSize();
@@ -123,27 +120,26 @@ class VideoManager implements MediaManagerInterface
             ->save(
                 APPLICATION_ROOT_PATH .
                 '/web/uploads/crops/' .
-                $this->video->getMediaId() . '.jpeg'
+                $video->getMediaId() . '.jpeg'
             );
     }
 
     /**
      * Watermark video
      *
-     * @param ImagineInterface $imagine Image processing library
-     * @param string           $pathToWatermark Absolute path to watermark file
+     * @param MediaItem|Video $video
+     * @param string $pathToWatermark Absolute path to watermark file
      *
      * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function watermark(ImagineInterface $imagine, $pathToWatermark)
+    public function watermark(MediaItem $video, $pathToWatermark)
     {
         if (! file_exists($pathToWatermark)) {
             throw new \InvalidArgumentException("Invalid path to watermark {$pathToWatermark}.");
         }
 
-        $watermark = $imagine->open($pathToWatermark);
-        $image     = $imagine->open($this->video->getMediaId() . '.jpeg');
+        $watermark = $this->imagine->open($pathToWatermark);
+        $image     = $this->imagine->open($video->getMediaId() . '.jpeg');
         $size      = $image->getSize();
         $wSize     = $watermark->getSize();
 
@@ -153,34 +149,36 @@ class VideoManager implements MediaManagerInterface
         );
 
         $image->paste($watermark, $bottomRight)
-              ->save(APPLICATION_ROOT_PATH . '/web/uploads/' . $this->video->getMediaId() . '.jpeg');
+              ->save(APPLICATION_ROOT_PATH . '/web/uploads/' . $video->getMediaId() . '.jpeg');
 
-        return $this->video;
+        return $video;
     }
 
     /**
      * Metadata extraction
+     * @param MediaItem|Video $video
+     * @return array|bool|mixed
      */
-    public function metadata()
+    public function metadata(MediaItem $video)
     {
         try {
-            $interpreted = $this->interpretMetadata();
-            $this->video->setDuration($interpreted['duration']);
+            return $this->interpretMetadata($video);
         } catch (\Exception $e) {
 
         }
 
-        return $this->interpretMetadata();
+        return false;
     }
 
     /**
      * Use ffprobe (part of ffmpeg) to get metadata from video file
      *
+     * @param Video $video
      * @param string $format Return format
      *
      * @return mixed
      */
-    private function ffprobe($format = 'json')
+    private function ffprobe(Video $video, $format = 'json')
     {
         $desc = array(
             0 => array('pipe', 'r'),
@@ -188,7 +186,7 @@ class VideoManager implements MediaManagerInterface
             2 => array('file', APPLICATION_ROOT_PATH . '/var/logs/service.log', 'a')
         );
 
-        $path = APPLICATION_ROOT_PATH.'/web/uploads/'.$this->video->getPath();
+        $path = APPLICATION_ROOT_PATH.'/web/uploads/'.$video->getPath();
         $cmd = "ffprobe -print_format json -show_format -show_streams -pretty -loglevel quiet " . $path;
         $p = proc_open($cmd, $desc, $pipes);
 
@@ -203,9 +201,10 @@ class VideoManager implements MediaManagerInterface
     /**
      * Convert video to web formats [currently ogg]
      *
+     * @param Video $video
      * @return mixed
      */
-    public function recode()
+    public function recode(Video $video)
     {
         $desc = array(
             0 => array('pipe', 'r'),
@@ -213,7 +212,7 @@ class VideoManager implements MediaManagerInterface
             2 => array('file', APPLICATION_ROOT_PATH . '/var/logs/service.log', 'a')
         );
 
-        $path = APPLICATION_ROOT_PATH.'/web/uploads/'.$this->video->getMediaId();
+        $path = APPLICATION_ROOT_PATH.'/web/uploads/'.$video->getMediaId();
         $cmd = "ffmpeg -i {$path}.avi -c:a libvorbis -movflags faststart {$path}.ogg";
         $p = proc_open($cmd, $desc, $pipes);
 
@@ -229,12 +228,13 @@ class VideoManager implements MediaManagerInterface
     /**
      * Interpret & aggregate extracted metadata
      *
+     * @param Video $video
      * @throws \Exception
      * @return array
      */
-    private function interpretMetadata()
+    private function interpretMetadata(Video $video)
     {
-        $data = $this->ffprobe();
+        $data = $this->ffprobe($video);
 
         if (!array_key_exists('format', $data)) {
             throw new \Exception('Metadata extraction failed or metadata unavailable.');
@@ -245,13 +245,13 @@ class VideoManager implements MediaManagerInterface
         }
 
         $format = $data['format'];
-        $video = $data['streams'][0];
-        $audio = $data['streams'][1];
+        $videoData = $data['streams'][0];
+        $audioData = $data['streams'][1];
 
         $result = array(
             'time_originated'   => $format['tags']['creation_time'],
-            'width'         => $video['width'],
-            'height'        => $video['height'],
+            'width'         => $videoData['width'],
+            'height'        => $videoData['height'],
             'duration'      => $format['duration'],
             'size'          => array(
                 substr($format['size'], 0, strrpos($format['size'], ' ')),
@@ -262,24 +262,24 @@ class VideoManager implements MediaManagerInterface
                 substr($format['bit_rate'], strrpos($format['bit_rate'], ' ')+1)
             ),
             'video' => array(
-                'codec'         => $video['codec_name'],
-                'codec_tag'     => $video['codec_tag_string'],
-                'codec_level'   => $video['level'],
-                'pixel_format'  => $video['pix_fmt'],
-                'frame_count'   => $video['nb_frames']
+                'codec'         => $videoData['codec_name'],
+                'codec_tag'     => $videoData['codec_tag_string'],
+                'codec_level'   => $videoData['level'],
+                'pixel_format'  => $videoData['pix_fmt'],
+                'frame_count'   => $videoData['nb_frames']
             ),
             'audio' => array(
-                'codec'         => $audio['codec_name'],
-                'codec_tag'     => $audio['codec_tag_string'],
-                'sample_format' => $audio['sample_fmt'],
+                'codec'         => $audioData['codec_name'],
+                'codec_tag'     => $audioData['codec_tag_string'],
+                'sample_format' => $audioData['sample_fmt'],
                 'sample_rate'   => array(
-                    substr($audio['sample_rate'], 0, strrpos($audio['sample_rate'], ' ')),
-                    substr($audio['sample_rate'], strrpos($audio['sample_rate'], ' ')+1)
+                    substr($audioData['sample_rate'], 0, strrpos($audioData['sample_rate'], ' ')),
+                    substr($audioData['sample_rate'], strrpos($audioData['sample_rate'], ' ')+1)
                 ),
-                'channels'      => $audio['channels']
+                'channels'      => $audioData['channels']
             ),
-            'audio_stream'  => $audio,
-            'video_stream'  => $video
+            'audio_stream'  => $audioData,
+            'video_stream'  => $videoData
         );
 
         return $result;
@@ -288,12 +288,13 @@ class VideoManager implements MediaManagerInterface
     /**
      * Capture a still frame from a video file using ffmpeg
      *
+     * @param Video $video
      * @param integer|bool $moment Moment in video to capture in seconds from beginning
      *
-     * @return resource Image resource
      * @throws \Exception if unable to complete
+     * @return resource Image resource
      */
-    private function getStillFrame($moment = 1)
+    private function getStillFrame(Video $video, $moment = 1)
     {
         // descriptor array
         $desc = array(
@@ -303,17 +304,17 @@ class VideoManager implements MediaManagerInterface
         );
 
         $cmd  = "ffmpeg -ss 00:00:01 -i ";
-        $cmd .= APPLICATION_ROOT_PATH.'/web/uploads/'.$this->video->getPath();
-        $cmd .= ' -frames:v 1 '.APPLICATION_ROOT_PATH.'/web/uploads/'.$this->video->getMediaId().'.jpeg';
+        $cmd .= APPLICATION_ROOT_PATH.'/web/uploads/'.$video->getPath();
+        $cmd .= ' -frames:v 1 '.APPLICATION_ROOT_PATH.'/web/uploads/'.$video->getMediaId().'.jpeg';
         $p = proc_open($cmd, $desc, $pipes);
         fclose($pipes[0]);
         fclose($pipes[1]);
         proc_close($p);
 
-        if (!file_exists(APPLICATION_ROOT_PATH.'/web/uploads/'.$this->video->getMediaId().'.jpeg')) {
+        if (!file_exists(APPLICATION_ROOT_PATH.'/web/uploads/'.$video->getMediaId().'.jpeg')) {
             throw new \Exception('Unable to obtain a video still file.');
         }
 
-        return imagecreatefromjpeg(APPLICATION_ROOT_PATH.'/web/uploads/'.$this->video->getMediaId().'.jpeg');
+        return imagecreatefromjpeg(APPLICATION_ROOT_PATH.'/web/uploads/'.$video->getMediaId().'.jpeg');
     }
 }

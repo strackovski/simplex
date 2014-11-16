@@ -14,6 +14,7 @@ namespace nv\Simplex\Controller\Admin;
 
 use Imagine\Image\ImagineInterface;
 use nv\Simplex\Controller\ActionControllerAbstract;
+use nv\Simplex\Core\Media\ImageManager;
 use Silex\Application;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -42,12 +43,12 @@ class ImageController extends ActionControllerAbstract
     /** @var MediaRepository */
     private $media;
 
-    /** @var  ImagineInterface */
-    private $imageLib;
+    /** @var ImageManager */
+    private $manager;
 
     public function __construct(
         MediaRepository $mediaRepository,
-        ImagineInterface $imageLib,
+        ImageManager $manager,
         Settings $settings,
         \Twig_Environment $twig,
         FormFactoryInterface $formFactory,
@@ -57,18 +58,17 @@ class ImageController extends ActionControllerAbstract
     ) {
         parent::__construct($settings, $twig, $formFactory, $security, $session, $url);
         $this->media = $mediaRepository;
-        $this->imageLib = $imageLib;
+        $this->manager = $manager;
     }
 
     /**
      * Index image items: display all images with images template
      *
      * @param Request     $request
-     * @param Application $app
      *
      * @return mixed
      */
-    public function indexAction(Request $request, Application $app)
+    public function indexAction(Request $request)
     {
         /** @var $form Form */
         $form = $this->form->createNamedBuilder(
@@ -90,10 +90,9 @@ class ImageController extends ActionControllerAbstract
      * View single image item
      *
      * @param Request     $request
-     * @param Application $app
      * @return mixed
      */
-    public function viewAction(Request $request, Application $app)
+    public function viewAction(Request $request)
     {
         return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/image.html.twig');
     }
@@ -103,11 +102,10 @@ class ImageController extends ActionControllerAbstract
      * Upload image
      *
      * @param Request     $request
-     * @param Application $app
      *
      * @return JsonResponse
      */
-    public function uploadAction(Request $request, Application $app)
+    public function uploadAction(Request $request)
     {
         $files = $request->files;
         /** @var UploadedFile $uploadedFile */
@@ -116,26 +114,9 @@ class ImageController extends ActionControllerAbstract
             $image->setInLibrary(true);
             $image->setFile($uploadedFile);
             $image->setName($uploadedFile->getClientOriginalName());
-            $image->setMetadata($metadata = new Metadata());
-            $this->media->save($image);
-            $image->setMetadata($metadata->setData($image->getManager()->metadata()));
-            $this->media->save($image);
 
             try {
-                $image->getManager()->thumbnail($this->imageLib, $this->settings->getImageResizeDimensions());
-
-                $this->settings->getImageAutoCrop() ?
-                    $image->getManager()->autoCrop($this->imageLib, null) :
-                    $image->getManager()->crop($this->imageLib, $this->settings->getImageResizeDimensions('crop'));
-
-                if ($this->settings->getWatermarkMedia() and $this->settings->getWatermark()) {
-                    $image->getManager()->watermark(
-                        $this->imageLib,
-                        APPLICATION_ROOT_PATH . '/web/uploads/' . $this->settings->getWatermark(),
-                        $this->settings->getWatermarkPosition()
-                    );
-                }
-                $image->getManager()->cleanUp($this->settings->getImageKeepOriginal());
+                $this->media->save($image);
             } catch (\Exception $e) {
                 $this->media->delete($image);
             }
@@ -148,10 +129,9 @@ class ImageController extends ActionControllerAbstract
      * Add image
      *
      * @param Request     $request
-     * @param Application $app
      * @return mixed
      */
-    public function addAction(Request $request, Application $app)
+    public function addAction(Request $request)
     {
         $image = new Image();
         /** @var $form Form */

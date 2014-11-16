@@ -129,11 +129,10 @@ class SettingsController
      * Settings index
      *
      * @param Request     $request
-     * @param Application $app
      *
      * @return mixed
      */
-    public function indexAction(Request $request, Application $app)
+    public function indexAction(Request $request)
     {
         return $this->twig->render(
             'admin/'.$this->settings->getAdminTheme().'/views/settings.html.twig',
@@ -149,11 +148,10 @@ class SettingsController
      * Settings snapshots
      *
      * @param Request     $request
-     * @param Application $app
      *
      * @return mixed
      */
-    public function snapshotsIndexAction(Request $request, Application $app)
+    public function snapshotsIndexAction(Request $request)
     {
         $settings = $this->settingsRepository->getSnapshots();
 
@@ -171,11 +169,9 @@ class SettingsController
      * @todo Fix error generating XML
      *
      * @param Request     $request
-     * @param Application $app
-     *
      * @return Response
      */
-    public function exportAction(Request $request, Application $app)
+    public function exportAction(Request $request)
     {
         $settingsArray = $this->settings->getSettings();
         $exportFilename = 'settings-export_' . time();
@@ -221,11 +217,9 @@ class SettingsController
      * Import settings from file
      *
      * @param Request     $request
-     * @param Application $app
-     *
      * @return string
      */
-    public function importAction(Request $request, Application $app)
+    public function importAction(Request $request)
     {
         // @next Settings import implement (file upload, read, persist)
         return false;
@@ -235,17 +229,14 @@ class SettingsController
      * Save settings
      *
      * @param Request     $request
-     * @param Application $app
-     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function saveAction(Request $request, Application $app)
+    public function saveAction(Request $request)
     {
         /** @var \nv\Simplex\Model\Entity\Settings $archive */
         $archive = clone $this->settingsRepository->getCurrent();
         $archive->setCurrent(false);
-        $app['orm.em']->persist($archive);
-        $app['orm.em']->flush();
+        $this->settingsRepository->save($archive);
 
         $redirect = $this->url->generate('admin/settings');
         return new RedirectResponse($redirect);
@@ -255,10 +246,9 @@ class SettingsController
      * Configure theme settings
      *
      * @param Request $request
-     * @param Application $app
      * @return mixed
      */
-    public function themeSettingsAction(Request $request, Application $app)
+    public function themeSettingsAction(Request $request)
     {
         /** @var \nv\Simplex\Model\Entity\Settings $settings */
         $settings = $this->settingsRepository->getCurrent();
@@ -307,10 +297,9 @@ class SettingsController
      * Configure system mailing settings
      *
      * @param Request $request
-     * @param Application $app
      * @return mixed
      */
-    public function mailSettingsAction(Request $request, Application $app)
+    public function mailSettingsAction(Request $request)
     {
         /** @var \nv\Simplex\Model\Entity\Settings $settings */
         $settings = $this->settingsRepository->getCurrent();
@@ -358,10 +347,9 @@ class SettingsController
      * Edit current settings
      *
      * @param Request     $request
-     * @param Application $app
      * @return mixed
      */
-    public function editAction(Request $request, Application $app)
+    public function editAction(Request $request)
     {
         /** @var \nv\Simplex\Model\Entity\Settings $settings */
         $settings = $this->settingsRepository->getCurrent();
@@ -384,13 +372,7 @@ class SettingsController
                 }
                 $this->settingsRepository->save($settings);
 
-                if (isset($logo) and $logo instanceof Image) {
-                    $logo->getManager()->thumbnail($app['imagine'], $this->settings->getImageResizeDimensions());
-                    $logo->getManager()->autoCrop($app['imagine']);
-                }
-
-                $redirect = $this->url->generate('admin/settings');
-                return new RedirectResponse($redirect);
+                return new RedirectResponse($this->url->generate('admin/settings'));
             }
         }
 
@@ -423,20 +405,15 @@ class SettingsController
      * Delete settings instance
      *
      * @param Request     $request
-     * @param Application $app
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction(Request $request, Application $app)
+    public function deleteAction(Request $request)
     {
         /** @var \nv\Simplex\Model\Entity\Settings $set */
         $set = $this->settingsRepository->findOneBy(array('id' => $request->get('id')));
         $this->settingsRepository->delete($set);
 
-        /*
-        $app['orm.em']->remove($set);
-        $app['orm.em']->flush();
-        */
         $redirect = $this->url->generate('admin/settings');
         return new RedirectResponse($redirect);
     }

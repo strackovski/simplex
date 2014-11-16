@@ -17,7 +17,6 @@ use Imagine\Image\Point;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use nv\Simplex\Common\TimestampableAbstract;
-use nv\Simplex\Core\Media\MediaManagerInterface;
 
 /**
  * Media Item base
@@ -26,6 +25,7 @@ use nv\Simplex\Core\Media\MediaManagerInterface;
  * @InheritanceType("JOINED")
  * @Table(name="media_items")
  * @HasLifecycleCallbacks
+ * @EntityListeners({"nv\Simplex\Model\Listener\MediaListener"})
  *
  * @DiscriminatorColumn(name="discr", type="string")
  * @DiscriminatorMap({"video" = "Video", "image" = "Image"})
@@ -121,13 +121,6 @@ abstract class MediaItem extends TimestampableAbstract
      * @JoinColumn(name="metadata_id", referencedColumnName="id")
      **/
     protected $metadata;
-
-    /**
-     * Media manager
-     *
-     * @var MediaManagerInterface
-     */
-    protected $manager;
 
     /**
      * @ManyToMany(targetEntity="Post", mappedBy="mediaItems", cascade={"persist", "detach"})
@@ -499,13 +492,5 @@ abstract class MediaItem extends TimestampableAbstract
     public function getMediaId()
     {
         return $this->mediaId;
-    }
-
-    /**
-     * @return MediaManagerInterface
-     */
-    public function getManager()
-    {
-        return $this->manager;
     }
 }

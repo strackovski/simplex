@@ -2,7 +2,7 @@
 
 namespace nv\Simplex\Core\Media;
 
-use Imagine\Image\ImagineInterface;
+use nv\Simplex\Model\Entity\MediaItem;
 
 /**
  * Media Manager Interface
@@ -17,29 +17,28 @@ interface MediaManagerInterface
      * Options array must be provided with dimension identifier as key:
      * array('large' => array(width, height))
      *
-     *
-     * @param ImagineInterface $imagine Image processing library
-     * @param array            $options Desired thumbnail dimensions
+     * @param MediaItem $item
+     * @param array $options Desired thumbnail dimensions
      *
      * @return mixed|\nv\Simplex\Model\Entity\MediaItem
      */
-    public function thumbnail(ImagineInterface $imagine, array $options = null);
+    public function thumbnail(MediaItem $item, array $options = null);
 
     /**
      * Watermark media item
      *
-     * @param ImagineInterface $imagine Image processing library
-     * @param string           $pathToWatermark Absolute path to watermark file
+     * @param MediaItem $item
+     * @param string $pathToWatermark Absolute path to watermark file
      *
      * @return $this
-     * @throws \InvalidArgumentException
      */
-    public function watermark(ImagineInterface $imagine, $pathToWatermark);
+    public function watermark(MediaItem $item, $pathToWatermark);
 
     /**
      * Extract and interpret media metadata if available
      *
+     * @param MediaItem $item
      * @return mixed
      */
-    public function metadata();
+    public function metadata(MediaItem $item);
 }

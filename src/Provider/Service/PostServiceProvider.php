@@ -4,6 +4,7 @@ namespace nv\Simplex\Provider\Service;
 
 use nv\Simplex\Controller\Admin\PostController;
 use nv\Simplex\Core\Post\PostManager;
+use nv\Simplex\Model\Listener\PostListener;
 use nv\Simplex\Model\Repository\TagRepository;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
@@ -46,6 +47,10 @@ class PostServiceProvider implements ServiceProviderInterface, ControllerProvide
                 $app['repository.post'],
                 $app['repository.tag']
             );
+        });
+
+        $app['post.listener'] = $app->share(function ($app) {
+            return new PostListener($app['post.manager'], $app['settings']);
         });
 
         $app['post.controller'] = $app->share(function () use ($app) {

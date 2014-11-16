@@ -3,6 +3,8 @@
 namespace nv\Simplex\Provider\Service;
 
 use nv\Simplex\Controller\Admin\UserController;
+use nv\Simplex\Core\User\UserManager;
+use nv\Simplex\Model\Listener\UserListener;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ServiceProviderInterface;
@@ -22,8 +24,35 @@ class UserServiceProvider implements ServiceProviderInterface, ControllerProvide
      */
     public function register(Application $app)
     {
+        $app['user.manager'] = $app->share(function () use ($app) {
+            return new UserManager(
+                $app['repository.user'],
+                $app['url_generator'],
+                $app['system.mailer'],
+                $app['security.encoder.digest']
+            );
+        });
+
+        $app['user.listener'] = $app->share(function ($app) {
+            return new UserListener(
+                $app['user.manager'],
+                $app['settings']
+            );
+        });
+
         $app['user.controller'] = $app->share(function () use ($app) {
-            return new UserController();
+            return new UserController(
+                $app['repository.user'],
+                $app['settings'],
+                $app['twig'],
+                $app['form.factory'],
+                $app['security'],
+                $app['session'],
+                $app['url_generator'],
+                $app['system.mailer'],
+                $app['imagine'],
+                $app['user.manager']
+            );
         });
     }
 

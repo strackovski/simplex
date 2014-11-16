@@ -28,7 +28,7 @@
                 <div>{{ post.getCreatedAt|date }}</div>
             </div>
             <div class="item">
-                <a class="detail-btn" href="#">
+                <a class="detail-btn" href="{{ app.url_generator.generate('admin/post/get', {post:post.getId}) }}">
                     <i class="fa fa-ellipsis-v"></i>
                 </a>
             </div>

@@ -43,9 +43,9 @@
                                 <div class="item-wrap">
                                     <div class="item">
                                         {% if page.getSlug == '/' %}
-                                            <div><a href="#"><i class="fa fa-circle-thin"></i> {{ page.getTitle }}</a></div>
+                                            <div><i class="fa fa-circle-thin"></i> {{ page.getTitle }}</div>
                                         {% else %}
-                                            <div><a href="#"><i class="fa fa-circle-thin icon-{{ page.getTypeColor }}"></i> {{ page.getTitle }}</a></div>
+                                            <div><i class="fa fa-circle-thin icon-{{ page.getTypeColor }}"></i> {{ page.getTitle }}</div>
                                         {% endif %}
                                     </div>
                                     <div class="item">
@@ -55,7 +55,7 @@
                                         <div>{{ page.getCreatedAt|date }}</div>
                                     </div>
                                     <div class="item">
-                                        <a class="detail-btn" href="#">
+                                        <a class="detail-btn" href="{{ app.url_generator.generate('admin/page/get', {page:page.getId}) }}">
                                             <i class="fa fa-ellipsis-v"></i>
                                         </a>
                                     </div>

@@ -1,0 +1,36 @@
+<div class="right-bar-header">
+    <div class="top-header">
+        <div class="right-aux-toolbar">
+            <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fa fa-times"></i></a>
+            <a href="{{  app.url_generator.generate('admin/page/delete', {page:page.getId}) }}" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
+            <a href="{{ app.url_generator.generate('admin/page/edit', {page:page.getId}) }}" class="paper-btn edit-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="fa fa-pencil"></i></a>
+        </div>
+    </div>
+
+    <div class="bottom-header">
+        <h4>{{ page.getTitle }}</h4>
+    </div>
+</div>
+
+<div class="right-bar-content">
+    <div class="content-section">
+        <div class="section-title">
+            Data Query
+        </div>
+
+        <div class="section-entity">
+            <p></p>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-entity">
+            <div class="dt">
+                Accessible at
+            </div>
+            <div class="dd">
+                <i class="fa fa-link"></i> {{ page.getSlug }}
+            </div>
+        </div>
+    </div>
+</div>

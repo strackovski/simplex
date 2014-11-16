@@ -2,16 +2,11 @@
 
 {% block tabPaneHeader %}
 <div class="controls-group">
-    <div class="controls-group">
-        <div class="left-controls">
-            <h3>Theme settings</h3>
-        </div>
-        <div class="right-controls">
-            <div class="btn-group">
-                <a class="btn btn-cmd cmd-upload-theme btn-round btn-round-sm" href="{{ app.url_generator.generate('admin/settings/themes/add') }}"><i class="fa fa-plus"></i> Upload theme</a>
-                <a class="btn btn-round btn-round-sm" href="#"><i class="fa fa-question"></i></a>
-            </div>
-        </div>
+    <div class="left-controls">
+        <h3>Theme settings</h3>
+    </div>
+    <div class="right-controls">
+        <a class="form-btn upload-theme-btn" href="{{ app.url_generator.generate('admin/settings/themes/add') }}"><i class="fa fa-plus"></i> Upload theme</a>
     </div>
 </div>
 {% endblock %}

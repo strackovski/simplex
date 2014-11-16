@@ -1,0 +1,72 @@
+<div class="right-bar-header">
+    <div class="top-header">
+        <div class="right-aux-toolbar">
+            <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fa fa-times"></i></a>
+            <a href="{{  app.url_generator.generate('admin/post/delete', {post:post.getId}) }}" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
+            <a href="{{ app.url_generator.generate('admin/post/edit', {post:post.getId}) }}" class="paper-btn edit-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="fa fa-pencil"></i></a>
+            <a href="{{ app.url_generator.generate('admin/post/view', {post:post.getId}) }}" class="paper-btn edit-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="View"><i class="fa fa-eye"></i></a>
+        </div>
+    </div>
+
+    <div class="bottom-header">
+        <h4>{{ post.getTitle }}</h4>
+    </div>
+</div>
+
+<div class="right-bar-content">
+    <div class="content-section">
+        <div class="section-title">
+            Details
+        </div>
+
+        <div class="section-entity">
+            <p>{{ post.getSubtitle }}</p>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-entity">
+            <div class="dt">
+                Accessible at
+            </div>
+            <div class="dd">
+                <i class="fa fa-link"></i> {{ post.getSlug }}
+            </div>
+        </div>
+    </div>
+    <div class="content-section">
+        <div class="section-entity">
+            <div class="dt">
+                Created
+            </div>
+            <div class="dd">
+                {% if post.getAuthor %}
+                    {{ post.getAuthor.displayName }},
+                {% endif %}
+
+                {{ post.getCreatedAt|date('M d h:i') }}
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-entity">
+            <div class="dt">
+                Media
+            </div>
+            <div class="dd">
+                {{ post.getMediaItems.count }} media items attached
+            </div>
+        </div>
+
+        <div class="section-entity">
+            {% if post.getMediaItems.count > 0 %}
+                <div class="media-box">
+                    {% for media in post.getMediaItems %}
+                        <img src="{{ app.request.basepath ~ '/uploads/' ~ media.getWebPath('crop') }}" alt="{{ media.getMediaId }}"/>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

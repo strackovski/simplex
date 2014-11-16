@@ -78,15 +78,16 @@
         </div>
         {% if settings.getSiteLogo %}
             <div class="single-item-box select-image">
-                <div class="select-overlay">Choose file</div>
-                <img src="{{ app.request.getBasePath() ~ '/uploads/crops/' ~ settings.getSiteLogo }}" width="80" />
+                <img src="{{ app.request.getBasePath() ~ '/uploads/crops/' ~ settings.getSiteLogo }}.jpeg" width="80" />
+                <div class="form-btn select-file select-logo">Choose file</div>
             </div>
         {% endif %}
-        <div class="form-group form-element">
+        <div class="form-group">
             {{ form_label(form.siteLogo) }}
             {{ form_widget(form.siteLogo) }}
             {{ form_errors(form.siteLogo) }}
         </div>
+
     </div>
 </div>
 

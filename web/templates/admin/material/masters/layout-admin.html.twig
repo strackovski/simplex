@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/jquery-ui.structure.css"/>
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/modal.css"/>
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/flats.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/graphics.css"/>
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/main.css"/>
 
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/jquery-1.11.1.js"></script>
@@ -22,7 +23,7 @@
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/main.js"></script>
 </head>
 
-<body class="initial-pad">
+<body class="initial-pad" data-base="{{ app.request.baseUrl }}">
 {% block pageHeader %}
     <header class="">
         <div class="header-wrapper">
@@ -156,6 +157,18 @@
 
 
 <div class="page-mask"></div>
+
+<div class="page-loader">
+    <p>
+        <i class="fa fa-spinner fa-spin fa-2x"></i>
+    </p>
+</div>
+
+<div class="right-bar-loader">
+    <p>
+        <i class="fa fa-spinner fa-spin fa-2x"></i>
+    </p>
+</div>
 
 </body>
 </html>

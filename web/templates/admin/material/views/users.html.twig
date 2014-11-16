@@ -49,7 +49,7 @@
                                 <div class="user-name">
                                     {% if user.getAvatar %}
                                         <div class="user-image">
-                                            <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ user.getAvatar }}" alt="" height="60" />
+                                            <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ user.getAvatar }}.jpeg" alt="" height="60" />
                                         </div>
                                         <div>{{ user.displayName|upper }}</div>
                                     {% else %}

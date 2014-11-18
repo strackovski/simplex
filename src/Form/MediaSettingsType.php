@@ -45,7 +45,8 @@ class MediaSettingsType extends AbstractType
             ->add('imageResampleQuality', 'text', array(
                 'required' => false,
                 'attr' => array(
-                    'class' => 'form-slider'
+                    'class' => 'form-slider',
+                    'placeholder' => '0-100'
                 )
             ))
             ->add(

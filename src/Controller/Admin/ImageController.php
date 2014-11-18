@@ -114,6 +114,9 @@ class ImageController extends ActionControllerAbstract
             $image->setInLibrary(true);
             $image->setFile($uploadedFile);
             $image->setName($uploadedFile->getClientOriginalName());
+            $image->setMetadata($metadata = new Metadata());
+            $this->media->save($image);
+            $image->setMetadata($metadata->setData($this->manager->metadata($image)));
 
             try {
                 $this->media->save($image);

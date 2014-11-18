@@ -80,6 +80,7 @@ class AsseticSimplexBridge
                 ));
 
                 $am->get('styles')->setTargetPath('styles.css');
+
                 $am->set(
                     'jquery',
                     new FileAsset(

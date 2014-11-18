@@ -35,14 +35,27 @@ class UserProfileType extends AbstractType
         $builder
             ->add('first_name', 'text', array(
                 'constraints' => new Assert\NotBlank(),
+                'attr' => array(
+                    'placeholder' => 'Your first'
+                )
             ))
             ->add('last_name', 'text', array(
                 'constraints' => new Assert\NotBlank(),
+                'attr' => array(
+                    'placeholder' => 'and last name'
+                )
             ))
             ->add('description', 'textarea', array(
-                'attr' => array('rows' => '8')
+                'attr' => array(
+                    'rows' => '8',
+                    'placeholder' => 'Enter description (optional)'
+                )
             ))
-            ->add('save', 'submit')
+            ->add('save', 'submit', array(
+                'attr' => array(
+                    'class' => 'btn-save'
+                )
+            ))
             ->add('cancel', 'button', array(
                 'attr' => array(
                     'class' => 'btn-cmd cmd-cancel btn-cancel'

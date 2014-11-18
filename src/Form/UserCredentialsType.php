@@ -31,7 +31,10 @@ class UserCredentialsType extends AbstractType
     {
         $builder
             ->add('email', 'text', array(
-                'constraints' => new Assert\NotBlank()
+                'constraints' => new Assert\NotBlank(),
+                'attr' => array(
+                    'placeholder' => 'Enter email address'
+                )
             ))
             ->add('password', 'password', array(
                 'required' => true,

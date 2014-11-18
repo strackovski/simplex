@@ -3,6 +3,7 @@
 namespace nv\Simplex\Model\Listener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreFlushEventArgs;
 use nv\Simplex\Core\Media\ImageManager;
 use nv\Simplex\Core\Media\VideoManager;
 use nv\Simplex\Model\Entity\Image;
@@ -50,9 +51,6 @@ class MediaListener
      */
     protected function processImage(Image $image)
     {
-        $metadata = new Metadata();
-        $image->setMetadata($metadata->setData($this->imageManager->metadata($image)));
-
         $this->imageManager->thumbnail($image, $this->settings->getImageResizeDimensions());
 
         $this->settings->getImageAutoCrop() ?

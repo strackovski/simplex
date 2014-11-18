@@ -58,7 +58,11 @@ class PageQueryType extends AbstractType
                 ),
                 'required' => false
             ))
-            ->add('value', 'text')
+            ->add('value', 'text', array(
+                'attr' => array(
+                    'placeholder' => 'Value'
+                )
+            ))
             ->add('sortBy', 'choice', array(
                 'choices' => array('asc' => 'Ascending', 'desc' => 'Descending'),
             ))

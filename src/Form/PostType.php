@@ -82,7 +82,7 @@ class PostType extends AbstractType
                 'class' => ''
                 )
             ))
-            ->add('published_interval', 'datetime', array(
+            /*->add('published_interval', 'datetime', array(
                 'label' => 'Publish during this interval',
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
@@ -99,7 +99,7 @@ class PostType extends AbstractType
                 'attr' => array(
                     'class' => 'flat-input'
                 )
-            ))
+            ))*/
             ->add('exposed', 'checkbox', array(
                 'label' => 'Expose this post',
                 'required' => false

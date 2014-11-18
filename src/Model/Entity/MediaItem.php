@@ -445,7 +445,7 @@ abstract class MediaItem extends TimestampableAbstract
     /**
      * @param $metadata
      */
-    public function setMetadata($metadata)
+    public function setMetadata(Metadata $metadata)
     {
         $this->metadata = $metadata;
     }

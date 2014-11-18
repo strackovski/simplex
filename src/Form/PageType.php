@@ -78,12 +78,21 @@ class PageType extends AbstractType
         $builder
             ->add('title', 'text', array(
                 'constraints' => new Assert\NotBlank(),
+                'attr' => array(
+                    'placeholder' => 'Page title'
+                )
             ))
             ->add('description', 'textarea', array(
-                'required' => false
+                'required' => false,
+                'attr' => array(
+                    'placeholder' => 'Enter description (optional)'
+                )
             ))
             ->add('slug', 'text', array(
                 'constraints' => new Assert\NotBlank(),
+                'attr' => array(
+                    'placeholder' => 'Enter slug for this page'
+                )
             ))
             ->add('typeColor', 'choice', array(
                 'choices' => array(

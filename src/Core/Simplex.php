@@ -145,16 +145,22 @@ class Simplex extends Application
         $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
             $twig->addFunction(new \Twig_SimpleFunction('display', function ($asset) use ($app) {
                 $basePath = dirname(dirname(dirname(__FILE__))) . '/web/uploads/';
-                $baseUrl = $app['url_generator']->getContext()->getBaseUrl()  . '/uploads/';
+                $baseUrl = $app['url_generator']->getContext()->getBaseUrl();
+
+                if ($index = strpos($baseUrl, 'index_dev.php')) {
+                    $baseUrl = str_replace('index_dev.php', '', $baseUrl);
+                } else {
+                    $baseUrl = str_replace('index_dev.php', '', $baseUrl) . '/';
+                }
 
                 if (strpos($asset, ":") !== false) {
                     list($type, $name) = explode(":", $asset);
                     if (file_exists($file = $basePath . $type . '/' . $name)) {
-                        return $baseUrl . $type . '/' . $name;
+                        return $baseUrl . 'uploads/' . $type . '/' . $name;
                     }
                 }
 
-                return $app['url_generator']->getContext()->getBaseUrl() . '/assets/images/empty.png';
+                return $baseUrl . 'assets/images/empty.png';
             }));
 
             return $twig;

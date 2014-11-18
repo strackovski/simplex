@@ -196,7 +196,6 @@ class MediaRepository extends EntityRepository
         $em = $this->getEntityManager();
         if ($item->getMetadata() instanceof Metadata) {
             $em->remove($item->getMetadata());
-            $item->setMetadata(null);
         }
         $em->remove($item);
         $em->flush();

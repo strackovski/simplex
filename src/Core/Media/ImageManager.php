@@ -37,7 +37,6 @@ class ImageManager implements MediaManagerInterface
         $this->imagine = $imagine;
     }
 
-
     /**
      * Generate thumbnails
      *
@@ -256,6 +255,7 @@ class ImageManager implements MediaManagerInterface
             $sections = explode(',', $exif['SectionsFound']);
         }
         $result = array();
+        $gps = array();
 
         if (array_key_exists('Make', $exif) && array_key_exists('Model', $exif)) $result['camera'] = $exif['Make'] . ' ' . $exif['Model'];
         if (array_key_exists('IsColor', $exif['COMPUTED'])) $result['is_color'] = $exif['COMPUTED']['IsColor'];
@@ -271,6 +271,10 @@ class ImageManager implements MediaManagerInterface
 
         $result['has_faces'] = '@todo';
         $result['color_palette'] = '@todo';
+
+        if (count($gps) > 0) {
+            $result['gps'] = $gps;
+        }
 
         return $result;
     }

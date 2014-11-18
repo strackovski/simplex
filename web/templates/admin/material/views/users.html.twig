@@ -61,13 +61,13 @@
                                 </div>
                             </div>
                             <div class="item">
-                                <div>ROLE</div>
+                                <div>{{ user.getRoles|join(', ')|replace('_', ' ') }}</div>
                             </div>
                             <div class="item">
                                 <div>{{ user.getCreatedAt|date('M d \'y h:i') }}</div>
                             </div>
                             <div class="item">
-                                <a class="detail-btn" href="#">
+                                <a class="detail-btn" href="{{ app.url_generator.generate('admin/user/get', {user:user.getId}) }}">
                                     <i class="fa fa-ellipsis-v"></i>
                                 </a>
                             </div>

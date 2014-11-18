@@ -10,7 +10,7 @@
 
 {% block tabPaneContent %}
 
-{{ form_start(form) }}
+{{ form_start(form, {'action': app.url_generator.generate('admin/settings/mail') }) }}
 
 <div class="settings-section">
     <div class="settings-name">
@@ -22,7 +22,7 @@
             The mailing system is required for user account activation, automated user credentials support, and
             email logging. It is recommended you enable and configure your system mailing account.
         </div>
-        <div class="form-group field field-small option">
+        <div class="form-group field option">
             {{ form_row(form.enableMailing) }}
         </div>
     </div>
@@ -41,12 +41,12 @@
             {{ form_widget(form.mailTransport) }}
             {{ form_errors(form.mailTransport) }}
         </div>
-        <div class="form-group field field-small">
+        <div class="form-group form-element">
             {{ form_label(form.mailHost) }}
             {{ form_widget(form.mailHost) }}
             {{ form_errors(form.mailHost) }}
         </div>
-        <div class="form-group field field-small">
+        <div class="form-group form-element">
             {{ form_label(form.mailPort) }}
             {{ form_widget(form.mailPort) }}
             {{ form_errors(form.mailPort) }}
@@ -62,12 +62,12 @@
         <div class="des">
             Account credentials provided by mail service provider.
         </div>
-        <div class="form-group field field-small">
+        <div class="form-group form-element">
             {{ form_label(form.mailPassword) }}
             {{ form_widget(form.mailPassword) }}
             {{ form_errors(form.mailPassword) }}
         </div>
-        <div class="form-group field field-small">
+        <div class="form-group form-element">
             {{ form_label(form.mailUsername) }}
             {{ form_widget(form.mailUsername) }}
             {{ form_errors(form.mailUsername) }}

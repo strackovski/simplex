@@ -1,0 +1,51 @@
+<div class="modal-left">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                {% block body %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <div class="col-xs-4"></div>
+        <div class="col-xs-4 title">
+            <div class="paper-btn modal-prev"><i class="fa fa-arrow-left"></i></div>
+            <div class="paper-btn modal-next"><i class="fa fa-arrow-right"></i></div>
+        </div>
+    </div>
+</div>
+
+{% block modalRight %}
+    <div class="modal-right-bar">
+        <div class="right-bar-header">
+            <div class="top-header">
+                <div class="right-aux-toolbar">
+                    <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fa fa-times"></i></a>
+                    <a href="#" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
+                    <a href="#" class="paper-btn edit-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="fa fa-pencil"></i></a>
+                    <a href="#" class="paper-btn edit-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="View"><i class="fa fa-eye"></i></a>
+                </div>
+            </div>
+            <div class="bottom-header">
+                <h4>Post Title</h4>
+            </div>
+        </div>
+
+        <div class="right-bar-content">
+            <div class="content-section">
+                <div class="section-title">
+                    Details
+                </div>
+
+                <div class="section-entity">
+                    <p>title</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

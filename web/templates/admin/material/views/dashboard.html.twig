@@ -16,136 +16,142 @@
 
 {% block content %}
 
-    <div class="grid">
-        <div class="grid-outer">
-            <div class="row db-tabs">
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs nav-tabs-mini" role="tablist">
-                    <li class="tab-lead disabled"><span><i class="fa fa-bar-chart-o"></i> SITE STATS <i class="fa fa-angle-right"></i></span></li>
-                    <li class="active"><a href="#home" role="tab" data-toggle="tab">CONTENT</a></li>
-                </ul>
+    <div class="grid grid-dashboard">
 
-                <!-- Tab panes -->
-                <div class="tab-content tabs-mini">
-                    <div class="tab-pane active" id="home">
-                        <div class="row">
-                            <div class="col-sm-12 col-xs-12">
-                                <h5>Content creation trend (days)</h5>
-                                <div>
-                                    <canvas id="postsChart"></canvas>
-                                </div>
-                            </div>
+        <div class="dash-inner">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="card-wrap xsm">
+                        <div class="card">
+                            <h4>Welcome back, {{ user.displayName }}!</h4>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-sm-4 col-xs-12">
+                    <div class="card-wrap">
+                        <div class="card sm">
+                            <div class="card-left">
+                                <div class="card-img-wrap">
+                                    <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ user.getAvatar }}.jpeg" alt="" />
+                                </div>
+                            </div>
+                            <div class="card-right">
+                                <p>Logged in as <b>{{ user.displayName }}</b>.</p>
+                                <p>Last login on 2. 4. 2011</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="card sm">
+                            <p>Application running on <b>{{ app.request.getBaseURL() }}</b>.</p>
+                            <p>Administrative contact is {{ settings.getAdminEmail }}.</p>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="row db-control">
-                <div class="col-xs-12 col-sm-6">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            {% if user.getAvatar %}
-                                <div class="user-img">
-                                    <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ user.getAvatar }}" alt="" />
-                                </div>
+                <div class="card-wrap col-sm-8 col-xs-12">
+                    <div class="card bg">
+                        <h4>Site Stats</h4>
+                        <p>This is where the graph will go or whatevs, you know?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-xs-12">
+                    <div class="card-wrap">
+                        <div class="card">
+                            <a href="{{ app.url_generator.generate('admin/post/add') }}" class="raised-btn"><i class="fa fa-file-text"></i><i class="fa fa-plus"></i> New post</a>
+                            <a href="{{ app.url_generator.generate('admin/page/add') }}" class="raised-btn"><i class="fa fa-file"></i><i class="fa fa-plus"></i> New page</a>
+                            <a href="{{ app.url_generator.generate('admin/user/add') }}" class="raised-btn"><i class="fa fa-user"></i><i class="fa fa-plus"></i> New user</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <div class="card-wrap">
+                        <div class="card">
+                            <a href="{{ app.url_generator.generate('admin/settings') }}" class="raised-btn"><i class="fa fa-cog"></i> Settings</a>
+                            {% if app.settings.getLive == 1 %}
+                                <a href="" class="form-btn raised-btn"><i style="color: limegreen;" class="fa fa-check"></i> Page is live</a>
                             {% else %}
-                                <div class="user-img">
-                                    <img src="{{ asset('image:default-user-icon-profile.png') }}" alt="" />
-                                </div>
+                                <a href="" class="form-btn raised-btn"><i class="fa fa-arrow-down"></i> Page is down</a>
                             {% endif %}
                         </div>
-                        <div class="col-xs-9">
-                            <h4 class="page-header clean">Welcome back, {{ user.displayName }}!</h4>
-                            <p>Application running on {{ app.request.getBaseURL() }}. Administrative contact is {{ settings.getAdminEmail }}.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-xs-12">
+                    <div class="card-wrap">
+                        <div class="card bg">
+                            <h5 class="latest-header"><i class="fa fa-clock-o"></i> Latest posts</h5>
+                            {% if latest is defined %}
+                                <table class="table list-overview">
+                                    {% for latestPost in latest.posts %}
+                                        <tr>
+                                            <td>{{ latestPost.getTitle }}</td>
+                                            <td class="text-right">{{ latestPost.getCreatedAt|date('M/d h:i') }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-
-                <div class="col-xs-12 col-sm-6">
-                    <div class="row">
-                        <div class="col-xs-4 col-sm-4">
-                            <div class="list-group text-center">
-                                <a href="{{ app.url_generator.generate('admin/post/add') }}" class="list-group-item"><i class="fa fa-file-text fa-2x"></i><i class="fa fa-plus"></i></a>
-                                <a href="{{ app.url_generator.generate('admin/page/add') }}" class="list-group-item"><i class="fa fa-file fa-2x"></i><i class="fa fa-plus"></i></a>
-                            </div>
+                <div class="col-sm-6 col-xs-12">
+                    <div class="card-wrap">
+                        <div class="card bg">
+                            <h5 class="latest-header"><i class="fa fa-clock-o"></i> Latest pages</h5>
+                            {% if latest is defined %}
+                                <table class="table list-overview">
+                                    {% for latestPage in latest.pages %}
+                                        <tr>
+                                            <td>
+                                                {% if latestPage.getQueries.count > 0 %}
+                                                    <i class="fa fa-circle-o" style="color:#1ca823;"></i> {{ latestPage.getTitle }}
+                                                {% else %}
+                                                    <i class="fa fa-circle-o" style="color:#999;"></i> {{ latestPage.getTitle }}
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-right">{{ latestPage.getCreatedAt|date('M/d h:i') }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            {% endif %}
                         </div>
-                        <div class="col-xs-4 col-sm-4">
-                            <div class="list-group text-center">
-                                <a href="{{ app.url_generator.generate('admin/user/add') }}" class="list-group-item"><i class="fa fa-user fa-2x"></i><i class="fa fa-plus"></i></a>
-                                <a href="{{ app.url_generator.generate('admin/settings') }}" class="list-group-item"><i class="fa fa-cogs fa-2x"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-xs-4 col-sm-4">
-                            <div class="list-group text-center">
-                                {% if app.settings.getLive == 1 %}
-                                    <a href="" class="list-group-item"><i style="color: deeppink;" class="fa fa-check fa-2x"></i></a>
-                                {% else %}
-                                    <a href="" class="list-group-item"><i class="fa fa-check fa-2x"></i></a>
-                                {% endif %}
-                            </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xs-12">
+                    <div class="card-wrap">
+                        <div class="card bg">
+                            <h5 class="latest-header"><i class="fa fa-clock-o"></i> Latest media</h5>
+                            {% if latest is defined %}
+                                <table class="table media-overview">
+                                    {% for latestMedia in latest.media %}
+                                        <tr>
+                                            <td>
+                                                <div class="media-img">
+                                                    {% if latestMedia.type == 'video' %}
+                                                        <img height="50" src="{{ app.request.basepath ~ '/uploads/crops/' ~ latestMedia.getMediaId ~ '.jpeg' }}">
+                                                    {% else %}
+                                                        <img height="50" src="{{ display('crops:' ~ latestMedia.getPath) }}">
+                                                    {% endif %}
+                                                </div>
+                                            </td>
+                                            <td class="text-center">{{ latestMedia.type }}</td>
+                                            <td class="text-right">{{ latestMedia.getCreatedAt|date('M/d h:i') }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
+        </div><!-- /.dash-inner -->
 
-            <div class="row db-control latest-overview">
-                <div class="col-xs-12 col-md-4">
-                    {% if latest is defined %}
-                        <h5 class="page-header clean tiny"><i class="fa fa-clock-o"></i> Latest posts</h5>
-                        <table class="table table-condensed table-small">
-                            {% for latestPost in latest.posts %}
-                                <tr>
-                                    <td>{{ latestPost.getTitle }}</td>
-                                    <td class="text-right">{{ latestPost.getCreatedAt|date('M/d h:i') }}</td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    {% endif %}
-
-                </div>
-                <div class="col-xs-12 col-md-4">
-                    {% if latest is defined %}
-                        <h5 class="page-header clean tiny"><i class="fa fa-clock-o"></i> Latest media</h5>
-                        <table class="table table-condensed table-small media-overview">
-                            {% for latestMedia in latest.media %}
-                                <tr>
-                                    <td>
-                                        <div class="media-img">
-                                            {% if latestMedia.type == 'video' %}
-                                                <img height="50" src="{{ app.request.basepath ~ '/uploads/crops/' ~ latestMedia.getMediaId ~ '.jpeg' }}">
-                                            {% else %}
-                                                <img height="50" src="{{ display('crops:' ~ latestMedia.getPath) }}">
-                                            {% endif %}
-                                        </div>
-                                    </td>
-                                    <td>{{ latestMedia.type }}</td>
-                                    <td class="text-right">{{ latestMedia.getCreatedAt|date('M/d h:i') }}</td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    {% endif %}
-                </div>
-                <div class="col-xs-12 col-md-4">
-                    {% if latest is defined %}
-                        <h5 class="page-header clean tiny"><i class="fa fa-clock-o"></i> Latest pages</h5>
-                        <table class="table table-condensed table-small">
-                            {% for latestPage in latest.pages %}
-                                <tr>
-                                    <td>
-                                        {% if latestPage.getQueries.count > 0 %}
-                                            <i class="fa fa-circle-o" style="color:#1ca823;"></i> {{ latestPage.getTitle }}
-                                        {% else %}
-                                            <i class="fa fa-circle-o" style="color:#999;"></i> {{ latestPage.getTitle }}
-                                        {% endif %}
-                                    </td>
-                                    <td class="text-right">{{ latestPage.getCreatedAt|date('M/d h:i') }}</td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
     </div>
 
 <script type="text/javascript" src="{{ app.request.basepath }}/assets/chartjs/Chart.min.js"></script>

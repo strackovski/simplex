@@ -21,7 +21,7 @@
                 <i class="fa fa-plus"></i>
             </a>
             <div class="grid-content">
-                <div class="item-list">
+                <div class="item-list page-list">
                     {% if pages|length < 1 %}
                         no pages
                     {% else %}
@@ -45,7 +45,7 @@
                                         {% if page.getSlug == '/' %}
                                             <div><i class="fa fa-circle-thin"></i> {{ page.getTitle }}</div>
                                         {% else %}
-                                            <div><i class="fa fa-circle-thin icon-{{ page.getTypeColor }}"></i> {{ page.getTitle }}</div>
+                                            <div><i class="fa fa-circle-thin fa-2x icon-{{ page.getTypeColor }}"></i> {{ page.getTitle }}</div>
                                         {% endif %}
                                     </div>
                                     <div class="item">

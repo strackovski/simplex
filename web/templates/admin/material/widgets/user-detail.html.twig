@@ -1,0 +1,48 @@
+<div class="right-bar-header">
+    <div class="top-header">
+        <div class="right-aux-toolbar">
+            <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fa fa-times"></i></a>
+            <a href="{{  app.url_generator.generate('admin/user/delete', {user:user.getId}) }}" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
+            <a href="{{ app.url_generator.generate('admin/user/edit', {user:user.getId}) }}" class="paper-btn edit-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="fa fa-pencil"></i></a>
+        </div>
+    </div>
+
+    <div class="bottom-header">
+        <h4>{{ user.displayName }}</h4>
+    </div>
+</div>
+
+<div class="right-bar-content">
+    <div class="content-section">
+        <div class="section-title">
+            Details
+        </div>
+
+        <div class="section-entity">
+            <p>{{ user.getRoles|join(', ') }}</p>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-entity">
+            <div class="dt">
+                Created
+            </div>
+            <div class="dd">
+                {{ user.getCreatedAt|date('M d h:i') }}
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-entity">
+            {% if user.getPostsAuthored.count > 0 %}
+                <div class="media-box">
+                    {% for post in user.getPostsAuthored%}
+                        {{ post.getTitle }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

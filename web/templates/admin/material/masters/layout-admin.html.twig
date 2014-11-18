@@ -18,6 +18,7 @@
 
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/jquery-1.11.1.js"></script>
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/jquery-ui.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/jquery.history.js"></script>
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/bootstrap.js"></script>
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/dropzone.js"></script>
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/main.js"></script>
@@ -79,9 +80,26 @@
                 <a href="{{ app.url_generator.generate('admin/pages') }}">Pages</a>
                 <a href="{{ app.url_generator.generate('admin/settings') }}">Settings</a>
                 <a href="{{ app.url_generator.generate('admin/users') }}">Users</a>
-                <a href="{{ app.url_generator.generate('admin/user/profile') }}">My Profile</a>
             {% endif %}
         </nav>
+
+        <div class="user-corner">
+            <div class="corner-item">
+                <div class="avatar-wrap">
+                    {% if app.security.token and app.security.token.user.getAvatar %}
+                        <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ app.security.token.user.getAvatar }}.jpeg" alt="User avatar" />
+                    {% else %}
+                        <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt="User avatar" />
+                    {% endif %}
+                </div>
+            </div>
+            <div class="corner-item">
+                <b><a href="{{ app.url_generator.generate('admin/user/profile') }}">{{ app.security.token ? app.security.token.user.displayName : null }} <i class="fa fa-angle-right"></i></a></b>
+                <a class="logout-btn" href="{{ path('admin_logout') }}">Logout</a>
+            </div>
+
+
+        </div>
     </div>
 </div>
 
@@ -89,20 +107,34 @@
 {% endblock %}
 
 <div class="modal media-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <img src="halloween_pumpkin.png" alt="alt"/>
+    <div class="modal-left">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="halloween_pumpkin.png" alt="alt"/>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="modal-footer">
-        <div class="col-xs-4"></div>
-        <div class="col-xs-4 title">
-            <div class="paper-btn modal-prev"><i class="fa fa-arrow-left"></i></div>
-            <div class="paper-btn modal-next"><i class="fa fa-arrow-right"></i></div>
+        <div class="modal-footer">
+            <div class="col-xs-4"></div>
+            <div class="col-xs-4 title">
+                <div class="paper-btn modal-prev"><i class="fa fa-arrow-left"></i></div>
+                <div class="paper-btn modal-next"><i class="fa fa-arrow-right"></i></div>
+            </div>
+            <div class="col-xs-4"><a href="#" class="popover-link" data-toggle="popover" title="Share this" data-content="Share links..."><i class="fa fa-share"></i></a></div>
         </div>
-        <div class="col-xs-4"><a href="#" class="popover-link" data-toggle="popover" title="Share this" data-content="Share links..."><i class="fa fa-share"></i></a></div>
+    </div>
+
+    <div class="modal-right-bar">
+        <div class="right-bar-header">
+            <div class="top-header">
+                <div class="right-aux-toolbar">
+                </div>
+            </div>
+            <div class="bottom-header">
+                <h4>Post Title</h4>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -130,7 +162,9 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default form-btn" data-dismiss="modal">Close</button>
+                <div class="text-right">
+                    <button type="button" class="btn btn-default form-btn" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

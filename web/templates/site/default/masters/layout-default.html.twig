@@ -16,9 +16,11 @@
 <body>
 <div class="container">
     <nav>
-        {% for page in menu %}
-            <a href="{{ app.request.baseUrl ~ '/' ~ page.getSlug }}">{{ page.getTitle }}</a>
-        {% endfor %}
+        {% if menu is defined %}
+            {% for page in menu %}
+                <a href="{{ app.request.baseUrl ~ '/' ~ page.getSlug }}">{{ page.getTitle }}</a>
+            {% endfor %}
+        {% endif %}
     </nav>
 </div>
 <div class="jumbotron text-center">

@@ -2,7 +2,10 @@
     {% for video in videos %}
         <div class="tb-col removable col-lg-2 col-md-3 col-sm-4 col-xs-6">
             <div class="thumbnail">
-                <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ video.getMediaId ~ '.jpeg' }}">
+                {#<img src="{{ app.request.basepath ~ '/uploads/crops/' ~ video.getMediaId ~ '.jpeg' }}">#}
+                <a class="view-link" href="{{ app.url_generator.generate('admin/media/view', {id:video.getId}) }}">
+                    <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ video.getMediaId ~ '.jpeg' }}">
+                </a>
                 <input type="checkbox" name="delete_items[]" value="{{ video.getId }}" />
                 <a class="text-center thumb-action thumb-check" href="#"><i class="fa fa-check"></i></a>
             </div>
@@ -33,9 +36,7 @@
             </div>
         </div>
         <p>
-            Click the upload button at the top right <br/>
-            or just <br/>
-            <a class="form-btn" href="#">Upload some now</a>
+            <a class="form-btn new-media" href="#">Upload</a>
         </p>
     </div>
     <div class="tiles container-fluid">

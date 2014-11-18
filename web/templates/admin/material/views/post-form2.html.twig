@@ -10,14 +10,15 @@
                     <div class="header-title">
                         <span>
                             {% if post is defined %}
-                                {{ post.getTitle }}
                             {% else %}
                                 New post
                             {% endif %}
                         </span>
                     </div>
                 </div>
-                <div class="bottom-header-wrapper">
+                {#
+                <div class="bottom-header-wrapper bottom-header-wrapper2">
+
                     <div class="tabs">
                         <ul>
                             <li class="active">
@@ -31,7 +32,9 @@
                             </li>
                         </ul>
                     </div>
+
                 </div>
+                #}
             </div>
         </div>
     </header>
@@ -51,19 +54,36 @@
 {% endblock %}
 
 {% block content %}
+    {{ form_start(form) }}
+    <div class="grid-header">
+        <div class="grid-header-outer">
+            <div class="header-box">
+                <div class="form-group title form-element">
+                    {{ form_widget(form.title) }}
+                    {{ form_errors(form.title) }}
+                </div>
+            </div>
 
-    <div class="grid grid-clear">
+            <div class="header-box">
+                <div class="post-addition">
+                    <ul class="new-post-tabs">
+                        <li class="active">
+                            <a href="#home" role="tab" data-toggle="tab"><i class="fa fa-pencil"></i></a>
+                        </li>
+                        <li class="">
+                            <a href="#media" role="tab" data-toggle="tab"><i class="fa fa-camera"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid grid-post">
         <div class="grid-outer">
             <script type="text/javascript" src="{{ app.request.basepath }}/assets/tinymce/tinymce.min.js"></script>
-            {{ form_start(form) }}
             <div class="tab-wrap form">
                 <div class="tab-content">
                     <div class="tab-pane active" id="home">
-                        <div class="form-group title form-element">
-                            {{ form_label(form.title) }}
-                            {{ form_widget(form.title) }}
-                            {{ form_errors(form.title) }}
-                        </div>
                         <div class="form-group form-element">
                             {{ form_label(form.subtitle) }}
                             {{ form_widget(form.subtitle) }}
@@ -90,6 +110,35 @@
                             {{ form_errors(form.body) }}
                         </div>
                         <a href="#" class="btn-cmd cmd-edit-modal"></a>
+
+                        <div class="panel-box">
+                            <h4>Publishing options</h4>
+
+                            <div class="col-xs-6">
+                                <div class="field option">
+                                    {{ form_row(form.published) }}
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6">
+                                <div class="field option">
+                                    {{ form_row(form.exposed) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-box panel-condensed">
+                            <h4>Comments & ratings</h4>
+                            <div class="col-xs-12">
+                                <div class="field option">
+                                    {{ form_row(form.allow_ratings) }}
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="field option">
+                                    {{ form_row(form.allow_comments) }}
+                                </div>
+                            </div>
+                        </div>
 
                         {# {{ form_row(form.body) }}#}
                     </div>
@@ -129,27 +178,6 @@
                                     {{ form_row(form.exposed) }}
                                 </div>
                             </div>
-
-                            <div class="col-xs-6">
-                                <div class="col-xs-8">
-                                    <div class="form-group form-element prepend-icon">
-                                        {{ form_label(form.published_interval) }}
-                                        {{ form_widget(form.published_interval) }}
-                                        <div class="field-addon"><i class="fa fa-calendar"></i></div>
-                                        {{ form_errors(form.published_interval) }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="col-xs-8">
-                                    <div class="form-group form-element prepend-icon">
-                                        {{ form_label(form.exposed_interval) }}
-                                        {{ form_widget(form.exposed_interval) }}
-                                        <div class="field-addon"><i class="fa fa-calendar"></i></div>
-                                        {{ form_errors(form.exposed_interval) }}
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="panel-box panel-condensed">
                             <h4>Comments & ratings</h4>
@@ -171,9 +199,9 @@
                     {{ form_widget(form.save) }}
                 </div>
             </div>
-            {{ form_end(form) }}
         </div>
     </div>
+    {{ form_end(form) }}
 
 <div id="modal-editor" class="modal">
     <div class="modal-dialog modal-lg">

@@ -1,0 +1,434 @@
+.form-element.prepend-icon > input, .field.prepend-icon > input {
+    padding-left: 50px;
+
+}
+
+.field {
+    position: relative;
+}
+
+.field .field-addon {
+    top: 31px;
+}
+
+.field-addon {
+    position: absolute;
+    text-align: center;
+    height: 50px;
+    width: 50px;
+    line-height: 50px;
+    top: 19px;
+    pointer-events: none;
+}
+
+.field-small .field-addon {
+    height: 34px;
+    width: 34px;
+    line-height: 34px;
+    top: 0px;
+}
+
+.field-small .field-addon i.fa {
+    font-size: 1em;
+}
+
+.field-addon i.fa {
+    font-size: 1.3em;
+    color: #a0a0a0;
+}
+
+.field-focus .field-addon i.fa {
+    color: #6fafd8;
+    -webkit-transition: color ease-in-out .15s;
+    transition: color ease-in-out .15s;
+}
+
+.form-element.prepend-icon .field-addon {
+    left: 2px;
+}
+
+.addQuery-form .form-element.prepend-icon .field-addon {
+    left: auto;
+}
+
+.form-element.append-icon .field-addon {
+    right: 2px;
+}
+
+.form-center input {
+    text-align: center;
+}
+
+/*
+
+
+.option label {
+    padding-left: 0;
+}
+
+.option label > input {
+    margin-left: 0 !important;
+    position: absolute;
+    left: 0;
+    position: absolute;
+
+    min-height: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    opacity: 0;
+}
+*/
+
+
+.option .checksquare, .option .radiobox {
+    position: relative;
+    margin-right: 7px;
+    background: white;
+    display: inline-block;
+    border: 2px solid #d3d8db;
+    height: 23px;
+    width: 23px;
+    top: 6px;
+    border-radius: 3px;
+    outline: 0;
+    font-size: 14px;
+    box-sizing: border-box;
+    font-weight: bold;
+
+}
+
+.option .radiobox {
+    border-radius: 50%;
+
+}
+
+.field-small.option .checksquare, .field-small.option .radiobox {
+    height: 20px;
+    width: 20px;
+    border-width: 1px;
+}
+
+.option .checksquare-selected {
+    background: #2196F3;
+    border-color: #2196F3;
+}
+
+.option .radiobox-selected {
+    border-color: #2196F3;
+}
+
+.option .checksquare-selected:before {
+    position: absolute;
+    display: block;
+    content: '';
+    top: 6px;
+    left: 5px;
+    width: 6px;
+    height: 3px;
+    border: solid #fff;
+    box-sizing: content-box;
+    border-width: 0 0 3px 3px;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.option .radiobox-selected:before {
+    position: absolute;
+    display: block;
+    content: '';
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #2196F3;
+    box-sizing: content-box;
+}
+
+
+.field-small.option .checksquare-selected:before {
+    top: 5px;
+}
+
+/*
+.form-wrap .field-addon {
+    top: 22px;
+}
+
+.form-wrap .field > input {
+    line-height: normal;
+}
+
+#media .ab-content .field-small p {
+    padding-top: 33px;
+}
+
+*/
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-horizontal .form-group {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.form-group input[type="checkbox"],
+.form-group input[type="radio"] {
+    display: none;
+}
+
+input, textarea {
+    font-family: Roboto !important;
+}
+.form-group label {
+    /*padding-top: 16px;*/
+    font-size: 13px;
+    color: #2196F3;
+    display: block;
+}
+
+.form-group .checkbox label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-control, .form-control:focus {
+     border-radius: 0px;
+     -webkit-box-shadow: none;
+     box-shadow: none;
+}
+
+.form-group {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.form-element {
+    position: relative;
+}
+
+.form-element input, .form-element textarea {
+    background: none;
+    display: block;
+    width: 100%;
+    margin: 0;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    border-radius: 0;
+    padding: 8px 4px;
+    font-size: 14px;
+    color: #555;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.14);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: none;
+    -webkit-transition: border-color ease-in-out .25s;
+    -o-transition: border-color ease-in-out .25s;
+    transition: border-color ease-in-out .25s;
+    resize: none;
+}
+
+.form-element textarea, button {
+    border: 1px solid rgba(0,0,0,0.14);
+}
+
+.form-element input:focus, .form-element textarea:focus {
+    border-color: #2196F3;
+    outline: none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+/*.form-action .btn, .form-btn, .post-submit-controls .btn {
+    outline: 0;
+    height: 36px;
+    border: none;
+    line-height: 36px;
+    min-width: 64px;
+    padding: 0 8px;
+    margin: 0 4px;
+    font-size: 14px;
+    color: #fff;
+    font-weight: 400;
+    border-radius: 4px;
+    background: #2196F3;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    text-transform: uppercase;
+    min-width: 88px;
+
+    -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.14);
+    -moz-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.14);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.14);
+
+    -webkit-transition: background 0.15s ease, box-shadow 0.15s ease;
+    -moz-transition: background 0.15s ease, box-shadow 0.15s ease;
+    -ms-transition: background 0.15s ease, box-shadow 0.15s ease;
+    -o-transition: background 0.15s ease, box-shadow 0.15s ease;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+}*/
+/*
+.form-action .btn:hover, .form-btn:hover, .post-submit-controls .btn:hover {
+    background: #1E88E5;
+    -webkit-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
+    -moz-box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
+    -webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.26);
+    -moz-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.26);
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.26);
+    color: #fff;
+    border: none;
+}*/
+
+.btn-save, .raised-btn {
+    outline: 0;
+    height: 36px;
+    border: none;
+    line-height: 36px;
+    min-width: 64px;
+    padding: 0 8px;
+    margin: 0 4px;
+    font-size: 14px;
+    color: #fff;
+    font-weight: 400;
+    border-radius: 4px;
+    background: #2196F3;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    text-transform: uppercase;
+    min-width: 88px;
+
+    -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.14);
+    -moz-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.14);
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.14);
+
+    -webkit-transition: background 0.15s ease, box-shadow 0.15s ease;
+    -moz-transition: background 0.15s ease, box-shadow 0.15s ease;
+    -ms-transition: background 0.15s ease, box-shadow 0.15s ease;
+    -o-transition: background 0.15s ease, box-shadow 0.15s ease;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.raised-btn {
+    -webkit-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.24);
+    -moz-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.24);
+}
+
+
+.form-btn.raised-btn:hover {
+    border: 1px solid transparent;
+    -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.24);
+    -moz-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.24);
+    color: #2196F3;
+}
+
+.raised-btn:hover {
+    color: #fff;
+    -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.44);
+    -moz-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.44);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.44);
+}
+
+.btn-save:hover {
+    -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.24);
+    -moz-box-shadow: 0 3px 8px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.24);
+}
+
+.form-btn, .btn-cancel {
+    outline: 0;
+    height: 36px;
+    line-height: 36px;
+    min-width: 64px;
+    padding: 0 8px;
+    margin: 0 4px;
+    font-size: 14px;
+    color: #2196F3;
+    font-weight: 400;
+    border-radius: 4px;
+    background: none;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    -webkit-transition: background 0.15s ease, box-shadow 0.15s ease;
+    -moz-transition: background 0.15s ease, box-shadow 0.15s ease;
+    -ms-transition: background 0.15s ease, box-shadow 0.15s ease;
+    -o-transition: background 0.15s ease, box-shadow 0.15s ease;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+
+}
+
+.controls-group .form-btn {
+    display: block;
+    color: #2196F3;
+}
+
+.controls-group .form-btn i.fa{
+    padding-right: 6px;
+}
+
+.form-btn:hover, .form-action .btn:hover, .post-submit-controls .btn:hover {
+    border: 1px solid rgba(0,0,0,0.14);
+}
+
+.form-btns, .post-submit-controls {
+    text-align: right;
+}
+
+
+.form-action {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.radio label, .checkbox label {
+    padding-left: 0;
+}
+.settings-content:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+.radio-img {
+    display: inline-block;
+    line-height: 100px;
+    border: 5px solid #fff;
+    margin: 5px 20px;
+    margin-bottom: -65px;
+    width: 160px;
+    height: 140px;
+}
+
+.radio-img:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+.radio > label {
+    height: 140px;
+}
+
+.form-group.field-small.option {
+    margin-bottom: 54px;
+}
+

@@ -1,5 +1,5 @@
 <div class="item-list">
-    <div class="item-wrap item-header">
+    <div class="simple-item-wrap simple-item-header">
         <div class="item">
             <div>Title</div>
         </div>
@@ -9,14 +9,10 @@
         <div class="item">
             <div>Last Modified</div>
         </div>
-        <div class="item">
-            <div>
-            </div>
-        </div>
     </div>
 
     {% for post in posts %}
-        <div class="item-wrap">
+        <div class="simple-item-wrap">
             <div class="item">
                 <div><a href="{{ app.url_generator.generate('admin/post/view', {post:post.getId}) }}">{{ post.getTitle }}</a></div>
             </div>
@@ -25,11 +21,6 @@
             </div>
             <div class="item">
                 <div>{{ post.getCreatedAt|date }}</div>
-            </div>
-            <div class="item">
-                <a class="detail-btn" href="{{ app.url_generator.generate('admin/post/get', {post:post.getId}) }}">
-                    <i class="fa fa-ellipsis-v"></i>
-                </a>
             </div>
         </div>
     {% endfor %}

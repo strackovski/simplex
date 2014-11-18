@@ -31,7 +31,7 @@
 {% block rightBlock %}
     <nav class="">
         <div class="right-toolbar">
-            <a href="#upload" class="paper-btn upload-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Upload"><i class="fa fa-upload"></i></a>
+
         </div>
     </nav>
 {% endblock %}
@@ -39,6 +39,9 @@
 {% block content %}
     <div class="grid">
         <div class="grid-outer-full">
+            <a class="paper-btn float-btn tooltipped upload-btn" data-toggle="tooltip" data-placement="top" title="Upload" href="#upload">
+                <i class="fa fa-plus"></i>
+            </a>
             <div class="tab-content">
                 <div id="images" class="tab-pane fade in active">
                     {% block images %}
@@ -48,8 +51,8 @@
                                 <span class="media-count">0 selected</span>
                             </div>
                             <div class="mas">
-                                <a class="paper-btn media-select-all">Select</a>
-                                <a class="paper-btn media-deselect-all">Deselect</a>
+                                <a class="paper-btn media-select-all">Select all</a>
+                                <a class="paper-btn media-deselect-all">Cancel selection</a>
                             </div>
 
                             <div class="mas">

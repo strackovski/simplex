@@ -1950,25 +1950,32 @@ $(window).load(function () {
         // Bind to StateChange Event
         History.Adapter.bind(window, 'statechange', function() { // Note: We are using statechange instead of popstate
             State = History.getState();
+            console.log('statechange')
         });
 
-        $('#settings-tabs a').click(function(e) {
+        $('.settings-tabs a').click(function(e) {
             anchor = rootURL + $(this).attr('data-url');
             e.preventDefault();
             History.pushState(null, $(this).text(), $(this).attr('data-url'));
         });
 
         var displayTab = function () {
-            $('#settings-tabs a[data-url="' + anchor + '"]').click();
+            console.log('length : ' + $('.settings-tabs a[data-url="' + anchor + '"]').length)
+            $('.settings-tabs a[data-url="' + anchor + '"]').click();
         };
         window.addEventListener("popstate", function(e) {
+            console.log('popstate')
             var location1 = document.location.toString();
 
             anchor = location1.substr(location1.indexOf('13/') + 2);
 
-            if (anchor.length) {
+            //if($('.settings-tabs a[data-url="'+anchor+'"]').length) {
                 displayTab(anchor);
-            } /*else {
+            //}
+
+            /*if (anchor.length) {
+                displayTab(anchor);
+            }*/ /*else {
              anchor =  $('.transformer-tabs li.active a');
              displayTab(anchor);
              }*/

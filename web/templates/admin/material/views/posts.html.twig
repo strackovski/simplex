@@ -23,7 +23,31 @@
             <div class="grid-content">
 
                 {% if posts|length < 1 %}
-                    no posts
+                    <div class="empty-msg">
+                        <h2>No posts here</h2>
+                        <div class="holder holder-post">
+                            <div class="p-main">
+                                <div class="p-header">
+                                    <div class="p-flag"></div>
+                                    <div class="p-title"></div>
+                                </div>
+                                <div class="p-content">
+                                    <ul class="p-insides">
+                                        <li class="img"></li>
+                                        <li class="line"></li>
+                                        <li class="line"></li>
+                                        <li class="line"></li>
+                                        <li class="line"></li>
+                                        <li class="line"></li>
+                                        <li class="line"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <p>
+                            <a class="form-btn new-post" href="{{ app.url_generator.generate('admin/post/add') }}">Add a new post now</a>
+                        </p>
+                    </div>
                 {% else %}
                     {% include 'admin/material/widgets/post-list.html.twig' %}
                 {% endif %}
@@ -35,10 +59,6 @@
         <div class="right-bar-header">
             <div class="top-header">
                 <div class="right-aux-toolbar">
-                    <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fa fa-times"></i></a>
-                    <a href="#" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
-                    <a href="newpost.html" class="paper-btn edit-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="fa fa-pencil"></i></a>
-                    <a href="post.html" class="paper-btn view-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="View"><i class="fa fa-eye"></i></a>
                 </div>
             </div>
             <div class="bottom-header">

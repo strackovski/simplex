@@ -8,6 +8,7 @@ config/parameters.json
 /vendor/
 web/assets/build/*
 web/assets/build2
+web/assets/build2/*
 web/assets/dev
 web/uploads/*
 web/index_dev.php

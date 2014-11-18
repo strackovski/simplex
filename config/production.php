@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the __PACKAGE__ package.
+ * This file is part of Simplex WCM project.
  *
  * Copyright (c) 2014 Vladimir Stračkovski <vlado@nv3.org>
  * The MIT License <http://choosealicense.com/licenses/mit/>

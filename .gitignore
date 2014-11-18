@@ -7,9 +7,10 @@ config/mailing.json
 config/parameters.json
 /vendor/
 web/assets/build/*
+web/assets/build2
 web/assets/dev
 web/uploads/*
 web/index_dev.php
 composer.lock
-var/cache
-var/logs
+var/cache/*
+var/logs/*

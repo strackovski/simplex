@@ -60,7 +60,10 @@ class PageType extends AbstractType
         }
 
         foreach (glob($tplDir .$this->settings->getPublicTheme().'/views/*.twig') as $file) {
-            $files[basename($file, '.html.twig')] = ucfirst(basename($file, '.html.twig'));
+
+            if (basename($file) !== 'post.html.twig') {
+                $files[basename($file, '.html.twig')] = ucfirst(basename($file, '.html.twig'));
+            }
         }
 
         $authors = $this->pages->getAuthors();

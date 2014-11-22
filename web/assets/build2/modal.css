@@ -69,14 +69,12 @@
 }
 
 .media-modal .modal-dialog{
-    max-width: 600px;
-    max-height: 400px !important;
     margin: 0 auto;
 }
 
 .media-modal .modal-body{
     padding: 0;
-    overflow: hidden;
+
 }
 
 .media-modal img{
@@ -87,39 +85,42 @@
     display: block;
     margin: 0 auto;
     opacity: 0;
+    padding: 0 12px;
 }
 
 @media screen and (min-height: 400px) {
-    .media-modal .modal-body img {
+    .media-modal .modal-body img, .video-js .vjs-tech {
         max-height: 300px;
+
     }
+
 }
 
 @media screen and (min-height: 500px) {
-    .media-modal .modal-body img {
+    .media-modal .modal-body img, .video-js .vjs-tech {
         max-height: 400px;
     }
 }
 
 @media screen and (min-height: 600px) {
-    .media-modal .modal-body img {
+    .media-modal .modal-body img, .video-js .vjs-tech {
         max-height: 500px;
     }
 }
 @media screen and (min-height: 700px) {
-    .media-modal .modal-body img {
+    .media-modal .modal-body img, .video-js .vjs-tech {
         max-height: 600px;
     }
 }
 
 @media screen and (min-height: 800px) {
-    .media-modal .modal-body img {
+    .media-modal .modal-body img, .video-js .vjs-tech {
         max-height: 700px;
     }
 }
 
 @media screen and (min-height: 950px) {
-    .media-modal .modal-body img {
+    .media-modal .modal-body img, .video-js .vjs-tech {
         max-height: 850px;
     }
 }

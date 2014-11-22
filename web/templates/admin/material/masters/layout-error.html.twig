@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,500,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/reset.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/error.css"/>
+</head>
+<body>
+
+<div class="container-full">
+</div>
+<div class="content">
+    <div class="holder">
+        <div class="robot-wrap">
+            <div class="robot-head">
+                <div class="robot-eyes">
+                    <div class="robot-left-eye"></div>
+                    <div class="robot-right-eye"></div>
+                </div>
+                <div class="robot-mouth"></div>
+            </div>
+            <div class="robot-body"><div class="robot-feet"></div></div>
+        </div>
+    </div>
+
+    {% block content %}
+        Error
+    {% endblock %}
+</div>
+</body>
+</html>

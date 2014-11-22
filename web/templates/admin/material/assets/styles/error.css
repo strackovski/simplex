@@ -1,0 +1,233 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: Roboto;
+}
+body, h1, h2, h3, h4 {
+    padding: 0; margin: 0;
+}
+body,html {
+    min-height: 100%
+}
+
+body {
+    background: #42A5F5;
+
+}
+
+h1 {
+    font-size: 4.5em;
+    padding: 10px 0;
+}
+
+.container-full {
+    background: #64B5F6;
+    text-align: center;
+    position: relative;
+    height: 60vh;
+}
+
+p {
+    line-height: 2em;
+}
+
+.content {
+    width: 100%;
+    height: 360px;
+    position: absolute;
+    top: 50%;
+    margin-top: -120px;
+    color: #fff;
+    font-weight: 300;
+}
+
+.error-msg {
+    float: left;
+    width: 65%;
+    height: 360px;
+    padding: 20px;
+}
+
+.holder {
+    padding: 80px;
+    float: left;
+    width: 35%;
+}
+
+/* SAD ROBOT */
+.robot-wrap {
+    -webkit-transform: scale(1.8, 1.8);
+    transform: scale(1.8, 1.8);
+    -moz-transform: scale(1.8, 1.8);
+    -ms-transform: scale(1.8, 1.8);
+    -o-transform: scale(1.8, 1.8);
+    height: 180px;
+    position: relative;
+
+}
+
+@media screen and (max-width: 650px) {
+    .robot-wrap {
+        -webkit-transform: scale(1, 1);
+        transform: scale(1, 1);
+        -moz-transform: scale(1, 1);
+        -ms-transform: scale(1, 1);
+        -o-transform: scale(1, 1);
+    }
+}
+
+.robot-head {
+    width: 110px;
+    height: 90px;
+    background: #ccc;
+    position: absolute;
+    left: 50%;
+    margin-left: -55px;
+    top: 10px;
+    border-radius: 6px;
+}
+
+
+
+.robot-eyes > div {
+    height: 20px;
+    width: 14px;
+    background: #9a9a9a;
+    position: absolute;
+    top: 30px;
+    -webkit-animation: robotblink 5s infinite;
+    -o-animation: robotblink 5s infinite;
+    -ms-animation: robotblink 5s infinite;
+    -moz-animation: robotblink 5s infinite;
+    animation: robotblink 5s infinite;
+}
+
+.robot-left-eye {
+    left: 50%;
+    margin-left: -38px;
+}
+
+.robot-right-eye {
+    right: 50%;
+    margin-right: -38px;
+}
+
+.robot-mouth {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    bottom: 0;
+    left: 50%;
+    margin-left: -10px;
+    border-radius: 40px 40px 0 0;
+    border-top: 4px solid #9a9a9a;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+}
+
+.robot-body {
+    position: absolute;
+    top: 100px;
+    width: 70px;
+    height: 70px;
+    left: 50%;
+    margin-left: -35px;
+    background: #b9b9b9;
+}
+
+.robot-body:before, .robot-body:after {
+    position: absolute;
+    content: '';
+    top:0;
+    height: 50px;
+    width: 15px;
+    background: #7a7a7a;
+}
+
+.robot-body:before {
+    left:-15px;
+}
+.robot-body:after {
+    right: -15px;
+}
+
+.robot-feet {
+    position:absolute;
+    bottom: 0;
+    width: 100%;
+    left:0;
+}
+
+.robot-feet:before, .robot-feet:after {
+    position: absolute;
+    content: '';
+    height: 10px;
+    width: 20px;
+    background: #7a7a7a;
+    bottom: -3px;
+    border-radius: 20px 20px 0 0;
+}
+
+.robot-feet:before {
+    left: 12px;
+}
+
+.robot-feet:after {
+    right: 12px;
+}
+
+@keyframes robotblink {
+    0% { height: 20px; top: 30px; }
+    8% { height: 20px; top: 30px; }
+    13% { height: 3px; top: 47px; }
+    15% { height: 20px; top: 30px; }
+    72% { height: 20px; top:30px; }
+    77% { height: 3px; top: 47px; }
+    79% { height: 20px; top: 30px; }
+    100% { height: 20px; top: 30px; }
+}
+
+@-moz-keyframes robotblink {
+    0% { height: 20px; top: 30px; }
+    8% { height: 20px; top: 30px; }
+    13% { height: 3px; top: 47px; }
+    15% { height: 20px; top: 30px; }
+    72% { height: 20px; top:30px; }
+    77% { height: 3px; top: 47px; }
+    79% { height: 20px; top: 30px; }
+    100% { height: 20px; top: 30px; }
+}
+
+@-ms-keyframes robotblink {
+    0% { height: 20px; top: 30px; }
+    8% { height: 20px; top: 30px; }
+    13% { height: 3px; top: 47px; }
+    15% { height: 20px; top: 30px; }
+    72% { height: 20px; top:30px; }
+    77% { height: 3px; top: 47px; }
+    79% { height: 20px; top: 30px; }
+    100% { height: 20px; top: 30px; }
+}
+
+@-o-keyframes robotblink {
+    0% { height: 20px; top: 30px; }
+    8% { height: 20px; top: 30px; }
+    13% { height: 3px; top: 47px; }
+    15% { height: 20px; top: 30px; }
+    72% { height: 20px; top:30px; }
+    77% { height: 3px; top: 47px; }
+    79% { height: 20px; top: 30px; }
+    100% { height: 20px; top: 30px; }
+}
+
+@-webkit-keyframes robotblink {
+    0% { height: 20px; top: 30px; }
+    8% { height: 20px; top: 30px; }
+    13% { height: 3px; top: 47px; }
+    15% { height: 20px; top: 30px; }
+    72% { height: 20px; top:30px; }
+    77% { height: 3px; top: 47px; }
+    79% { height: 20px; top: 30px; }
+    100% { height: 20px; top: 30px; }
+}

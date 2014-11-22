@@ -66,10 +66,12 @@ class MediaListener
                 );
             }
 
+            /*
             $client = new \GearmanClient();
             $client->addServer();
             $result = $client->doBackground("send_email", json_encode($image->getId()));
-
+            */
+            
             if ($this->settings->detectFacesInPhotos()) {
                 $image->setHasFace(false);
                 if ($this->imageManager->detectFace($image)) {

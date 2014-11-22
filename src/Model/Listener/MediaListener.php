@@ -71,8 +71,9 @@ class MediaListener
             $client->addServer();
             $result = $client->doBackground("send_email", json_encode($image->getId()));
             */
-            
-            if ($this->settings->detectFacesInPhotos()) {
+
+
+            if ($this->settings->detectFacesInPhotos() == true) {
                 $image->setHasFace(false);
                 if ($this->imageManager->detectFace($image)) {
                     $image->setHasFace(true);

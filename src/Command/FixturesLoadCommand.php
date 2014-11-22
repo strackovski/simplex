@@ -43,14 +43,15 @@ class FixturesLoadCommand extends ApplicationAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+
         if ($this->app['debug']) {
             $authors = array();
             $user = new User();
-            $user->setFirstName('test');
-            $user->setLastName('test');
-            $user->setEmail('test@test.com');
+            $user->setFirstName('Janez');
+            $user->setLastName('Novak');
+            $user->setEmail('janez@novak.com');
             $user->setRoles('ROLE_ADMIN');
-            $user->setDescription("This is the test user.");
+            $user->setDescription("Moje ime je Janez Novak.");
             $user->setSalt($user->getEmail());
             $user->setIsActive(true);
             $user->setEncodedPassword($this->app['security.encoder.digest'], 'testing');
@@ -59,6 +60,7 @@ class FixturesLoadCommand extends ApplicationAwareCommand
             $this->app['orm.em']->persist($user);
             $authors[] = $user;
         }
+
 
         // Set route for homepage
         $homePage = new Page('Home');

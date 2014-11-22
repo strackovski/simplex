@@ -146,8 +146,10 @@
                                     {% set max = max(data.classes) %}
                                     {% for key, val in data.classes %}
                                         {% if val == max %}
-                                            <div class="pull-right score label label-success">{{ val|round(2, 'floor') }}</div>
-                                            <span class="nw pull-right">{{ key }}</span>
+                                            <div class="pull-right">
+                                                <span class="nw">{{ key }}</span>
+                                                <div class="score label label-success">{{ val|round(2, 'floor') }}</div>
+                                            </div>
                                         {% endif %}
                                     {% endfor %}
                                 </li>

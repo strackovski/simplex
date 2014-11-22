@@ -17,9 +17,9 @@
 {% block rightBlock %}
     <nav class="">
         <div class="right-toolbar">
-            <a href="{{ app.url_generator.generate('admin/posts') }}" class="paper-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Back"><i class="fa fa-times"></i></a>
+            <a href="{{ app.url_generator.generate('admin/posts') }}" class="paper-btn tooltipped back-btn" data-toggle="tooltip" data-placement="bottom" title="Back"><i class="fa fa-times"></i></a>
             <a href="#" class="paper-btn meta-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Metadata"><i class="fa fa-pie-chart"></i></a>
-            <a href="#" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
+            <a href="{{ app.url_generator.generate('admin/post/delete', {post:post.getId}) }}" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
         </div>
     </nav>
 {% endblock %}

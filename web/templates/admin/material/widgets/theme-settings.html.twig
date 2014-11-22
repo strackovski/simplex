@@ -17,13 +17,12 @@
 
 <div class="settings-section">
     <div class="settings-name">
-        <h4>Public theme</h4>
+        <h4>Site theme</h4>
     </div>
 
     <div class="settings-content">
         <div class="des">
-            When changing the resampling quality, existing media items do not get resampled. To unify quality off
-            all media items in your library, you can resample all items with a click below.
+            Theme for public pages.
         </div>
         <div class="form-group field field-small option">
             {{ form_widget(form.public_theme) }}
@@ -38,8 +37,7 @@
 
     <div class="settings-content">
         <div class="des">
-            When changing the resampling quality, existing media items do not get resampled. To unify quality off
-            all media items in your library, you can resample all items with a click below.
+            Administrator area theme.
         </div>
         <div class="form-group field field-small option">
             {{ form_widget(form.admin_theme) }}
@@ -47,8 +45,8 @@
     </div>
 </div>
 <div class="form-action">
-    {{ form_row(form.save) }}
     {{ form_row(form.cancel) }}
+    {{ form_row(form.save) }}
 </div>
 {{ form_end(form) }}
 

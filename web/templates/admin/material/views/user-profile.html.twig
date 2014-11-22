@@ -21,7 +21,7 @@
                                 <a href="#credentials" role="tab" data-toggle="tab">Credentials</a>
                             </li>
                             <li class="">
-                                <a href="#myposts" role="tab" data-toggle="tab">My posts</a>
+                                <a href="#myposts" role="tab" data-toggle="tab">My content</a>
                             </li>
                         </ul>
                     </div>
@@ -119,8 +119,7 @@
                 <div id="myposts" class="tab-pane fade">
                     {% if user.getPostsAuthored|length < 1 %}
                         <div class="empty-msg">
-                            <h2>No posts</h2>
-                            <p class="text-center">You haven't created any posts yet.</p>
+                            <h2 class="ghost big">You have not added any content yet</h2>
                             <div class="holder holder-post">
                                 <div class="p-main">
                                     <div class="p-header">

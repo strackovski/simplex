@@ -557,4 +557,9 @@ class Post extends TimestampableAbstract implements ObservableInterface
 
         return $this;
     }
+
+    public function getType()
+    {
+        return 'post';
+    }
 }

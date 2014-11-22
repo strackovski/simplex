@@ -19,14 +19,39 @@
         </div>
 
         <div class="section-entity">
-            <p>{{ user.getRoles|join(', ') }}</p>
+            <div class="dt">
+                Email
+            </div>
+            <div class="dd">
+                {{ user.getEmail }}
+            </div>
         </div>
-    </div>
 
-    <div class="content-section">
         <div class="section-entity">
             <div class="dt">
-                Created
+                Account status
+            </div>
+            <div class="dd">
+                {% if user.getIsActive %}
+                    Active
+                {% else %}
+                    Inactive
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="section-entity">
+            <div class="dt">
+                Assigned roles
+            </div>
+            <div class="dd">
+                {{ user.getRoles|join(', ') }}
+            </div>
+        </div>
+
+        <div class="section-entity">
+            <div class="dt">
+                Member since
             </div>
             <div class="dd">
                 {{ user.getCreatedAt|date('M d h:i') }}
@@ -35,13 +60,35 @@
     </div>
 
     <div class="content-section">
+        <div class="section-title">
+            Authored posts
+        </div>
         <div class="section-entity">
             {% if user.getPostsAuthored.count > 0 %}
-                <div class="media-box">
-                    {% for post in user.getPostsAuthored%}
-                        {{ post.getTitle }}
+                <ul class="list-box">
+                    {% for post in user.getPostsAuthored %}
+                        <li>{{ post.getTitle }} <span class="pull-right">{{ post.getCreatedAt|date('M d h:i') }}</span></li>
                     {% endfor %}
-                </div>
+                </ul>
+            {% else %}
+                This user has not contributed any posts yet.
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-title">
+            Edited posts
+        </div>
+        <div class="section-entity">
+            {% if user.getPostsEdited.count > 0 %}
+                <ul class="list-box">
+                    {% for post in user.getPostsEdited %}
+                        <li>{{ post.getTitle }} <span class="pull-right" {{ post.getUpdatedAt|date('M d h:i') }}</span></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                This user has not edited any posts yet.
             {% endif %}
         </div>
     </div>

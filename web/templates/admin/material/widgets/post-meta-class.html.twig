@@ -8,13 +8,21 @@
                                 <div class="meta-header">
                                     <span class="small">{{ data.classifier }}</span>
                                     {% if data.textCoverage >= 0 and data.textCoverage <= 0.25 %}
-                                        <span class="label label-danger pull-right">{{ data.textCoverage|round(2, 'floor') }}</span>
+                                        <div class="pull-right">
+                                            <span class="label label-danger">{{ data.textCoverage|round(2, 'floor') }}</span>
+                                        </div>
                                     {% elseif data.textCoverage > 0.25 and data.textCoverage <= 0.50 %}
-                                        <span class="label label-success pull-right">{{ data.textCoverage|round(2, 'floor') }}</span>
+                                        <div class="pull-right">
+                                            <span class="label label-success">{{ data.textCoverage|round(2, 'floor') }}</span>
+                                        </div>
                                     {% elseif data.textCoverage > 0.50 and data.textCoverage <= 0.75 %}
-                                        <span class="label label-success pull-right">{{ data.textCoverage|round(2,'floor') }}</span>
+                                        <div class="pull-right">
+                                            <span class="label label-success">{{ data.textCoverage|round(2,'floor') }}</span>
+                                        </div>
                                     {% elseif data.textCoverage > 0.75 and data.textCoverage <= 1 %}
-                                        <span class="label label-success pull-right">{{ data.textCoverage|round(2, 'floor') }}</span>
+                                        <div class="pull-right">
+                                            <span class="label label-success">{{ data.textCoverage|round(2, 'floor') }}</span>
+                                        </div>
                                     {% endif %}
                                 </div>
                             </td>

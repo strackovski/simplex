@@ -89,6 +89,11 @@
                             {{ form_widget(form.subtitle) }}
                             {{ form_errors(form.subtitle) }}
                         </div>
+                        <div class="form-group form-element">
+                            {{ form_label(form.body) }}
+                            {{ form_widget(form.body | raw) }}
+                            {{ form_errors(form.body) }}
+                        </div>
 
                         <div class="form-group form-element">
                             {{ form_label(form.tags) }}
@@ -104,39 +109,25 @@
                             {{ form_widget(form.keywords) }}
                         </div>
 
-                        <div class="form-group form-element">
-                            {{ form_label(form.body) }}
-                            {{ form_widget(form.body | raw) }}
-                            {{ form_errors(form.body) }}
-                        </div>
-                        <a href="#" class="btn-cmd cmd-edit-modal"></a>
-
-                        <div class="panel-box">
-                            <h4>Publishing options</h4>
-
-                            <div class="col-xs-6">
-                                <div class="field option">
-                                    {{ form_row(form.published) }}
-                                </div>
-                            </div>
-
-                            <div class="col-xs-6">
-                                <div class="field option">
-                                    {{ form_row(form.exposed) }}
-                                </div>
+                        <div class="col-xs-6">
+                            <div class="field option">
+                                {{ form_row(form.published) }}
                             </div>
                         </div>
-                        <div class="panel-box panel-condensed">
-                            <h4>Comments & ratings</h4>
-                            <div class="col-xs-12">
-                                <div class="field option">
-                                    {{ form_row(form.allow_ratings) }}
-                                </div>
+
+                        <div class="col-xs-6">
+                            <div class="field option">
+                                {{ form_row(form.exposed) }}
                             </div>
-                            <div class="col-xs-12">
-                                <div class="field option">
-                                    {{ form_row(form.allow_comments) }}
-                                </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="field option">
+                                {{ form_row(form.allow_ratings) }}
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="field option">
+                                {{ form_row(form.allow_comments) }}
                             </div>
                         </div>
 
@@ -162,39 +153,8 @@
                             {% endfor %}
                         </div>
                     </div>
-
-                    <div class="tab-pane" id="settings">
-                        <div class="panel-box">
-                            <h4>Publishing options</h4>
-
-                            <div class="col-xs-6">
-                                <div class="field option">
-                                    {{ form_row(form.published) }}
-                                </div>
-                            </div>
-
-                            <div class="col-xs-6">
-                                <div class="field option">
-                                    {{ form_row(form.exposed) }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel-box panel-condensed">
-                            <h4>Comments & ratings</h4>
-                            <div class="col-xs-12">
-                                <div class="field option">
-                                    {{ form_row(form.allow_ratings) }}
-                                </div>
-                            </div>
-                            <div class="col-xs-12">
-                                <div class="field option">
-                                    {{ form_row(form.allow_comments) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-                <div class="form-group submit-controls post-submit-controls">
+                <div class="form-group submit-controls post-submit-controls form-action">
                     {{ form_widget(form.cancel) }}
                     {{ form_widget(form.save) }}
                 </div>

@@ -1,7 +1,7 @@
 {% extends "admin/material/masters/layout-admin.html.twig" %}
 
 {% block pageHeader %}
-    <header class="">
+    <header class="big-header">
         <div class="header-wrapper">
             <div class="inner-header-wrapper">
                 <div class="top-header-wrapper">
@@ -11,100 +11,136 @@
                 </div>
             </div>
         </div>
+        <div class="float-wrap">
+            <a href="#" class="float-btn morph-initial morph-float"><i class="fa fa-plus"></i></a>
+            <div class="controls-hidden">
+                <a href="{{ app.url_generator.generate('admin/post/add') }}" class="float-btn action-btn tooltipped" data-toggle="tooltip" data-placement="left" title="New post"><i class="fa fa-file-text"></i></a>
+                <a href="{{ app.url_generator.generate('admin/page/add') }}" class="float-btn action-btn tooltipped" data-toggle="tooltip" data-placement="left" title="New page"><i class="fa fa-file"></i></a>
+            </div>
+        </div>
     </header>
 {% endblock %}
 
 {% block content %}
 
-    <div class="grid grid-dashboard">
+    <div class="dashboard-grid-header">
+        <div class="dashboard-grid-header-outer clearfix">
+            <div class="header-box info-box">
 
+                <div class="info-image">
+                    {% if user.getAvatar %}
+                        <img src="{{ display('crops:' ~ user.getAvatar.getPath) }}" alt="" />
+                    {% else %}
+                        <img src="{{ display('crops:none') }}" alt=""/>
+                    {% endif %}
+                </div>
+
+                <div class="info-text">
+                    <p>Welcome back, <b>{{ user.displayName }}</b>!</p>
+                    <a href="{{ app.url_generator.generate('admin/user/profile') }}">Manage your profile</a>
+                </div>
+
+            </div>
+
+            <div class="header-box info-box status-type right-info-box">
+                <div class="info-app-button">
+                    <a href="{{ app.url_generator.generate('admin/settings') }}"><i class="fa fa-cog"></i></a>
+                </div>
+                <div class="info-app-status">
+                    <p><b>{{ app.request.getBaseURL() }}</b></p>
+                    {% if app.settings.getLive == 1 %}
+                        <p>Site is online</p>
+                    {% else %}
+                        <p>Site is offline</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-dashboard">
         <div class="dash-inner">
             <div class="row">
-                <div class="col-xs-12">
-                    <div class="card-wrap xsm">
-                        <div class="card">
-                            <h4>Welcome back, {{ user.displayName }}!</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4 col-xs-12">
-                    <div class="card-wrap">
-                        <div class="card sm">
-                            <div class="card-left">
-                                <div class="card-img-wrap">
-                                    <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ user.getAvatar }}.jpeg" alt="" />
-                                </div>
-                            </div>
-                            <div class="card-right">
-                                <p>Logged in as <b>{{ user.displayName }}</b>.</p>
-                                <p>Last login on 2. 4. 2011</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-wrap">
-                        <div class="card sm">
-                            <p>Application running on <b>{{ app.request.getBaseURL() }}</b>.</p>
-                            <p>Administrative contact is {{ settings.getAdminEmail }}.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-wrap col-sm-8 col-xs-12">
+                <div class="card-wrap stripped-wrap col-xs-12">
                     <div class="card bg">
-                        <h4>Site Stats</h4>
-                        <p>This is where the graph will go or whatevs, you know?</p>
+                        <h5 class="latest-header">Latest</h5>
+                        <div class="chips">
+                            {% if latest is defined %}
+                                {% if latest.posts|length > 0 %}
+                                    {% for latestPost in latest.posts %}
+                                        <div class="chip">
+                                            <div class="chip-header">
+                                                <div class="chip-inner">
+                                                    <div class="chip-pre-header">
+                                                        <div class="pre-header-title">
+                                                            <h3>{{ latestPost.getTitle }}</h3>
+                                                        </div>
+                                                        <div class="chip-controls">
+                                                            <a href="{{ app.url_generator.generate('admin/post/view', {post:latestPost.getId}) }}"><i class="fa fa-ellipsis-v"></i></a>
+                                                            <a class="delete-post" href="{{ app.url_generator.generate('admin/post/delete', {post:latestPost.getId}) }}"><i class="fa fa-trash"></i></a>
+                                                            <a href="{{ app.url_generator.generate('admin/post/edit', {post:latestPost.getId}) }}"><i class="fa fa-pencil"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    {% if latestPost.getAuthor.getAvatar %}
+                                                        <img src="{{ display('crops:' ~ latestPost.getAuthor.getAvatar.getPath) }}" alt=""/>
+                                                    {% else %}
+                                                        <img src="{{ display('crops:none') }}" alt=""/>
+                                                    {% endif %}
+                                                    <div class="chip-summary">
+                                                        <h3>{{ latestPost.getTitle }}</h3>
+                                                        <p>by {{ latestPost.getAuthor.displayName }} <span class="connector">-</span> <span>{{ latestPost.getSubtitle }}</span></p>
+                                                    </div>
+                                                </div>
+                                                <div class="chip-loader"></div>
+                                            </div>
+                                            <div class="chip-content">
+                                                <div class="chip-inner">
+                                                    <p>
+                                                        {{ latestPost.getBody|raw }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <p class="ghost big">no postandos addiero yetando</p>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="card-wrap col-xs-12">
+                    <div class="card bg">
+                        <p class="ghost big">GOOGLE ANALYTICS DATA NOT AVAILABLE</p>
                     </div>
                 </div>
             </div>
 
+            {#
             <div class="row">
                 <div class="col-sm-6 col-xs-12">
                     <div class="card-wrap">
                         <div class="card">
-                            <a href="{{ app.url_generator.generate('admin/post/add') }}" class="raised-btn"><i class="fa fa-file-text"></i><i class="fa fa-plus"></i> New post</a>
-                            <a href="{{ app.url_generator.generate('admin/page/add') }}" class="raised-btn"><i class="fa fa-file"></i><i class="fa fa-plus"></i> New page</a>
-                            <a href="{{ app.url_generator.generate('admin/user/add') }}" class="raised-btn"><i class="fa fa-user"></i><i class="fa fa-plus"></i> New user</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                    <div class="card-wrap">
-                        <div class="card">
-                            <a href="{{ app.url_generator.generate('admin/settings') }}" class="raised-btn"><i class="fa fa-cog"></i> Settings</a>
-                            {% if app.settings.getLive == 1 %}
-                                <a href="" class="form-btn raised-btn"><i style="color: limegreen;" class="fa fa-check"></i> Page is live</a>
-                            {% else %}
-                                <a href="" class="form-btn raised-btn"><i class="fa fa-arrow-down"></i> Page is down</a>
-                            {% endif %}
+                            <a href="#" class="float-btn morph-initial action-btn"><i class="fa fa-plus"></i></a><div class="add-msg">Add something now</div>
+                            <div class="controls-hidden">
+                                <a href="{{ app.url_generator.generate('admin/post/add') }}" class="float-btn action-btn"><i class="fa fa-file-text"></i></a>
+                                <a href="{{ app.url_generator.generate('admin/page/add') }}" class="float-btn action-btn"><i class="fa fa-file"></i></a>
+                                <a href="{{ app.url_generator.generate('admin/user/add') }}" class="float-btn action-btn"><i class="fa fa-user"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            #}
+
             <div class="row">
-                <div class="col-sm-6 col-xs-12">
-                    <div class="card-wrap">
-                        <div class="card bg">
-                            <h5 class="latest-header"><i class="fa fa-clock-o"></i> Latest posts</h5>
-                            {% if latest is defined %}
-                                <table class="table list-overview">
-                                    {% for latestPost in latest.posts %}
-                                        <tr>
-                                            <td>{{ latestPost.getTitle }}</td>
-                                            <td class="text-right">{{ latestPost.getCreatedAt|date('M/d h:i') }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xs-12">
-                    <div class="card-wrap">
-                        <div class="card bg">
-                            <h5 class="latest-header"><i class="fa fa-clock-o"></i> Latest pages</h5>
-                            {% if latest is defined %}
+                <div class="card-wrap col-sm-6 col-xs-12">
+                    <div class="card bg">
+                        <h5 class="latest-header">Latest pages</h5>
+                        {% if latest is defined %}
+                            {% if latest.pages|length > 0 %}
                                 <table class="table list-overview">
                                     {% for latestPage in latest.pages %}
                                         <tr>
@@ -119,15 +155,18 @@
                                         </tr>
                                     {% endfor %}
                                 </table>
+                            {% else %}
+                                <p class="ghost big">no pagendos addiero yetando</p>
                             {% endif %}
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
-                <div class="col-sm-6 col-xs-12">
-                    <div class="card-wrap">
-                        <div class="card bg">
-                            <h5 class="latest-header"><i class="fa fa-clock-o"></i> Latest media</h5>
-                            {% if latest is defined %}
+
+                <div class="card-wrap col-sm-6 col-xs-12">
+                    <div class="card bg">
+                        <h5 class="latest-header">Latest media</h5>
+                        {% if latest is defined %}
+                            {% if latest.media|length > 0 %}
                                 <table class="table media-overview">
                                     {% for latestMedia in latest.media %}
                                         <tr>
@@ -145,8 +184,10 @@
                                         </tr>
                                     {% endfor %}
                                 </table>
+                            {% else %}
+                                <p class="ghost big">no mediandos addiero yetando</p>
                             {% endif %}
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -91,14 +91,15 @@ abstract class MediaItem extends TimestampableAbstract
      */
     protected $author;
 
-    /**
+    /*
      * Path to media file
      *
      * @var string
      *
      * @Column(type="string", length=255, nullable=true)
-     */
+     *
     protected $path;
+    */
 
     /**
      * Image file
@@ -109,10 +110,17 @@ abstract class MediaItem extends TimestampableAbstract
      *     maxSize = "5M",
      *     mimeTypes = {"image/jpeg", "image/gif", "image/png", "image/tiff"},
      *     maxSizeMessage = "The maximum allowed file size is 5MB.",
-     *     mimeTypesMessage = "Only the file types image are allowed."
+     *     mimeTypesMessage = "Only image file types are allowed."
      * )
      */
     protected $file;
+
+    /**
+     * Retrieved item name, like original file name
+     *
+     * @Column(name="file_ext", type="string", length=255, nullable=false)
+     */
+    protected $fileExtension;
 
     /**
      * Extracted metadata
@@ -133,6 +141,11 @@ abstract class MediaItem extends TimestampableAbstract
     protected $inLibrary;
 
     /**
+     * @Column(type="boolean", nullable=true)
+     */
+    protected $hasFace;
+
+    /**
      *  @Column(type="string", length=255, nullable=true)
      */
     protected $mediaCategory;
@@ -143,6 +156,22 @@ abstract class MediaItem extends TimestampableAbstract
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHasFace()
+    {
+        return $this->hasFace;
+    }
+
+    /**
+     * @param mixed $hasFace
+     */
+    public function setHasFace($hasFace)
+    {
+        $this->hasFace = $hasFace;
     }
 
     /**
@@ -197,15 +226,37 @@ abstract class MediaItem extends TimestampableAbstract
     }
 
     /**
+     * @return mixed
+     */
+    public function getFileExtension()
+    {
+        return $this->fileExtension;
+    }
+
+    /**
+     * @param mixed $fileExtension
+     */
+    public function setFileExtension($fileExtension)
+    {
+        $this->fileExtension = $fileExtension;
+    }
+
+    /**
      * Get absolute path to media file
      *
      * @return null|string
      */
     public function getAbsolutePath()
     {
+        return null === $this->mediaId . '.' . $this->fileExtension
+            ? null
+            : $this->getUploadRootDir().'/'. $this->mediaId . '.' . $this->fileExtension;
+
+        /*
         return null === $this->path
             ? null
             : $this->getUploadRootDir().'/'.$this->path;
+        */
     }
 
     /**
@@ -230,7 +281,7 @@ abstract class MediaItem extends TimestampableAbstract
      */
     public function getWebPath($variation = false)
     {
-        if ($this->getType() === 'image' and $variation !== false and $this->path !== null) {
+        if ($this->getType() === 'image' and $variation !== false and $this->getPath() !== null) {
             switch ($variation) {
                 case 'small':
                     $var = 'thumbnails/small/';
@@ -253,12 +304,12 @@ abstract class MediaItem extends TimestampableAbstract
                     break;
             }
 
-            return $var.$this->path;
+            return $var.$this->getPath();
         }
 
-        return null === $this->path
+        return null === $this->getPath()
             ? null
-            : $this->getUploadDir().'/'.$this->path;
+            : $this->getUploadDir().'/'.$this->getPath();
     }
 
     /**
@@ -304,8 +355,9 @@ abstract class MediaItem extends TimestampableAbstract
     {
         if (null !== $this->file) {
             $filename = sha1(uniqid(mt_rand(), true));
-            $this->path = $filename.'.'.$this->file->guessExtension();
+            //$this->path = $filename.'.'.$this->file->guessExtension();
             $this->mediaId = $filename;
+            $this->fileExtension = $this->file->guessExtension();
         }
     }
 
@@ -348,7 +400,7 @@ abstract class MediaItem extends TimestampableAbstract
 
         $this->file->move(
             $this->getUploadRootDir(),
-            $this->path
+            $this->getPath()
         );
 
         $this->file = null;
@@ -372,18 +424,22 @@ abstract class MediaItem extends TimestampableAbstract
 
     /**
      * @param string $path
-     */
+
     public function setPath($path)
     {
         $this->path = $path;
     }
-
+    */
     /**
      * @return string
      */
     public function getPath()
     {
+        /*
         return $this->path;
+        */
+
+        return $this->mediaId . '.' . $this->fileExtension;
     }
 
     /**
@@ -475,6 +531,10 @@ abstract class MediaItem extends TimestampableAbstract
      */
     public function getTitle()
     {
+        if ($this->title === null) {
+            return $this->name;
+        }
+
         return $this->title;
     }
 

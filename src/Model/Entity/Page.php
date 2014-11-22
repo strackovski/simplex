@@ -117,6 +117,11 @@ class Page extends TimestampableAbstract implements ObservableInterface
         $this->observers = array();
     }
 
+    public function getAuthor()
+    {
+        return 'none';
+    }
+
     /**
      * Return page title
      *
@@ -341,5 +346,10 @@ class Page extends TimestampableAbstract implements ObservableInterface
     public function getView()
     {
         return $this->view;
+    }
+
+    public function getType()
+    {
+        return 'page';
     }
 }

@@ -233,9 +233,7 @@ class User implements UserInterface
      * @param $password
      *
      * @internal param $container
-     * @todo test
      */
-    // public function setEncodedPassword($container, $password)
     public function setEncodedPassword(MessageDigestPasswordEncoder $encoder, $password)
     {
         if (!$encoder->isPasswordValid($this->password, $password, $this->getSalt())) {
@@ -246,17 +244,6 @@ class User implements UserInterface
 
             $this->setPassword($encoder->encodePassword($password, $this->getSalt()));
         }
-
-        /*
-        if (!$container['security.encoder.digest']->isPasswordValid($this->password, $password, $this->getSalt())) {
-
-            if ($this->password !== null) {
-                // notify
-            }
-
-            $this->setPassword($container['security.encoder.digest']->encodePassword($password, $this->getSalt()));
-        }
-        */
     }
 
     /**

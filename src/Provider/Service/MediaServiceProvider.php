@@ -6,6 +6,7 @@ use Neutron\Silex\Provider\ImagineServiceProvider;
 use nv\Simplex\Controller\Admin\ImageController;
 use nv\Simplex\Controller\Admin\MediaController;
 use nv\Simplex\Controller\Admin\VideoController;
+use nv\Simplex\Core\Media\FaceDetector;
 use nv\Simplex\Core\Media\ImageManager;
 use nv\Simplex\Core\Media\VideoManager;
 use nv\Simplex\Model\Listener\MediaListener;
@@ -30,8 +31,15 @@ class MediaServiceProvider implements ServiceProviderInterface, ControllerProvid
     {
         $app->register(new ImagineServiceProvider());
 
+        $app['image.face.detector'] = $app->share(function () use ($app) {
+            return new FaceDetector(dirname(dirname(dirname(__DIR__))) . '/config/fd.dat');
+        });
+
         $app['image.manager'] = $app->share(function () use ($app) {
-            return new ImageManager($app['imagine']);
+            return new ImageManager(
+                $app['imagine'],
+                $app['image.face.detector']
+            );
         });
 
         $app['video.manager'] = $app->share(function () use ($app) {

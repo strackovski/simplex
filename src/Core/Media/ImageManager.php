@@ -29,12 +29,36 @@ class ImageManager implements MediaManagerInterface
     /** @var ImagineInterface */
     private $imagine;
 
+    /** @var FaceDetector */
+    private $face;
+
     /**
      * @param ImagineInterface $imagine
+     * @param FaceDetector $fd
      */
-    public function __construct(ImagineInterface $imagine)
+    public function __construct(ImagineInterface $imagine, FaceDetector $fd = null)
     {
         $this->imagine = $imagine;
+        $this->face = $fd;
+    }
+
+    public function getFaceDetector()
+    {
+        return $this->face;
+    }
+
+    /**
+     * @param MediaItem $image
+     * @return bool
+     * @throws \Exception
+     */
+    public function detectFace(MediaItem $image)
+    {
+        return $this->face->faceDetect(
+            APPLICATION_ROOT_PATH .
+            '/web/uploads/' .
+            $image->getPath()
+        );
     }
 
     /**
@@ -87,7 +111,41 @@ class ImageManager implements MediaManagerInterface
      * @param MediaItem $image
      * @param array $options
      */
-    public function crop(MediaItem $image, array $options)
+    public function crop2(MediaItem $image, array $options, $destination = false)
+    {
+        $imageTemp = $this->imagine->open($image->getAbsolutePath());
+        $size = $imageTemp->getSize();
+
+        if (count($options) === 4) {
+            list($width, $height, $x, $y) = $options;
+            $box = new Box($width, $height);
+            $point = new Point($x, $y);
+
+        } else {
+            list($width, $height) = $options;
+            $box = new Box($width, $height);
+            $point = new Point(
+                $size->getWidth() / 2 - $width / 2,
+                $size->getHeight() / 2 - $height / 2
+            );
+        }
+
+        $writeTo = APPLICATION_ROOT_PATH . '/web/uploads/crops/' . $image->getPath();
+
+        if ($destination) {
+            $writeTo = $destination;
+        }
+
+        $imageTemp->crop($point, $box)->save($writeTo);
+    }
+
+    /**
+     * Crop a rectangle of predefined size from center of image
+     *
+     * @param MediaItem $image
+     * @param array $options
+     */
+    public function crop(MediaItem $image, array $options, $destination = false)
     {
         $imageTemp = $this->imagine->open($image->getAbsolutePath());
         $size = $imageTemp->getSize();
@@ -100,12 +158,13 @@ class ImageManager implements MediaManagerInterface
             $size->getHeight() / 2 - $height / 2
         );
 
-        $imageTemp->crop($point, $box)
-              ->save(
-                  APPLICATION_ROOT_PATH .
-                  '/web/uploads/crops/' .
-                  $image->getPath()
-              );
+        $writeTo = APPLICATION_ROOT_PATH . '/web/uploads/crops/' . $image->getPath();
+
+        if ($destination) {
+            $writeTo = $destination;
+        }
+
+        $imageTemp->crop($point, $box)->save($writeTo);
     }
 
     /**
@@ -169,6 +228,11 @@ class ImageManager implements MediaManagerInterface
             $imageTemp = $this->imagine->open($targetPath);
             $size      = $imageTemp->getSize();
             $wSize     = $watermark->getSize();
+
+            if ($size < $wSize) {
+                $watermark = $watermark->thumbnail(new Box($size->getWidth() / 4, $size->getHeight() / 4));
+                $wSize     = $watermark->getSize();
+            }
 
             switch ($watermarkPosition) {
                 // Top-right

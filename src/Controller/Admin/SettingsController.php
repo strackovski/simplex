@@ -16,6 +16,7 @@ use nv\Simplex\Form\MailSettingsType;
 use nv\Simplex\Form\ThemeSettingsType;
 use nv\Simplex\Model\Entity\Settings;
 use nv\Simplex\Model\Repository\SettingsRepository;
+use PhpAmqpLib\Connection\AMQPConnection;
 use Silex\Application;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

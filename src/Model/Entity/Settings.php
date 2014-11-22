@@ -164,6 +164,14 @@ class Settings extends TimestampableAbstract
     protected $watermarkMedia = false;
 
     /**
+     * Enable/disable media item watermarking
+     *
+     * @var bool
+     * @Column(name="face_detect", type="boolean")
+     */
+    protected $detectFacesInPhotos = false;
+
+    /**
      * @ManyToOne(targetEntity="Image", cascade="persist")
      * @JoinColumn(name="watermark", referencedColumnName="id")
      **/
@@ -248,7 +256,7 @@ class Settings extends TimestampableAbstract
         $this->adminEmail = $email;
         $this->language = 'en';
         $this->current = $current;
-        $this->adminTheme = 'default';
+        $this->adminTheme = 'material';
         $this->publicTheme = 'default';
 
         $this->allowPublicUserRegistration = false;
@@ -261,6 +269,7 @@ class Settings extends TimestampableAbstract
         $this->imageKeepOriginal = true;
         $this->imageResampleQuality = 80;
         $this->imageStripMeta = true;
+        $this->detectFacesInPhotos = false;
 
         $this->setImageResizeDimensions(array(
             'small' => array(240,160),
@@ -268,6 +277,24 @@ class Settings extends TimestampableAbstract
             'large' => array(1024,768)
         ));
     }
+
+    /**
+     * @return boolean
+     */
+    public function detectFacesInPhotos()
+    {
+        return $this->detectFacesInPhotos;
+    }
+
+    /**
+     * @param boolean $detectFacesInPhotos
+     */
+    public function setDetectFacesInPhotos($detectFacesInPhotos)
+    {
+        $this->detectFacesInPhotos = $detectFacesInPhotos;
+    }
+
+
 
     /**
      * Interceptor for invalid method calls
@@ -553,9 +580,9 @@ class Settings extends TimestampableAbstract
     }
 
     /**
-     * Get path to media file
+     * Get watermark media object
      *
-     * @return string
+     * @return Image
      */
     public function getWatermark()
     {

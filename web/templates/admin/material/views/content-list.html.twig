@@ -1,0 +1,109 @@
+{% extends "admin/material/masters/layout-admin.html.twig" %}
+
+{% block pageHeader %}
+    <header class="">
+        <div class="header-wrapper">
+            <div class="inner-header-wrapper">
+                <div class="top-header-wrapper">
+                    <div class="header-title">
+                        <span>Content</span> <span class="page-title"><i class="fa fa-angle-right"></i>All</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block content %}
+    <div class="grid grid-clear">
+        <div class="grid-outer-full">
+            <div class="float-wrap">
+                <a href="#" class="float-btn morph-initial"><i class="fa fa-plus"></i></a>
+                <div class="controls-hidden fixed-bottom">
+                    <a href="{{ app.url_generator.generate('admin/post/add') }}" class="float-btn action-btn tooltipped" data-toggle="tooltip" data-placement="left" title="New post"><i class="fa fa-file-text"></i></a>
+                    <a href="{{ app.url_generator.generate('admin/page/add') }}" class="float-btn action-btn tooltipped" data-toggle="tooltip" data-placement="left" title="New page"><i class="fa fa-file"></i></a>
+                </div>
+            </div>
+
+            <div class="grid-content">
+
+                {% if content|length < 1 %}
+                    <h1 class="ghost big">No content added yet</h1>
+                {% else %}
+
+                <div class="item-list item-list-6">
+                    <div class="item-wrap item-header item-fixed-header">
+                        <div class="item">
+                            <div></div>
+                        </div>
+
+                        <div class="item">
+                            <div>Title</div>
+                        </div>
+                        <div class="item">
+                            <div>Author</div>
+                        </div>
+                        <div class="item">
+                            <div>Last Modified</div>
+                        </div>
+                        <div class="item">
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+
+                        {% for item in content %}
+                            <div class="item-wrap">
+                                <div class="item">
+                                    {% if item.getType == 'post' %}
+                                        <div class="badge-icon badge-blue"><i class="fa fa-2x fa-file-text"></i></div>
+                                    {% elseif item.getType == 'page' %}
+                                        <div class="badge-icon badge-violet"><i class="fa fa-2x fa-list"></i></div>
+                                    {% elseif item.getType == 'image' %}
+                                        <div class="badge-icon badge-red"><i class="fa fa-2x fa-image"></i></div>
+                                    {% elseif item.getType == 'video' %}
+                                        <div class="badge-icon badge-green"><i class="fa fa-2x fa-video-camera"></i></div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="item">
+                                    <div><a href="#">{{ item.getTitle }}</a></div>
+                                </div>
+
+                                <div class="item">
+                                    {% if item.getAuthor %}
+                                        <div>{{ item.getAuthor }}</div>
+                                    {% else %}
+                                        <div>unknown author</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="item">
+                                    <div>{{ item.getCreatedAt|date|timeago }}</div>
+                                </div>
+
+                                <div class="item">
+                                    <a class="detail-btn" href="{{ app.url_generator.generate('admin/content/get', {type: item.getType, id:item.getId}) }}">
+                                        <i class="fa fa-ellipsis-v"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-bar">
+        <div class="right-bar-header">
+            <div class="top-header">
+                <div class="right-aux-toolbar">
+                </div>
+            </div>
+            <div class="bottom-header">
+                <h4>Post Title</h4>
+            </div>
+        </div>
+    </div>
+{% endblock %}

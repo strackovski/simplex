@@ -171,6 +171,14 @@ class MediaSettingsType extends AbstractType
                 )
             )
             ->add(
+                'detect_faces_in_photos',
+                'checkbox',
+                array(
+                    'required' => false,
+                    'label' => 'Enable face detection for library media'
+                )
+            )
+            ->add(
                 'watermarkMedia',
                 'checkbox',
                 array(

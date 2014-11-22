@@ -169,7 +169,6 @@ class MediaController extends ActionControllerAbstract
                         }
                     }
                 }
-                // @todo check repo
                 $app['repository.settings']->save($this->settings);
             }
         }

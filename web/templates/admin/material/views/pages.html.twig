@@ -6,7 +6,7 @@
             <div class="inner-header-wrapper">
                 <div class="top-header-wrapper">
                     <div class="header-title">
-                        <span>Pages</span>
+                        <span>Content</span> <span class="page-title"><i class="fa fa-angle-right"></i>Pages</span>
                     </div>
                 </div>
             </div>
@@ -23,10 +23,37 @@
             <div class="grid-content">
                 <div class="item-list page-list">
                     {% if pages|length < 1 %}
-                        no pages
+                        <div class="empty-msg">
+                            <h1 class="ghost big">No pages added yet</h1>
+                            <div class="holder holder-post">
+                                <div class="p-main">
+                                    <div class="p-header">
+                                        <div class="p-flag"></div>
+                                        <div class="p-title"></div>
+                                    </div>
+                                    <div class="p-content">
+                                        <ul class="p-insides">
+                                            <li class="img"></li>
+                                            <li class="line"></li>
+                                            <li class="line"></li>
+                                            <li class="line"></li>
+                                            <li class="line"></li>
+                                            <li class="line"></li>
+                                            <li class="line"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>
+                                <a class="form-btn new-page empty-add" href="{{ app.url_generator.generate('admin/page/add') }}">Add one now</a>
+                            </p>
+                        </div>
                     {% else %}
                         <div class="item-list">
                             <div class="item-wrap item-header">
+                                <div class="item">
+
+                                </div>
                                 <div class="item">
                                     <div>Title</div>
                                 </div>
@@ -41,11 +68,26 @@
                             </div>
                             {% for page in pages %}
                                 <div class="item-wrap">
+                                    <div class="item status-item">
+                                        <div class="status-div">
+                                        {% if page.getInMenu %}
+                                            <div class="status-icon"><i class="fa fa-sitemap active"></i></div>
+                                        {% else %}
+                                            <div><i class="fa fa-sitemap"></i></div>
+                                        {% endif %}
+
+                                        {% if page.getSlug == '/' %}
+                                            <div class="page-icon"><i class="fa fa-circle-thin fa-2x"></i></div>
+                                        {% else %}
+                                            <div class="page-icon"><i class="fa fa-circle-thin fa-2x icon-{{ page.getTypeColor }}"></i></div>
+                                        {% endif %}
+                                        </div>
+                                    </div>
                                     <div class="item">
                                         {% if page.getSlug == '/' %}
-                                            <div><i class="fa fa-circle-thin"></i> {{ page.getTitle }}</div>
+                                            <div>{{ page.getTitle }}</div>
                                         {% else %}
-                                            <div><i class="fa fa-circle-thin fa-2x icon-{{ page.getTypeColor }}"></i> {{ page.getTitle }}</div>
+                                            <div>{{ page.getTitle }}</div>
                                         {% endif %}
                                     </div>
                                     <div class="item">

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/reset.css"/>
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/bootstrap.css"/>
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/jquery-ui.structure.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/video-js.css"/>
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/modal.css"/>
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/flats.css"/>
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/graphics.css"/>
@@ -21,6 +22,7 @@
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/jquery.history.js"></script>
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/bootstrap.js"></script>
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/dropzone.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/video.js"></script>
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/main.js"></script>
 </head>
 
@@ -68,18 +70,41 @@
 <div class="side-nav">
     <div class="side-nav-wrapper">
         <span class="logo">
-            <img src="http://192.168.64.13/simplexNejaFix/web/assets/images/tetra_gray.png" alt="Simplex Logo"/>
-            Simplex
+            <a href="#">
+                <img src="http://192.168.64.13/simplexNejaFix/web/assets/images/tetra_gray.png" alt="Simplex Logo"/>
+                Simplex
+            </a>
         </span>
 
         <nav>
-            {#<a href="{{ app.url_generator.generate('admin/dashboard') }}">Simplex</a>#}
-            <a href="{{ app.url_generator.generate('admin/posts') }}">Posts</a>
-            <a href="{{ app.url_generator.generate('admin/media') }}">Media</a>
+            <a class="{% if 'admin/dashboard' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/dashboard') }}">Dashboard</a>
+
+            {% if 'admin/content' in app.request.attributes.get('_route') or 'admin/posts' in app.request.attributes.get('_route') or 'admin/pages' in app.request.attributes.get('_route') %}
+                <a class="submenu-open active" href="#sub-content">Content</a>
+            {% else %}
+                <a class="submenu-open" href="#sub-content">Content</a>
+            {% endif %}
+
+            <div class="submenu hidden" id="sub-content">
+                <a class="{% if 'admin/content' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/content') }}">All</a>
+                <a class="{% if 'admin/posts' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/posts') }}">Posts</a>
+                <a class="{% if 'admin/media' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/media') }}">Media</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="{% if 'admin/pages' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/pages') }}">Pages</a>
+                {% endif %}
+            </div>
+
             {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ app.url_generator.generate('admin/pages') }}">Pages</a>
-                <a href="{{ app.url_generator.generate('admin/settings') }}">Settings</a>
-                <a href="{{ app.url_generator.generate('admin/users') }}">Users</a>
+                <a class="submenu-open {% if 'settings' in app.request.attributes.get('_route') %}active{% endif %}" href="#sub-settings">Settings</a>
+
+                <div class="submenu hidden" id="sub-settings">
+                    <a href="{{ app.url_generator.generate('admin/settings') }}">General</a>
+                    <a class="{% if 'media/settings' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/media/settings') }}">Media</a>
+                    <a class="{% if 'settings/themes' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/themes') }}">Themes</a>
+                    <a class="{% if 'settings/mail' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/mail') }}">Mailing</a>
+                </div>
+
+                <a class="{% if 'admin/users' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/users') }}">Users</a>
             {% endif %}
         </nav>
 

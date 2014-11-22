@@ -27,20 +27,27 @@
                 <input type="password" id="password_" class="form-control" placeholder="Your password" name="_password" value="" />
             </div>
 
-            <div class="text-center">
-                <button type="submit" class="form-btn btn btn-default">Login</button>
-            </div>
-            <div class="form-group field option pull-left">
-                <div class="checkbox">
-                    <label for="remember_">
-                        <input type="checkbox" name="_remember_me" id="remember_"/>
-                        <span class="checksquare"></span>
-                        Remember me
-                    </label>
-                </div>
+            <div class="act-wrap">
+                <div class="form-group field field-small forgot option pull-left">
+                    <div class="checkbox">
+                        <label for="remember_">
+                            <input type="checkbox" name="_remember_me" id="remember_"/>
+                            <span class="checksquare"></span>
+                            <span>Remember me</span>
+                        </label>
+                    </div>
 
+                </div>
+                <span class="pull-right forgot-password text-right"><a href="{{ path('help/password') }}"><i class="fa fa-question-circle"></i> Hilfe</a></span>
             </div>
-            <span class="forgot-password text-right pull-right"><a href="{{ path('help/password') }}"><i class="fa fa-question-circle"></i> Hilfe</a></span>
+
+
+            <div class="form-group text-center sign-in">
+                <button type="submit" class="btn-save">Login</button>
+            </div>
+
+
+
             {{ error }}
 
            <!--<input type="submit" class="btn btn-lg btn-primary btn-block" />-->

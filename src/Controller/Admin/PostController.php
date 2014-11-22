@@ -256,6 +256,7 @@ class PostController extends ActionControllerAbstract
         //$redirect = $this->url->generate('admin/posts');
 
         //return new RedirectResponse($redirect);
+
         return $this->twig->render(
             'admin/'.$this->settings->getAdminTheme().'/widgets/post-list.html.twig',
             array('posts' => $this->posts->get())

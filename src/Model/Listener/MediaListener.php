@@ -57,12 +57,39 @@ class MediaListener
             $this->imageManager->autoCrop($image, null) :
             $this->imageManager->crop($image, $this->settings->getImageResizeDimensions('crop'));
 
-        if ($this->settings->getWatermarkMedia() and $this->settings->getWatermark()) {
-            $this->imageManager->watermark(
-                $image,
-                APPLICATION_ROOT_PATH . '/web/uploads/' . $this->settings->getWatermark(),
-                $this->settings->getWatermarkPosition()
-            );
+        if ($image->isInLibrary()) {
+            if ($this->settings->getWatermarkMedia() and $this->settings->getWatermark()) {
+                $this->imageManager->watermark(
+                    $image,
+                    APPLICATION_ROOT_PATH . '/web/uploads/' . $this->settings->getWatermark()->getPath(),
+                    $this->settings->getWatermarkPosition()
+                );
+            }
+
+            $client = new \GearmanClient();
+            $client->addServer();
+            $result = $client->doBackground("send_email", json_encode($image->getId()));
+
+            if ($this->settings->detectFacesInPhotos()) {
+                $image->setHasFace(false);
+                if ($this->imageManager->detectFace($image)) {
+                    $image->setHasFace(true);
+                    $faceLoc = json_decode($this->imageManager->getFaceDetector()->toJson(), 1);
+
+                    if (is_array($faceLoc)) {
+                        $this->imageManager->crop2(
+                            $image,
+                            array(
+                                $faceLoc['w'],
+                                $faceLoc['w'],
+                                $faceLoc['x'],
+                                $faceLoc['y']
+                            ),
+                            APPLICATION_ROOT_PATH . '/web/uploads/faces/' . $image->getPath()
+                        );
+                    }
+                }
+            }
         }
         $this->imageManager->cleanUp($image, $this->settings->getImageKeepOriginal());
 
@@ -77,15 +104,8 @@ class MediaListener
     {
         $metadata = new Metadata();
         $video->setMetadata($metadata->setData($this->videoManager->metadata($video)));
-
         $this->videoManager->thumbnail($video, $this->settings->getImageResizeDimensions());
         $this->videoManager->autoCrop($video, null);
-
-        if (strtolower(pathinfo($video->getAbsolutePath(), PATHINFO_EXTENSION)) == 'avi') {
-            $this->videoManager->recode($video);
-        }
-
-        return 1;
-
+        $this->videoManager->recode($video);
     }
 }

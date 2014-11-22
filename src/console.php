@@ -62,7 +62,9 @@ $console->addCommands(array(
     new \nv\Simplex\Command\CacheClearCommand($app),
     new \nv\Simplex\Command\ConnectDatabaseCommand($app),
     new \nv\Simplex\Command\AuthenticateMailerCommand($app),
-    new \nv\Simplex\Command\FileAssetCleanUpCommand($app)
+    new \nv\Simplex\Command\FileAssetCleanUpCommand($app),
+    new \nv\Simplex\Command\StartWorkerCommand($app)
+
 ));
 
 $app->boot();

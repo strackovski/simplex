@@ -8,7 +8,7 @@
                 <div class="top-header">
                     <div class="right-aux-toolbar">
                         <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fa fa-times"></i></a>
-                        <a href="#" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
+                        <a href="{{ app.url_generator.generate('admin/media/delete', {id:item.getId}) }}" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
                         <a href="#" class="paper-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Share"><i class="fa fa-share"></i></a>
                     </div>
                 </div>
@@ -34,7 +34,8 @@
                                 No information available
                             {% endif %}
                         </div>
-
+                    </div>
+                    <div class="section-entity">
                         <div class="dt">
                             Author
                         </div>
@@ -93,7 +94,8 @@
                                     <div class="dd">
                                         {{ metaval|date('M d, Y H:i') }}
                                     </div>
-
+                                </div>
+                                <div class="section-entity">
                                     <div class="dt">
                                         Time uploaded
                                     </div>
@@ -114,16 +116,59 @@
                             {% elseif item.getType == 'video' %}
                                 {% if metakey != 'video_stream' and metakey != 'audio_stream' and metakey != 'audio' and metakey != 'video' and metakey != 'height' and metakey != 'gps' %}
                                     {% if metakey == 'width' and metaval < 1280 %}
-                                        <span class="label label-clear"><i class="glyphicon glyphicon-sd-video"></i> {{ item.getMetadata.getData.width ~ ' x ' ~ item.getMetadata.getData.height }}</span>
+                                        <div class="section-entity">
+                                            <div class="dt">
+                                                Format
+                                            </div>
+                                            <div class="dd">
+                                                Standard definition
+                                            </div>
+                                        </div>
                                     {% elseif metakey == 'width' and metaval >= 1280 %}
-                                        <span class="label label-clear"><i class="glyphicon glyphicon-hd-video"></i> {{ item.getMetadata.getData.width ~ ' x ' ~ item.getMetadata.getData.height }}</span>
+                                        <div class="section-entity">
+                                            <div class="dt">
+                                                Format
+                                            </div>
+                                            <div class="dd">
+                                                High definition
+                                            </div>
+                                        </div>
                                     {% elseif metakey == 'size' or metakey == 'bit_rate' %}
-                                        <span class="label label-clear"><i class="glyphicon glyphicon-{{ metakey }}"></i> {{ metaval.0|round(2, 'ceil') ~ ' ' ~ metaval.1 }}</span>
+                                        <div class="section-entity">
+                                            <div class="dt">
+                                                {{ metakey|capitalize|replace('_', ' ') }}
+                                            </div>
+                                            <div class="dd">
+                                                {{ metaval.0|round(2, 'ceil') ~ ' ' ~ metaval.1 }}
+                                            </div>
+                                        </div>
                                     {% elseif metakey == 'time_originated' %}
-                                        <span class="label label-clear"><i class="glyphicon glyphicon-time_originated"></i> {{ metaval|date('M d, Y H:i') }}</span>
-                                        <span class="label label-clear"><i class="glyphicon glyphicon-export"></i> {{ item.getCreatedAt|date('M d, Y') }}</span>
+                                        <div class="section-entity">
+                                            <div class="dt">
+                                                Captured
+                                            </div>
+                                            <div class="dd">
+                                                {{ metaval|date('M d, Y H:i') }}
+                                            </div>
+                                        </div>
+
+                                        <div class="section-entity">
+                                            <div class="dt">
+                                                Uploaded
+                                            </div>
+                                            <div class="dd">
+                                                {{ item.getCreatedAt|date('M d, Y') }}
+                                            </div>
+                                        </div>
                                     {% else %}
-                                        <span class="label label-clear"><i class="glyphicon glyphicon-{{ metakey }}"></i> {{ metaval|join(' ') }}</span>
+                                        <div class="section-entity">
+                                            <div class="dt">
+                                                {{ metakey|capitalize|replace('_', ' ') }}
+                                            </div>
+                                            <div class="dd">
+                                                {{ metaval|join(' ') }}
+                                            </div>
+                                        </div>
                                     {% endif %}
                                 {% endif %}
                             {% endif %}
@@ -136,14 +181,23 @@
                         Available variations
                     </div>
                     <div class="section-entity">
-                        <div class="dt">
-                            Sizes
-                        </div>
-                        <div class="dd">
-                            {% for key, val in item.getVariations %}
-                                {{ key }}
-                            {% endfor %}
-                        </div>
+                        {% if item.getType == 'image' %}
+                            <div class="dt">
+                                Sizes
+                            </div>
+                            <div class="dd">
+                                {% for key, val in item.getVariations %}
+                                    {{ key }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="dt">
+                                Encoded formats
+                            </div>
+                            <div class="dd">
+
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -153,16 +207,29 @@
         {% if item %}
             {% if item.getType() == 'image' %}
                 <div class="image-item-embed">
-                    <img src="{{ app.request.basepath ~ '/uploads/thumbnails/large/' ~ item.getPath }}" />
+                    {#<img src="{{ app.request.basepath ~ '/uploads/thumbnails/large/' ~ item.getPath }}" />#}
+                    <img src="{{ app.request.basepath ~ '/uploads/' ~ item.getWebPath('large') }}" />
                 </div>
             {% elseif item.getType() == 'video' %}
+
+                <div class="media-container">
+                    <video id="example_video_1" class="video-js vjs-big-play-centered vjs-default-skin"
+                           controls preload="auto" height="auto" width="auto"
+                           poster="{{ app.request.basepath }}/uploads/{{ item.getMediaId }}.jpeg"
+                           data-setup='{"example_option":true}'>
+                        <source src="{{ app.request.basepath }}/uploads/{{ item.getMediaId }}.mp4" type='video/mp4' />
+                        <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+                    </video>
+                </div>
+
+                {#
                 <div class="video-item-embed">
                     <video style="width:100%;" controls>
-                        <source src="{{ app.request.basepath }}/uploads/{{ item.getMediaId }}.ogg" type="video/ogg">
                         <source src="{{ app.request.basepath }}/uploads/{{ item.getMediaId }}.mp4" type="video/mp4">
                         Can't play
                     </video>
                 </div>
+                #}
             {% endif %}
         {% endif %}
     {% endblock %}

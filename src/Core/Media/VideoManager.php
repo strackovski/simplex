@@ -213,7 +213,15 @@ class VideoManager implements MediaManagerInterface
         );
 
         $path = APPLICATION_ROOT_PATH.'/web/uploads/'.$video->getMediaId();
-        $cmd = "ffmpeg -i {$path}.avi -c:a libvorbis -movflags faststart {$path}.ogg";
+        // Use extension to retrieve source file correctly
+        // Use highest possible quality to encode video to web h264 mp4
+        // Use original resolution
+        // Use correct codecs (h264/libx264 and mp4 container)
+
+        //$cmd = "ffmpeg -i {$path}.{$video->getFileExtension()} -c:a libvorbis -movflags faststart {$path}.ogg";
+
+        $cmd = "ffmpeg -i {$path}.{$video->getFileExtension()} -codec:v libx264 -profile:v high -preset slow -b:v 500k -maxrate 500k -bufsize 1000k -vf scale=-1:480 -threads 0 -ar 44100 -codec:a libmp3lame -b:a 128k {$path}.mp4";
+
         $p = proc_open($cmd, $desc, $pipes);
 
         fclose($pipes[0]);

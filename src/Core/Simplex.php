@@ -25,6 +25,7 @@ use nv\Simplex\Core\Post\PostListener;
 use nv\Simplex\Core\User\UserListener;
 use nv\Simplex\Model\Listener\EntityListenerResolver;
 use nv\Simplex\Model\Listener\PageListener;
+use nv\Simplex\Provider\Service\ContentServiceProvider;
 use nv\Simplex\Provider\Service\SiteServiceProvider;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
@@ -85,6 +86,7 @@ class Simplex extends Application
                 'http_cache.cache_dir' => APPLICATION_ROOT_PATH.'/var/cache/http'
             )
         );
+
         $this->register(new UrlGeneratorServiceProvider());
         $this->register(new ValidatorServiceProvider());
         $this->register(new ServiceControllerServiceProvider());
@@ -110,6 +112,48 @@ class Simplex extends Application
 
             return $twig;
         });
+
+        $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
+            $twig->addFilter(new \Twig_SimpleFilter('timeago', function ($datetime) use ($app) {
+                /*
+                 * @todo
+                  0 <-> 29 secs                                                             # => less than a minute
+                  30 secs <-> 1 min, 29 secs                                                # => 1 minute
+                  1 min, 30 secs <-> 44 mins, 29 secs                                       # => [2..44] minutes
+                  44 mins, 30 secs <-> 89 mins, 29 secs                                     # => about 1 hour
+                  89 mins, 29 secs <-> 23 hrs, 59 mins, 29 secs                             # => about [2..24] hours
+                  23 hrs, 59 mins, 29 secs <-> 47 hrs, 59 mins, 29 secs                     # => 1 day
+                  47 hrs, 59 mins, 29 secs <-> 29 days, 23 hrs, 59 mins, 29 secs            # => [2..29] days
+                  29 days, 23 hrs, 59 mins, 30 secs <-> 59 days, 23 hrs, 59 mins, 29 secs   # => about 1 month
+                  59 days, 23 hrs, 59 mins, 30 secs <-> 1 yr minus 1 sec                    # => [2..12] months
+                  1 yr <-> 2 yrs minus 1 secs                                               # => about 1 year
+                  2 yrs <-> max time or date                                                # => over [2..X] years
+                 */
+
+                $time = time() - strtotime($datetime);
+
+                $units = array (
+                    31536000 => 'year',
+                    2592000 => 'month',
+                    604800 => 'week',
+                    86400 => 'day',
+                    3600 => 'hour',
+                    60 => 'minute',
+                    1 => 'second'
+                );
+
+                foreach ($units as $unit => $val) {
+                    if ($time < $unit) continue;
+                    $numberOfUnits = floor($time / $unit);
+                    return ($val == 'second')? 'a few seconds ago' :
+                        (($numberOfUnits>1) ? $numberOfUnits : 'a')
+                        .' '.$val.(($numberOfUnits>1) ? 's' : '').' ago';
+                }
+
+            }));
+
+            return $twig;
+        }));
 
         /*
          * Asset: resolve asset path by asset name and type (image, font, ...)
@@ -139,6 +183,8 @@ class Simplex extends Application
          * Display: use {{ display('size:mediaId') }} to resolve to actual media path
          * Size can be any valid media size identifier (cropped, small, large, medium, original)
          * Return empty placeholder image when not found
+         *
+         * example display('crops:mediaId')
          *
          * @todo Fix & enable twig 'display'
          */
@@ -290,6 +336,9 @@ class Simplex extends Application
 
         $this->register($pageProvider = new PageServiceProvider());
         $this->mount('/admin', $pageProvider);
+
+        $this->register($contentProvider = new ContentServiceProvider());
+        $this->mount('/admin', $contentProvider);
     }
 
     /**

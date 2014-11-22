@@ -14,6 +14,7 @@ namespace nv\Simplex\Controller\Admin;
 
 use nv\Simplex\Controller\ActionControllerAbstract;
 use nv\Simplex\Core\Media\VideoManager;
+use nv\Simplex\Model\Entity\Metadata;
 use nv\Simplex\Model\Entity\Settings;
 use nv\Simplex\Model\Repository\MediaRepository;
 use Silex\Application;
@@ -129,6 +130,9 @@ class VideoController extends ActionControllerAbstract
             $video->setInLibrary(true);
             $video->setFile($uploadedFile);
             $video->setName($uploadedFile->getClientOriginalName());
+            $video->setMetadata($metadata = new Metadata());
+            $this->media->save($video);
+            $video->setMetadata($metadata->setData($this->manager->metadata($video)));
 
             try {
                 $this->media->save($video);

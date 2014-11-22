@@ -20,7 +20,7 @@
 
     <div class="settings-content">
         <div class="des">
-            Site name defines a common name for your project and is used extensively in public templates.
+            Your site name and description are used on public pages and define your global project profile. Meaningful values also help search engine crawlers.
         </div>
         <div class="form-group form-element">
             {{ form_label(form.siteName) }}
@@ -43,7 +43,7 @@
 
     <div class="settings-content">
         <div class="des">
-            Keywords are used for content categorization. Enter the words that best match the content of the post, each keyword separated by comma.
+            Keywords are used for content categorization and search optimization. Enter the words that best match the content of the post, each keyword separated by comma.
         </div>
         <div class="form-group form-element">
             {{ form_label(form.keywords) }}
@@ -74,7 +74,8 @@
         </div>
 
         <div class="des">
-            You can upload your organization's logo image to show instead of the Simplex logo.
+            You can upload your organization's logo image to show instead of the Simplex logo. This only applies to admin area as Simplex logo is never displayed on public pages.
+            It also greatly simplifies logo image control in your public templates.
         </div>
         {% if settings.getSiteLogo %}
             <div class="single-item-box select-image">
@@ -96,7 +97,9 @@
         <h4>Default Site Language</h4>
     </div>
     <div class="settings-content">
-        <div class="des"></div>
+        <div class="des">
+            In case you have a multilingual site, you must choose a default language.
+        </div>
         <div class="form-group form-element">
             {{ form_label(form.language) }}
             {{ form_widget(form.language) }}
@@ -109,9 +112,9 @@
     <div class="settings-name">
         <h4>Options</h4>
     </div>
-    <div class="settings-content">
+    <div class="settings-content condensed">
         <div class="des">
-            This will enable public access to your published items directly, independent of Pages.
+            This will enable public access to your published items directly.
         </div>
         <div class="field form-group option">
             {{ form_row(form.enableQueryStringAccess) }}

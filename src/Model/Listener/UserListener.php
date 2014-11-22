@@ -43,7 +43,7 @@ class UserListener implements EntityListenerInterface
      */
     public function prePersist(User $user, LifecycleEventArgs $event)
     {
-        if ($user->getId() === null) {
+        if ($user->getId() === null and $user->getIsActive() === false) {
             $this->manager->sendActivationNotification($user);
         }
     }

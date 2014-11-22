@@ -6,7 +6,7 @@
             <div class="inner-header-wrapper">
                 <div class="top-header-wrapper">
                     <div class="header-title">
-                        <span>Posts</span>
+                        <span>Content</span> <span class="page-title"><i class="fa fa-angle-right"></i>Posts</span>
                     </div>
                 </div>
             </div>
@@ -24,7 +24,7 @@
 
                 {% if posts|length < 1 %}
                     <div class="empty-msg">
-                        <h2>No posts here</h2>
+                        <h1 class="ghost big">No posts added yet</h1>
                         <div class="holder holder-post">
                             <div class="p-main">
                                 <div class="p-header">
@@ -45,7 +45,7 @@
                             </div>
                         </div>
                         <p>
-                            <a class="form-btn new-post" href="{{ app.url_generator.generate('admin/post/add') }}">Add a new post now</a>
+                            <a class="form-btn new-post empty-add" href="{{ app.url_generator.generate('admin/post/add') }}">Add one now</a>
                         </p>
                     </div>
                 {% else %}

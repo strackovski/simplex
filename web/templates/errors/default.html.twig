@@ -1,13 +1,13 @@
-{% extends "admin/default/masters/layout-error.html.twig" %}
+{% extends "admin/material/masters/layout-error.html.twig" %}
 
 {% block content %}
-    <div class="page error">
-        <div class="container">
-            <div class="wrapper">
-                <h1>Error</h1>
-
-                <p class="lead-text">An error occured.</p>
-            </div>
-        </div>
+    <div class="error-msg">
+        <h1>Error</h1>
+        <p>
+            You are seeing this Error Page because an error occured, duh.
+        </p>
+        <p class="help-msg">
+            Make the robot happy by going to admin/default and changing xxx to yyy.
+        </p>
     </div>
 {% endblock %}

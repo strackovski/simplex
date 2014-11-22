@@ -1264,7 +1264,8 @@ header.big-header {
     margin-top: 56px;
 }
 
-.item-list.page-list .item-wrap:not(.item-header) {
+.item-list.page-list .item-wrap:not(.item-header),
+.item-list.user-list .item-wrap:not(.item-header){
     height: 64px;
     line-height: 64px;
 }
@@ -1330,7 +1331,7 @@ header.big-header {
     width: 40%;
 }
 .item-list.post-list .item:first-child,
-.item-list.page-list .item:first-child {
+.item-list.page-list .item:first-child{
     width: 10%;
 }
 .item-list.item-list-6 .item:first-child {
@@ -1341,11 +1342,19 @@ header.big-header {
 
 .status-item > div {
     white-space: nowrap;
+    overflow: hidden;
 }
 
+.page-list .status-div {
+    height: 64px;
+}
 .status-item > .status-div {
     line-height: 64px;
     vertical-align: middle;
+}
+
+.post-list .status-item > .status-div {
+    line-height: 48px;
 }
 
 .status-item > div:after {
@@ -1355,7 +1364,8 @@ header.big-header {
 }
 
 .status-item div > div {
-    line-height: 64px;display: block; float: left;
+    line-height: 64px;
+    display: inline-block;
 }
 
 .status-item.post-item div > div {
@@ -1370,6 +1380,10 @@ header.big-header {
 
 .page-icon i.fa {
     margin-top: 1px;
+}
+
+.status-icon {
+    vertical-align: top;
 }
 
 .status-icon i.fa {

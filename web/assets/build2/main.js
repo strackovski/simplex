@@ -1,5 +1,5 @@
 //var baseURL = '/simplex/web/index_dev.php/';
-var baseURL;
+// var baseURL;
 Dropzone.autoDiscover = false;
 var theDropzone;
 
@@ -51,7 +51,8 @@ function handleDropzone() {
     }
 
     theDropzone = new Dropzone('div.dropzone', {
-        url: baseURL + 'admin/' + type + '/upload',
+        // url: baseURL + 'admin/' + type + '/upload',
+        url: '//192.168.64.13/simplex/web/index_dev.php/admin/' + type + '/upload',
         clickable: '.dropzone-clickable',
         autoProcessQueue: true,
         thumbnailWidth: null,
@@ -85,7 +86,8 @@ function handleDropzone() {
                 // $('.main-content .tab-pane.active').animate({opacity: 0});
 
             },
-            url: baseURL + 'admin/media/' + urlType
+            // url: baseURL + 'admin/media/' + urlType
+            url: '//192.168.64.13/simplex/web/index_dev.php/admin/media/' + urlType
         })
             .done(function (data) {
                 $('.page-loader').hide();
@@ -108,9 +110,10 @@ function handleDropzone() {
 
     });
 
-    theDropzone.on("error", function (file, msg) {
+    theDropzone.on("error", function (file, msg, xhr) {
         var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
         console.log(msg)
+        console.log(xhr)
         $('body').append(flash);
         $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
             $('.flash-error').remove();
@@ -679,7 +682,7 @@ function mediaModalAction() {
 }
 
 $(document).ready(function () {
-    baseURL = $('body').attr('data-base') + '/';
+    //baseURL = $('body').attr('data-base') + '/';
 
     /* side-nav submenu */
     var activeSideMenu = $('.side-nav a.submenu-open.active').attr('href');

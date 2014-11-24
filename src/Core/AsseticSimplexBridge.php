@@ -67,38 +67,70 @@ class AsseticSimplexBridge
                     $adminTheme = 'default';
                 }
 
-                /** @var AssetManager $am */
-                $am->set('styles', new AssetCache(
-                    new GlobAsset(
-                        array(
-                            dirname(__DIR__) . '/../web/templates/admin/' . $adminTheme . '/assets/styles/vendor/*.css',
-                            dirname(__DIR__) . '/../web/templates/admin/' . $adminTheme . '/assets/styles/*.css'
+                /*
+                 * Check if theme has a vendors.json dependency definition file
+                 */
+                if (file_exists($f = dirname(__DIR__) . '/../web/templates/admin/'  . $adminTheme . '/vendors.json')) {
+                    // Process vendors.json
+                    $vendors = json_decode(file_get_contents($f), 1);
+                    $scripts = array();
+                    $styles = array();
+                    $dir = dirname(__DIR__) . '/../web/templates/admin/'.$adminTheme.'/assets/';
+
+                    foreach ($vendors['scripts'] as $name => $path) {
+                        $scripts[] = $dir . 'scripts/' . $path;
+                    }
+
+                    foreach ($vendors['styles'] as $name => $path) {
+                        $styles[] = $dir . 'styles/' . $path;
+                    }
+
+                    // Build according to vendors.json
+                    /** @var AssetManager $am */
+                    $am->set('styles', new AssetCache(
+                        new GlobAsset(
+                            $styles,
+                            array($app['assetic.filter_manager']->get('css_min'))
                         ),
-                        array($app['assetic.filter_manager']->get('css_min'))
-                    ),
-                    new \Assetic\Cache\FilesystemCache(dirname(__DIR__) . '/../var/cache/assetic')
-                ));
+                        new \Assetic\Cache\FilesystemCache(dirname(__DIR__) . '/../var/cache/assetic')
+                    ));
+
+                    $am->set('scripts', new AssetCache(
+                        new GlobAsset(
+                            $scripts,
+                            array($app['assetic.filter_manager']->get('js_min'))
+                        ),
+                        new \Assetic\Cache\FilesystemCache(dirname(__DIR__) . '/../var/cache/assetic')
+                    ));
+
+                } else {
+                    // Build according to theme directory structure
+                    /** @var AssetManager $am */
+                    $am->set('styles', new AssetCache(
+                        new GlobAsset(
+                            array(
+                                dirname(__DIR__) . '/../web/templates/admin/' . $adminTheme . '/assets/vendor/*.css',
+                                dirname(__DIR__) . '/../web/templates/admin/' . $adminTheme . '/assets/styles/*.css'
+                            ),
+                            array($app['assetic.filter_manager']->get('css_min'))
+                        ),
+                        new \Assetic\Cache\FilesystemCache(dirname(__DIR__) . '/../var/cache/assetic')
+                    ));
+
+                    $am->set('scripts', new AssetCache(
+                        new GlobAsset(
+                            array(
+                                dirname(__DIR__) . '/../web/templates/admin/' . $adminTheme . '/assets/vendor/*.js',
+                                dirname(__DIR__) . '/../web/templates/admin/' . $adminTheme . '/assets/scripts/*.js'
+                            ),
+                            array($app['assetic.filter_manager']->get('js_min'))
+                        ),
+                        new \Assetic\Cache\FilesystemCache(__DIR__ . '/../../var/cache/assetic')
+                    ));
+                }
 
                 $am->get('styles')->setTargetPath('styles.css');
-
-                $am->set(
-                    'jquery',
-                    new FileAsset(
-                        dirname(__DIR__) . '/../web/templates/admin/' . $adminTheme . '/assets/jquery.js'
-                    )
-                );
-                $am->set('scripts', new AssetCache(
-                    new GlobAsset(
-                        array(
-                            dirname(__DIR__) . '/../web/templates/admin/' . $adminTheme . '/assets/scripts/vendor/*.js',
-                            dirname(__DIR__) . '/../web/templates/admin/' . $adminTheme . '/assets/scripts/*.js'
-                        ),
-                        array($app['assetic.filter_manager']->get('js_min'))
-                    ),
-                    new \Assetic\Cache\FilesystemCache(__DIR__ . '/../../var/cache/assetic')
-                ));
                 $am->get('scripts')->setTargetPath('scripts.js');
-                $am->get('jquery')->setTargetPath('jquery.js');
 
                 return $am;
             })

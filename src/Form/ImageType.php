@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Defines the Image type form
  *
  * @package nv\Simplex\Form
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class ImageType extends AbstractType
 {

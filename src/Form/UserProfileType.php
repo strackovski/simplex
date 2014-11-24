@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Defines the User profile form
  *
  * @package nv\Simplex\Form\Type
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class UserProfileType extends AbstractType
 {

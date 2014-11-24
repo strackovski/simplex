@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Defines User form
  *
  * @package nv\Simplex\Form\Type
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class UserType extends AbstractType
 {
@@ -37,13 +38,13 @@ class UserType extends AbstractType
                 'constraints' => new Assert\NotBlank(),
                 'required' => true,
                 'attr' => array(
-                    'placeholder' => 'Your first'
+                    'placeholder' => 'First name'
                 )
             ))
             ->add('lastName', 'text', array(
                 'constraints' => new Assert\NotBlank(),
                 'attr' => array(
-                    'placeholder' => 'and last name'
+                    'placeholder' => 'Last name'
                 )
             ))
             ->add('description', 'textarea', array(

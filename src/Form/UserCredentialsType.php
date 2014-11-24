@@ -20,6 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * User credentials form
  *
  * @package nv\Simplex\Form\Type
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class UserCredentialsType extends AbstractType
 {

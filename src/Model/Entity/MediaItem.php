@@ -87,9 +87,9 @@ abstract class MediaItem extends TimestampableAbstract
      *
      * The identification (name, email, etc.) of the author of the media
      *
-     * @Column(name="author", type="string", length=100, nullable=true, unique=false)
+     * @Column(name="original_author", type="string", length=100, nullable=true, unique=false)
      */
-    protected $author;
+    protected $originalAuthor;
 
     /*
      * Path to media file
@@ -151,12 +151,35 @@ abstract class MediaItem extends TimestampableAbstract
     protected $mediaCategory;
 
     /**
+     * @ManyToOne(targetEntity="User")
+     * @JoinColumn(name="user_id", referencedColumnName="id")
+     **/
+    private $author;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->posts = new ArrayCollection();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param mixed $author
+     */
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+    }
+
 
     /**
      * @return mixed
@@ -445,17 +468,17 @@ abstract class MediaItem extends TimestampableAbstract
     /**
      * @param $author
      */
-    public function setAuthor($author)
+    public function setOriginalAuthor($author)
     {
-        $this->author = $author;
+        $this->originalAuthor = $author;
     }
 
     /**
      * @return mixed
      */
-    public function getAuthor()
+    public function getOriginalAuthor()
     {
-        return $this->author;
+        return $this->originalAuthor;
     }
 
     /**

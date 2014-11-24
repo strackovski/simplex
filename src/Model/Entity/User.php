@@ -99,6 +99,11 @@ class User implements UserInterface
     protected $resetTokenExpirationDate;
 
     /**
+     * @Column(name="login_count", type="integer", nullable=true)
+     */
+    protected $loginCount;
+
+    /**
      * @param Image $image
      */
     public function setAvatar(Image $image)
@@ -454,5 +459,21 @@ class User implements UserInterface
     public function getPostsEdited()
     {
         return $this->postsEdited;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLoginCount()
+    {
+        return $this->loginCount;
+    }
+
+    /**
+     * @param mixed $loginCount
+     */
+    public function setLoginCount($loginCount)
+    {
+        $this->loginCount = $loginCount;
     }
 }

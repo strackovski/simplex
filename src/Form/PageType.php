@@ -28,6 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Defines the Page form
  *
  * @package nv\Simplex\Form
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class PageType extends AbstractType
 {

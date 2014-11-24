@@ -46,7 +46,7 @@ class FaceDetector
      * @param string|array $detection_data
      * @throws Exception
      */
-    public function __construct($detection_data = 'fd.dat')
+    public function __construct($detection_data = 'facedata.dat')
     {
         if (is_array($detection_data)) {
             $this->detection_data = $detection_data;
@@ -65,6 +65,11 @@ class FaceDetector
         $this->detection_data = unserialize(file_get_contents($detection_data));
     }
 
+    /**
+     * @param $file
+     * @return bool
+     * @throws Exception
+     */
     public function faceDetect($file)
     {
         if (is_resource($file)) {

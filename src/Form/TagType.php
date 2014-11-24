@@ -24,6 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Defines the Tag class as a form type
  *
  * @package nv\Simplex\Form
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class TagType extends AbstractType
 {

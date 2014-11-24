@@ -7,7 +7,11 @@ use nv\Simplex\Core\Simplex;
 
 /**
  * Class EntityListenerResolver
+ *
+ * Resolves entity-specific listeners
+ *
  * @package nv\Simplex\Model\Listener
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class EntityListenerResolver extends DefaultEntityListenerResolver
 {

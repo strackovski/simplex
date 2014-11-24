@@ -38,18 +38,24 @@ class StartWorkerCommand extends ApplicationAwareCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @throws \Exception
      * @return int|null|void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<info>Starting workers...</info>');
 
+        if (!class_exists("\\GearmanWorker")) {
+            throw new \Exception("Gearman not supported!");
+        }
+
         $worker = new \GearmanWorker();
         $worker->addServer();
 
-        $worker->addFunction("send_email", function (\GearmanJob $job) {
+        // @todo Implement worker
+        $worker->addFunction("process_image", function (\GearmanJob $job) {
             $workload = json_decode($job->workload());
-            echo "Sending email: " . print_r($workload, 1);
+            echo "Processing image: " . print_r($workload, 1);
             sleep(5);
             // You would then, of course, actually call this:
             //mail($workload->email, $workload->subject, $workload->body);

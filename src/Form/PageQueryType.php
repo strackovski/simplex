@@ -24,6 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Defines the PageQuery form type
  *
  * @package nv\Simplex\Form
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class PageQueryType extends AbstractType
 {

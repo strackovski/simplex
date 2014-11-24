@@ -104,6 +104,12 @@ class Page extends TimestampableAbstract implements ObservableInterface
     private $observers;
 
     /**
+     * @ManyToOne(targetEntity="User")
+     * @JoinColumn(name="user_id", referencedColumnName="id")
+     **/
+    private $author;
+
+    /**
      * Constructor
      *
      * @param string      $title Page title
@@ -117,9 +123,20 @@ class Page extends TimestampableAbstract implements ObservableInterface
         $this->observers = array();
     }
 
+    /**
+     * @return mixed
+     */
     public function getAuthor()
     {
-        return 'none';
+        return $this->author;
+    }
+
+    /**
+     * @param mixed $author
+     */
+    public function setAuthor($author)
+    {
+        $this->author = $author;
     }
 
     /**

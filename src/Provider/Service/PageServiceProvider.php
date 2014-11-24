@@ -70,6 +70,9 @@ class PageServiceProvider implements ServiceProviderInterface, ControllerProvide
         $controllers->get('/page/get/{page}', 'page.controller:getAction')
             ->bind('admin/page/get');
 
+        $controllers->get('/pages/help', 'page.controller:helpAction')
+            ->bind('admin/pages/help');
+
         $controllers->match('/page/delete/{page}', 'page.controller:deleteAction')
             ->bind('admin/page/delete');
 

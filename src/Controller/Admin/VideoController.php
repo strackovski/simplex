@@ -32,6 +32,7 @@ use Symfony\Component\Security\Core\SecurityContext;
  * Defines actions to perform on requests regarding Post objects.
  *
  * @package nv\Simplex\Controller
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class VideoController extends ActionControllerAbstract
 {
@@ -125,8 +126,13 @@ class VideoController extends ActionControllerAbstract
     public function uploadAction(Request $request)
     {
         $files = $request->files;
+        $token = $this->security->getToken();
+
         foreach ($files as $uploadedFile) {
             $video = new Video();
+            if (null !== $token) {
+                $video->setAuthor($token->getUser());
+            }
             $video->setInLibrary(true);
             $video->setFile($uploadedFile);
             $video->setName($uploadedFile->getClientOriginalName());

@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Class PostController
  *
  * @package nv\Simplex\Controller\Site
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class PostController
 {

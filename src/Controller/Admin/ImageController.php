@@ -37,6 +37,7 @@ use Symfony\Component\Security\Core\SecurityContext;
  * Defines actions to perform on requests regarding Image objects.
  *
  * @package nv\Simplex\Controller
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class ImageController extends ActionControllerAbstract
 {
@@ -108,9 +109,13 @@ class ImageController extends ActionControllerAbstract
     public function uploadAction(Request $request)
     {
         $files = $request->files;
+        $token = $this->security->getToken();
         /** @var UploadedFile $uploadedFile */
         foreach ($files as $uploadedFile) {
             $image = new Image();
+            if (null !== $token) {
+                $image->setAuthor($token->getUser());
+            }
             $image->setInLibrary(true);
             $image->setFile($uploadedFile);
             $image->setName($uploadedFile->getClientOriginalName());

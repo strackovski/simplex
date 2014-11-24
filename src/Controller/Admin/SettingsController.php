@@ -37,6 +37,7 @@ use Symfony\Component\Security\Core\SecurityContext;
  * Defines actions to perform on requests regarding Settings objects.
  *
  * @package nv\Simplex\Controller\Admin
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class SettingsController
 {

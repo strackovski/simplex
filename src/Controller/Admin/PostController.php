@@ -35,6 +35,7 @@ use Symfony\Component\Security\Core\SecurityContext;
  * Defines actions to perform on requests regarding Post objects.
  *
  * @package nv\Simplex\Controller\Admin
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class PostController extends ActionControllerAbstract
 {
@@ -263,6 +264,36 @@ class PostController extends ActionControllerAbstract
         );
     }
 
+    public function toggleAction(Request $request)
+    {
+        $id = $request->get('id');
+        $status = $request->get('status');
+        $item = $this->posts->findOneBy(array('id' => $id));
+
+        if ($item instanceof Post) {
+            if (in_array($status, $array = array('published', 'exposed'))) {
+                if ($status === 'published') {
+                    if ($item->getPublished()) {
+                        $item->setPublished(false);
+                    } else {
+                        $item->setPublished(true);
+                    }
+                } elseif ($status === 'exposed') {
+                    if ($item->getExposed()) {
+                        $item->setExposed(false);
+                    } else {
+                        $item->setExposed(true);
+                    }
+                }
+
+                $this->posts->save($item);
+                return new JsonResponse(true);
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Filter posts
      *
@@ -278,5 +309,10 @@ class PostController extends ActionControllerAbstract
         $data['request'] = $request;
 
         return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/posts.html.twig', $data);
+    }
+
+    public function helpAction()
+    {
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/widgets/help-posts.html.twig');
     }
 }

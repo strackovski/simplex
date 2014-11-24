@@ -32,6 +32,7 @@ use Symfony\Component\Security\Core\SecurityContext;
  * Defines actions to perform on requests regarding Post objects.
  *
  * @package nv\Simplex\Controller\Admin
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class PageController extends ActionControllerAbstract
 {
@@ -116,29 +117,25 @@ class PageController extends ActionControllerAbstract
     {
         $page = new Page($request->request->get('title'), $request->request->get('slug'));
         $form = $this->form->create(new PageType($this->pages, $this->settings), $page);
-
+        $token = $this->security->getToken();
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
-
+                if (null !== $token) {
+                    $page->setAuthor($token->getUser());
+                }
                 $this->manager->slug($page, $form->get('slug')->getData());
-
                 $this->pages->save($page);
 
                 $message = 'The page <strong>' . $page->getTitle() .
                     '</strong> has been saved. <a href="' . $page->getSlug() . '" target="_blank">See it!</a>';
 
                 $this->session->getFlashBag()->add('success', $message);
-
                 $redirect = $this->url->generate('admin/pages');
-
                 return new RedirectResponse($redirect);
-
-                //return $app->redirect($redirect);
             }
         }
-
         $data = array(
             'form' => $form->createView(),
             'title' => 'Add new page',
@@ -157,10 +154,15 @@ class PageController extends ActionControllerAbstract
     {
         $page = $this->pages->findOneBy(array('id' => $request->get('page')));
         $form = $this->form->create(new PageType($this->pages, $this->settings), $page);
+        $token = $this->security->getToken();
+
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
+                if (null !== $token) {
+                    $page->setAuthor($token->getUser());
+                }
                 $this->manager->slug($page, $form->get('slug')->getData());
                 $this->pages->save($page);
                 $message = 'Changes to page <strong>' . $page->getTitle() . '</strong> have been saved.';
@@ -195,5 +197,10 @@ class PageController extends ActionControllerAbstract
         $redirect = $this->url->generate('admin/pages');
 
         return new RedirectResponse($redirect);
+    }
+
+    public function helpAction()
+    {
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/widgets/help-pages.html.twig');
     }
 }

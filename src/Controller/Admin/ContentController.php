@@ -34,6 +34,7 @@ use Symfony\Component\Security\Core\SecurityContext;
  * Class ContentController
  *
  * @package nv\Simplex\Controller\Admin
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class ContentController extends ActionControllerAbstract
 {
@@ -86,6 +87,8 @@ class ContentController extends ActionControllerAbstract
 
         $data['request'] = $request;
 
+
+
         return $this->twig->render(
             'admin/'.$this->settings->getAdminTheme().'/views/content-list.html.twig',
             $data
@@ -113,17 +116,22 @@ class ContentController extends ActionControllerAbstract
                 $item = $this->pages->findOneBy(array('id' => $id));
             }
 
-
-
-
             $data = array(
                 'item' => $item,
                 'request' => $request
             );
 
-            return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/widgets/content-detail.html.twig', $data);
+            return $this->twig->render(
+                'admin/'.$this->settings->getAdminTheme().'/widgets/content-detail.html.twig',
+                $data
+            );
         }
 
         return false;
+    }
+
+    public function helpAction()
+    {
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/widgets/help-content.html.twig');
     }
 }

@@ -32,6 +32,7 @@ use Symfony\Component\Security\Core\SecurityContext;
  * Defines actions to perform on requests regarding Media objects.
  *
  * @package nv\Simplex\Controller\Admin
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class MediaController extends ActionControllerAbstract
 {
@@ -216,5 +217,10 @@ class MediaController extends ActionControllerAbstract
             'admin/'.$this->settings->getAdminTheme().'/widgets/library-resample.html.twig',
             array('settings' => $this->settings)
         );
+    }
+
+    public function helpAction()
+    {
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/widgets/help-media.html.twig');
     }
 }

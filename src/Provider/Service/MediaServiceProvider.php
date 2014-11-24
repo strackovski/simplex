@@ -32,7 +32,10 @@ class MediaServiceProvider implements ServiceProviderInterface, ControllerProvid
         $app->register(new ImagineServiceProvider());
 
         $app['image.face.detector'] = $app->share(function () use ($app) {
-            return new FaceDetector(dirname(dirname(dirname(__DIR__))) . '/config/fd.dat');
+            if (file_exists($file = dirname(dirname(dirname(__DIR__))) . '/config/facedata.dat')) {
+                return new FaceDetector(dirname(dirname(dirname(__DIR__))) . '/config/facedata.dat');
+            }
+            return false;
         });
 
         $app['image.manager'] = $app->share(function () use ($app) {
@@ -129,6 +132,9 @@ class MediaServiceProvider implements ServiceProviderInterface, ControllerProvid
 
         $controllers->match('/media/delete', 'media.controller:deleteAction')
             ->bind('admin/media/delete');
+
+        $controllers->match('/media/help', 'media.controller:helpAction')
+            ->bind('admin/media/help');
 
         $controllers->match('/media/edit/{id}', 'media.controller:editAction')
             ->bind('admin/media/edit');

@@ -10,7 +10,9 @@ use Symfony\Component\Security\Core\SecurityContext;
 
 /**
  * Class ActionControllerAbstract
+ *
  * @package nv\Simplex\Controller
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 abstract class ActionControllerAbstract
 {

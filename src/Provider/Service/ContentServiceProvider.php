@@ -51,6 +51,9 @@ class ContentServiceProvider implements ServiceProviderInterface, ControllerProv
         $controllers->match('/content', 'content.controller:indexAction')
             ->bind('admin/content');
 
+        $controllers->match('/content/help', 'content.controller:helpAction')
+            ->bind('admin/content/help');
+
         $controllers->get('/content/get/{type}/{id}', 'content.controller:getAction')
             ->bind('admin/content/get');
 

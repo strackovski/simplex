@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Defines actions to perform on requests regarding Image objects.
  *
  * @package nv\Simplex\Controller
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class SecurityController
 {
@@ -37,6 +38,9 @@ class SecurityController
             'last_username' => $app['session']->get('_security.last_username')
         );
 
-        return $app['twig']->render('admin/'.$app['settings']->getAdminTheme().'/views/login.html.twig', $data);
+        return $app['twig']->render(
+            'admin/'.$app['settings']->getAdminTheme().'/views/login.html.twig',
+            $data
+        );
     }
 }

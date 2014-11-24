@@ -14,7 +14,9 @@ use nv\Simplex\Model\Entity\Video;
 
 /**
  * Class MediaListener
+ *
  * @package nv\Simplex\Model\Listener
+ * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class MediaListener
 {
@@ -66,12 +68,15 @@ class MediaListener
                 );
             }
 
-            /*
-            $client = new \GearmanClient();
-            $client->addServer();
-            $result = $client->doBackground("send_email", json_encode($image->getId()));
-            */
+            if (class_exists("\\GearmanClient")) {
+                try {
+                    $client = new \GearmanClient();
+                    $client->addServer();
+                    $result = $client->doBackground("process_image", json_encode($image->getId()));
+                } catch (\Exception $e) {
 
+                }
+            }
 
             if ($this->settings->detectFacesInPhotos() == true) {
                 $image->setHasFace(false);

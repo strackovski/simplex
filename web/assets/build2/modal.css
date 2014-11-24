@@ -1,3 +1,10 @@
+/*****************************************************
+ Simplex Material Theme
+ Modal stylesheet
+ by Neja Dolinar <neja@nv3.org>
+ 2014
+*****************************************************/
+
 .modal-open .media-modal.modal {
     overflow-x: hidden;
     overflow-y: hidden;
@@ -179,8 +186,14 @@
 }
 
 
-/* Upload modal */
+/* Help modal */
+.help-modal .modal-dialog {
+    height: 95%;
+    width: 98%;
+    margin-top: 1% !important;
+}
 
+/* Upload modal */
 .upload-modal .modal-dialog {
     height: 90%;
     width: 100%;
@@ -191,13 +204,13 @@
     float: left;
 }
 
-.upload-modal .modal-header, .confirm-modal .modal-header {
+.upload-modal .modal-header, .confirm-modal .modal-header, .help-modal .modal-header {
     border-bottom: none;
     background: #f9f9f9;
     text-align: center;
 }
 
-.upload-modal .modal-content, .confirm-modal .modal-content {
+.upload-modal .modal-content, .confirm-modal .modal-content,.help-modal .modal-content {
     height: 100%;
     border-radius: 0;
     border: 0;

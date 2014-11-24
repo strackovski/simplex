@@ -1,3 +1,9 @@
+/*****************************************************
+ Simplex Flat Forms
+ by Neja Dolinar <neja@nv3.org>
+ 2014
+*****************************************************/
+
 .form-element.prepend-icon > input, .field.prepend-icon > input {
     padding-left: 50px;
 
@@ -111,6 +117,10 @@
 .option .checksquare-selected {
     background: #2196F3;
     border-color: #2196F3;
+    position: relative;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .option .radiobox-selected {
@@ -125,14 +135,35 @@
     left: 5px;
     width: 6px;
     height: 3px;
+
     border: solid #fff;
     box-sizing: content-box;
     border-width: 0 0 3px 3px;
+    border-bottom: 3px solid #fff;
+    border-left: 3px solid #fff;
+    background: transparent;
     -webkit-transform: rotate(-45deg);
     -moz-transform: rotate(-45deg);
     -ms-transform: rotate(-45deg);
     -o-transform: rotate(-45deg);
     transform: rotate(-45deg);
+/*
+    box-sizing: border-box;
+
+    border-bottom: 3px solid white;
+    border-left: 3px solid red;
+    
+
+    background: transparent;
+
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    */
+
+
 }
 
 .option .radiobox-selected:before {
@@ -195,6 +226,9 @@ input, textarea {
 .form-group .checkbox label {
     font-size: 14px;
     font-weight: 500;
+}
+.forgot.form-group .checkbox label {
+    font-size: 13px;
 }
 
 .form-control, .form-control:focus {
@@ -415,8 +449,9 @@ input, textarea {
     border: 5px solid #fff;
     margin: 5px 20px;
     margin-bottom: -65px;
-    width: 160px;
     height: 140px;
+    max-width: 140px;
+    overflow: hidden;
 }
 
 .radio-img:after {
@@ -432,3 +467,29 @@ input, textarea {
     margin-bottom: 54px;
 }
 
+.form-group.field-small.option.forgot {
+    margin-bottom: 24px;
+}
+
+.act-wrap {
+    line-height: 20px;
+}
+
+.act-wrap:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.forgot-password {
+    margin: 10px 0;
+}
+
+.sign-in .btn-save {
+    display: block !important;
+    width: 100%;
+}
+
+.login-wrap .btn-save {
+    margin: 0;
+}

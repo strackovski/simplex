@@ -1,7 +1,12 @@
-//var baseURL = '/simplex/web/index_dev.php/';
-// var baseURL;
-Dropzone.autoDiscover = false;
+/*****************************************************
+ Simplex UI script for Material Theme
+ by Neja Dolinar <neja@nv3.org>
+ 2014
+ *****************************************************/
+var baseURL;
+var debug;
 var theDropzone;
+Dropzone.autoDiscover = false;
 
 // functions
 function deactivateRightBar() {
@@ -11,9 +16,7 @@ function deactivateRightBar() {
     $('.right-toolbar').removeClass('active-right-bar');
     $('.float-btn').removeClass('active-right-bar');
     $('.right-bar').removeClass('active-right-bar');
-
-    //post meta-btn
-    $('.meta-btn').removeClass('active');
+    $('.meta-btn').removeClass('active'); //post meta-btn
 }
 
 function activateRightBar() {
@@ -23,6 +26,14 @@ function activateRightBar() {
     $('.right-toolbar').addClass('active-right-bar');
     $('.float-btn').addClass('active-right-bar');
     $('.right-bar').addClass('active-right-bar');
+}
+
+function logXhrError(msg, xhr) {
+    if (debug == 1) {
+        console.log('*** ERROR ***');
+        console.log(msg);
+        console.log(xhr);
+    }
 }
 
 function handleDropzone() {
@@ -51,8 +62,7 @@ function handleDropzone() {
     }
 
     theDropzone = new Dropzone('div.dropzone', {
-        // url: baseURL + 'admin/' + type + '/upload',
-        url: '//192.168.64.13/simplex/web/index_dev.php/admin/' + type + '/upload',
+        url: type + '/upload',
         clickable: '.dropzone-clickable',
         autoProcessQueue: true,
         thumbnailWidth: null,
@@ -84,9 +94,7 @@ function handleDropzone() {
         $.ajax({
             beforeSend: function () {
                 // $('.main-content .tab-pane.active').animate({opacity: 0});
-
             },
-            // url: baseURL + 'admin/media/' + urlType
             url: '//192.168.64.13/simplex/web/index_dev.php/admin/media/' + urlType
         })
             .done(function (data) {
@@ -101,7 +109,7 @@ function handleDropzone() {
             })
             .fail(function (xhr, unknown, error) {
                 var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
-                console.log(error)
+                logXhrError(error, xhr);
                 $('body').append(flash);
                 $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
                     $('.flash-error').remove();
@@ -111,9 +119,8 @@ function handleDropzone() {
     });
 
     theDropzone.on("error", function (file, msg, xhr) {
+        logXhrError(msg, xhr);
         var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
-        console.log(msg)
-        console.log(xhr)
         $('body').append(flash);
         $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
             $('.flash-error').remove();
@@ -181,24 +188,15 @@ function querySelection() {
 
     // if contentType is not defined, a new page is being created
     if (!contentTypeField.val()) {
-
         //hide all secondary options, unhide first choices
-
         contentTypeField.closest('.data-group').nextAll().addClass('hidden');
-
         columnField.closest('.data-group').removeClass('hidden');
-
         operatorField.closest('.data-group').removeClass('hidden');
         operatorField.find('option[value="eq"]').removeClass('hidden').prop('selected', true);
         operatorField.find('option[value="in"]').removeClass('hidden');
-
         valueField.closest('.data-group').removeClass('hidden');
-
         limitMaxField.closest('.data-group').removeClass('hidden');
         sortByField.closest('.data-group').removeClass('hidden');
-
-
-
         //operatorField.find('option').removeClass('hidden');
 
     } else {
@@ -264,7 +262,6 @@ function querySelection() {
     }
 
     // Input changes
-
     contentTypeField.on('change', function () {
         // hide all sibling .form-groups
         //$(this).closest('.row').siblings().find('.data-group').addClass('hidden');
@@ -288,14 +285,10 @@ function querySelection() {
         authors.addClass('hidden');
         $('.dateField').addClass('hidden');
         $('.dateField').val('');
-
-
     });
 
     columnField.on('change', function () {
-
         operatorField.find('option').addClass('hidden');
-
         valueField.val('');
         valueField.closest('.data-group').addClass('hidden');
 
@@ -309,11 +302,9 @@ function querySelection() {
         authorsCheckboxes.length = 0;
         dates.length = 0;
 
-
         var columnCurrent = $(this).val();
 
         if (columnCurrent == 'title') {
-
             valueField.closest('.data-group').removeClass('hidden');
 
             // operatorField, show 'equals' and 'contains' options
@@ -557,10 +548,8 @@ function initRichEditor(height) {
 }
 
 function fileInputAction() {
-    $('.file-overflow').remove();
     var wrapper = $('<div class="file-hider"></div>').css({height: 0, width: 0, 'overflow': 'hidden'});
     var fileInput = $(':file').wrap(wrapper);
-
 
     function readURL(input) {
         var url = input.value;
@@ -570,14 +559,10 @@ function fileInputAction() {
             reader.onload = function (e) {
                 if ($('.select-image img').length) {
                     $('.select-image img').attr('src', e.target.result);
-
                 } else if ($('.user-form-image').length) {
                     $('.user-form-image img').attr('src', e.target.result)
                         .width(300);
-                }/* else {
-                 $('img.img-chooser').attr('src', e.target.result)
-                 .width(254);
-                 }*/
+                }
             };
             reader.readAsDataURL(input.files[0]);
         } else {
@@ -649,7 +634,6 @@ function fileInputAction() {
             fileInput.click();
         }
     });
-
 }
 
 function centerModal() {
@@ -660,12 +644,10 @@ function centerModal() {
 }
 
 function mediaModalAction() {
-
     $('.media-modal .modal-body img').on('load', function () {
         centerModal();
         $(this).animate({opacity: 1});
     });
-
     centerModal();
     setTimeout(function(){
         centerModal();
@@ -678,80 +660,118 @@ function mediaModalAction() {
             $('.modal .modal-next').trigger('click');
         }
     });
+}
 
+function showSectionHelper() {
+    var sectionHref = window.location.href;
+    var section = sectionHref.substr(sectionHref.lastIndexOf('/') + 1);
+    var sections = ['posts', 'pages', 'content', 'media'];
+
+    if (sections.indexOf(section) != -1 ) {
+        setTimeout(function() {
+            $.ajax({
+                url: baseURL + section + '/help'
+            })
+                .done(function (data) {
+                    $('.page-loader').hide(0);
+                    $('.help-modal .modal-content').html(data);
+                    $('.help-modal').modal();
+                    $('.help-modal .btn-confirm').off('click').on('click', function (e) {
+                    })
+                });
+        }, 500);
+    }
 }
 
 $(document).ready(function () {
-    //baseURL = $('body').attr('data-base') + '/';
+    //showSectionHelper();
+
+    $('.toggle-icon').on('click', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        var $title = $this.find('i.fa').attr('title');
+        $('.confirm-modal .modal-body').html("<p>This action will publish this post on your public site. Are you sure?</p><p>Don\'t remind me again</p>");
+        $('.confirm-modal').modal();
+        $('.confirm-modal .btn-confirm').off('click').on('click', function (e) {
+            $this.find('i.fa').toggleClass('active');
+            $.ajax({
+                url: $this.attr('data-action'),
+                beforeSend: function () {
+
+                }
+            })
+                .fail(function (xhr, msg) {
+                    logXhrError(msg, xhr);
+                });
+
+            $('.confirm-modal').modal('hide');
+        });
+
+    });
+
+
+    baseURL = '//192.168.64.13/simplex/web/index_dev.php/admin/';
+    debug = $('body').attr('data-env');
+
+    if (debug == 1) {
+        console.log('*** APPLICATION IS IN DEBUG MODE ***');
+    }
 
     /* side-nav submenu */
     var activeSideMenu = $('.side-nav a.submenu-open.active').attr('href');
     $(activeSideMenu).toggleClass('hidden');
 
-    /*
+    /* @todo
     var activeInnerMenu = $('.side-nav .submenu a.active');
     activeInnerMenu.closest('.submenu').removeClass('hidden');
     */
 
-
-
     $('.submenu-open').on('click', function(e) {
-        e.preventDefault();
-        console.log('hehe');
-        console.log($(this).attr('href'));
-
+        e.preventDefault();;
         var id = $(this).attr('href');
-
         $(id).toggleClass('hidden');
     });
 
-    $('.chip-header').on('click', function (e) {
+    $('.chip2-header').on('click', function (e) {
         if($('.animated-loader').length) {
             return false;
         }
 
-        if (!($(e.target).closest('.chip-controls').length > 0)) {
-
+        if (!($(e.target).closest('.chip2-controls').length > 0)) {
             var $this = $(this);
-            var chip = $this.closest('.chip');
+            var chip = $this.closest('.chip2');
 
-            if(chip.hasClass('active-chip')) {
+            if (chip.hasClass('chip2-active')) {
                 return false;
             }
 
-            chip.siblings().removeClass('active-chip');
-            chip.siblings().find('.chip-pre-header').removeAttr('style');
-            chip.siblings().find('.bigger-chip-title').removeClass('bigger-chip-title');
-            chip.siblings().find('.animated-loader').removeClass('animated-loader');
-            chip.siblings().find('.chip-actions').hide();
-            chip.siblings().find('.chip-content').hide();
+            chip.addClass('chip2-active');
+            chip.find('.chip2-loader').addClass('animated-loader');
 
+            // reset all chips
+            chip.siblings().removeClass('chip2-active');
+            chip.siblings().find('.chip2-content').hide();
+            chip.siblings().find('.chip2-line').hide();
+            chip.siblings().find('.chip2-summary').show();
+            chip.siblings().find('.chip2-pre-header').addClass('hidden');
 
-            // questionable
-            chip.addClass('active-chip');
-
-            //$this.find('h3').addClass('bigger-chip-title');
-            chip.find('.chip-pre-header').fadeIn();
-
-            $this.find('.chip-loader').addClass('animated-loader');
-            chip.find('.chip-actions').fadeIn(200);
-            setTimeout(function() {
-                $this.find('.chip-loader').removeClass('animated-loader');
-                chip.find('.chip-content').slideDown();
-
-            }, 800);
+            setTimeout(function(){
+                chip.find('.chip2-loader').removeClass('animated-loader');
+                chip.find('.chip2-content').slideDown();
+                chip.find('.chip2-line').fadeIn();
+                chip.find('.chip2-summary').hide();
+                chip.find('.chip2-pre-header').removeClass('hidden');
+            }, 400);
         }
     });
 
     $('.grid').on('click', '.chip-controls a', function (e) {
-
         if ($(this).hasClass('delete-post')) {
             e.preventDefault();
             var href = $(this).attr('href');
             $('.confirm-modal').modal();
             $('.confirm-modal .btn-confirm').off('click').on('click', function (e) {
                 e.preventDefault();
-
 
                 $.ajax({
                     url: href,
@@ -766,6 +786,7 @@ $(document).ready(function () {
 
                     })
                     .fail(function (xhr, msg) {
+                        logXhrError(msg, xhr);
                         var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
                         $('body').append(flash);
                         $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
@@ -783,8 +804,8 @@ $(document).ready(function () {
     }
 
     querySelection();
-    // handlers
 
+    // handlers
     if ($('.dash-inner').length) {
         $('body').addClass('dashboard');
     }
@@ -842,7 +863,7 @@ $(document).ready(function () {
             beforeSend: function () {
                 $('.page-loader').show();
             },
-            url: baseURL + 'admin/media/' + realTabHref
+            url: 'media/' + realTabHref
         })
             .done(function (data) {
 
@@ -850,6 +871,7 @@ $(document).ready(function () {
                 targetEl.html(data);
             })
             .fail(function (xhr, msg) {
+                logXhrError(msg, xhr);
                 var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
                 $('body').append(flash);
                 $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
@@ -868,13 +890,14 @@ $(document).ready(function () {
                         $('.page-loader').show();
                         $('.tab-pane#credentials').html('');
                     },
-                    url: baseURL + 'admin/user/credentials'
+                    url: 'credentials'
                 })
                     .done(function (html) {
                         $('.page-loader').hide(0);
                         $('.tab-pane#credentials').html(html);
                     })
-                    .fail(function () {
+                    .fail(function (xhr, msg) {
+                        logXhrError(msg, xhr);
                         var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
                         $('body').append(flash);
                         $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
@@ -886,11 +909,8 @@ $(document).ready(function () {
     });
 
     $('.settings-tabs a').off('show.bs.tab').on('show.bs.tab', function (e) {
-
         $('.tab-pane.active').html('');
-        if($('#media').length) {
-            fileInputAction();
-        }
+
         var tabHref = e.target.href;
         var realTabHref = tabHref.substr(tabHref.indexOf('#') + 1);
         var contentUrl = $(this).attr('data-url');
@@ -900,23 +920,20 @@ $(document).ready(function () {
                 $('.page-loader').show();
                 $('.tab-wrap .tab-content .tab-pane').html('');
             },
-            // url: baseURL + 'admin/settings/snapshots'
             url: contentUrl
         })
             .done(function (html) {
-
                 $('.page-loader').hide(0);
-
                 $('#' + realTabHref).html(html);
-                if(realTabHref == 'media') {
+                if(realTabHref == 'media' || realTabHref == 'settings') {
                     fileInputAction();
                 }
                 if(realTabHref == 'themes') {
                     //bindButtons();
                 }
-                //$('.form-action').hide();
             })
-            .fail(function () {
+            .fail(function (xhr, msg) {
+                logXhrError(msg, xhr);
                 var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
                 $('body').append(flash);
                 $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
@@ -946,9 +963,7 @@ $(document).ready(function () {
                 $('.images-dropdown').removeClass('shown');
             }
         }
-    })
-
-
+    });
 
     // page navigation, add mask
     $('.nav-btn').on('click', function () {
@@ -966,7 +981,6 @@ $(document).ready(function () {
     // detail-btn (posts, pages list)
     $('.grid').on('click', '.detail-btn', function (e) {
         e.preventDefault();
-
         var $this = $(this);
 
         if ($this.closest('.item-wrap').hasClass('active')) {
@@ -994,6 +1008,7 @@ $(document).ready(function () {
 
                     })
                     .fail(function (xhr, msg) {
+                        logXhrError(msg, xhr);
                         var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
                         $('body').append(flash);
                         $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
@@ -1021,6 +1036,7 @@ $(document).ready(function () {
                         }
                     })
                     .fail(function (xhr, msg) {
+                        logXhrError(msg, xhr);
                         var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
                         $('body').append(flash);
                         $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
@@ -1033,19 +1049,15 @@ $(document).ready(function () {
 
     // right-bar handlers
     // todo: make it work for every view, not just pages/posts
-
     $('body').keydown(function (e) {
         if (e.keyCode == 27 && $('.right-bar').hasClass('active-right-bar')) {
-
             $('.right-bar .close-btn').click();
         }
-
     });
 
     $('.grid').on('click', '.modal-right-bar .close-btn', function (e) {
         e.preventDefault();
         $('.media-modal').modal('hide');
-
     });
 
     $('.right-bar').on('click', '.close-btn', function (e) {
@@ -1058,7 +1070,6 @@ $(document).ready(function () {
         }
     });
 
-
     // help-btn (login page)
     $('.help-btn').on('click', function (e) {
         e.preventDefault();
@@ -1066,9 +1077,7 @@ $(document).ready(function () {
     });
 
     // meta-btn
-
     $('.meta-btn').on('click', function (e) {
-
         e.preventDefault();
         var $this = $(this);
         if ($this.hasClass('active')) {
@@ -1120,7 +1129,6 @@ $(document).ready(function () {
         $('.confirm-modal .btn-confirm').off('click').on('click', function (e) {
             e.preventDefault();
 
-
             $.ajax({
                 url: href,
                 beforeSend: function () {
@@ -1134,6 +1142,7 @@ $(document).ready(function () {
 
                 })
                 .fail(function (xhr, msg) {
+                    logXhrError(msg, xhr);
                     var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
                     $('body').append(flash);
                     $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
@@ -1151,7 +1160,6 @@ $(document).ready(function () {
         $('.confirm-modal .btn-confirm').off('click').on('click', function (e) {
             e.preventDefault();
 
-
             $.ajax({
                 url: href,
                 beforeSend: function () {
@@ -1160,10 +1168,10 @@ $(document).ready(function () {
             })
                 .done(function (data) {
                     $('.page-loader').hide(0);
-                    window.location = "http://192.168.64.13/simplex/web/index_dev.php/admin/posts";
-                    window.location = baseURL +"admin/posts";
+                    window.location = baseURL + 'posts';
                 })
                 .fail(function (xhr, msg) {
+                    logXhrError(msg, xhr);
                     var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
                     $('body').append(flash);
                     $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
@@ -1181,10 +1189,7 @@ $(document).ready(function () {
         if ( $(e.target).closest('.right-aux-toolbar').length > 0 ) {
             $('.confirm-modal').modal();
             $('.confirm-modal .btn-confirm').off('click').on('click', function (e) {
-
                 e.preventDefault();
-
-
                 $.ajax({
                     url: href,
                     beforeSend: function () {
@@ -1199,50 +1204,13 @@ $(document).ready(function () {
 
                     })
                     .fail(function (xhr, msg) {
+                        logXhrError(msg, xhr);
                         var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
                         $('body').append(flash);
                         $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
                             $('.flash-error').remove();
                         });
                     });
-
-/*
-                var arrayOfIds = [];
-                var jsonArrayOfIds = [];
-                arrayOfIds.length = 0;
-                jsonArrayOfIds.length = 0;
-                $('input[name="delete_items[]"]:checked').each(function () {
-                    arrayOfIds.push($(this).attr('value'));
-                });
-
-                jsonArrayOfIds = JSON.stringify(arrayOfIds);
-
-                $.ajax({
-                    url: href + '?id=' + jsonArrayOfIds + '&multi=true',
-                    beforeSend: function () {
-                        $('.page-loader').show();
-                    }
-                })
-                    .done(function (data) {
-                        $('.page-loader').hide(0);
-                        $('.tab-pane.active').html(data)
-
-                    })
-                    .fail(function (xhr, msg) {
-                        var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
-                        $('body').append(flash);
-                        $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
-                            $('.flash-error').remove();
-                        });
-                    });
-
-                $('.thumbnail.active').closest('.removable').remove();
-                //$('.isSelected').closest('.removable').remove();
-                $('.confirm-modal').modal('hide');
-                $('.media-actions').hide();
-                //$('.btn-group.selected-menu .btn').css('display', 'none');
-                //$('.cmd-multiselect').find('i.fa').removeClass('fa-check-square-o').addClass('fa-square-o');
-                */
             });
         } else {
             $('.confirm-modal').modal();
@@ -1258,7 +1226,6 @@ $(document).ready(function () {
                 });
 
                 jsonArrayOfIds = JSON.stringify(arrayOfIds);
-
                 $.ajax({
                     url: href + '?id=' + jsonArrayOfIds + '&multi=true',
                     beforeSend: function () {
@@ -1271,19 +1238,16 @@ $(document).ready(function () {
 
                     })
                     .fail(function (xhr, msg) {
+                        logXhrError(msg, xhr);
                         var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
                         $('body').append(flash);
                         $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
                             $('.flash-error').remove();
                         });
                     });
-
                 $('.thumbnail.active').closest('.removable').remove();
-                //$('.isSelected').closest('.removable').remove();
                 $('.confirm-modal').modal('hide');
                 $('.media-actions').hide();
-                //$('.btn-group.selected-menu .btn').css('display', 'none');
-                //$('.cmd-multiselect').find('i.fa').removeClass('fa-check-square-o').addClass('fa-square-o');
             });
         }
 
@@ -1299,7 +1263,6 @@ $(document).ready(function () {
 
     $('.grid').on('click', '.thumbnail', function (e) {
         e.preventDefault();
-
         var $this;
 
         if ( $(event.target).closest('.thumb-check').length > 0 ) {
@@ -1344,21 +1307,16 @@ $(document).ready(function () {
                 .done(function (data) {
 
                     $('.media-modal').html(data);
-
                     if ($('#example_video_1').length) {
-
                         var mm = $('.media-modal').find('#example_video_1')[0];
-
                         videojs(mm, {"controls": true, "autoplay": false, "preload": "auto" });
                     }
-
                     $('.media-modal').modal({
                         backdrop: 'static'
                     });
-
-                    //activateRightBar();
                 })
                 .fail(function (xhr, msg) {
+                    logXhrError(msg, xhr);
                     var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
                     $('body').append(flash);
                     $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
@@ -1366,15 +1324,6 @@ $(document).ready(function () {
                     });
                 });
 
-            /*
-            $('.media-modal .modal-body').html('<img src="'+ $src +'" alt="pumpkin" />');
-
-            $('.media-modal').modal({
-                backdrop: 'static'
-            });
-
-            activateRightBar();
-            */
         }
     });
 
@@ -1448,17 +1397,14 @@ var timeout = false;
 var delta = 200;
 
 $(window).resize(function () {
-
     rtime = new Date();
     if (timeout === false) {
         timeout = true;
         setTimeout(resizeend, delta);
     }
-
 });
 
 function resizeend() {
-
     if (new Date() - rtime < delta) {
         setTimeout(resizeend, delta);
     } else {
@@ -1467,5 +1413,4 @@ function resizeend() {
             centerModal();
         }
     }
-
 }

@@ -80,14 +80,14 @@
         {% if settings.getSiteLogo %}
             <div class="single-item-box select-image">
                 <img src="{{ app.request.getBasePath() ~ '/uploads/crops/' ~ settings.getSiteLogo }}.jpeg" width="80" />
-                <div class="form-btn raised-btn select-file select-logo">Choose file</div>
             </div>
         {% endif %}
-        <div class="form-group">
+        <div class="">
             {{ form_label(form.siteLogo) }}
             {{ form_widget(form.siteLogo) }}
             {{ form_errors(form.siteLogo) }}
         </div>
+        <div class="form-btn raised-btn select-file select-watermark">Choose file</div>
 
     </div>
 </div>

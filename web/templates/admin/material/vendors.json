@@ -1,0 +1,24 @@
+{
+    "scripts":
+    {
+        "jquery": "vendor/jquery.js",
+        "bootstrap": "vendor/bootstrap.js",
+        "dropzone": "vendor/dropzone.js",
+        "jquery-history": "vendor/jquery.history.js",
+        "jquery-ui": "vendor/jquery-ui.js",
+        "video-js": "vendor/video.js",
+        "simplex-main": "main.js"
+    },
+    "styles":
+    {
+        "reset": "vendor/reset.css",
+        "bootstrap": "vendor/bootstrap.css",
+        "font-awesome": "vendor/font-awesome.css",
+        "jquery-ui.structure": "vendor/jquery-ui.structure.css",
+        "video-js": "vendor/video-js.css",
+        "simplex-modal-dialogs": "modal.css",
+        "simplex-flat-forms": "flats.css",
+        "simplex-graphics": "graphics.css",
+        "simplex-main": "main.css"
+    }
+}

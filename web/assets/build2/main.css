@@ -1,3 +1,9 @@
+/*****************************************************
+ Simplex UI Material Theme
+ Main stylesheet
+ by Neja Dolinar <neja@nv3.org>
+ 2014
+*****************************************************/
 * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -1200,6 +1206,10 @@ header.big-header {
     margin-bottom: 24px;
 }
 
+.select-image img {
+    margin-bottom: 12px;
+}
+
 .des {
     padding-bottom: 12px;
 
@@ -1384,6 +1394,30 @@ header.big-header {
 
 .status-icon {
     vertical-align: top;
+}
+
+.toggle-icon i.fa{
+    transition: background .2s;
+}
+
+.toggle-icon:hover{
+    cursor: pointer;
+}
+
+.toggle-icon:hover i.fa-eye{
+    background: #999;
+}
+
+.toggle-icon:hover i.fa-star {
+    background: #999;
+}
+
+.toggle-icon:hover i.fa-star.active {
+    background: #c43600;
+}
+
+.toggle-icon:hover i.fa-eye.active{
+    background: #005f00;
 }
 
 .status-icon i.fa {
@@ -2085,6 +2119,179 @@ ul.list-box > li {
 }
 
 
+/* CHIPS 2 */
+
+.chip2 {
+    border-bottom: 1px solid rgba(0,0,0,0.14);
+    overflow: hidden;
+    position: relative;
+}
+
+.chip2-header{
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.chip2-active .chip2-header {
+    cursor: auto;
+}
+
+.chip2-summary{
+    line-height: 24px;
+    height: 76px;
+}
+
+.chip2-summary .badge-icon,
+.chip2-pre-header .badge-icon{
+    float: left;
+    background: #ccc;
+    transition: background .3s;
+}
+
+.chip2.chip2-active .badge-icon {
+    background: dodgerblue;
+}
+
+.chip2 .btn-small{
+    font-size: 1.2em;
+    margin: 0 10px;
+    color: #a6a6a6;
+}
+
+.chip2 .btn-small:hover{
+    color: #777;
+}
+
+.chip2-content {
+    padding-left: 60px;
+    margin-top: 8px;
+    margin-bottom: 20px;
+    display: none;
+}
+
+.chip2-content-main {
+    padding-top: 20px;
+    padding-left: 52px;
+    padding-right: 40px;
+}
+
+.chip2-content-main p{
+    font-size: 1em;
+    color: #666;
+    line-height: 1.8em;
+}
+
+.chip2-content-info {
+    height: 48px;
+    line-height: 48px;
+    white-space: nowrap;
+}
+
+.chip2-content-info img {
+    float: left;
+    display: block;
+    height: 38px;
+    width: 38px;
+    border-radius: 50%;
+    margin-top: 5px;
+    margin-right: 12px;
+}
+
+.chip2-detail p {
+    font-size: .9em;
+    white-space: nowrap;
+    color: #777;
+}
+
+.chip2-content-info p {
+    font-size: .9em;
+    white-space: nowrap;
+    color: #444;
+    height: 40px;
+    line-height: 20px;
+    padding-top: 4px;
+}
+
+.chip2-content-info p span {
+    display: block;
+}
+
+
+.chip2-pre-header {
+    height: 76px;
+}
+
+.chip2-pre-header-title {
+    width: 60%;
+    float: left;
+    white-space: nowrap;
+    height: 76px;
+    line-height: 76px;
+}
+
+.chip2-pre-header-title:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.chip2-controls {
+    float: left;
+    width: 40%;
+    white-space: nowrap;
+    height: 76px;
+    line-height: 76px;
+    text-align: right;
+}
+
+.chip2-pre-header h3 {
+    float: left;
+    margin-left: 12px;
+}
+
+.chip2-detail {
+    height: 40px;
+    line-height: 20px;
+    padding-top: 18px;
+    margin-left: 12px;
+    float: left;
+}
+
+
+.chip2-loader {
+    height: 3px;
+    background: deepskyblue;
+    visibility: hidden;
+}
+.chip2-loader.animated {
+    visibility: visible;
+    -webkit-animation: loading 1.6s linear infinite;
+    -o-animation: loading 1.6s linear infinite;
+    animation: loading 1.6s linear infinite;
+}
+
+
+.chip2-loader.animated-loader {
+    visibility: visible;
+    -webkit-animation: loading 1.6s linear infinite;
+    -o-animation: loading 1.6s linear infinite;
+    animation: loading 1.6s linear infinite;
+    width: 40px;
+
+}
+
+.chip2-line {
+    position: absolute;
+    height: 50px;
+    width: 37px;
+    top: 63px;
+    left: 23px;
+    border-left: 1px solid rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    display: none;
+
+}
+
 
 /* CHIPS */
 .chips {
@@ -2095,6 +2302,7 @@ ul.list-box > li {
     overflow: hidden;
     border-bottom: 1px solid rgba(0, 0, 0, 0.14);
     background: #fff;
+    position: relative;
 }
 
 .chip-loader {
@@ -2147,17 +2355,53 @@ ul.list-box > li {
     cursor: auto;
 }
 
-.chip-header img {
+.chip-header img,
+.chip-header .badge-icon {
     display: block;
     float: left;
     height: 48px;
+    width: 48px;
     border-radius: 50%;
     margin-right: 12px;
+}
+
+.chip-header .badge-icon{
+    line-height: 52px;
+    margin-top: 0;
 }
 
 .chip-inner {
     margin: 0 12px;
     overflow: hidden;
+}
+
+.cs-inner {
+    position: absolute;
+    left: 60px;
+    top: 36px;
+
+
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+
+}
+
+.cs-inner.transit {
+    transform: translate(80px, 40px);
+    -webkit-transform: translate(80px, 40px);
+
+}
+
+.chip-inner img.round {
+    display: block;
+    float: left;
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
+    margin-right: 12px;
 }
 
 .chip-header .chip-inner {
@@ -2173,6 +2417,7 @@ ul.list-box > li {
 .chip-summary {
     white-space: nowrap;
     overflow: hidden;
+    height: 30px;
 }
 
 .chip-summary p {
@@ -2209,7 +2454,7 @@ ul.list-box > li {
     transition: all 0.2s ease;
 }
 
-.active-chip .chip-summary h3 {
+.chip-loaded .chip-summary h3 {
     display: none;
 }
 
@@ -2291,6 +2536,7 @@ ul.list-box > li {
     padding-right: 12px;
 
 }
+
 
 
 
@@ -2378,6 +2624,12 @@ div.badge-icon > i {
     font-size: 1.6em;
 }
 
+div.badge-icon.badge-icon-big {
+    height: 48px;
+    width: 48px;
+    line-height: 52px;
+}
+
 .badge-green { background: forestgreen; }
 .badge-violet { background: blueviolet; }
 .badge-blue { background: dodgerblue; }
@@ -2385,4 +2637,37 @@ div.badge-icon > i {
 
 .empty-add{
     margin: 20px 0;
+}
+
+.modal.help-modal {
+    opacity: 0.8;
+}
+
+.help.welcome {
+    color: #666;
+    padding: 40px;
+}
+
+.welcome > .title {
+    width: 70%;
+    margin: 10% auto auto auto;
+}
+
+.welcome .title h1{
+    text-transform: uppercase;
+    font-size: 2em;
+    margin-bottom: 40px;
+}
+
+.welcome .title p{
+    font-size: 1.4em;
+    line-height: 2em;
+    margin-bottom: 30px;
+}
+
+.close-abs {
+    top: 40px;
+    right: 40px;
+    color: #999;
+    position: absolute;
 }

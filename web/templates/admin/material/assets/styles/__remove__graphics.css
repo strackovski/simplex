@@ -1,5 +1,8 @@
-/* Animations */
-
+/*****************************************************
+ Simplex UI Animations
+ by Neja Dolinar <neja@nv3.org>
+ 2014
+*****************************************************/
 @-webkit-keyframes flash {
     0%, 10%, 100% { background: transparent; box-shadow: none; }
     5% { background: #fff; box-shadow: 0px 0px 10px #fff; }

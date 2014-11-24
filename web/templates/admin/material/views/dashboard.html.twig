@@ -31,7 +31,7 @@
                     {% if user.getAvatar %}
                         <img src="{{ display('crops:' ~ user.getAvatar.getPath) }}" alt="" />
                     {% else %}
-                        <img src="{{ display('crops:none') }}" alt=""/>
+                        <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt=""/>
                     {% endif %}
                 </div>
 
@@ -68,43 +68,192 @@
                             {% if latest is defined %}
                                 {% if latest.posts|length > 0 %}
                                     {% for latestPost in latest.posts %}
-                                        <div class="chip">
-                                            <div class="chip-header">
-                                                <div class="chip-inner">
-                                                    <div class="chip-pre-header">
-                                                        <div class="pre-header-title">
+
+                                        <div class="chip2">
+                                            <div class="chip2-line"></div>
+                                            <div class="chip2-header">
+                                                <div class="chip2-inner">
+                                                    <div class="chip2-pre-header hidden">
+                                                        <div class="chip2-pre-header-title">
+                                                            <div class="badge-icon badge-icon-big badge-blue"><i class="fa fa-2x fa-file-text"></i></div>
                                                             <h3>{{ latestPost.getTitle }}</h3>
                                                         </div>
-                                                        <div class="chip-controls">
-                                                            <a href="{{ app.url_generator.generate('admin/post/view', {post:latestPost.getId}) }}"><i class="fa fa-ellipsis-v"></i></a>
-                                                            <a class="delete-post" href="{{ app.url_generator.generate('admin/post/delete', {post:latestPost.getId}) }}"><i class="fa fa-trash"></i></a>
-                                                            <a href="{{ app.url_generator.generate('admin/post/edit', {post:latestPost.getId}) }}"><i class="fa fa-pencil"></i></a>
+
+                                                        <div class="chip2-controls">
+                                                            <a class="delete-page delete-btn btn-small" href="{{ app.url_generator.generate('admin/post/delete', {post:latestPost.getId}) }}"><i class="fa fa-trash"></i></a>
+                                                            <a class="btn-small" href="{{ app.url_generator.generate('admin/post/edit', {post:latestPost.getId}) }}"><i class="fa fa-pencil"></i></a>
                                                         </div>
                                                     </div>
-                                                    {% if latestPost.getAuthor.getAvatar %}
-                                                        <img src="{{ display('crops:' ~ latestPost.getAuthor.getAvatar.getPath) }}" alt=""/>
-                                                    {% else %}
-                                                        <img src="{{ display('crops:none') }}" alt=""/>
-                                                    {% endif %}
-                                                    <div class="chip-summary">
-                                                        <h3>{{ latestPost.getTitle }}</h3>
-                                                        <p>by {{ latestPost.getAuthor.displayName }} <span class="connector">-</span> <span>{{ latestPost.getSubtitle }}</span></p>
+
+                                                    <div class="chip2-summary">
+                                                        <div class="badge-icon badge-icon-big badge-blue"><i class="fa fa-2x fa-file-text"></i></div>
+                                                        <div class="chip2-detail">
+                                                            <h3>{{ latestPost.getTitle }}</h3>
+                                                            {% if latestPost.getAuthor %}
+                                                                <p>by {{ latestPost.getAuthor.displayName }} <span class="connector">-</span> <span>{{ latestPost.getCreatedAt|date|timeago }}</span></p>
+                                                            {% else %}
+                                                                <p>no author</p>
+                                                            {% endif %}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="chip-loader"></div>
+
+                                                <div class="chip2-loader"></div>
                                             </div>
-                                            <div class="chip-content">
-                                                <div class="chip-inner">
-                                                    <p>
-                                                        {{ latestPost.getBody|raw }}
-                                                    </p>
+
+                                            <div class="chip2-content">
+                                                <div class="chip2-inner">
+                                                    <div class="chip2-content-info">
+                                                        {% if latestPost.getAuthor %}
+                                                            {% if latestPost.getAuthor.getAvatar %}
+                                                                <img src="{{ display('crops:' ~ latestPost.getAuthor.getAvatar.getPath) }}" alt=""/>
+                                                            {% else %}
+                                                                <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt=""/>
+                                                            {% endif %}
+                                                            <p>by {{ latestPost.getAuthor.displayName }}<span>{{ latestPost.createdAt|date|timeago }}</span></p>
+                                                        {% else %}
+                                                            <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt=""/>
+                                                            <p>no author</p>
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <div class="chip2-content-main">
+                                                        <p>{{ latestPost.getSubtitle }}</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     {% endfor %}
-                                {% else %}
-                                    <p class="ghost big">no postandos addiero yetando</p>
                                 {% endif %}
+
+                                {% if latest.pages|length > 0 %}
+                                    {% for latestPage in latest.pages %}
+                                       <div class="chip2">
+                                           <div class="chip2-line"></div>
+                                           <div class="chip2-header">
+                                               <div class="chip2-inner">
+                                                   <div class="chip2-pre-header hidden">
+                                                       <div class="chip2-pre-header-title">
+                                                           <div class="badge-icon badge-icon-big badge-blue"><i class="fa fa-2x fa-file"></i></div>
+                                                           <h3>{{ latestPage.getTitle }}</h3>
+                                                       </div>
+
+                                                       <div class="chip2-controls">
+                                                           <a class="delete-page delete-btn btn-small" href="{{ app.url_generator.generate('admin/page/delete', {page:latestPage.getId}) }}"><i class="fa fa-trash"></i></a>
+                                                           <a class="btn-small" href="{{ app.url_generator.generate('admin/page/edit', {page:latestPage.getId}) }}"><i class="fa fa-pencil"></i></a>
+                                                       </div>
+                                                   </div>
+
+                                                   <div class="chip2-summary">
+                                                       <div class="badge-icon badge-icon-big badge-blue"><i class="fa fa-2x fa-file"></i></div>
+                                                       <div class="chip2-detail">
+                                                           <h3>{{ latestPage.getTitle }}</h3>
+                                                           {% if latestPage.getAuthor %}
+                                                               <p>by {{ latestPage.getAuthor.displayName }} <span class="connector">-</span> <span>{{ latestPage.createdAt|date|timeago }}</span></p>
+                                                           {% else %}
+                                                               <p>no author</p>
+                                                           {% endif %}
+                                                       </div>
+                                                   </div>
+                                               </div>
+
+                                               <div class="chip2-loader"></div>
+                                           </div>
+
+                                           <div class="chip2-content">
+                                               <div class="chip2-inner">
+                                                   <div class="chip2-content-info">
+                                                       {% if latestPage.getAuthor %}
+                                                           {% if latestPage.getAuthor.getAvatar %}
+                                                               <img src="{{ display('crops:' ~ latestPage.getAuthor.getAvatar.getPath) }}" alt=""/>
+                                                           {% else %}
+                                                               <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt=""/>
+                                                           {% endif %}
+                                                           <p>by {{ latestPage.getAuthor.displayName }} <span>{{ latestPage.createdAt|date|timeago }}</span></p>
+                                                       {% else %}
+                                                           <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt=""/>
+                                                           <p>no author</p>
+                                                       {% endif %}
+                                                   </div>
+
+                                                   <div class="chip2-content-main">
+                                                       content
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                    {% endfor %}
+                                {% endif %}
+
+                                {% if latest.media|length > 0 %}
+                                    {% for latestMedia in latest.media %}
+
+                                        <div class="chip2">
+                                            <div class="chip2-line"></div>
+                                            <div class="chip2-header">
+                                                <div class="chip2-inner">
+                                                    <div class="chip2-pre-header hidden">
+                                                        <div class="chip2-pre-header-title">
+                                                            {% if latestMedia.getType == 'image' %}
+                                                            <div class="badge-icon badge-icon-big badge-blue"><i class="fa fa-2x fa-image"></i></div>
+                                                            {% elseif latestMedia.getType == 'video' %}
+                                                            <div class="badge-icon badge-icon-big badge-blue"><i class="fa fa-2x fa-camera"></i></div>
+                                                            {% endif %}
+                                                            <h3>{{ latestMedia.getTitle }}</h3>
+                                                        </div>
+
+                                                        <div class="chip2-controls">
+                                                            <a class="delete-page delete-btn btn-small" href="{{ app.url_generator.generate('admin/media/delete', {id:latestMedia.getId}) }}"><i class="fa fa-trash"></i></a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="chip2-summary">
+                                                        {% if latestMedia.getType == 'image' %}
+                                                            <div class="badge-icon badge-icon-big badge-blue"><i class="fa fa-2x fa-image"></i></div>
+                                                        {% elseif latestMedia.getType == 'video' %}
+                                                            <div class="badge-icon badge-icon-big badge-blue"><i class="fa fa-2x fa-camera"></i></div>
+                                                        {% endif %}
+                                                        <div class="chip2-detail">
+                                                            <h3>{{ latestMedia.getTitle }}</h3>
+                                                            {% if latestMedia.getAuthor %}
+                                                                <p>by {{ latestMedia.getAuthor.displayName }} <span class="connector">-</span> <span>{{ latestMedia.createdAt|date|timeago }}</span></p>
+                                                            {% else %}
+                                                                <p>no author</p>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="chip2-loader"></div>
+                                            </div>
+
+                                            <div class="chip2-content">
+                                                <div class="chip2-inner">
+                                                    <div class="chip2-content-info">
+                                                        {% if latestMedia.getAuthor %}
+                                                            {% if latestMedia.getAuthor.getAvatar %}
+                                                                <img src="{{ display('crops:' ~ latestMedia.getAuthor.getAvatar.getPath) }}" alt=""/>
+                                                            {% else %}
+                                                                <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt=""/>
+                                                            {% endif %}
+                                                            <p>by {{ latestMedia.getAuthor.displayName }} <span>{{ latestMedia.createdAt|date|timeago }}</span></p>
+                                                        {% else %}
+                                                            <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt=""/>
+                                                            <p>no author</p>
+                                                        {% endif %}
+                                                    </div>
+
+                                                    <div class="chip2-content-main">
+                                                        <img height="250" src="{{ display('thumbnails/medium:' ~ latestMedia.getPath) }}" alt="{{ latestMedia.getTitle }}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+
+                            {% else %}
+                                <p class="ghost big">no latest</p>
                             {% endif %}
                         </div>
                     </div>

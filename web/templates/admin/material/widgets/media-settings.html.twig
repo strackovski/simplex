@@ -170,8 +170,7 @@
         </div>
         {% if settings.getWatermark %}
             <div class="single-item-box select-image">
-                <div class="select-overlay">Change file</div>
-                <img src="{{ app.request.getBasePath() ~ '/uploads/' ~ settings.getWatermark }}.png" width="80" />
+                <img src="{{ app.request.getBasePath() ~ '/uploads/' ~ settings.getWatermark }}.jpeg" width="80" />
             </div>
         {% endif %}
         <div class="watermark-file">

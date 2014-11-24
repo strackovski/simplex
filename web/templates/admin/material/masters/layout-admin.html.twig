@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/font-awesome-4.2.0/css/font-awesome.css"/>
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/reset.css"/>
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/bootstrap.css"/>
@@ -24,9 +25,15 @@
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/dropzone.js"></script>
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/video.js"></script>
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build2/main.js"></script>
+
+
+    {#
+    <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build/styles.css"/>
+    <script type="text/javascript" src="{{ app.request.basepath }}/assets/build/scripts.js"></script>
+    #}
 </head>
 
-<body class="initial-pad" data-base="{{ app.request.baseUrl }}">
+<body class="initial-pad" data-base="{{ app.request.getHost ~ app.request.baseUrl }}" data-env="{{ app.debug }}">
 {% block pageHeader %}
     <header class="">
         <div class="header-wrapper">
@@ -136,7 +143,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <img src="halloween_pumpkin.png" alt="alt"/>
+
                 </div>
             </div>
         </div>
@@ -214,6 +221,13 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div class="modal fade help-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+           5
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <div class="page-mask"></div>
 

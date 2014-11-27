@@ -28,6 +28,7 @@ use nv\Simplex\Model\Entity\Post;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Security\Core\SecurityContext;
+use nv\Simplex\Model\Entity\User;
 
 /**
  * Class PostController
@@ -216,6 +217,7 @@ class PostController extends ActionControllerAbstract
                 }
 
                 if (null !== $token) {
+                    /** @var $user User */
                     $post->setEditor($token->getUser());
                 }
 

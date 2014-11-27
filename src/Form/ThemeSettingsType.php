@@ -60,7 +60,7 @@ class ThemeSettingsType extends AbstractType
             ))
             ->add('admin_theme', 'choice', array(
                 'mapped' => true,
-                'required' => false,
+                'required' => true,
                 'expanded' => true,
                 'multiple' => false,
                 'choices' => $adminThemes

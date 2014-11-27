@@ -131,16 +131,6 @@ class Post extends TimestampableAbstract implements ObservableInterface
     private $observers;
 
     /**
-     * @PrePersist
-     *
-     * @return $this
-     */
-    public function prePersist()
-    {
-
-    }
-
-    /**
      * @param $slug
      *
      * @return mixed

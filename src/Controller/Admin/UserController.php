@@ -134,9 +134,12 @@ class UserController extends ActionControllerAbstract
      */
     public function getAction(Request $request)
     {
+        $view = $request->get('view');
         $user = $this->users->findOneBy(array('id' => $request->get('user')));
 
         return $this->twig->render(
+            $view ?
+            'admin/'.$this->settings->getAdminTheme().'/widgets/user-card.html.twig' :
             'admin/'.$this->settings->getAdminTheme().'/widgets/user-detail.html.twig',
             array(
                 'user' => $user,

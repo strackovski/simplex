@@ -21,7 +21,8 @@ $config = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR .'paramete
 
 $app['db.options'] = $config['database'];
 $app['orm.options'] = array(
-    'orm.proxies_dir'          => APPLICATION_ROOT_PATH.'/var/cache/doctrine/proxy',
+    'orm.proxies_dir' => APPLICATION_ROOT_PATH.'/var/cache/doctrine/proxy',
+    //'orm.default_cache' => 'memcache',
     'orm.em.options' => array(
         "mappings" => array(
             array(

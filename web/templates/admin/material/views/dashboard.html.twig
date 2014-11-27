@@ -22,7 +22,6 @@
 {% endblock %}
 
 {% block content %}
-
     <div class="dashboard-grid-header">
         <div class="dashboard-grid-header-outer clearfix">
             <div class="header-box info-box">
@@ -44,12 +43,32 @@
 
             <div class="header-box info-box status-type right-info-box">
                 <div class="info-app-button">
-                    <a href="{{ app.url_generator.generate('admin/settings') }}"><i class="fa fa-cog"></i></a>
+
+                    <div class="dropdown">
+                        <a id="settings-menu" data-toggle="dropdown" aria-expanded="true" class="dropdown-toggle btn-large" href="{{ app.url_generator.generate('admin/settings') }}">
+                            <i class="fa fa-cog"></i>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="settings-menu">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="{{ app.url_generator.generate('admin/settings') }}">General settings</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="{{ app.url_generator.generate('admin/media/settings') }}">Media options</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="{{ app.url_generator.generate('admin/settings/themes') }}">Theme settings</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="{{ app.url_generator.generate('admin/settings/mail') }}">Mail configuration</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="info-app-status">
-                    <p><b>{{ app.request.getBaseURL() }}</b></p>
+                    <p><b>{{ app.request.getHost ~ app.request.getBaseURL() }}</b></p>
                     {% if app.settings.getLive == 1 %}
-                        <p>Site is online</p>
+                        <p><a target="_blank" href="{{ app.url_generator.generate('/') }}">Site is online</a></p>
                     {% else %}
                         <p>Site is offline</p>
                     {% endif %}
@@ -68,7 +87,6 @@
                             {% if latest is defined %}
                                 {% if latest.posts|length > 0 %}
                                     {% for latestPost in latest.posts %}
-
                                         <div class="chip2">
                                             <div class="chip2-line"></div>
                                             <div class="chip2-header">
@@ -82,6 +100,7 @@
                                                         <div class="chip2-controls">
                                                             <a class="delete-page delete-btn btn-small" href="{{ app.url_generator.generate('admin/post/delete', {post:latestPost.getId}) }}"><i class="fa fa-trash"></i></a>
                                                             <a class="btn-small" href="{{ app.url_generator.generate('admin/post/edit', {post:latestPost.getId}) }}"><i class="fa fa-pencil"></i></a>
+                                                            <a class="btn-small chip-close" href="#"><i class="fa fa-caret-up"></i></a>
                                                         </div>
                                                     </div>
 
@@ -90,7 +109,11 @@
                                                         <div class="chip2-detail">
                                                             <h3>{{ latestPost.getTitle }}</h3>
                                                             {% if latestPost.getAuthor %}
-                                                                <p>by {{ latestPost.getAuthor.displayName }} <span class="connector">-</span> <span>{{ latestPost.getCreatedAt|date|timeago }}</span></p>
+                                                                {% if user == app.security.token.user %}
+                                                                    <p>by {{ latestPost.getAuthor.displayName }} <span class="connector">-</span> <span>{{ latestPost.getCreatedAt|date|timeago }}</span></p>
+                                                                {% else %}
+                                                                    <p>by {{ latestPost.getAuthor.displayName }} <span class="connector">-</span> <span>{{ latestPost.getCreatedAt|date|timeago }}</span></p>
+                                                                {% endif %}
                                                             {% else %}
                                                                 <p>no author</p>
                                                             {% endif %}
@@ -110,7 +133,8 @@
                                                             {% else %}
                                                                 <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt=""/>
                                                             {% endif %}
-                                                            <p>by {{ latestPost.getAuthor.displayName }}<span>{{ latestPost.createdAt|date|timeago }}</span></p>
+
+                                                            <p>by <a class="user-popover btn btn-default" href="{{ app.url_generator.generate('admin/user/get', {user:user.getId}) }}">{{ latestPost.getAuthor.displayName }}</a><span>{{ latestPost.getCreatedAt|date|timeago }}</span></p>
                                                         {% else %}
                                                             <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt=""/>
                                                             <p>no author</p>
@@ -134,18 +158,19 @@
                                                <div class="chip2-inner">
                                                    <div class="chip2-pre-header hidden">
                                                        <div class="chip2-pre-header-title">
-                                                           <div class="badge-icon badge-icon-big badge-blue"><i class="fa fa-2x fa-file"></i></div>
+                                                           <div class="badge-icon badge-icon-big badge-violet"><i class="fa fa-2x fa-file"></i></div>
                                                            <h3>{{ latestPage.getTitle }}</h3>
                                                        </div>
 
                                                        <div class="chip2-controls">
                                                            <a class="delete-page delete-btn btn-small" href="{{ app.url_generator.generate('admin/page/delete', {page:latestPage.getId}) }}"><i class="fa fa-trash"></i></a>
                                                            <a class="btn-small" href="{{ app.url_generator.generate('admin/page/edit', {page:latestPage.getId}) }}"><i class="fa fa-pencil"></i></a>
+                                                           <a class="btn-small chip-close" href="#"><i class="fa fa-caret-up"></i></a>
                                                        </div>
                                                    </div>
 
                                                    <div class="chip2-summary">
-                                                       <div class="badge-icon badge-icon-big badge-blue"><i class="fa fa-2x fa-file"></i></div>
+                                                       <div class="badge-icon badge-icon-big badge-violet"><i class="fa fa-2x fa-file"></i></div>
                                                        <div class="chip2-detail">
                                                            <h3>{{ latestPage.getTitle }}</h3>
                                                            {% if latestPage.getAuthor %}
@@ -195,23 +220,24 @@
                                                     <div class="chip2-pre-header hidden">
                                                         <div class="chip2-pre-header-title">
                                                             {% if latestMedia.getType == 'image' %}
-                                                            <div class="badge-icon badge-icon-big badge-blue"><i class="fa fa-2x fa-image"></i></div>
+                                                            <div class="badge-icon badge-icon-big badge-red"><i class="fa fa-2x fa-image"></i></div>
                                                             {% elseif latestMedia.getType == 'video' %}
-                                                            <div class="badge-icon badge-icon-big badge-blue"><i class="fa fa-2x fa-camera"></i></div>
+                                                            <div class="badge-icon badge-icon-big badge-red"><i class="fa fa-2x fa-camera"></i></div>
                                                             {% endif %}
                                                             <h3>{{ latestMedia.getTitle }}</h3>
                                                         </div>
 
                                                         <div class="chip2-controls">
                                                             <a class="delete-page delete-btn btn-small" href="{{ app.url_generator.generate('admin/media/delete', {id:latestMedia.getId}) }}"><i class="fa fa-trash"></i></a>
+                                                            <a class="btn-small chip-close" href="#"><i class="fa fa-caret-up"></i></a>
                                                         </div>
                                                     </div>
 
                                                     <div class="chip2-summary">
                                                         {% if latestMedia.getType == 'image' %}
-                                                            <div class="badge-icon badge-icon-big badge-blue"><i class="fa fa-2x fa-image"></i></div>
+                                                            <div class="badge-icon badge-icon-big badge-red"><i class="fa fa-2x fa-image"></i></div>
                                                         {% elseif latestMedia.getType == 'video' %}
-                                                            <div class="badge-icon badge-icon-big badge-blue"><i class="fa fa-2x fa-camera"></i></div>
+                                                            <div class="badge-icon badge-icon-big badge-red"><i class="fa fa-2x fa-camera"></i></div>
                                                         {% endif %}
                                                         <div class="chip2-detail">
                                                             <h3>{{ latestMedia.getTitle }}</h3>
@@ -267,79 +293,7 @@
                 </div>
             </div>
 
-            {#
-            <div class="row">
-                <div class="col-sm-6 col-xs-12">
-                    <div class="card-wrap">
-                        <div class="card">
-                            <a href="#" class="float-btn morph-initial action-btn"><i class="fa fa-plus"></i></a><div class="add-msg">Add something now</div>
-                            <div class="controls-hidden">
-                                <a href="{{ app.url_generator.generate('admin/post/add') }}" class="float-btn action-btn"><i class="fa fa-file-text"></i></a>
-                                <a href="{{ app.url_generator.generate('admin/page/add') }}" class="float-btn action-btn"><i class="fa fa-file"></i></a>
-                                <a href="{{ app.url_generator.generate('admin/user/add') }}" class="float-btn action-btn"><i class="fa fa-user"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            #}
 
-            <div class="row">
-                <div class="card-wrap col-sm-6 col-xs-12">
-                    <div class="card bg">
-                        <h5 class="latest-header">Latest pages</h5>
-                        {% if latest is defined %}
-                            {% if latest.pages|length > 0 %}
-                                <table class="table list-overview">
-                                    {% for latestPage in latest.pages %}
-                                        <tr>
-                                            <td>
-                                                {% if latestPage.getQueries.count > 0 %}
-                                                    <i class="fa fa-circle-o" style="color:#1ca823;"></i> {{ latestPage.getTitle }}
-                                                {% else %}
-                                                    <i class="fa fa-circle-o" style="color:#999;"></i> {{ latestPage.getTitle }}
-                                                {% endif %}
-                                            </td>
-                                            <td class="text-right">{{ latestPage.getCreatedAt|date('M/d h:i') }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-                            {% else %}
-                                <p class="ghost big">no pagendos addiero yetando</p>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="card-wrap col-sm-6 col-xs-12">
-                    <div class="card bg">
-                        <h5 class="latest-header">Latest media</h5>
-                        {% if latest is defined %}
-                            {% if latest.media|length > 0 %}
-                                <table class="table media-overview">
-                                    {% for latestMedia in latest.media %}
-                                        <tr>
-                                            <td>
-                                                <div class="media-img">
-                                                    {% if latestMedia.type == 'video' %}
-                                                        <img height="50" src="{{ app.request.basepath ~ '/uploads/crops/' ~ latestMedia.getMediaId ~ '.jpeg' }}">
-                                                    {% else %}
-                                                        <img height="50" src="{{ display('crops:' ~ latestMedia.getPath) }}">
-                                                    {% endif %}
-                                                </div>
-                                            </td>
-                                            <td class="text-center">{{ latestMedia.type }}</td>
-                                            <td class="text-right">{{ latestMedia.getCreatedAt|date('M/d h:i') }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-                            {% else %}
-                                <p class="ghost big">no mediandos addiero yetando</p>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
         </div><!-- /.dash-inner -->
 
     </div>

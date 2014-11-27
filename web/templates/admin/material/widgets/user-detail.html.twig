@@ -84,7 +84,7 @@
             {% if user.getPostsEdited.count > 0 %}
                 <ul class="list-box">
                     {% for post in user.getPostsEdited %}
-                        <li>{{ post.getTitle }} <span class="pull-right" {{ post.getUpdatedAt|date('M d h:i') }}</span></li>
+                        <li>{{ post.getTitle }} <span class="pull-right">{{ post.getUpdatedAt|date('M d h:i') }}</span></li>
                     {% endfor %}
                 </ul>
             {% else %}

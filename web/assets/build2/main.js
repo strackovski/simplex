@@ -83,10 +83,11 @@ function handleDropzone() {
 
     theDropzone.on("addedfile", function (file) {
         $('.progress').removeClass('hidden');
-        $('.dz-message').remove();
+        $('.dz-message').html('<h2>Uploading</h2><p><i class="fa fa-spin fa-2x fa-spinner"></i></p>');
         $('.upload-modal .modal-footer .btn').prop('disabled', true);
         $('.modal-header .sr-only').prop('disabled', true);
         $('.page-loader').show();
+
     });
 
     theDropzone.on("queuecomplete", function (file) {
@@ -187,7 +188,7 @@ function querySelection() {
 
 
     // if contentType is not defined, a new page is being created
-    if (!contentTypeField.val()) {
+    if (!columnField.val()) {
         //hide all secondary options, unhide first choices
         contentTypeField.closest('.data-group').nextAll().addClass('hidden');
         columnField.closest('.data-group').removeClass('hidden');
@@ -686,6 +687,7 @@ function showSectionHelper() {
 $(document).ready(function () {
     //showSectionHelper();
 
+    // Status toggles
     $('.toggle-icon').on('click', function(e){
         e.preventDefault();
         var $this = $(this);
@@ -717,6 +719,39 @@ $(document).ready(function () {
         console.log('*** APPLICATION IS IN DEBUG MODE ***');
     }
 
+
+        //$('[data-toggle="popover"]').popover()
+
+
+    $('.grid').on('click', '.dismiss-popover', function(e) {
+        e.preventDefault();
+        var $this = $(this);
+        $this.closest('.chip2-content-info').find('.popover').popover('hide');
+    })
+
+    $('.user-popover').on('click', function(e) {
+        var $this = $(this);
+        if ($this.closest('.chip2-content-info').find('.popover').hasClass('in')) {
+            return false;
+        }
+        e.preventDefault();
+        console.log('click');
+        var el = $(this);
+
+        $.ajax({
+            url: el.attr('href'),
+            data: {'view': 'user-card'}
+        })
+            .done(function (d) {
+                el.popover({content: d, html: true, viewport: 'body', trigger: 'manual'}).popover('show');
+            })
+            .fail(function (xhr, msg) {
+                logXhrError(msg, xhr);
+            });
+    });
+
+    //$('.user-popover').click();
+
     /* side-nav submenu */
     var activeSideMenu = $('.side-nav a.submenu-open.active').attr('href');
     $(activeSideMenu).toggleClass('hidden');
@@ -727,9 +762,20 @@ $(document).ready(function () {
     */
 
     $('.submenu-open').on('click', function(e) {
-        e.preventDefault();;
+        e.preventDefault();
         var id = $(this).attr('href');
         $(id).toggleClass('hidden');
+    });
+
+    $('.grid').on('click', '.chip-close', function (e) {
+        var chip = $(this).closest('.chip2');
+        $('.chips .popover').popover('hide');
+        chip.removeClass('chip2-active');
+        chip.find('.chip2-content').hide();
+        chip.find('.chip2-line').hide();
+        chip.find('.chip2-summary').show();
+        chip.find('.chip2-pre-header').addClass('hidden');
+
     });
 
     $('.chip2-header').on('click', function (e) {
@@ -744,7 +790,7 @@ $(document).ready(function () {
             if (chip.hasClass('chip2-active')) {
                 return false;
             }
-
+            $('.chips .popover').popover('hide');
             chip.addClass('chip2-active');
             chip.find('.chip2-loader').addClass('animated-loader');
 
@@ -803,10 +849,8 @@ $(document).ready(function () {
         initRichEditor();
     }
 
-    querySelection();
-
     // handlers
-    if ($('.dash-inner').length) {
+    if ($('.dash-inner').length || $('.grid-post').length) {
         $('body').addClass('dashboard');
     }
 
@@ -816,7 +860,16 @@ $(document).ready(function () {
 
         $this.closest('.float-wrap').toggleClass('morphed');
         $this.find('i.fa').toggleClass('fa-plus fa-minus');
+    });
 
+    $(document).click(function(event) {
+        if(!$(event.target).closest('.float-wrap').length) {
+            if($('.controls-hidden').is(":visible")) {
+                $('.float-wrap').toggleClass('morphed');
+                $('.float-wrap').find('i.fa').toggleClass('fa-plus fa-minus');
+
+            }
+        }
     });
 
     // flat forms
@@ -839,6 +892,15 @@ $(document).ready(function () {
     if ($('.tooltipped').length) {
         $('.tooltipped').tooltip({ container: 'body' });
     }
+
+    var opened = 0;
+    $('.page-tabs a[href="#data"]').on('show.bs.tab', function (e) {
+        if(opened == 0) {
+            querySelection();
+            opened = 1;
+        }
+
+    });
 
     $('.new-post-tabs a[href="#media"]').on('click', function() {
         var $this = $('.new-post-tabs a[href="#media"]')
@@ -1184,6 +1246,7 @@ $(document).ready(function () {
 
     $('.grid').on('click', '.delete-btn', function (e) {
         e.preventDefault();
+
         var href = $(this).attr('href');
 
         if ( $(e.target).closest('.right-aux-toolbar').length > 0 ) {
@@ -1256,12 +1319,26 @@ $(document).ready(function () {
 
     $('.grid').on('click','.resample-btn', function (e) {
         e.preventDefault();
-        $('.confirm-modal').find('.modal-body').html('<p>Are you sure you want to resample all media?</p><p>This will result in a shit storm.</p>');
+        $('.confirm-modal').find('.modal-body').html('<p>Are you sure you want to resample all media?</p>');
         $('.confirm-modal').find('.btn-confirm').text('Resample');
         $('.confirm-modal').modal();
     });
 
-    $('.grid').on('click', '.thumbnail', function (e) {
+    $('.grid #media').on('click', '.thumbnail', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        if ($this.hasClass('active')) {
+            $this.removeClass('active');
+            $this.find('.thumb-check').removeClass('active');
+            $this.find('input').prop('checked', false);
+        } else {
+            $this.addClass('active');
+            $this.find('.thumb-check').addClass('active');
+            $this.find('input').prop('checked', true);
+        }
+    });
+
+    $('.grid .media-content').on('click', '.thumbnail', function (e) {
         e.preventDefault();
         var $this;
 

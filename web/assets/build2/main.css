@@ -331,11 +331,12 @@ header.big-header {
     width: 10%;
     text-align: center;
     height: 56px;
-    z-index: 6;
+    z-index: 3;
 }
 
 .float-wrap.fixed-bottom {
     position: absolute;
+    top: auto;
     bottom: 24px;
     right: 24px;
     width: 56px;
@@ -445,7 +446,7 @@ header.big-header {
     padding-bottom: 100px;
     width: 100%;
     padding-left: 240px;
-    background: #f9f9f9;
+    background: #f5f5f5;
     -webkit-transition: padding-left 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     -moz-transition: padding-left 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     transition: padding-left 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -547,7 +548,11 @@ header.big-header {
 }
 
 .right-info-box > div:last-child {
-    height: 96px;
+    height: 32px;
+    line-height: 16px;
+    margin-top: 32px;
+    white-space: nowrap;
+    padding-right: 20px;
 }
 
 .info-app-button {
@@ -559,7 +564,7 @@ header.big-header {
 
 }
 
-.info-app-button a {
+.info-app-button a.btn-large {
     display: block;
     height: 48px;
     width: 48px;
@@ -575,11 +580,9 @@ header.big-header {
     margin-left: -4px;
 }
 
-.info-app-status {
-    padding-right: 20px;
-    height: 32px;
-    padding-top: 31px;
-    line-height: 16px;
+.info-app-status p {
+    white-space: nowrap;
+
 }
 
 .status-type {
@@ -675,7 +678,7 @@ header.big-header {
 =============================*/
 
 .side-nav {
-    border-right: 1px solid rgba(0,0,0,0.14);
+   /* border-right: 1px solid rgba(0,0,0,0.14); */
     bottom: 0;
     background: #fff;
     color: #333;
@@ -743,10 +746,11 @@ header.big-header {
     margin: auto;
     padding: 17px 24px 15px 18px;
     position: relative;
+    background: #2196F3;
 }
 
 .side-nav .logo a {
-    color: #ccc;
+    color: #fff;
     text-transform: uppercase;
     font-size: 1.4em;
 }
@@ -1470,7 +1474,7 @@ header.big-header {
 }
 
 .icon-pink {
-    color: deeppink;
+    color: pink;
 }
 
 .icon-blue {
@@ -1532,6 +1536,10 @@ header.big-header {
     margin-bottom: 4px;
 }
 
+#media .thumbnail {
+    cursor: pointer;
+}
+
 .thumbnail img {
     width: 100%;
 }
@@ -1574,6 +1582,10 @@ header.big-header {
 
 .thumbnail:hover .thumb-action {
     opacity: 1;
+}
+
+.thumb-action:focus {
+    color: rgba(255,255,255,0.6);
 }
 
 .thumb-action:hover {
@@ -1789,8 +1801,8 @@ header.big-header {
 .select-file.form-btn {
     display: inline-block;
     margin-left: 24px;
-
 }
+
 .dz-preview {
     height: 180px;
     margin-bottom: 20px;
@@ -1979,8 +1991,17 @@ header.big-header {
     height: 32px;
     padding-top: 31px;
     line-height: 16px;
+}
 
+.info-text:after {
+    content: '';
+    display: table;
+    clear: both;
+}
 
+.info-text p {
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 @media screen and (max-width: 1479px) {
@@ -2148,8 +2169,20 @@ ul.list-box > li {
     transition: background .3s;
 }
 
-.chip2.chip2-active .badge-icon {
+.chip2.chip2-active .badge-icon.badge-blue {
     background: dodgerblue;
+}
+
+.chip2.chip2-active .badge-icon.badge-green {
+    background: forestgreen;
+}
+
+.chip2.chip2-active .badge-icon.badge-violet {
+    background: blueviolet;
+}
+
+.chip2.chip2-active .badge-icon.badge-red {
+    background: orangered;
 }
 
 .chip2 .btn-small{
@@ -2187,7 +2220,7 @@ ul.list-box > li {
     white-space: nowrap;
 }
 
-.chip2-content-info img {
+.chip2-content-info > img {
     float: left;
     display: block;
     height: 38px;
@@ -2670,4 +2703,70 @@ div.badge-icon.badge-icon-big {
     right: 40px;
     color: #999;
     position: absolute;
+}
+
+.dropdown-menu {
+    border-radius: 0;
+    top: 141%;
+    border-top: 1px solid #fff;
+}
+
+.dropdown-menu-right{
+
+}
+
+.dropdown-menu > li > a {
+    padding: 3px 8px;
+    text-align: center;
+    line-height: normal;
+    line-height: 1.8em;
+    font-size: 1em;
+}
+
+.chips .popover {
+    display: block;
+    width: 300px;
+    padding: 15px 10px;
+    border-radius: 0;
+    z-index: 2;
+}
+
+.chips .popover-content {
+    position: relative;
+}
+
+.chips .dismiss-popover {
+    display: block;
+    padding: 0 6px;
+    float: right;
+}
+
+
+.popover p{
+    margin: 0;
+    padding: 0;
+    height: auto;
+}
+
+.popover .popover-left img{
+    text-align: center;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+
+.popover .popover-right p{
+    font-size: .8em;
+    margin-left: 10px;
+}
+
+.popover .popover-right p:first-child{
+    font-weight: bold;
+    font-size: 1em;
+}
+.popover .popover-bottom a{
+    width: 30%;
+    text-align: center;
+    float: left;
+    display: block;
 }

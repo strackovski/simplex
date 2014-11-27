@@ -272,7 +272,10 @@
     left: 50%;
     margin-top: -75px;
     margin-left: -200px;
+    z-index: 7;
+    background: #ededed;
 }
+
 .modal-header {
     color: rgba(0,0,0,0.7);
 }

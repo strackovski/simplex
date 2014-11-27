@@ -85,6 +85,9 @@
 }
 */
 
+.settings-section .radio {
+    margin-bottom: 24px;
+}
 
 .option .checksquare, .option .radiobox {
     position: relative;

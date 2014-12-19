@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
     Options -MultiViews
-
+    php_flag display_errors 1
     RewriteEngine On
     #RewriteBase /your-path-to-simplex-web
     RewriteCond %{REQUEST_FILENAME} !-f

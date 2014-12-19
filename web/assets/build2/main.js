@@ -714,7 +714,7 @@ $(document).ready(function () {
 
 
     // baseURL = '//192.168.64.13/simplex/web/index_dev.php/admin/';
-    baseURL = $('body').attr('data-base');
+    baseURL = $('body').attr('data-base') + '/index_dev.php/admin/';
     debug = $('body').attr('data-env');
 
     if (debug == 1) {

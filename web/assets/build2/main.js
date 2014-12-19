@@ -110,7 +110,7 @@ function handleDropzone() {
 
             })
             .fail(function (xhr, unknown, error) {
-                var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
+                var flash = '<div class="flash-error">Oh-oooh. QueueComplete failed.</div>';
                 logXhrError(error, xhr);
                 $('body').append(flash);
                 $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
@@ -122,7 +122,7 @@ function handleDropzone() {
 
     theDropzone.on("error", function (file, msg, xhr) {
         logXhrError(msg, xhr);
-        var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
+        var flash = '<div class="flash-error">Oh-oooh. Dropzone Error.</div>';
         $('body').append(flash);
         $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
             $('.flash-error').remove();

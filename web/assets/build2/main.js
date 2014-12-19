@@ -67,6 +67,7 @@ function handleDropzone() {
         autoProcessQueue: true,
         thumbnailWidth: null,
         thumbnailHeight: 200,
+        forceFallback: true,
         previewTemplate:
         '<div class="dz-preview dz-file-preview col-xs-3">'+
         '<div class="dz-details">'+

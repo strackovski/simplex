@@ -96,7 +96,8 @@ function handleDropzone() {
             beforeSend: function () {
                 // $('.main-content .tab-pane.active').animate({opacity: 0});
             },
-            url: '//192.168.64.13/simplex/web/index_dev.php/admin/media/' + urlType
+            // url: '//192.168.64.13/simplex/web/index_dev.php/admin/media/' + urlType
+            url: baseURL + '/media/' + urlType
         })
             .done(function (data) {
                 $('.page-loader').hide();
@@ -712,7 +713,8 @@ $(document).ready(function () {
     });
 
 
-    baseURL = '//192.168.64.13/simplex/web/index_dev.php/admin/';
+    // baseURL = '//192.168.64.13/simplex/web/index_dev.php/admin/';
+    baseURL = '$('body').attr('data-base');
     debug = $('body').attr('data-env');
 
     if (debug == 1) {

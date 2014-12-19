@@ -97,7 +97,7 @@ function handleDropzone() {
                 // $('.main-content .tab-pane.active').animate({opacity: 0});
             },
             // url: '//192.168.64.13/simplex/web/index_dev.php/admin/media/' + urlType
-            url: baseURL + '/media/' + urlType
+            url: 'media/' + urlType
         })
             .done(function (data) {
                 $('.page-loader').hide();

@@ -67,7 +67,6 @@ function handleDropzone() {
         autoProcessQueue: true,
         thumbnailWidth: null,
         thumbnailHeight: 200,
-        forceFallback: true,
         previewTemplate:
         '<div class="dz-preview dz-file-preview col-xs-3">'+
         '<div class="dz-details">'+
@@ -81,7 +80,7 @@ function handleDropzone() {
         createImageThumbnails: true,
         acceptedFiles: allowedFiles
     });
-/*
+
     theDropzone.on("addedfile", function (file) {
         $('.progress').removeClass('hidden');
         $('.dz-message').html('<h2>Uploading</h2><p><i class="fa fa-spin fa-2x fa-spinner"></i></p>');
@@ -90,7 +89,6 @@ function handleDropzone() {
         $('.page-loader').show();
 
     });
-    */
 
     theDropzone.on("queuecomplete", function (file) {
 

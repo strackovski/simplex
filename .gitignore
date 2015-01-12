@@ -13,3 +13,5 @@ web/index_dev.php
 composer.lock
 var/cache/*
 var/logs/*
+web/.htaccess
+web/templates/admin/default

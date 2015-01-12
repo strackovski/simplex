@@ -22,3 +22,5 @@ if (!file_exists(dirname(__DIR__) . '/config/parameters.json')) {
 require __DIR__.'/../src/bootstrap.php';
 
 $app->run();
+
+

@@ -97,7 +97,7 @@ function handleDropzone() {
                 // $('.main-content .tab-pane.active').animate({opacity: 0});
             },
             // url: '//192.168.64.13/simplex/web/index_dev.php/admin/media/' + urlType
-            url: baseURL + '/media/' + urlType
+            url:  '/simplex/admin/media/' + urlType
         })
             .done(function (data) {
                 $('.page-loader').hide();
@@ -111,6 +111,7 @@ function handleDropzone() {
             })
             .fail(function (xhr, unknown, error) {
                 var flash = '<div class="flash-error">Oh-oooh. QueueComplete failed.</div>';
+                console.log ('error:' + xhr);
                 logXhrError(error, xhr);
                 $('body').append(flash);
                 $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {

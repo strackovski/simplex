@@ -43,7 +43,6 @@ class FixturesLoadCommand extends ApplicationAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         if ($this->app['debug']) {
             $authors = array();
             $user = new User();
@@ -60,8 +59,7 @@ class FixturesLoadCommand extends ApplicationAwareCommand
             $this->app['orm.em']->persist($user);
             $authors[] = $user;
         }
-
-
+        
         // Set route for homepage
         $homePage = new Page('Home');
         $homePage->setView('index');

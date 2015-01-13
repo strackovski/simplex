@@ -49,6 +49,25 @@ class QueryManager
         $qb = $em->createQueryBuilder();
 
         switch ($this->query->getColumn()) {
+            case 'title':
+                $qb->select(array('u'))
+                    ->from('nv\Simplex\Model\Entity\Post', 'u');
+                if ($this->query->getOperator() == 'contains') {
+                    $qb->where($qb->expr()->in('u.title', '?1'))
+                        ->andWhere($qb->expr()->eq('u.published', '?2'));
+                }
+                else {
+                    $qb->where($qb->expr()->eq('u.title', '?1'))
+                        ->andWhere($qb->expr()->eq('u.published', '?2'));
+                }
+
+                $qb->setParameters(
+                    array(
+                        1 => $this->query->getValue(),
+                        2 => true
+                    )
+                );
+                break;
             case 'author':
                 $qb->select(array('u'))
                     ->from('nv\Simplex\Model\Entity\Post', 'u');

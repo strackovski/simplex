@@ -115,6 +115,27 @@ class PostRepository extends EntityRepository
         return $q->getResult();
     }
 
+    public function getPostsWithTag($tag)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select(array('u'))
+            ->from('nv\Simplex\Model\Entity\Post', 'u')
+            ->leftJoin('u.tags', 'x')
+            ->where($qb->expr()->in('x.name', '?1'))
+            ->andWhere($qb->expr()->eq('u.published', '?2'));
+
+        $qb->setParameters(array(
+                1 => $tag,
+                2 => true
+            )
+        );
+
+        $q = $qb->getQuery();
+        return $q->getResult();
+    }
+
     /**
      * @todo Remove GetPostsBy, use QM
      *

@@ -2770,3 +2770,41 @@ div.badge-icon.badge-icon-big {
     float: left;
     display: block;
 }
+
+.ld-link img{
+    width: 100%;
+}
+
+.ld-slider {
+
+}
+
+
+.bx-loading {
+    display: none !important;
+}
+
+.bx-wrapper .bx-viewport {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border:  5px solid #fff;
+    left: 0px;
+    background: #fff;
+
+    /*fix other elements on the page moving (on Chrome)*/
+    -webkit-transform: translatez(0);
+    -moz-transform: translatez(0);
+    -ms-transform: translatez(0);
+    -o-transform: translatez(0);
+    transform: translatez(0);
+}
+
+.bx-wrapper .bx-prev{
+    left: -40px;
+
+}
+
+.bx-wrapper .bx-next{
+    right: -40px;
+}

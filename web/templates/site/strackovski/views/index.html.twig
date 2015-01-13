@@ -1,0 +1,30 @@
+{% extends page is defined ? "site/strackovski/masters/" ~ page.getMaster ~ ".html.twig" : "site/strackovski/masters/layout-default.html.twig" %}
+
+{% block content %}
+    <div class="spinner-wrap">
+        <div class="spinner">
+            <img src="{{ app.request.basePath }}/templates/site/{{ settings.getPublicTheme }}/assets/images/ss-spinner.png" alt="..."/>
+        </div>
+    </div>
+
+    <div class="container padContainer no-slides-container">
+        <div class="row slides-wrap">
+            <ul class="ld-slider center-block">
+                {% for post in posts %}
+
+                    {% for media in post.getMediaItems[:1] %}
+                        <li>
+                            <div>
+                                <p>{{ post.getTitle }}</p>
+                                <p>{{ post.getSubtitle }}</p>
+                                <p>{{ post.getBody }}</p>
+                            </div>
+                            <a href="index.html" class="ld-link"><img src="{{ app.request.basepath ~ '/uploads/' ~ media.getWebPath('large') }}" /></a>
+                        </li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}

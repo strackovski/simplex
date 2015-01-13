@@ -1,0 +1,27 @@
+{% extends page is defined ? "site/strackovski/masters/" ~ page.getMaster ~ ".html.twig" : "site/strackovski/masters/layout-default.html.twig" %}
+
+{% block content %}
+    <div class="col-xs-12">
+        <h2 class="single-post-title">{{ content.getTitle }}</h2>
+        <div class="post-meta">
+            <p class="post-meta-main text-muted">
+                By <span class="post-author">{{ content.getAuthor.displayName }}</span> on <span class="post-date-created">{{ content.getCreatedAt|date }}</span>
+            </p>
+            {% if content.getTags %}
+                <div class="post-tags">
+                    {% for tag in content.getTags %}
+                        <div class="label label-info">{{ tag.getName }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="single-post-content">
+            <div class="single-post-description">
+                {{ content.getSubtitle }}
+            </div>
+            <div class="single-post-body">
+                {{ content.getBody|raw }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

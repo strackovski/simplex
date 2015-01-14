@@ -12,14 +12,16 @@
             <ul class="ld-slider center-block">
                 {% for post in posts %}
 
-                    {% for media in post.getMediaItems[:1] %}
+                    {% for media in post.getMediaItems %}
                         <li>
+                            {#
                             <div>
                                 <p>{{ post.getTitle }}</p>
                                 <p>{{ post.getSubtitle }}</p>
                                 <p>{{ post.getBody }}</p>
                             </div>
-                            <a href="index.html" class="ld-link"><img src="{{ app.request.basepath ~ '/uploads/' ~ media.getWebPath('large') }}" /></a>
+                            #}
+                            <a href="{{ app.request.baseUrl }}/gallery" class="ld-link"><img src="{{ app.request.basepath ~ '/uploads/' ~ media.getWebPath('large') }}" /></a>
                         </li>
                     {% endfor %}
                 {% endfor %}

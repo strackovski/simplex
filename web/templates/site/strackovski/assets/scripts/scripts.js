@@ -118,8 +118,8 @@ $(document).ready(function(){
         slider_contents = $('.ld-slider').contents();
         slider_wrap = $('.ld-slider').bxSlider({
             slideWidth: 500,
-            minSlides: 2,
-            maxSlides: 2,
+            minSlides: 3,
+            maxSlides: 3,
             /*  onSlideBefore: function($slideElement,oldIndex,newIndex) {
              // $slideElement.animate({'opacity': 0.2});
 

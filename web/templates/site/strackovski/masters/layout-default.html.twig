@@ -68,12 +68,15 @@
             <div class="col-xs-5">
                 <ul class="inline">
                     <li><a href="{{ app.request.baseUrl }}">First page</a></li>
+                    <li><a href="{{ app.request.baseUrl }}/contact">Contact</a></li>
                 </ul>
                 <ul class="inline">
                 {% for page in menu %}
+                    {% if page.getSlug != 'contact' %}
                     <li>
                         <a href="{{ app.request.baseUrl ~ '/' ~ page.getSlug }}">{{ page.getTitle }}</a>
                     </li>
+                    {% endif %}
                 {% endfor %}
                 </ul>
 

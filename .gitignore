@@ -9,7 +9,6 @@ config/parameters.json
 web/assets/build/*
 web/assets/dev
 web/uploads/*
-web/index_dev.php
 composer.lock
 var/cache/*
 var/logs/*

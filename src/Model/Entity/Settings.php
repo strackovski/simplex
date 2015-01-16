@@ -270,7 +270,6 @@ class Settings extends TimestampableAbstract
         $this->imageResampleQuality = 80;
         $this->imageStripMeta = true;
         $this->detectFacesInPhotos = false;
-
         $this->setImageResizeDimensions(array(
             'small' => array(240,160),
             'medium' => array(640,480),
@@ -293,9 +292,7 @@ class Settings extends TimestampableAbstract
     {
         $this->detectFacesInPhotos = $detectFacesInPhotos;
     }
-
-
-
+    
     /**
      * Interceptor for invalid method calls
      *

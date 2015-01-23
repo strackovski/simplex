@@ -42,7 +42,8 @@
         "neutron/silex-imagine-provider": "dev-master",
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
         "nv/semtools": "dev-master",
-        "videlalvaro/php-amqplib": "v2.1.0"
+        "videlalvaro/php-amqplib": "v2.1.0",
+        "google/apiclient": "1.0.*@beta"
     },
     "scripts": {
         "pre-install-cmd": "nv\\Simplex\\Composer\\Script::preInstall",

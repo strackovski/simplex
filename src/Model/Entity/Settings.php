@@ -13,6 +13,8 @@
 namespace nv\Simplex\Model\Entity;
 
 use nv\Simplex\Common\TimestampableAbstract;
+use nv\Simplex\Core\Api\ApiAuthenticatorAbstract;
+use nv\Simplex\Core\Api\GoogleApiAuthenticator;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -241,6 +243,15 @@ class Settings extends TimestampableAbstract
     protected $adminTheme;
 
     /**
+     * Public theme
+     *
+     * @var array
+     *
+     * @Column(name="api_authenticators", type="json_array", nullable=true)
+     */
+    protected $apiAuthenticators;
+
+    /**
      * Constructor
      *
      * @param string $owner     Project/site owner
@@ -275,6 +286,19 @@ class Settings extends TimestampableAbstract
             'medium' => array(640,480),
             'large' => array(1024,768)
         ));
+    }
+
+    public function addApiAuthenticator(ApiAuthenticatorAbstract $type)
+    {
+        if ($type instanceof GoogleApiAuthenticator) {
+            $this->apiAuthenticators['google'] = $type->toArray();
+            return;
+        } elseif ($type instanceof TwitterApiAuthenticator) {
+            $this->apiAuthenticators['twitter'] = $type->toArray();
+            return;
+        }
+
+        throw new \InvalidArgumentException("{$type} API not supported.");
     }
 
     /**

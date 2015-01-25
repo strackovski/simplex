@@ -13,8 +13,9 @@
 namespace nv\Simplex\Model\Entity;
 
 use nv\Simplex\Common\TimestampableAbstract;
-use nv\Simplex\Core\Api\ApiAuthenticatorAbstract;
-use nv\Simplex\Core\Api\GoogleApiAuthenticator;
+use nv\Simplex\Core\Service\ApiAccountAbstract;
+use nv\Simplex\Core\Service\GoogleApiAccount;
+use nv\Simplex\Core\Service\TwitterApiAccount;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -247,9 +248,9 @@ class Settings extends TimestampableAbstract
      *
      * @var array
      *
-     * @Column(name="api_authenticators", type="json_array", nullable=true)
+     * @Column(name="api_accounts", type="json_array", nullable=true)
      */
-    protected $apiAuthenticators;
+    protected $apiAccounts;
 
     /**
      * Constructor
@@ -288,17 +289,46 @@ class Settings extends TimestampableAbstract
         ));
     }
 
-    public function addApiAuthenticator(ApiAuthenticatorAbstract $type)
+    public function addApiAccount(ApiAccountAbstract $type)
     {
-        if ($type instanceof GoogleApiAuthenticator) {
-            $this->apiAuthenticators['google'] = $type->toArray();
+        if ($type instanceof GoogleApiAccount) {
+            $this->apiAccounts['google'] = $type->toArray();
             return;
-        } elseif ($type instanceof TwitterApiAuthenticator) {
-            $this->apiAuthenticators['twitter'] = $type->toArray();
+        } elseif ($type instanceof TwitterApiAccount) {
+            $this->apiAccounts['twitter'] = $type->toArray();
             return;
         }
 
         throw new \InvalidArgumentException("{$type} API not supported.");
+    }
+
+    public function getApiAccounts()
+    {
+        return $this->apiAccounts;
+    }
+
+    public function getApiAccount($provider, $obj = false)
+    {
+        if (array_key_exists($provider, $this->apiAccounts)) {
+            if ($obj) {
+                $c = "\\nv\\Simplex\\Core\\Service\\".ucfirst($provider)."ApiAccount";
+                $o = new $c();
+
+                foreach ($this->apiAccounts[$provider] as $key => $value)
+                {
+                    $m = 'set'.ucfirst($key);
+                    if (method_exists($o, $m)) {
+                        $o->$m($value);
+                    }
+                }
+
+                return $o;
+            }
+
+            return $this->apiAccounts[$provider];
+        }
+
+        return false;
     }
 
     /**

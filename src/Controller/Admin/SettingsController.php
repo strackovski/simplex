@@ -12,6 +12,10 @@
 
 namespace nv\Simplex\Controller\Admin;
 
+use nv\Simplex\Core\Api\GoogleApiAuthenticator;
+use nv\Simplex\Core\Service\ApiAccountAbstract;
+use nv\Simplex\Core\Service\GoogleApiAccount;
+use nv\Simplex\Form\ApiSettingsType;
 use nv\Simplex\Form\MailSettingsType;
 use nv\Simplex\Form\ThemeSettingsType;
 use nv\Simplex\Model\Entity\Settings;
@@ -61,6 +65,8 @@ class SettingsController
 
     /** @var UrlGenerator */
     private $url;
+
+    private $gclient;
 
     public function __construct(
         Settings $settings,
@@ -284,6 +290,9 @@ class SettingsController
                     ),
                     'mailing' => array(
                         'active' => false, 'url' => $this->url->generate('admin/settings/mail')
+                    ),
+                    'integration_services' => array(
+                        'active' => false, 'url' => $this->url->generate('admin/settings/api')
                     )
                 )
             );
@@ -291,6 +300,164 @@ class SettingsController
 
         return $this->twig->render(
             'admin/'.$this->settings->getAdminTheme().'/widgets/theme-settings.html.twig',
+            $data
+        );
+    }
+
+    public function authenticateGoogleApi()
+    {
+        $client = new \Google_Client();
+        $client->setApplicationName('nv3-simplex');
+        $client->setClientId('1055133477287-s79s6fh7dtoht2626l2op5r2j4cqocq5.apps.googleusercontent.com');
+        $client->setClientSecret('0U4N_j8vJbmdAgjFDvs6y98g');
+        $client->setRedirectUri('http://simplex.envee.eu/index_dev.php/admin/settings/google/oauth');
+        $client->setDeveloperKey('AIzaSyAqqpLkCaQnvWTULMs-hBl2r9nk0uvGGU0');
+        $client->addScope('https://www.googleapis.com/auth/youtube');
+        $client->setAccessType('offline');
+
+
+        if (isset($_GET['code'])) {
+            $client->authenticate($_GET['code']);
+            $_SESSION['token'] = $client->getAccessToken();
+            $token = json_decode($_SESSION['token'], 1);
+            $g = $this->settings->getApiAccount('google', 1);
+            if ($g instanceof ApiAccountAbstract) {
+                $g->setAccessToken($_SESSION['token']);
+                if (array_key_exists('refresh_token', $token)) {
+                    $g->setRefreshToken($token['refresh_token']);
+                }
+                $this->settings->addApiAccount($g);
+                $this->settingsRepository->save($this->settings);
+            }
+            $redirect = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+            header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL));
+        }
+
+        if (isset($_SESSION['token'])) {
+            $client->setAccessToken($_SESSION['token']);
+            $sessionToken = json_decode($_SESSION['token'], 1);
+            echo '<pre>';
+            print_r($sessionToken);
+            echo '</pre>';
+        }
+
+        if (!$client->getAccessToken()) {
+            $authUrl = $client->createAuthUrl();
+            echo "<a class='login' href='$authUrl'>Connect Me!</a>";
+        } else {
+            try {
+                $youtube = new \Google_Service_YouTube($client);
+                echo '<br>Authorized to YouTube API<br>';
+            } catch (\Google_Service_Exception $e) {
+                echo 'A service error occurred: ' . htmlspecialchars($e->getMessage()) . '<br>';
+            } catch (\Google_Exception $e) {
+                echo 'A client error occurred: ' . htmlspecialchars($e->getMessage()) . '<br>';
+            }
+        }
+
+        $this->gclient = $client;
+
+        /*
+        echo '<pre>';
+        print_r($this->settings->getApiAccount('google', 1));
+        echo '</pre>';
+        */
+        return true;
+    }
+
+    public function apiSettingsAction(Request $request)
+    {
+        // @todo process input and instantiate ApiAuthenticator(s)
+        /** @var \nv\Simplex\Model\Entity\Settings $settings */
+        $settings = $this->settingsRepository->getCurrent();
+        $form = $this->form->create(new ApiSettingsType($this->settingsRepository), $settings);
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            $params = $request->request->get('settings');
+            if ($form->isValid()) {
+                $ga = new GoogleApiAccount($params['clientId'], $params['clientSecret']);
+                if (array_key_exists('enableGoogleApi', $params)) {
+                    $ga->setEnabled($params['enableGoogleApi']);
+                } else {
+                    $ga->setEnabled(false);
+                }
+
+                $ga->setAppName($params['appName']);
+                $ga->setRedirectUri($params['redirectUri']);
+                $ga->setAccountLogin($params['accountLogin']);
+                $ga->setApiKey($params['apiKey']);
+
+                $settings->addApiAccount($ga);
+                $this->settingsRepository->save($settings);
+
+                echo '<pre>';
+                print_r($ga->toArray());
+                print_r($params);
+                echo '</pre>';
+            }
+        }
+
+        /*
+        if (!$this->gclient instanceof GoogleApiAccount) {
+            $this->authenticateGoogleApi();
+        }
+
+        $youtube = new \Google_Service_YouTube($this->gclient);
+
+        $videoId = '_bCn56BZbxE';
+        $listResponse = $youtube->videos->listVideos("snippet", array('id' => $videoId));
+        if (empty($listResponse)) {
+            echo 'Can\'t find video with ID ' . $videoId;
+        } else {
+            $video = $listResponse[0];
+            $videoSnippet = $video['snippet'];
+            $tags = $videoSnippet['tags'];
+
+            if (is_null($tags)) {
+                $tags = array("test", "nature");
+            } else {
+                array_push($tags, "test", "nature");
+            }
+
+            $videoSnippet['tags'] = $tags;
+            $updateResponse = $youtube->videos->update("snippet", $video);
+            $responseTags = $updateResponse['snippet']['tags'];
+            echo 'Video '. $video['snippet']['title'] .' updated, added tags: ' . implode(', ', $responseTags) . '<br>';
+        }
+        */
+
+        $data = array(
+            'form' => $form->createView(),
+            'settings' => $settings,
+            'title' => 'Edit settings'
+        );
+
+        if (!$request->isXmlHttpRequest()) {
+            $data['tabs'] = array(
+                'panels' => array(
+                    'settings' => array(
+                        'active' => false, 'url' => $this->url->generate('admin/settings')
+                    ),
+                    'media' => array(
+                        'active' => false, 'url' => $this->url->generate('admin/media/settings')
+                    ),
+                    'themes' => array(
+                        'active' => false, 'url' => $this->url->generate('admin/settings/themes')
+                    ),
+                    'mailing' => array(
+                        'active' => false, 'url' => $this->url->generate('admin/settings/mail')
+                    ),
+                    'integration_services' => array(
+                        'active' => true, 'url' => $this->url->generate('admin/settings/api')
+                    )
+                )
+            );
+        }
+
+        return $this->twig->render(
+            'admin/'.$this->settings->getAdminTheme().'/widgets/api-settings.html.twig',
             $data
         );
     }
@@ -334,6 +501,9 @@ class SettingsController
                     ),
                     'mailing' => array(
                         'active' => true, 'url' => $this->url->generate('admin/settings/mail')
+                    ),
+                    'integration_services' => array(
+                        'active' => false, 'url' => $this->url->generate('admin/settings/api')
                     )
                 )
             );
@@ -395,6 +565,9 @@ class SettingsController
                     ),
                     'mailing' => array(
                         'active' => false, 'url' => $this->url->generate('admin/settings/mail')
+                    ),
+                    'integration_services' => array(
+                        'active' => false, 'url' => $this->url->generate('admin/settings/api')
                     )
                 )
             )

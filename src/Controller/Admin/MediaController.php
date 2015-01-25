@@ -194,6 +194,9 @@ class MediaController extends ActionControllerAbstract
                     ),
                     'mailing' => array(
                         'active' => false, 'url' => $this->url->generate('admin/settings/mail')
+                    ),
+                    'integration_services' => array(
+                        'active' => false, 'url' => $this->url->generate('admin/settings/api')
                     )
                 )
             );

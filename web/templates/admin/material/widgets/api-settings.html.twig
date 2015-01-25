@@ -1,0 +1,214 @@
+{% extends app.request.isXmlHttpRequest ? "admin/material/masters/layout-tabs-panel.html.twig" : "admin/material/views/settings.html.twig" %}
+
+{% block tabPaneHeader %}
+    <div class="controls-group">
+        <div class="left-controls">
+            <h3>Integration services</h3>
+            <a href="#google">GOOGLE</a>
+            <a href="#twitter">TWITTER</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tabPaneContent %}
+
+{{ form_start(form, {'action': app.url_generator.generate('admin/settings/api') }) }}
+
+<div class="settings-section">
+    <div class="settings-name">
+        <h3 id="google">Google</h3>
+    </div>
+
+    <div class="settings-content">
+        <div class="des">
+            Integration with Google APIs provides access to Analytics, Drive, and YouTube services.
+        </div>
+        <div class="form-group field option">
+            {% if settings.getApiAccount('google') %}
+                {% if settings.getApiAccounts.google.isEnabled %}
+                    {{ form_row(form.enableGoogleApi, {'checked' : 1}) }}
+                {% else %}
+                    {{ form_row(form.enableGoogleApi, {'checked' : 0}) }}
+                {% endif %}
+            {% else %}
+                {{ form_row(form.enableGoogleApi) }}
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="settings-section">
+    <div class="settings-name">
+        <h4>Google Application Client ID</h4>
+    </div>
+
+    <div class="settings-content">
+        <div class="des">
+            Provide OAuth 2.0 application data from Google Developer Console.
+        </div>
+        <div class="form-group form-element">
+            {{ form_label(form.appName) }}
+            {% if settings.getApiAccount('google') %}
+                {{ form_widget(form.appName, {'value' : settings.getApiAccounts.google.appName}) }}
+            {% else %}
+                {{ form_widget(form.appName) }}
+            {% endif %}
+            {{ form_errors(form.appName) }}
+        </div>
+        <div class="form-group form-element">
+            {{ form_label(form.clientId) }}
+            {% if settings.getApiAccount('google') %}
+                {{ form_widget(form.clientId, {'value' : settings.getApiAccounts.google.clientId}) }}
+            {% else %}
+                {{ form_widget(form.clientId) }}
+            {% endif %}
+            {{ form_errors(form.clientId) }}
+        </div>
+        <div class="form-group form-element">
+            {{ form_label(form.clientSecret) }}
+            {% if settings.getApiAccount('google') %}
+                {{ form_widget(form.clientSecret, {'value' : settings.getApiAccounts.google.clientSecret}) }}
+            {% else %}
+                {{ form_widget(form.clientSecret) }}
+            {% endif %}
+            {{ form_errors(form.clientSecret) }}
+        </div>
+        <div class="form-group form-element">
+            {{ form_label(form.redirectUri) }}
+            {% if settings.getApiAccount('google') %}
+                {{ form_widget(form.redirectUri, {'value' : settings.getApiAccounts.google.redirectUri}) }}
+            {% else %}
+                {{ form_widget(form.redirectUri) }}
+            {% endif %}
+            {{ form_errors(form.redirectUri) }}
+        </div>
+        <div class="form-group form-element">
+            {{ form_label(form.apiKey) }}
+            {% if settings.getApiAccount('google') %}
+                {{ form_widget(form.apiKey, {'value' : settings.getApiAccounts.google.apiKey}) }}
+            {% else %}
+                {{ form_widget(form.apiKey) }}
+            {% endif %}
+            {{ form_errors(form.apiKey) }}
+        </div>
+    </div>
+</div>
+<div class="settings-section">
+    <div class="settings-name">
+        <h4>Google Account</h4>
+    </div>
+
+    <div class="settings-content">
+        <div class="des">
+            The account for the application to use. Must be a Google account.
+        </div>
+
+        <div class="form-group form-element">
+            {{ form_label(form.accountLogin) }}
+            {% if settings.getApiAccount('google') %}
+                {{ form_widget(form.accountLogin, {'value' : settings.getApiAccounts.google.accountLogin}) }}
+            {% else %}
+                {{ form_widget(form.accountLogin) }}
+            {% endif %}
+            {{ form_errors(form.accountLogin) }}
+        </div>
+
+        <div class="form-group form-element">
+            <a href="#">Authenticate now</a>
+        </div>
+    </div>
+</div>
+
+<div class="settings-section">
+    <div class="settings-name">
+        <h3 id="twitter">Twitter</h3>
+    </div>
+
+    <div class="settings-content">
+        <div class="des">
+            Integration with Twitter API provides access to your Twitter account.
+        </div>
+        <div class="form-group field option">
+            {% if settings.getApiAccount('twitter') %}
+                {% if settings.getApiAccounts.twitter.isEnabled %}
+                    {{ form_row(form.enableTwitterApi, {'checked' : 1}) }}
+                {% else %}
+                    {{ form_row(form.enableTwitterApi, {'checked' : 0}) }}
+                {% endif %}
+            {% else %}
+                {{ form_row(form.enableTwitterApi) }}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="settings-section">
+    <div class="settings-name">
+        <h4>Twitter Application Client ID</h4>
+    </div>
+
+    <div class="settings-content">
+        <div class="des">
+            Provide OAuth 2.0 application data from Twitter App Console.
+        </div>
+        <div class="form-group form-element">
+            {{ form_label(form.twitter_ConsumerKey) }}
+            {% if settings.getApiAccount('twitter') %}
+                {{ form_widget(form.twitter_ConsumerKey, {'value' : settings.getApiAccounts.twitter.consumerKey}) }}
+            {% else %}
+                {{ form_widget(form.twitter_ConsumerKey) }}
+            {% endif %}
+            {{ form_errors(form.twitter_ConsumerKey) }}
+        </div>
+
+        <div class="form-group form-element">
+            {{ form_label(form.twitter_ConsumerSecret) }}
+            {% if settings.getApiAccount('twitter') %}
+                {{ form_widget(form.twitter_ConsumerSecret, {'value' : settings.getApiAccounts.twitter.consumerSecret}) }}
+            {% else %}
+                {{ form_widget(form.twitter_ConsumerSecret) }}
+            {% endif %}
+            {{ form_errors(form.twitter_ConsumerSecret) }}
+        </div>
+
+        <div class="form-group form-element">
+            {{ form_label(form.twitter_OauthCallback) }}
+            {% if settings.getApiAccount('twitter') %}
+                {{ form_widget(form.twitter_OauthCallback, {'value' : settings.getApiAccounts.twitter.oauthCallback}) }}
+            {% else %}
+                {{ form_widget(form.twitter_OauthCallback) }}
+            {% endif %}
+            {{ form_errors(form.twitter_OauthCallback) }}
+        </div>
+    </div>
+</div>
+
+<div class="settings-section">
+    <div class="settings-name">
+        <h4>Twitter Account</h4>
+    </div>
+
+    <div class="settings-content">
+        <div class="des">
+            Twitter Account...
+        </div>
+
+        <div class="form-group form-element">
+            {{ form_label(form.twitter_AccountLogin) }}
+            {% if settings.getApiAccount('twitter') %}
+                {{ form_widget(form.twitter_AccountLogin, {'value' : settings.getApiAccounts.twitter.accountLogin}) }}
+            {% else %}
+                {{ form_widget(form.twitter_AccountLogin) }}
+            {% endif %}
+            {{ form_errors(form.twitter_AccountLogin) }}
+        </div>
+    </div>
+</div>
+
+
+<div class="form-action">
+    {{ form_row(form.cancel) }}
+    {{ form_row(form.save) }}
+</div>
+{{ form_end(form) }}
+
+{% endblock %}

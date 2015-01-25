@@ -63,6 +63,9 @@ class SettingsServiceProvider implements ServiceProviderInterface, ControllerPro
         $controllers->match('/settings/mail', 'settings.controller:mailSettingsAction')
             ->bind('admin/settings/mail');
 
+        $controllers->match('/settings/api', 'settings.controller:apiSettingsAction')
+            ->bind('admin/settings/api');
+
         $controllers->match('/settings/delete/{id}', 'settings.controller:deleteAction')
             ->bind('admin/settings/delete');
 
@@ -95,6 +98,9 @@ class SettingsServiceProvider implements ServiceProviderInterface, ControllerPro
 
         $controllers->match('/settings/theme/upload/{type}', 'settings.controller:uploadThemeFile')
             ->bind('admin/settings/theme/upload');
+
+        $controllers->match('/settings/google/oauth', 'settings.controller:authenticateGoogleApi')
+            ->bind('admin/settings/google/oauth');
 
         return $controllers;
     }

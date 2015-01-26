@@ -3,10 +3,10 @@
 namespace nv\Simplex\Core\Service;
 
 /**
- * Class Twitter API Account
+ * Class Facebook API Account
  * @package nv\Simplex\Core\Service
  */
-class TwitterApiAccount extends ApiAccountAbstract
+class FacebookApiAccount extends ApiAccountAbstract
 {
     private $consumerKey;
 
@@ -133,13 +133,6 @@ class TwitterApiAccount extends ApiAccountAbstract
      */
     public function setAccessToken($accessToken)
     {
-        if (!is_null($accessToken)) {
-            if (array_key_exists('oauth_token', $accessToken) and array_key_exists('oauth_token_secret', $accessToken)) {
-                $this->setOauthToken($accessToken['oauth_token']);
-                $this->setOauthTokenSecret($accessToken['oauth_token_secret']);
-            }
-        }
-
         $this->accessToken = $accessToken;
     }
 }

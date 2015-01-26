@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Security\Core\SecurityContext;
 use nv\Simplex\Model\Entity\User;
+use Abraham\TwitterOAuth\TwitterOAuth;
 
 /**
  * Class PostController
@@ -170,6 +171,41 @@ class PostController extends ActionControllerAbstract
                     $post->setAuthor($token->getUser());
                 }
 
+                /** @var \nv\Simplex\Core\Service\TwitterApiAccount $twitter */
+                if ($twitter = $this->settings->getApiAccount('twitter', 1)) {
+                    if (in_array('twitter', $form->get('channels')->getData())) {
+                        $connection = new TwitterOAuth(
+                            $twitter->getConsumerKey(),
+                            $twitter->getConsumerSecret(),
+                            $twitter->getOauthToken(),
+                            $twitter->getOauthTokenSecret()
+                        );
+                        $content = $connection->get("account/verify_credentials");
+                        if ($post->getMediaItems() < 1) {
+                            $connection->post("statuses/update", array("status" => substr($post->getSubtitle(), 0, 130)));
+                        } else {
+                            $mediaIds = array();
+                            /** @var \nv\Simplex\Model\Entity\Image $media */
+                            foreach ($post->getMediaItems() as $media) {
+                                $p = $request->getBasePath() . '/uploads/' . $media->getWebPath('medium');
+                                $mediaUpload = $connection->upload('media/upload', array('media' => $media->getVariations()['small']));
+                                $mediaIds[] = $mediaUpload->media_id_string;
+                            }
+
+                            $parameters = array(
+                                'status' => substr($post->getSubtitle(), 0, 130),
+                                'media_ids' => implode(',', $mediaIds)
+                            );
+                            $connection->post("statuses/update", $parameters);
+                        }
+
+                        if ($connection->lastHttpCode() == 200) {
+                            // @todo log success
+                        } else {
+                            // @todo log error, add to flashbag
+                        }
+                    }
+                }
                 $this->posts->save($post);
                 $message = 'The post <strong>' . $post->getTitle() . '</strong> has been saved.';
                 $this->session->getFlashBag()->add('success', $message);

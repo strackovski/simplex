@@ -8,21 +8,35 @@ namespace nv\Simplex\Core\Service;
  */
 class GoogleApiAccount extends ApiAccountAbstract
 {
-    private $accountLogin;
+    protected $clientId;
+
+    protected $clientSecret;
+
+    protected $redirectUri;
+
+    protected $accessToken;
+
+    protected $refreshToken;
 
     private $apiKey;
 
     private $appName;
 
-    public function __construct($client_id = null, $client_secret = null, $redirect_uri = null, array $scopes = null)
+    public function __construct($client_id = null, $client_secret = null, $redirect_uri = null)
     {
-        parent::__construct($client_id, $client_secret, $redirect_uri, $scopes);
+        $this->clientId = $client_id;
+        $this->clientSecret = $client_secret;
+        $this->redirectUri = $redirect_uri;
     }
 
     public function toArray()
     {
         $r = parent::toArray();
-        $r['accountLogin'] = $this->accountLogin;
+        $r['clientId'] = $this->clientId;
+        $r['clientSecret'] = $this->clientSecret;
+        $r['redirectUri'] = $this->redirectUri;
+        $r['accessToken'] = $this->accessToken;
+        $r['refreshToken'] = $this->refreshToken;
         $r['apiKey'] = $this->apiKey;
         $r['appName'] = $this->appName;
 
@@ -32,17 +46,17 @@ class GoogleApiAccount extends ApiAccountAbstract
     /**
      * @return mixed
      */
-    public function getAccountLogin()
+    public function getAccessToken()
     {
-        return $this->accountLogin;
+        return $this->accessToken;
     }
 
     /**
-     * @param mixed $accountLogin
+     * @param mixed $accessToken
      */
-    public function setAccountLogin($accountLogin)
+    public function setAccessToken($accessToken)
     {
-        $this->accountLogin = $accountLogin;
+        $this->accessToken = $accessToken;
     }
 
     /**
@@ -75,5 +89,69 @@ class GoogleApiAccount extends ApiAccountAbstract
     public function setAppName($appName)
     {
         $this->appName = $appName;
+    }
+
+    /**
+     * @return null
+     */
+    public function getClientId()
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * @param null $clientId
+     */
+    public function setClientId($clientId)
+    {
+        $this->clientId = $clientId;
+    }
+
+    /**
+     * @return null
+     */
+    public function getClientSecret()
+    {
+        return $this->clientSecret;
+    }
+
+    /**
+     * @param null $clientSecret
+     */
+    public function setClientSecret($clientSecret)
+    {
+        $this->clientSecret = $clientSecret;
+    }
+
+    /**
+     * @return null
+     */
+    public function getRedirectUri()
+    {
+        return $this->redirectUri;
+    }
+
+    /**
+     * @param null $redirectUri
+     */
+    public function setRedirectUri($redirectUri)
+    {
+        $this->redirectUri = $redirectUri;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRefreshToken()
+    {
+        return $this->refreshToken;
+    }
+
+    /**
+     * @param mixed $refreshToken
+     */
+    public function setRefreshToken($refreshToken)
+    {
+        $this->refreshToken = $refreshToken;
     }
 }

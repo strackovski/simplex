@@ -12,9 +12,9 @@
 
 namespace nv\Simplex\Controller\Admin;
 
-use nv\Simplex\Core\Api\GoogleApiAuthenticator;
 use nv\Simplex\Core\Service\ApiAccountAbstract;
 use nv\Simplex\Core\Service\GoogleApiAccount;
+use nv\Simplex\Core\Service\TwitterApiAccount;
 use nv\Simplex\Form\ApiSettingsType;
 use nv\Simplex\Form\MailSettingsType;
 use nv\Simplex\Form\ThemeSettingsType;
@@ -34,6 +34,10 @@ use nv\Simplex\Model\Entity\Image;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Security\Core\SecurityContext;
+use Abraham\TwitterOAuth\TwitterOAuth;
+
+
+// @todo IS API CALLBACKS TO ANOTHER SERVICE CALL IN CORE SIMPLEX !
 
 /**
  * Class SettingsController
@@ -304,24 +308,75 @@ class SettingsController
         );
     }
 
+    public function twitterCallback()
+    {
+        if (!$this->settings->getApiAccount('twitter', 1)) {
+            exit('no twitter');
+        }
+        /** @var TwitterApiAccount $twitter */
+        $twitter = $this->settings->getApiAccount('twitter', 1);
+
+        $request_token = [];
+        $request_token['oauth_token'] = $_SESSION['oauth_token'];
+        $request_token['oauth_token_secret'] = $_SESSION['oauth_token_secret'];
+
+        if (isset($_REQUEST['oauth_token']) && $request_token['oauth_token'] !== $_REQUEST['oauth_token']) {
+            // Abort
+        }
+
+        $connection = new TwitterOAuth($twitter->getConsumerKey(), $twitter->getConsumerSecret(), $request_token['oauth_token'], $request_token['oauth_token_secret']);
+        $access_token = $connection->oauth("oauth/access_token", array("oauth_verifier" => $_REQUEST['oauth_verifier']));
+        $_SESSION['access_token'] = $access_token;
+        $twitter->setAccessToken($access_token);
+        $this->settings->addApiAccount($twitter);
+        $this->settingsRepository->save($this->settings);
+
+        return true;
+    }
+
+    public function authenticateTwitterApi()
+    {
+        if (!$this->settings->getApiAccount('twitter', 1)) {
+            exit('no twitter');
+        }
+        /** @var TwitterApiAccount $twitter */
+        $twitter = $this->settings->getApiAccount('twitter', 1);
+        $connection = new TwitterOAuth($twitter->getConsumerKey(), $twitter->getConsumerSecret());
+        $request_token = $connection->oauth('oauth/request_token', array('oauth_callback' => $twitter->getOauthCallback()));
+        $_SESSION['oauth_token'] = $request_token['oauth_token'];
+        $_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
+        $url = $connection->url('oauth/authorize', array('oauth_token' => $request_token['oauth_token']));
+        echo '<a href="'.$url.'">Twitter</a>';
+
+        return true;
+    }
+
     public function authenticateGoogleApi()
     {
-        $client = new \Google_Client();
-        $client->setApplicationName('nv3-simplex');
-        $client->setClientId('1055133477287-s79s6fh7dtoht2626l2op5r2j4cqocq5.apps.googleusercontent.com');
-        $client->setClientSecret('0U4N_j8vJbmdAgjFDvs6y98g');
-        $client->setRedirectUri('http://simplex.envee.eu/index_dev.php/admin/settings/google/oauth');
-        $client->setDeveloperKey('AIzaSyAqqpLkCaQnvWTULMs-hBl2r9nk0uvGGU0');
-        $client->addScope('https://www.googleapis.com/auth/youtube');
-        $client->setAccessType('offline');
+        if (!$this->settings->getApiAccount('google')) {
+            exit('no google');
+        }
 
+        /** @var GoogleApiAccount $google */
+        $google = $this->settings->getApiAccount('google', 1);
+
+        $client = new \Google_Client();
+        $client->setApplicationName($google->getAppName());
+        $client->setClientId($google->getClientId());
+        $client->setClientSecret($google->getClientSecret());
+        $client->setRedirectUri($google->getRedirectUri());
+        $client->setDeveloperKey($google->getApiKey());
+        $client->addScope('https://www.googleapis.com/auth/youtube');
+        $client->addScope('https://www.googleapis.com/auth/drive');
+        $client->addScope('https://www.googleapis.com/auth/analytics.readonly');
+        $client->setAccessType('offline');
 
         if (isset($_GET['code'])) {
             $client->authenticate($_GET['code']);
             $_SESSION['token'] = $client->getAccessToken();
             $token = json_decode($_SESSION['token'], 1);
             $g = $this->settings->getApiAccount('google', 1);
-            if ($g instanceof ApiAccountAbstract) {
+            if ($g instanceof GoogleApiAccount) {
                 $g->setAccessToken($_SESSION['token']);
                 if (array_key_exists('refresh_token', $token)) {
                     $g->setRefreshToken($token['refresh_token']);
@@ -335,13 +390,10 @@ class SettingsController
 
         if (isset($_SESSION['token'])) {
             $client->setAccessToken($_SESSION['token']);
-            $sessionToken = json_decode($_SESSION['token'], 1);
-            echo '<pre>';
-            print_r($sessionToken);
-            echo '</pre>';
         }
 
         if (!$client->getAccessToken()) {
+            // @todo Use saved tokens ?
             $authUrl = $client->createAuthUrl();
             echo "<a class='login' href='$authUrl'>Connect Me!</a>";
         } else {
@@ -354,20 +406,19 @@ class SettingsController
                 echo 'A client error occurred: ' . htmlspecialchars($e->getMessage()) . '<br>';
             }
         }
-
         $this->gclient = $client;
 
-        /*
-        echo '<pre>';
-        print_r($this->settings->getApiAccount('google', 1));
-        echo '</pre>';
-        */
         return true;
     }
 
+    /**
+     * Integration services section
+     *
+     * @param Request $request
+     * @return string
+     */
     public function apiSettingsAction(Request $request)
     {
-        // @todo process input and instantiate ApiAuthenticator(s)
         /** @var \nv\Simplex\Model\Entity\Settings $settings */
         $settings = $this->settingsRepository->getCurrent();
         $form = $this->form->create(new ApiSettingsType($this->settingsRepository), $settings);
@@ -390,43 +441,21 @@ class SettingsController
                 $ga->setApiKey($params['apiKey']);
 
                 $settings->addApiAccount($ga);
+
+                $ta = new TwitterApiAccount($params['twitter_ConsumerKey'], $params['twitter_ConsumerSecret']);
+                if (array_key_exists('enableTwitterApi', $params)) {
+                    $ta->setEnabled($params['enableTwitterApi']);
+                } else {
+                    $ta->setEnabled(false);
+                }
+
+                $ta->setAccountLogin($params['twitter_AccountLogin']);
+                $ta->setOauthCallback($params['twitter_OauthCallback']);
+
+                $settings->addApiAccount($ta);
                 $this->settingsRepository->save($settings);
-
-                echo '<pre>';
-                print_r($ga->toArray());
-                print_r($params);
-                echo '</pre>';
             }
         }
-
-        /*
-        if (!$this->gclient instanceof GoogleApiAccount) {
-            $this->authenticateGoogleApi();
-        }
-
-        $youtube = new \Google_Service_YouTube($this->gclient);
-
-        $videoId = '_bCn56BZbxE';
-        $listResponse = $youtube->videos->listVideos("snippet", array('id' => $videoId));
-        if (empty($listResponse)) {
-            echo 'Can\'t find video with ID ' . $videoId;
-        } else {
-            $video = $listResponse[0];
-            $videoSnippet = $video['snippet'];
-            $tags = $videoSnippet['tags'];
-
-            if (is_null($tags)) {
-                $tags = array("test", "nature");
-            } else {
-                array_push($tags, "test", "nature");
-            }
-
-            $videoSnippet['tags'] = $tags;
-            $updateResponse = $youtube->videos->update("snippet", $video);
-            $responseTags = $updateResponse['snippet']['tags'];
-            echo 'Video '. $video['snippet']['title'] .' updated, added tags: ' . implode(', ', $responseTags) . '<br>';
-        }
-        */
 
         $data = array(
             'form' => $form->createView(),
@@ -661,95 +690,5 @@ class SettingsController
             'admin/'.$this->settings->getAdminTheme().'/widgets/upload-theme-form.html.twig',
             $data
         );
-    }
-
-    /**
-     * @param Request     $request
-     * @param Application $app
-     *
-     * @return JsonResponse
-     */
-    public function analyzePostsAction(Request $request, Application $app)
-    {
-        $posts = $app['repository.post']->get();
-        $images = $app['repository.media']->getImages();
-        $videos = $app['repository.media']->getVideos();
-        $exposed = array();
-        $published = array();
-        $tagged = array();
-        $creationTimes = array('MON' => 0, 'TUE' => 0, 'WED' => 0, 'THU' => 0, 'FRI' => 0, 'SAT' => 0, 'SUN' => 0);
-        $imgCreationTimes = array('MON' => 0, 'TUE' => 0, 'WED' => 0, 'THU' => 0, 'FRI' => 0, 'SAT' => 0, 'SUN' => 0);
-        $vidCreationTimes = array('MON' => 0, 'TUE' => 0, 'WED' => 0, 'THU' => 0, 'FRI' => 0, 'SAT' => 0, 'SUN' => 0);
-
-        foreach ($posts as $post) {
-            /** @var $post \nv\Simplex\Model\Entity\Post */
-            if ($post->getExposed()) {
-                $exposed[] = $post;
-            }
-
-            if ($post->getPublished()) {
-                $published[] = $post;
-            }
-
-            if (count($post->getTags()) > 0) {
-                $tagged[] = $post;
-            }
-
-            $postList[] = $post->getId();
-            $ct = strtoupper($post->getCreatedAt()->format('D'));
-            $creationTimes[$ct]++;
-        }
-
-        /** @var \nv\Simplex\Model\Entity\Image $image */
-        foreach ($images as $image) {
-            $ct = strtoupper($image->getCreatedAt()->format('D'));
-
-            $imgCreationTimes[$ct]++;
-        }
-
-        /** @var \nv\Simplex\Model\Entity\Video $video */
-        foreach ($videos as $video) {
-            $ct = strtoupper($video->getCreatedAt()->format('D'));
-
-            $vidCreationTimes[$ct]++;
-        }
-
-        $lineChartData = array(
-            'labels' => array('MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'),
-            'datasets' => array(
-                array(
-                    'label' => 'Posts',
-                    'fillColor' => 'rgba(220,220,220,0.2)',
-                    'strokeColor' => 'rgba(220,220,220,1)',
-                    'pointColor' => 'rgba(220,220,220,1)',
-                    'pointStrokeColor' => '#fff',
-                    'pointHighlightFill' => '#fff',
-                    'pointHighlightStroke' => 'rgba(220,220,220,1)',
-                    'data' => array_values($creationTimes)
-                ),
-                array(
-                    'label' => 'Images',
-                    'fillColor' => 'rgba(151,187,205,0.2)',
-                    'strokeColor' => 'rgba(151,187,205,1)',
-                    'pointColor' => 'rgba(151,187,205,1)',
-                    'pointStrokeColor' => '#fff',
-                    'pointHighlightFill' => '#fff',
-                    'pointHighlightStroke' => 'rgba(151,187,205,1)',
-                    'data' => array_values($imgCreationTimes)
-                ),
-                array(
-                    'label' => 'Videos',
-                    'fillColor' => 'rgba(80,187,205,0.2)',
-                    'strokeColor' => 'rgba(80,187,205,1)',
-                    'pointColor' => 'rgba(80,187,205,1)',
-                    'pointStrokeColor' => '#F7464A',
-                    'pointHighlightFill' => '#F7464A',
-                    'pointHighlightStroke' => 'rgba(151,187,205,1)',
-                    'data' => array_values($vidCreationTimes)
-                )
-            )
-        );
-
-        return new JsonResponse($lineChartData, 200);
     }
 }

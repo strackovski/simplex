@@ -83,6 +83,17 @@ class PostType extends AbstractType
                 'class' => ''
                 )
             ))
+            ->add('channels', 'choice', array(
+                'mapped' => true,
+                'label' => 'Publish to channels',
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true,
+                'choices' => array(
+                    'twitter' => 'Twitter',
+                    'facebook' => 'Facebook'
+                )
+            ))
             /*->add('published_interval', 'datetime', array(
                 'label' => 'Publish during this interval',
                 'widget' => 'single_text',

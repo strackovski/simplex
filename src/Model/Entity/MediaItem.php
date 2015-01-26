@@ -274,12 +274,6 @@ abstract class MediaItem extends TimestampableAbstract
         return null === $this->mediaId . '.' . $this->fileExtension
             ? null
             : $this->getUploadRootDir().'/'. $this->mediaId . '.' . $this->fileExtension;
-
-        /*
-        return null === $this->path
-            ? null
-            : $this->getUploadRootDir().'/'.$this->path;
-        */
     }
 
     /**

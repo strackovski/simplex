@@ -84,9 +84,6 @@ class SettingsServiceProvider implements ServiceProviderInterface, ControllerPro
         $controllers->match('/settings/save', 'settings.controller:saveAction')
             ->bind('admin/settings/save');
 
-        $controllers->match('/settings/ap', 'settings.controller:analyzePostsAction')
-            ->bind('admin/settings/ap');
-
         $controllers->match('/settings/mp', 'settings.controller:analyzeMediaAction')
             ->bind('admin/settings/mp');
 
@@ -101,6 +98,12 @@ class SettingsServiceProvider implements ServiceProviderInterface, ControllerPro
 
         $controllers->match('/settings/google/oauth', 'settings.controller:authenticateGoogleApi')
             ->bind('admin/settings/google/oauth');
+
+        $controllers->match('/settings/twitter/oauth', 'settings.controller:authenticateTwitterApi')
+            ->bind('admin/settings/twitter/oauth');
+
+        $controllers->match('/settings/twitter/oauthcb', 'settings.controller:twitterCallback')
+            ->bind('admin/settings/twitter/oauthcb');
 
         return $controllers;
     }

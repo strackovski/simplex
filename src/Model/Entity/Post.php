@@ -131,6 +131,11 @@ class Post extends TimestampableAbstract implements ObservableInterface
     private $observers;
 
     /**
+     * @Column(name="channels", type="json_array", nullable=true)
+     */
+    protected $channels;
+
+    /**
      * @param $slug
      *
      * @return mixed
@@ -551,5 +556,21 @@ class Post extends TimestampableAbstract implements ObservableInterface
     public function getType()
     {
         return 'post';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChannels()
+    {
+        return $this->channels;
+    }
+
+    /**
+     * @param mixed $channels
+     */
+    public function setChannels($channels)
+    {
+        $this->channels = $channels;
     }
 }

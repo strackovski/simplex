@@ -34,7 +34,6 @@ class PageController
      */
     public function indexAction(Request $request, Application $app)
     {
-        $pages = $app['repository.page']->findAll();
         $settings = $app['repository.settings']->getPublicSettings();
 
         return $app['twig']->render(
@@ -61,7 +60,7 @@ class PageController
 
         if ($page instanceof Page and $page->getQueries()) {
             foreach ($page->getQueries() as $query) {
-                $content = $query->getManager()->buildQuery($app['orm.em'])->getResult();
+                $content[] = $query->getManager()->buildQuery($app['orm.em'])->getResult();
             }
 
             return $app['twig']->render(

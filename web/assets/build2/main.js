@@ -136,6 +136,43 @@ function handleDropzone() {
     });
 }
 
+
+function addQueryForm($collectionHolder, $newLinkLi) {
+    // Get the data-prototype explained earlier
+    var prototype = $collectionHolder.data('prototype');
+
+    // get the new index
+    var index = $collectionHolder.data('index');
+
+    // Replace '__name__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    var newForm = prototype.replace(/__name__/g, index);
+
+    // increase the index with one for the next item
+    $collectionHolder.data('index', index + 1);
+
+    // Display the form in the page in an li, before the "Add a tag" link li
+    var $newFormLi = $('<li></li>').append(newForm);
+    $newLinkLi.before($newFormLi);
+
+    // add a delete link to the new form
+    addQueryFormDeleteLink($newFormLi);
+}
+
+function addQueryFormDeleteLink($queryFormLi) {
+    var $removeFormA = $('<a href="#">delete this query</a>');
+    $queryFormLi.append($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // remove the li for the tag form
+        $queryFormLi.remove();
+    });
+}
+
+/*
 function querySelection() {
     var contentTypeField, columnField, operatorField, valueField, sortByField, limitMaxField;
 
@@ -513,7 +550,7 @@ function querySelection() {
         $('.dateField').closest('.data-group').addClass('hidden');
     }
 }
-
+*/
 function initRichEditor(height) {
     if (!height) {
         height = 300;
@@ -688,6 +725,36 @@ function showSectionHelper() {
 
 $(document).ready(function () {
     //showSectionHelper();
+
+    var $collectionHolder;
+// setup an "add a tag" link
+    var $addQueryLink = $('<a href="#" class="add_query_link">Add a query</a>');
+    var $newLinkLi = $('<li></li>').append($addQueryLink);
+
+
+// Get the ul that holds the collection of tags
+    $collectionHolder = $('ul.queries');
+
+    // add a delete link to all of the existing tag form li elements
+    $collectionHolder.find('li').each(function() {
+        addQueryFormDeleteLink($(this));
+    });
+
+// add the "add a tag" anchor and li to the tags ul
+    $collectionHolder.append($newLinkLi);
+
+// count the current form inputs we have (e.g. 2), use that as the new
+// index when inserting a new item (e.g. 2)
+    $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+    $addQueryLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+        console.log('clicked aq')
+
+        // add a new tag form (see next code block)
+        addQueryForm($collectionHolder, $newLinkLi);
+    });
 
     // Status toggles
     $('.toggle-icon').on('click', function(e){
@@ -900,7 +967,7 @@ $(document).ready(function () {
     var opened = 0;
     $('.page-tabs a[href="#data"]').on('show.bs.tab', function (e) {
         if(opened == 0) {
-            querySelection();
+            //querySelection();
             opened = 1;
         }
 

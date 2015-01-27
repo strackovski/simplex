@@ -15,11 +15,13 @@
 <div class="right-bar-content">
     <div class="content-section">
         <div class="section-title">
-            Data Query
+            Page Queries
         </div>
 
         <div class="section-entity">
-            <p></p>
+            {% for query in page.getQueries %}
+                <p>{{ query.toArray|join(' | ') }}</p>
+            {% endfor %}
         </div>
     </div>
 

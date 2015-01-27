@@ -128,9 +128,12 @@ class PageType extends AbstractType
                     'mapped' => true,
                     'type' => new PageQueryType(),
                     'allow_add'    => true,
-                    'label' => false
+                    'allow_delete' => true,
+                    'label' => false,
+                    'by_reference' => false
                 )
             )
+            /*
             ->add('authors', 'choice', array(
                 'choices' => $authorItems,
                 'empty_value' => 'Select authors...',
@@ -147,6 +150,7 @@ class PageType extends AbstractType
                 'expanded' => true,
                 'required' => false
             ))
+            */
             ->add('in_menu', 'checkbox', array(
                 'required' => false,
                 'label' => 'Include a link to this page in main menu'

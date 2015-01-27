@@ -86,6 +86,20 @@ class PageQuery
         $this->manager = new QueryManager($this);
     }
 
+    public function toArray()
+    {
+        return array(
+            'id' => $this->id,
+            'contentType' => $this->contentType,
+            'column' => $this->column,
+            'operator' => $this->operator,
+            'value' => $this->value,
+            'sortBy' => $this->sortBy,
+            'sortColumn' => $this->sortColumn,
+            'limitMax' => $this->limitMax
+        );
+    }
+
     /**
      * @return QueryManager
      */

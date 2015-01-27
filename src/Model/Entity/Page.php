@@ -17,6 +17,8 @@ use nv\Simplex\Common\ObservableInterface;
 use nv\Simplex\Common\ObserverInterface;
 use nv\Simplex\Common\TimestampableAbstract;
 
+// @todo multiple queries and foreach in manager
+
 /**
  * Page class
  *

@@ -148,16 +148,11 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="data">
+                        {% for query in form.queries %}
+                            {% include 'admin/material/widgets/edit-query-form.html.twig' with {form: query.vars.form} %}
+                        {% endfor %}
+                        <div class="add-pq-form" data-proto="{% filter escape %}{% include 'admin/material/widgets/add-query-form.html.twig' %}{% endfilter %}"></div>
 
-                        {#<div class="add-pq-form" data-proto="{% filter escape %}{% include 'admin/material/widgets/add-query-form.html.twig' %}{% endfilter %}"></div> #}
-
-                        <ul class="queries" data-prototype="{{ form_widget(form.queries.vars.prototype)|e }}">
-                            {% for query in form.queries %}
-                                <li>{% include 'admin/material/widgets/edit-query-form.html.twig' with {form: query.vars.form} %}</li>
-                            {% endfor %}
-                        </ul>
-
-                        {#
                         <div class="data-group">
                             <div class="form-group form-element">
                                 {{ form_label(form.authors) }}
@@ -176,7 +171,6 @@
                                 </div>
                             </div>
                         </div>
-                        #}
                     </div>
                 </div>
                 <div class="form-group submit-controls page-submit-controls form-action">

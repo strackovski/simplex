@@ -18,7 +18,6 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
     exit('Authorized access only.');
 }
 
-
 ini_set('display_errors', 1);
 
 if (!file_exists(dirname(__DIR__) . '/config/parameters.json')) {

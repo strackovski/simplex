@@ -12,6 +12,8 @@
 
 namespace nv\Simplex\Form;
 
+// @todo Extract to separate forms
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 

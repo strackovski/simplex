@@ -17,6 +17,7 @@ use nv\Simplex\Model\Entity\Settings;
 use nv\Simplex\Model\Repository\MediaRepository;
 use nv\Simplex\Model\Repository\PostRepository;
 use nv\Simplex\Model\Repository\TagRepository;
+use nv\Simplex\Model\Repository\PageRepository;
 use Silex\Application;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -44,6 +45,9 @@ class PostController extends ActionControllerAbstract
     /** @var PostRepository  */
     private $posts;
 
+    /** @var PageRepository  */
+    private $pages;
+
     /** @var MediaRepository  */
     private $media;
 
@@ -57,6 +61,7 @@ class PostController extends ActionControllerAbstract
         PostRepository $postRepository,
         MediaRepository $mediaRepository,
         TagRepository $tagRepository,
+        PageRepository $pageRepository,
         Settings $settings,
         \Twig_Environment $twig,
         FormFactoryInterface $formFactory,
@@ -70,6 +75,7 @@ class PostController extends ActionControllerAbstract
         $this->media = $mediaRepository;
         $this->tags = $tagRepository;
         $this->manager = $postManager;
+        $this->pages = $pageRepository;
     }
 
     /**
@@ -149,11 +155,12 @@ class PostController extends ActionControllerAbstract
             $request->request->get('body')
         );
 
-        $form = $this->form->create(new PostType($this->media->getLibraryMedia()), $post);
+        $form = $this->form->create(new PostType($this->media->getLibraryMedia(), $this->pages), $post);
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
                 $images = $form->get('media')->getData();
+                $pages = $form->get('pages')->getData();
                 $tags = $form->get('tags')->getData();
 
                 if (count($tags) > 0) {
@@ -164,6 +171,13 @@ class PostController extends ActionControllerAbstract
                     foreach ($images as $image) {
                         $imageObj = $this->media->findOneBy(array('id' => $image));
                         $post->addMediaItem($imageObj);
+                    }
+                }
+
+                if (count($pages) > 0) {
+                    foreach ($pages as $page) {
+                        $pageObj = $this->pages->findOneBy(array('id' => $page));
+                        $post->addPage($pageObj);
                     }
                 }
 
@@ -235,7 +249,7 @@ class PostController extends ActionControllerAbstract
         /** @var Post $post */
         $post = $this->posts->findOneBy(array('id' => $request->get('post')));
         /** @var \Symfony\Component\Form\FormInterface $form */
-        $form = $this->form->create(new PostType($this->media->getLibraryMedia()), $post);
+        $form = $this->form->create(new PostType($this->media->getLibraryMedia(), $this->pages), $post);
 
         if ($request->isMethod('POST')) {
             $form->bind($request);

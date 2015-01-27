@@ -34,14 +34,12 @@ class PageController
      */
     public function indexAction(Request $request, Application $app)
     {
-        // $pages = $app['repository.page']->findAll();
-        $posts = $app['repository.post']->getPostsWithTag('landing');
+        $pages = $app['repository.page']->findAll();
         $settings = $app['repository.settings']->getPublicSettings();
 
         return $app['twig']->render(
             'site/'.$settings->getPublicTheme().'/views/index.html.twig',
             array(
-                'posts' => $posts,
                 'settings' => $settings,
                 'menu' => $app['repository.page']->getMenuPages()
             )

@@ -12,6 +12,8 @@
 
 namespace nv\Simplex\Form;
 
+use nv\Simplex\Model\Entity\Settings;
+use nv\Simplex\Model\Repository\PageRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -30,8 +32,12 @@ class PostType extends AbstractType
     /** @var array Library media items */
     private $media;
 
-    public function __construct(array $media)
+    /** @var PageRepository  */
+    private $pages;
+
+    public function __construct(array $media, PageRepository $pages = null)
     {
+        $this->pages = $pages;
         $this->media = $media;
     }
 
@@ -42,9 +48,14 @@ class PostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $mediaList = array();
+        $pageList = array();
 
         foreach ($this->media as $item) {
             $mediaList[$item->getId()] = $item->getMediaId();
+        }
+
+        foreach ($this->pages->findAll() as $page) {
+            $pageList[$page->getId()] = $page->getTitle();
         }
 
         $builder
@@ -131,6 +142,14 @@ class PostType extends AbstractType
                     'rows' => '10',
                     'placeholder' => 'Put some body in the post'
                 )
+            ))
+            ->add('pages', 'choice', array(
+                'mapped' => false,
+                'label' => 'Add to page(s)',
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true,
+                'choices' => $pageList
             ))
             ->add('media', 'choice', array(
                 'mapped' => false,

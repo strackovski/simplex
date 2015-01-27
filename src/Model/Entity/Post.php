@@ -17,6 +17,8 @@ use nv\Simplex\Common\TimestampableAbstract;
 use nv\Simplex\Common\ObservableInterface;
 use nv\Simplex\Common\ObserverInterface;
 
+// @todo Pre-persist remove page associations
+
 /**
  * Post class
  *
@@ -134,6 +136,12 @@ class Post extends TimestampableAbstract implements ObservableInterface
      * @Column(name="channels", type="json_array", nullable=true)
      */
     protected $channels;
+
+    /**
+     * @ManyToMany(targetEntity="Page", inversedBy="posts")
+     * @JoinTable(name="posts_pages")
+     **/
+    private $pages;
 
     /**
      * @param $slug
@@ -274,6 +282,7 @@ class Post extends TimestampableAbstract implements ObservableInterface
         $this->mediaItems = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->observers = array();
+        $this->pages = new ArrayCollection();
         $this->authors = new ArrayCollection();
     }
 
@@ -572,5 +581,33 @@ class Post extends TimestampableAbstract implements ObservableInterface
     public function setChannels($channels)
     {
         $this->channels = $channels;
+    }
+
+    public function addPage(Page $page)
+    {
+        $page->addPost($this);
+        $this->pages[] = $page;
+    }
+
+    public function removePage(Page $page)
+    {
+        $page->removePost($this);
+        $this->pages->remove($page);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPages()
+    {
+        return $this->pages;
+    }
+
+    /**
+     * @param mixed $pages
+     */
+    public function setPages($pages)
+    {
+        $this->pages = $pages;
     }
 }

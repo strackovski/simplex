@@ -58,6 +58,7 @@ class PostServiceProvider implements ServiceProviderInterface, ControllerProvide
                 $app['repository.post'],
                 $app['repository.media'],
                 $app['repository.tag'],
+                $app['repository.page'],
                 $app['settings'],
                 $app['twig'],
                 $app['form.factory'],

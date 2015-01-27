@@ -47,11 +47,12 @@ class QueryManager
     public function buildQuery(EntityManager $em)
     {
         $qb = $em->createQueryBuilder();
-
+        $contentType = 'nv\Simplex\Model\Entity\\' . $this->query->getContentType();
         switch ($this->query->getColumn()) {
             case 'title':
                 $qb->select(array('u'))
-                    ->from('nv\Simplex\Model\Entity\Post', 'u');
+                    // ->from('nv\Simplex\Model\Entity\Post', 'u');
+                    ->from($contentType, 'u');
                 if ($this->query->getOperator() == 'contains') {
                     $qb->where($qb->expr()->in('u.title', '?1'))
                         ->andWhere($qb->expr()->eq('u.published', '?2'));
@@ -70,7 +71,7 @@ class QueryManager
                 break;
             case 'author':
                 $qb->select(array('u'))
-                    ->from('nv\Simplex\Model\Entity\Post', 'u');
+                    ->from($contentType, 'u');
                 $qb->where($qb->expr()->eq('u.author', '?1'))
                     ->andWhere($qb->expr()->eq('u.published', '?2'));
 
@@ -84,7 +85,7 @@ class QueryManager
 
             case 'tags':
                 $qb->select(array('u'))
-                    ->from('nv\Simplex\Model\Entity\Post', 'u')
+                    ->from($contentType, 'u')
                     ->leftJoin('u.tags', 'x')
                     ->where($qb->expr()->in('x.id', '?1'))
                     ->andWhere($qb->expr()->eq('u.published', '?2'));
@@ -101,7 +102,7 @@ class QueryManager
             case 'updated_at':
                 if ($this->query->getOperator() == 'from_to') {
                     $qb->select(array('u'))
-                        ->from('nv\Simplex\Model\Entity\Post', 'u');
+                        ->from($contentType, 'u');
                     $qb->where($qb->expr()->gte('u.'.$this->query->getColumn(), '?1'))
                         ->andWhere($qb->expr()->lte('u.'.$this->query->getColumn(), '?2'))
                         ->andWhere($qb->expr()->eq('u.published', '?3'));
@@ -114,7 +115,8 @@ class QueryManager
                         )
                     );
                 } else {
-                    $qb->select(array('u'))->from('nv\Simplex\Model\Entity\Post', 'u');
+                    // $qb->select(array('u'))->from('nv\Simplex\Model\Entity\Post', 'u');
+                    $qb->select(array('u'))->from($contentType, 'u');
                     if ($this->query->getOperator() == 'before') {
                         $qb->where($qb->expr()->lte('u.'.$this->query->getColumn(), '?1'))
                             ->andWhere($qb->expr()->eq('u.published', '?2'));

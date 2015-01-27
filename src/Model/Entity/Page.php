@@ -110,6 +110,11 @@ class Page extends TimestampableAbstract implements ObservableInterface
     private $author;
 
     /**
+     * @ManyToMany(targetEntity="Post", mappedBy="pages")
+     **/
+    private $posts;
+
+    /**
      * Constructor
      *
      * @param string      $title Page title
@@ -121,6 +126,7 @@ class Page extends TimestampableAbstract implements ObservableInterface
         $this->slug = $slug;
         $this->queries = new ArrayCollection();
         $this->observers = array();
+        $this->posts = new ArrayCollection();
     }
 
     /**
@@ -368,5 +374,31 @@ class Page extends TimestampableAbstract implements ObservableInterface
     public function getType()
     {
         return 'page';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPosts()
+    {
+        return $this->posts;
+    }
+
+    /**
+     * @param mixed $posts
+     */
+    public function setPosts($posts)
+    {
+        $this->posts = $posts;
+    }
+
+    public function addPost(Post $post)
+    {
+        $this->posts[] = $post;
+    }
+
+    public function removePost(Post $post)
+    {
+        $this->posts->remove($post);
     }
 }

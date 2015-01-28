@@ -136,9 +136,24 @@ function handleDropzone() {
     });
 }
 
-
+/**
+ * ADD (PAGE) QUERY FORM
+ *
+ * Dynamically add a new form when this link is clicked,
+ * using the data-prototype attribute. The data-prototype HTML
+ * contains the tag text input element with a name of
+ * page[queries][__name__][name] and id of page_queries___name___name.
+ *
+ * The __name__ is a little "placeholder", which you'll
+ * replace with a unique, incrementing number
+ * (e.g. page[queries][3][name]).
+ *
+ * @link http://symfony.com/doc/current/cookbook/form/form_collections.html
+ * @param $collectionHolder The container of forms
+ * @param $newLinkLi The new query link
+ */
 function addQueryForm($collectionHolder, $newLinkLi) {
-    // Get the data-prototype explained earlier
+    // Get the data-prototype
     var prototype = $collectionHolder.data('prototype');
 
     // get the new index
@@ -151,7 +166,7 @@ function addQueryForm($collectionHolder, $newLinkLi) {
     // increase the index with one for the next item
     $collectionHolder.data('index', index + 1);
 
-    // Display the form in the page in an li, before the "Add a tag" link li
+    // Display the form in the page in an li, before the "Add a query" link li
     var $newFormLi = $('<li></li>').append(newForm);
     $newLinkLi.before($newFormLi);
 
@@ -159,13 +174,25 @@ function addQueryForm($collectionHolder, $newLinkLi) {
     addQueryFormDeleteLink($newFormLi);
 }
 
+/**
+ * ADD (PAGE) QUERY FORM DELETE LINK
+ *
+ * Remove the query form from DOM
+ *
+ * @link http://symfony.com/doc/current/cookbook/form/form_collections.html
+ * @param $queryFormLi
+ */
 function addQueryFormDeleteLink($queryFormLi) {
-    var $removeFormA = $('<a href="#">delete this query</a>');
+    var $removeFormA = $('<a href="#">Delete this query</a>');
     $queryFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
+        console.log($queryFormLi.siblings())
+        if ($queryFormLi.siblings().length===1) {
+            $('.li-empty > div').removeClass('hidden');
+        }
 
         // remove the li for the tag form
         $queryFormLi.remove();
@@ -726,33 +753,33 @@ function showSectionHelper() {
 $(document).ready(function () {
     //showSectionHelper();
 
+    /**
+     * [ QUERY FORM ]
+     *
+     *  Use JavaScript to read data-prototype attribute and
+     *  dynamically add new tag forms when the user clicks
+     *  a "Add a query" link.
+     */
     var $collectionHolder;
-// setup an "add a tag" link
+    // setup an "add a query" link
     var $addQueryLink = $('<a href="#" class="add_query_link">Add a query</a>');
     var $newLinkLi = $('<li></li>').append($addQueryLink);
-
-
-// Get the ul that holds the collection of tags
+    // Get the ul that holds the collection of queries
     $collectionHolder = $('ul.queries');
-
-    // add a delete link to all of the existing tag form li elements
+    // add a delete link to all of the existing query form li elements
     $collectionHolder.find('li').each(function() {
         addQueryFormDeleteLink($(this));
     });
-
-// add the "add a tag" anchor and li to the tags ul
+    // add the "add a query" anchor and li to the query ul
     $collectionHolder.append($newLinkLi);
-
-// count the current form inputs we have (e.g. 2), use that as the new
-// index when inserting a new item (e.g. 2)
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
     $collectionHolder.data('index', $collectionHolder.find(':input').length);
 
     $addQueryLink.on('click', function(e) {
-        // prevent the link from creating a "#" on the URL
         e.preventDefault();
-        console.log('clicked aq')
-
-        // add a new tag form (see next code block)
+        $('.li-empty > div').addClass('hidden');
+        // add a new query form
         addQueryForm($collectionHolder, $newLinkLi);
     });
 

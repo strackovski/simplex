@@ -12,6 +12,7 @@
 
 namespace nv\Simplex\Controller\Site;
 
+use Doctrine\DBAL\Query\QueryException;
 use nv\Simplex\Model\Entity\Page;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,7 +61,11 @@ class PageController
 
         if ($page instanceof Page and $page->getQueries()) {
             foreach ($page->getQueries() as $query) {
-                $content[] = $query->getManager()->buildQuery($app['orm.em'])->getResult();
+                try{
+                    $content[] = $query->getManager()->buildQuery($app['orm.em'])->getResult();
+                } catch (QueryException $e) {
+                    // @todo log error
+                }
             }
 
             return $app['twig']->render(

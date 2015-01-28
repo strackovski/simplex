@@ -17,8 +17,6 @@ use nv\Simplex\Common\TimestampableAbstract;
 use nv\Simplex\Common\ObservableInterface;
 use nv\Simplex\Common\ObserverInterface;
 
-// @todo Pre-persist remove page associations
-
 /**
  * Post class
  *

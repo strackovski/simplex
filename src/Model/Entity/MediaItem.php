@@ -91,16 +91,6 @@ abstract class MediaItem extends TimestampableAbstract
      */
     protected $originalAuthor;
 
-    /*
-     * Path to media file
-     *
-     * @var string
-     *
-     * @Column(type="string", length=255, nullable=true)
-     *
-    protected $path;
-    */
-
     /**
      * Image file
      *
@@ -439,14 +429,6 @@ abstract class MediaItem extends TimestampableAbstract
         return $this->file;
     }
 
-    /**
-     * @param string $path
-
-    public function setPath($path)
-    {
-        $this->path = $path;
-    }
-    */
     /**
      * @return string
      */

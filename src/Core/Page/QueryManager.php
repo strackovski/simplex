@@ -12,6 +12,7 @@
 
 namespace nv\Simplex\Core\Page;
 
+use Doctrine\DBAL\Query\QueryException;
 use Doctrine\ORM\EntityManager;
 use nv\Simplex\Model\Entity\PageQuery;
 
@@ -47,7 +48,7 @@ class QueryManager
     public function buildQuery(EntityManager $em)
     {
         $qb = $em->createQueryBuilder();
-        $contentType = 'nv\Simplex\Model\Entity\\' . $this->query->getContentType();
+        $contentType = $this->query->getContentType(1);
         switch ($this->query->getColumn()) {
             case 'title':
                 $qb->select(array('u'))
@@ -146,6 +147,8 @@ class QueryManager
             $qb->setMaxResults($this->query->getLimitMax());
         }
 
-        return $q = $qb->getQuery();
+        return $qb->getQuery();
+
+
     }
 }

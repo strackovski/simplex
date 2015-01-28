@@ -92,6 +92,12 @@ class PageType extends AbstractType
                     'placeholder' => 'Enter description (optional)'
                 )
             ))
+            ->add('keywords', 'text', array(
+                'required' => false,
+                'attr' => array(
+                    'placeholder' => 'Enter keywords (optional)'
+                )
+            ))
             ->add('slug', 'text', array(
                 'constraints' => new Assert\NotBlank(),
                 'attr' => array(

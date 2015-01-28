@@ -12,8 +12,6 @@
 
 namespace nv\Simplex\Form;
 
-// @todo Extract to separate forms
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -38,7 +36,7 @@ class PageQueryType extends AbstractType
     {
         $builder
             ->add('contentType', 'choice', array(
-                'choices' => array('post' => 'Post'),
+                'choices' => array('post' => 'Post', 'image' => 'Image', 'video' => 'Video'),
                 'data' => 'post',
                 'empty_value' => 'Select content type...',
             ))
@@ -49,6 +47,8 @@ class PageQueryType extends AbstractType
                     'updated_at' => 'Date modified',
                     'author' => 'Author',
                     'tags' => 'Tags',
+                    'hasFace' => 'With faces',
+                    'inLibrary' => 'In library',
                 ),
                 'empty_value' => 'Select a column filter...'
             ))
@@ -72,7 +72,18 @@ class PageQueryType extends AbstractType
             ))
             ->add('limitMax', 'text', array(
                 'required' => false
+            ))
+            ->add('viewPosition', 'choice', array(
+                'choices' => array(
+                    'eq' => 'Equals',
+                    'in' => 'Contains',
+                    'between' => 'Between',
+                    'before' => 'Before',
+                    'after' => 'After'
+                ),
+                'required' => false
             ));
+
     }
 
     /**

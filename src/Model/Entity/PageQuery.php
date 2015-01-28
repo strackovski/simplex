@@ -72,6 +72,13 @@ class PageQuery
     protected $limitMax;
 
     /**
+     * View position, defines the position of the returned data in the view (optional)
+     *
+     * @Column(name="view_pos", type="string", length=255, nullable=true, unique=false)
+     */
+    protected $viewPosition;
+
+    /**
      * @var QueryManager
      */
     protected $manager;
@@ -170,7 +177,7 @@ class PageQuery
     public function getContentType($full = false)
     {
         if ($full and !is_null($this->contentType)) {
-            return sprintf("nv\\Simplex\\Model\\Entity\\", trim(ucfirst($this->contentType)));
+            return "nv\\Simplex\\Model\\Entity\\" . trim(ucfirst($this->contentType));
         }
         return $this->contentType;
     }
@@ -280,6 +287,22 @@ class PageQuery
             throw new \Exception('Invalid sort parameter.');
         }
         $this->sortBy = $option;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getViewPosition()
+    {
+        return $this->viewPosition;
+    }
+
+    /**
+     * @param mixed $viewPosition
+     */
+    public function setViewPosition($viewPosition)
+    {
+        $this->viewPosition = $viewPosition;
     }
 
     /**

@@ -17,8 +17,6 @@ use nv\Simplex\Common\ObservableInterface;
 use nv\Simplex\Common\ObserverInterface;
 use nv\Simplex\Common\TimestampableAbstract;
 
-// @todo multiple queries and foreach in manager
-
 /**
  * Page class
  *
@@ -50,21 +48,21 @@ class Page extends TimestampableAbstract implements ObservableInterface
     protected $title;
 
     /**
-     * Post subtitle
+     * Slug defines the page's route
      *
      * @Column(name="slug", type="string", length=255, nullable=true, unique=true)
      */
     protected $slug;
 
     /**
-     * View template
+     * Master template for this page
      *
      * @Column(name="master", type="string", length=255, nullable=true, unique=false)
      */
     protected $master;
 
     /**
-     * View template
+     * View template, extends from maser template
      *
      * @Column(name="view", type="string", length=255, nullable=true, unique=false)
      */
@@ -78,11 +76,18 @@ class Page extends TimestampableAbstract implements ObservableInterface
     protected $inMenu;
 
     /**
-     * Page description
+     * Page description, applied to "description" meta tag
      *
      * @Column(name="description", type="string", nullable=true)
      */
     protected $description;
+
+    /**
+     * Page keywords, applied to "keywords" meta tag
+     *
+     * @Column(name="keywords", type="string", length=255, nullable=true, unique=false)
+     */
+    protected $keywords;
 
     /**
      * Attached page queries
@@ -102,16 +107,24 @@ class Page extends TimestampableAbstract implements ObservableInterface
      */
     protected $typeColor;
 
-    /** @var array */
+    /**
+     * Observers container
+     *
+     * @var array
+     */
     private $observers;
 
     /**
+     * Page author
+     *
      * @ManyToOne(targetEntity="User")
      * @JoinColumn(name="user_id", referencedColumnName="id")
      **/
     private $author;
 
     /**
+     * Directly (manually) associated posts
+     *
      * @ManyToMany(targetEntity="Post", mappedBy="pages")
      **/
     private $posts;
@@ -402,5 +415,21 @@ class Page extends TimestampableAbstract implements ObservableInterface
     public function removePost(Post $post)
     {
         $this->posts->remove($post);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getKeywords()
+    {
+        return $this->keywords;
+    }
+
+    /**
+     * @param mixed $keywords
+     */
+    public function setKeywords($keywords)
+    {
+        $this->keywords = $keywords;
     }
 }

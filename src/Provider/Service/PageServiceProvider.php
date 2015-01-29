@@ -31,7 +31,7 @@ class PageServiceProvider implements ServiceProviderInterface, ControllerProvide
         });
 
         $app['page.listener'] = $app->share(function ($app) {
-            return new PageListener($app['page.manager'], $app['settings']);
+            return new PageListener($app['page.manager'], $app['monolog']);
         });
 
         $app['page.controller'] = $app->share(function () use ($app) {

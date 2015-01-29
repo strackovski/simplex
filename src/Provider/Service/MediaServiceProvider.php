@@ -53,7 +53,8 @@ class MediaServiceProvider implements ServiceProviderInterface, ControllerProvid
             return new MediaListener(
                 $app['image.manager'],
                 $app['video.manager'],
-                $app['settings']
+                $app['settings'],
+                $app['monolog']
             );
         });
 

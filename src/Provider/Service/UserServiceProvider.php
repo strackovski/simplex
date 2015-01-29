@@ -36,7 +36,8 @@ class UserServiceProvider implements ServiceProviderInterface, ControllerProvide
         $app['user.listener'] = $app->share(function ($app) {
             return new UserListener(
                 $app['user.manager'],
-                $app['settings']
+                $app['settings'],
+                $app['monolog']
             );
         });
 

@@ -50,7 +50,7 @@ class PostServiceProvider implements ServiceProviderInterface, ControllerProvide
         });
 
         $app['post.listener'] = $app->share(function ($app) {
-            return new PostListener($app['post.manager'], $app['settings']);
+            return new PostListener($app['post.manager'], $app['settings'], $app['monolog']);
         });
 
         $app['post.controller'] = $app->share(function () use ($app) {

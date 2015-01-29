@@ -11,6 +11,7 @@ use nv\Simplex\Model\Entity\MediaItem;
 use nv\Simplex\Model\Entity\Metadata;
 use nv\Simplex\Model\Entity\Settings;
 use nv\Simplex\Model\Entity\Video;
+use Symfony\Bridge\Monolog\Logger;
 
 /**
  * Class MediaListener
@@ -18,7 +19,7 @@ use nv\Simplex\Model\Entity\Video;
  * @package nv\Simplex\Model\Listener
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
-class MediaListener
+class MediaListener extends EntityListenerAbstract
 {
     /**
      * @param ImageManager $imageManager
@@ -26,8 +27,9 @@ class MediaListener
      * @param Settings $settings
      * @internal param MediaManagerInterface $manager
      */
-    public function __construct(ImageManager $imageManager, VideoManager $videoManager, Settings $settings)
+    public function __construct(ImageManager $imageManager, VideoManager $videoManager, Settings $settings, Logger $logger)
     {
+        parent::__construct($logger);
         $this->imageManager = $imageManager;
         $this->videoManager = $videoManager;
         $this->settings = $settings;
@@ -55,17 +57,29 @@ class MediaListener
     {
         $this->imageManager->thumbnail($image, $this->settings->getImageResizeDimensions());
 
-        $this->settings->getImageAutoCrop() ?
-            $this->imageManager->autoCrop($image, null) :
-            $this->imageManager->crop($image, $this->settings->getImageResizeDimensions('crop'));
+        try{
+            $this->settings->getImageAutoCrop() ?
+                $this->imageManager->autoCrop($image, null) :
+                $this->imageManager->crop($image, $this->settings->getImageResizeDimensions('crop'));
+        } catch (\Exception $e) {
+            $this->logger->addError(
+                "Cropping failed for media #" . $image->getId() . " with message: " . $e->getMessage()
+            );
+        }
 
         if ($image->isInLibrary()) {
             if ($this->settings->getWatermarkMedia() and $this->settings->getWatermark()) {
-                $this->imageManager->watermark(
-                    $image,
-                    APPLICATION_ROOT_PATH . '/web/uploads/' . $this->settings->getWatermark()->getPath(),
-                    $this->settings->getWatermarkPosition()
-                );
+                try{
+                    $this->imageManager->watermark(
+                        $image,
+                        APPLICATION_ROOT_PATH . '/web/uploads/' . $this->settings->getWatermark()->getPath(),
+                        $this->settings->getWatermarkPosition()
+                    );
+                } catch (\Exception $e) {
+                    $this->logger->addError(
+                        "Watermarking failed for media #" . $image->getId() . " with message: " . $e->getMessage()
+                    );
+                }
             }
 
             if (class_exists("\\GearmanClient")) {
@@ -74,17 +88,27 @@ class MediaListener
                     $client->addServer();
                     $result = $client->doBackground("process_image", json_encode($image->getId()));
                 } catch (\Exception $e) {
-
+                    $this->logger->addError(
+                        "Gearman failed processing image with message " . $e->getMessage()
+                    );
                 }
             }
 
             if ($this->settings->detectFacesInPhotos() == true) {
                 $image->setHasFace(false);
-                if ($this->imageManager->detectFace($image)) {
+                try{
+                    $fd = $this->imageManager->detectFace($image);
+                } catch (\Exception $e) {
+                    $this->logger->addError(
+                        "Face detection failed for media #" . $image->getId() . " with message: " . $e->getMessage()
+                    );
+                }
+                if (isset($fd)) {
                     $image->setHasFace(true);
                     $faceLoc = json_decode($this->imageManager->getFaceDetector()->toJson(), 1);
 
                     if (is_array($faceLoc)) {
+                        // @todo Crop2???
                         $this->imageManager->crop2(
                             $image,
                             array(
@@ -99,7 +123,13 @@ class MediaListener
                 }
             }
         }
-        $this->imageManager->cleanUp($image, $this->settings->getImageKeepOriginal());
+        try{
+            $this->imageManager->cleanUp($image, $this->settings->getImageKeepOriginal());
+        } catch (\Exception $e) {
+            $this->logger->addError(
+                "Cleanup failed for media #" . $image->getId() . " with message: " . $e->getMessage()
+            );
+        }
 
         return 1;
     }
@@ -111,9 +141,37 @@ class MediaListener
     protected function processVideo(Video $video)
     {
         $metadata = new Metadata();
-        $video->setMetadata($metadata->setData($this->videoManager->metadata($video)));
-        $this->videoManager->thumbnail($video, $this->settings->getImageResizeDimensions());
-        $this->videoManager->autoCrop($video, null);
-        $this->videoManager->recode($video);
+
+        try{
+            $video->setMetadata($metadata->setData($this->videoManager->metadata($video)));
+        } catch (\Exception $e) {
+            $this->logger->addError(
+                "Metadata retrieval failed for media #" . $video->getId() . " with message: " . $e->getMessage()
+            );
+        }
+
+        try{
+            $this->videoManager->thumbnail($video, $this->settings->getImageResizeDimensions());
+        } catch (\Exception $e) {
+            $this->logger->addError(
+                "Thumbnail generation failed for media #" . $video->getId() . " with message: " . $e->getMessage()
+            );
+        }
+
+        try{
+            $this->videoManager->autoCrop($video, null);
+        } catch (\Exception $e) {
+            $this->logger->addError(
+                "Cropping failed for media #" . $video->getId() . " with message: " . $e->getMessage()
+            );
+        }
+
+        try{
+            $this->videoManager->recode($video);
+        } catch (\Exception $e) {
+            $this->logger->addError(
+                "Encoding failed for media #" . $video->getId() . " with message: " . $e->getMessage()
+            );
+        }
     }
 }

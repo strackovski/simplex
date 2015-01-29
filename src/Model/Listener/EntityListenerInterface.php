@@ -9,5 +9,5 @@ namespace nv\Simplex\Model\Listener;
  */
 interface EntityListenerInterface
 {
-    // @todo
+    // @todo Implement
 }

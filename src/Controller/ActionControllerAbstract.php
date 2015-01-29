@@ -3,6 +3,7 @@
 namespace nv\Simplex\Controller;
 
 use nv\Simplex\Model\Entity\Settings;
+use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -34,6 +35,9 @@ abstract class ActionControllerAbstract
     /** @var UrlGenerator */
     protected $url;
 
+    /** @var Logger $logger */
+    protected $logger;
+
     /**
      * @param Settings $settings
      * @param \Twig_Environment $twig
@@ -41,6 +45,7 @@ abstract class ActionControllerAbstract
      * @param SecurityContext $security
      * @param Session $session
      * @param UrlGenerator $url
+     * @param Logger $logger
      */
     public function __construct(
         Settings $settings,
@@ -48,7 +53,8 @@ abstract class ActionControllerAbstract
         FormFactoryInterface $formFactory,
         SecurityContext $security,
         Session $session,
-        UrlGenerator $url
+        UrlGenerator $url,
+        Logger $logger
     ) {
         $this->settings = $settings;
         $this->twig = $twig;
@@ -56,6 +62,7 @@ abstract class ActionControllerAbstract
         $this->security = $security;
         $this->session = $session;
         $this->url = $url;
+        $this->logger = $logger;
     }
 
     protected function render($view, array $data = null)

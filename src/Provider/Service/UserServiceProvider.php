@@ -51,7 +51,8 @@ class UserServiceProvider implements ServiceProviderInterface, ControllerProvide
                 $app['url_generator'],
                 $app['system.mailer'],
                 $app['imagine'],
-                $app['user.manager']
+                $app['user.manager'],
+                $app['monolog']
             );
         });
     }

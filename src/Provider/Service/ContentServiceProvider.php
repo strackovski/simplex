@@ -33,7 +33,8 @@ class ContentServiceProvider implements ServiceProviderInterface, ControllerProv
                 $app['form.factory'],
                 $app['security'],
                 $app['session'],
-                $app['url_generator']
+                $app['url_generator'],
+                $app['monolog']
             );
         });
     }

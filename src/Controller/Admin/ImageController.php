@@ -16,6 +16,7 @@ use Imagine\Image\ImagineInterface;
 use nv\Simplex\Controller\ActionControllerAbstract;
 use nv\Simplex\Core\Media\ImageManager;
 use Silex\Application;
+use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,9 +56,10 @@ class ImageController extends ActionControllerAbstract
         FormFactoryInterface $formFactory,
         SecurityContext $security,
         Session $session,
-        UrlGenerator $url
+        UrlGenerator $url,
+        Logger $logger
     ) {
-        parent::__construct($settings, $twig, $formFactory, $security, $session, $url);
+        parent::__construct($settings, $twig, $formFactory, $security, $session, $url, $logger);
         $this->media = $mediaRepository;
         $this->manager = $manager;
     }

@@ -17,6 +17,7 @@ use nv\Simplex\Controller\ActionControllerAbstract;
 use nv\Simplex\Core\Mailer\SystemMailer;
 use nv\Simplex\Model\Entity\Settings;
 use Silex\Application;
+use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -79,9 +80,10 @@ class UserController extends ActionControllerAbstract
         UrlGenerator $url,
         SystemMailer $mailer,
         ImagineInterface $imagine,
-        UserManager $manager
+        UserManager $manager,
+        Logger $logger
     ) {
-        parent::__construct($settings, $twig, $formFactory, $security, $session, $url, $imagine);
+        parent::__construct($settings, $twig, $formFactory, $security, $session, $url, $imagine, $logger);
         $this->users = $users;
         $this->mailer = $mailer;
         $this->imagine = $imagine;
@@ -595,7 +597,6 @@ class UserController extends ActionControllerAbstract
     {
         $user = $this->users->findOneBy(array('id' => $request->get('user')));
         if ($user instanceof User) {
-            //  @todo pass to repo
             $app['orm.em']->remove($user);
             $app['orm.em']->flush();
         }

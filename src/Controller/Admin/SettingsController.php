@@ -90,6 +90,39 @@ class SettingsController
         $this->url = $url;
     }
 
+
+    private function getFirstprofileId(&$analytics) {
+        $accounts = $analytics->management_accounts->listManagementAccounts();
+
+        if (count($accounts->getItems()) > 0) {
+            $items = $accounts->getItems();
+            $firstAccountId = $items[0]->getId();
+
+            $webproperties = $analytics->management_webproperties
+                ->listManagementWebproperties($firstAccountId);
+
+            if (count($webproperties->getItems()) > 0) {
+                $items = $webproperties->getItems();
+                $firstWebpropertyId = $items[0]->getId();
+
+                $profiles = $analytics->management_profiles
+                    ->listManagementProfiles($firstAccountId, $firstWebpropertyId);
+
+                if (count($profiles->getItems()) > 0) {
+                    $items = $profiles->getItems();
+                    return $items[0]->getId();
+
+                } else {
+                    throw new Exception('No views (profiles) found for this user.');
+                }
+            } else {
+                throw new Exception('No webproperties found for this user.');
+            }
+        } else {
+            throw new Exception('No accounts found for this user.');
+        }
+    }
+
     /**
      * Administration panel home
      *
@@ -105,6 +138,33 @@ class SettingsController
         $latest['media'] = $app['repository.media']->getLatest(5);
         $latest['pages'] = $app['repository.page']->getLatest(5);
         $settings = $this->settingsRepository->getCurrent();
+
+        /** @var GoogleApiAccount $google */
+        if ($google = $this->settings->getApiAccount('google', 1)) {
+            if ($token = $google->getAccessToken()) {
+                $client = new \Google_Client();
+                $client->setApplicationName('nv3-simplex');
+                $client->setClientId('1055133477287-s79s6fh7dtoht2626l2op5r2j4cqocq5.apps.googleusercontent.com');
+                $client->setClientSecret('0U4N_j8vJbmdAgjFDvs6y98g');
+                $client->setRedirectUri('http://simplex.envee.eu/HelloAnalyticsApi.php');
+                $client->setDeveloperKey('AIzaSyAqqpLkCaQnvWTULMs-hBl2r9nk0uvGGU0');
+                $client->setScopes(array('https://www.googleapis.com/auth/analytics.edit'));
+                $client->setAccessToken($token);
+
+                $analytics = new \Google_Service_Analytics($client);
+
+                $profileId = $this->getFirstprofileId($analytics);
+
+                $ga = $analytics->data_ga->get(
+                    'ga:'.$profileId,
+                    '2015-01-01',
+                    '2015-01-14',
+                    'ga:sessions,ga:pageviews,ga:sessionDuration,ga:exits'
+                );
+            }
+
+        }
+
 
         $published = '';
         $exposed = '';
@@ -127,7 +187,8 @@ class SettingsController
             ),
             'posts' => $posts,
             'latest' => $latest,
-            'settings' => $settings
+            'settings' => $settings,
+            'analytics' => $ga
         );
 
         if (null !== $app['security']->getToken()) {
@@ -393,7 +454,6 @@ class SettingsController
         }
 
         if (!$client->getAccessToken()) {
-            // @todo Use saved tokens ?
             $authUrl = $client->createAuthUrl();
             echo "<a class='login' href='$authUrl'>Connect Me!</a>";
         } else {

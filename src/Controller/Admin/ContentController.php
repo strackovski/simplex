@@ -19,6 +19,7 @@ use nv\Simplex\Model\Repository\PageRepository;
 use nv\Simplex\Model\Repository\PostRepository;
 use nv\Simplex\Model\Repository\TagRepository;
 use Silex\Application;
+use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -61,9 +62,10 @@ class ContentController extends ActionControllerAbstract
         FormFactoryInterface $formFactory,
         SecurityContext $security,
         Session $session,
-        UrlGenerator $url
+        UrlGenerator $url,
+        Logger $logger
     ) {
-        parent::__construct($settings, $twig, $formFactory, $security, $session, $url);
+        parent::__construct($settings, $twig, $formFactory, $security, $session, $url, $logger);
         $this->posts = $postRepository;
         $this->media = $mediaRepository;
         $this->pages = $pageRepository;

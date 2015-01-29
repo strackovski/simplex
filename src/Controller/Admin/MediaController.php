@@ -17,6 +17,7 @@ use nv\Simplex\Form\MediaSettingsType;
 use nv\Simplex\Model\Entity\Settings;
 use nv\Simplex\Model\Repository\MediaRepository;
 use Silex\Application;
+use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -46,9 +47,10 @@ class MediaController extends ActionControllerAbstract
         FormFactoryInterface $formFactory,
         SecurityContext $security,
         Session $session,
-        UrlGenerator $url
+        UrlGenerator $url,
+        Logger $logger
     ) {
-        parent::__construct($settings, $twig, $formFactory, $security, $session, $url);
+        parent::__construct($settings, $twig, $formFactory, $security, $session, $url, $logger);
         $this->media = $mediaRepository;
     }
 

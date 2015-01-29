@@ -19,6 +19,7 @@ use nv\Simplex\Model\Repository\PostRepository;
 use nv\Simplex\Model\Repository\TagRepository;
 use nv\Simplex\Model\Repository\PageRepository;
 use Silex\Application;
+use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -68,9 +69,10 @@ class PostController extends ActionControllerAbstract
         SecurityContext $security,
         Session $session,
         UrlGenerator $url,
-        PostManager $postManager
+        PostManager $postManager,
+        Logger $logger
     ) {
-        parent::__construct($settings, $twig, $formFactory, $security, $session, $url);
+        parent::__construct($settings, $twig, $formFactory, $security, $session, $url, $logger);
         $this->posts = $postRepository;
         $this->media = $mediaRepository;
         $this->tags = $tagRepository;
@@ -142,6 +144,16 @@ class PostController extends ActionControllerAbstract
     }
 
     /**
+     * Update Twitter status (tweet)
+     *
+     * @param Request $request
+     */
+    private function twitterPostTask(Request $request)
+    {
+        // @todo Implement twitter statuses/update (with auth)
+    }
+
+    /**
      * Add new post
      *
      * @param Request     $request
@@ -185,6 +197,8 @@ class PostController extends ActionControllerAbstract
                     $post->setAuthor($token->getUser());
                 }
 
+                // @todo TEST TWITTER POSTING CODE IN ISOLATION
+                // @todo Extract to twitterPostTask, use it if post to twitter enabled
                 /** @var \nv\Simplex\Core\Service\TwitterApiAccount $twitter */
                 if ($twitter = $this->settings->getApiAccount('twitter', 1)) {
                     if (in_array('twitter', $form->get('channels')->getData())) {
@@ -194,24 +208,26 @@ class PostController extends ActionControllerAbstract
                             $twitter->getOauthToken(),
                             $twitter->getOauthTokenSecret()
                         );
-                        $content = $connection->get("account/verify_credentials");
-                        if ($post->getMediaItems() < 1) {
-                            $connection->post("statuses/update", array("status" => substr($post->getSubtitle(), 0, 130)));
-                        } else {
+                        $connection->get("oauth/authenticate");
+                        // @todo Check if twitter auth failed (access revoked)
+
+                        if ($post->getMediaItems()->count() > 0) {
                             $mediaIds = array();
-                            /** @var \nv\Simplex\Model\Entity\Image $media */
                             foreach ($post->getMediaItems() as $media) {
-                                $p = $request->getBasePath() . '/uploads/' . $media->getWebPath('medium');
                                 $mediaUpload = $connection->upload('media/upload', array('media' => $media->getVariations()['small']));
                                 $mediaIds[] = $mediaUpload->media_id_string;
                             }
-
                             $parameters = array(
                                 'status' => substr($post->getSubtitle(), 0, 130),
                                 'media_ids' => implode(',', $mediaIds)
                             );
                             $connection->post("statuses/update", $parameters);
+                        } else {
+                            $connection->post("statuses/update", array("status" => substr($post->getSubtitle(), 0, 130)));
                         }
+
+                        $connection->post("statuses/update", array("status" => substr($post->getSubtitle(), 0, 130)));
+
 
                         if ($connection->lastHttpCode() == 200) {
                             // @todo log success

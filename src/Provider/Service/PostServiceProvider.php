@@ -65,7 +65,8 @@ class PostServiceProvider implements ServiceProviderInterface, ControllerProvide
                 $app['security'],
                 $app['session'],
                 $app['url_generator'],
-                $app['post.manager']
+                $app['post.manager'],
+                $app['monolog']
             );
         });
     }

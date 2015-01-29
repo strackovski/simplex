@@ -19,6 +19,7 @@ use nv\Simplex\Model\Entity\Page;
 use nv\Simplex\Form\PageType;
 use nv\Simplex\Core\Page\PageManager;
 use nv\Simplex\Model\Repository\PageRepository;
+use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,9 +61,10 @@ class PageController extends ActionControllerAbstract
         SecurityContext $security,
         Session $session,
         UrlGenerator $url,
-        PageManager $pageManager
+        PageManager $pageManager,
+        Logger $logger
     ) {
-        parent::__construct($settings, $twig, $formFactory, $security, $session, $url);
+        parent::__construct($settings, $twig, $formFactory, $security, $session, $url, $logger);
         $this->pages = $pageRepository;
         $this->manager = $pageManager;
     }

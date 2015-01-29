@@ -43,7 +43,8 @@ class PageServiceProvider implements ServiceProviderInterface, ControllerProvide
                 $app['security'],
                 $app['session'],
                 $app['url_generator'],
-                $app['page.manager']
+                $app['page.manager'],
+                $app['monolog']
             );
         });
     }

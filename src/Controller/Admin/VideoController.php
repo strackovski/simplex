@@ -150,50 +150,7 @@ class VideoController extends ActionControllerAbstract
      */
     private function youTubeUploadTask(Request $request)
     {
-        // @todo Implement YouTube video upload, example:
-        // REQUEST NEEDS API TOKEN !
-        /**
-        $videoPath = __DIR__ . "/media/IMG_5097.MOV";
-        $snippet = new \Google_Service_YouTube_VideoSnippet();
-        $snippet->setTitle('api test');
-        $snippet->setDescription('Test description');
-        $snippet->setTags(array("tagged", "some tag"));
-        $snippet->setCategoryId("22");
-
-        $status = new \Google_Service_YouTube_VideoStatus();
-        $status->privacyStatus = "private";
-
-        $video = new \Google_Service_YouTube_Video();
-        $video->setSnippet($snippet);
-        $video->setStatus($status);
-
-        $chunkSizeByes = 1 * 51200 * 1024;
-        $client->setDefer(true);
-        $insertRequest = $youtube->videos->insert("status,snippet", $video);
-
-        $media = new \Google_Http_MediaFileUpload(
-            $client,
-            $insertRequest,
-            'video/*',
-            null,
-            true,
-            $chunkSizeByes
-        );
-        $media->setFileSize(filesize($videoPath));
-
-        $status = false;
-        $handle = fopen($videoPath, "rb");
-        while (!$status && !feof($handle)) {
-            $chunk = fread($handle, $chunkSizeByes);
-            $status = $media->nextChunk($chunk);
-        }
-        fclose($handle);
-        $client->setDefer(false);
-
-        echo 'Video uploaded! <br>';
-        echo 'Title: ' . $status['snippet']['title'] . '<br>';
-        echo 'ID: ' . $status['id'] . '<br>';
-        **/
+        // @todo Implement YouTube video upload
         return false;
     }
 
@@ -208,7 +165,7 @@ class VideoController extends ActionControllerAbstract
         $files = $request->files;
         $token = $this->security->getToken();
 
-         // @todo check if YouTube uploads enabled, call youTubeUploadTask
+         // @todo Check for YT upload when implemented
         foreach ($files as $uploadedFile) {
             $video = new Video();
             if (null !== $token) {

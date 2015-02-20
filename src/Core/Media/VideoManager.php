@@ -22,7 +22,7 @@ use nv\Simplex\Model\Entity\Video;
 /**
  * Video Manager
  *
- * @todo use php-ffmpeg
+ * @todo Use php-ffmpeg lib
  *
  * @package nv\Simplex\Core\Media
  * @author Vladimir Stračkovski <vlado@nv3.org>

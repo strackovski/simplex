@@ -1,5 +1,7 @@
-Simplex CMS
+Simplex WCM
 =========
+This project is in development and is currently being tested. The final version has not been released yet. You are welcome
+to install it and try it out. A working demo can be found here: link.
 
 Features
 ----
@@ -11,14 +13,16 @@ Features
    * Transparent support for multimedia content
    * Automatic content enrichment, classification and semantic tagging
    * Per-post keywords and metadata specification
+   * Twitter integration enables automatic tweeting when new content is added
+   * Facebook integration in development
   
 ####Media features
 
    * Drag and drop media import supporting multifile uploads
    * Automatic video and image thumbnail generation
-   * Metadata extraction for images using EXIF data (if available)
-   * Metadata extraction for videos using ffmpeg (if available)
-   * Automatic image watermarking if watermark is uploaded
+   * Metadata extraction for images using EXIF data
+   * Metadata extraction for videos using ffmpeg
+   * Automatic image watermarking
    * User defined image resampling quality
    * Media library resampling enabled on demand
 
@@ -39,12 +43,11 @@ Features
 ####Users and security
 
    * Multiuser support with very basic content change-tracking
-   * Two user groups for editors and administrators with differentiating levels of access
+   * Two user groups for editors and administrators with different levels of access
    * Full user profile for each user
    * Support for public user registration
    * Secure password and credentials storage
    * Account activation and reactivation via email
-   * Password reset support via email
   
 ####Technical
 

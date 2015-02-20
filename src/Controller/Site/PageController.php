@@ -64,7 +64,9 @@ class PageController
                 try{
                     $content[] = $query->getManager()->buildQuery($app['orm.em'])->getResult();
                 } catch (QueryException $e) {
-                    // @todo log error
+                    $app['monolog']->addError(
+                        'Failed building query in Site\\PageController:viewAction: ' . $e->getMessage()
+                    );
                 }
             }
 

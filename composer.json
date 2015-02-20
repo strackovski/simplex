@@ -1,6 +1,6 @@
 {
     "name": "nv/Simplex",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Simplex web CMS",
     "type": "project",
     "license": "MIT",
@@ -39,6 +39,8 @@
         "braincrafted/bootstrap-bundle": "2.0.0",
         "mjohnson/type-converter": "2.0.0",
         "imagine/imagine": "~0.5.0",
+        "php-ffmpeg/php-ffmpeg": "~0.5",
+        "php-ffmpeg/extras": "*",
         "neutron/silex-imagine-provider": "dev-master",
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
         "nv/semtools": "dev-master",

@@ -34,8 +34,16 @@ class PostListener extends EntityListenerAbstract
     {
         $this->manager->slug($post);
 
+        // @todo Check if twitter enabled and tweet this post
+
         if ($this->settings->getEnableAnnotations()) {
-            $this->manager->metadata($post);
+            try{
+                $this->manager->metadata($post);
+            } catch (\Exception $e) {
+                $this->logger->addError(
+                    'Failed retrieving metadata for post #' . $post->getId() . ': ' . $e->getMessage()
+                );
+            }
         }
     }
 }

@@ -39,6 +39,7 @@ class ProjectSetup extends SetupAbstract
             $this->setParameters($dbConfig, 'database');
 
             $this->writeLine('Enter connection parameters for the system mailing account.');
+            $this->writeLine('You can set this later in the web interface.');
             $mailingOptions = array(
                 'mail_host' => 'Mail server host address',
                 'mail_port' => 'Mail server port',

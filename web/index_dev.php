@@ -12,7 +12,7 @@
 
 if (isset($_SERVER['HTTP_CLIENT_IP'])
     || isset($_SERVER['HTTP_X_FORWARDED_FOR'])
-    || !in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', 'fe80::1', '::1', '192.168.178.102', '192.168.178.106', '192.168.178.201', '86.61.77.139'))
+    || !in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', 'fe80::1', '::1', '192.168.178.102', '192.168.178.106', '192.168.178.201', '86.61.77.139', '93.103.107.253'))
 ) {
     header('HTTP/1.0 403 Forbidden');
     exit('Authorized access only.');

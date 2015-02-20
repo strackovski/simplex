@@ -10,6 +10,7 @@ use nv\semtools\Factory\SemtoolsFactory;
  * Semtools service provider for Silex applications
  *
  * @author Vladimir Stračkovski <vlado@nv3.org>
+ * @todo Handle exceptions for semtools instantiation
  */
 class SemtoolsServiceProvider implements ServiceProviderInterface
 {

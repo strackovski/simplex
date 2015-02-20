@@ -144,16 +144,6 @@ class PostController extends ActionControllerAbstract
     }
 
     /**
-     * Update Twitter status (tweet)
-     *
-     * @param Request $request
-     */
-    private function twitterPostTask(Request $request)
-    {
-        // @todo Implement twitter statuses/update (with auth)
-    }
-
-    /**
      * Add new post
      *
      * @param Request     $request
@@ -197,16 +187,15 @@ class PostController extends ActionControllerAbstract
                     $post->setAuthor($token->getUser());
                 }
 
-                // @todo TEST TWITTER POSTING CODE IN ISOLATION
-                // @todo Extract to twitterPostTask, use it if post to twitter enabled
                 /** @var \nv\Simplex\Core\Service\TwitterApiAccount $twitter */
                 if ($twitter = $this->settings->getApiAccount('twitter', 1)) {
                     if (in_array('twitter', $form->get('channels')->getData())) {
+                        $token = $twitter->getAccessToken();
                         $connection = new TwitterOAuth(
                             $twitter->getConsumerKey(),
                             $twitter->getConsumerSecret(),
-                            $twitter->getOauthToken(),
-                            $twitter->getOauthTokenSecret()
+                            $token['oauth_token'],
+                            $token['oauth_token_secret']
                         );
                         $connection->get("oauth/authenticate");
                         // @todo Check if twitter auth failed (access revoked)
@@ -230,9 +219,9 @@ class PostController extends ActionControllerAbstract
 
 
                         if ($connection->lastHttpCode() == 200) {
-                            // @todo log success
+                            $this->logger->addInfo('Tweeted about post #' . $post->getId());
                         } else {
-                            // @todo log error, add to flashbag
+                            $this->logger->addError('Failed tweeting about post #' . $post->getId() . ', c');
                         }
                     }
                 }
@@ -272,7 +261,13 @@ class PostController extends ActionControllerAbstract
             if ($form->isValid()) {
                 $images = $form->get('media')->getData();
                 $tags = $form->get('tags')->getData();
-                $this->manager->tag($post, $tags);
+                try {
+                    $this->manager->tag($post, $tags);
+                } catch (\Exception $e) {
+                    $this->logger->addError(
+                        'Failed tagging metadata for post #' . $post->getId() . ': ' . $e->getMessage()
+                    );
+                }
 
                 if (count($images) > 0) {
                     $post->clearMedia();

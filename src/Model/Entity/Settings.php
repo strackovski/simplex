@@ -295,6 +295,8 @@ class Settings extends TimestampableAbstract
             $this->apiAccounts['google'] = $type->toArray();
             return;
         } elseif ($type instanceof TwitterApiAccount) {
+
+
             $this->apiAccounts['twitter'] = $type->toArray();
             return;
         }
@@ -314,8 +316,7 @@ class Settings extends TimestampableAbstract
                 $c = "\\nv\\Simplex\\Core\\Service\\".ucfirst($provider)."ApiAccount";
                 $o = new $c();
 
-                foreach ($this->apiAccounts[$provider] as $key => $value)
-                {
+                foreach ($this->apiAccounts[$provider] as $key => $value) {
                     $m = 'set'.ucfirst($key);
                     if (method_exists($o, $m)) {
                         $o->$m($value);

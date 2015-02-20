@@ -36,9 +36,6 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Security\Core\SecurityContext;
 use Abraham\TwitterOAuth\TwitterOAuth;
 
-
-// @todo IS API CALLBACKS TO ANOTHER SERVICE CALL IN CORE SIMPLEX !
-
 /**
  * Class SettingsController
  *
@@ -90,39 +87,6 @@ class SettingsController
         $this->url = $url;
     }
 
-
-    private function getFirstprofileId(&$analytics) {
-        $accounts = $analytics->management_accounts->listManagementAccounts();
-
-        if (count($accounts->getItems()) > 0) {
-            $items = $accounts->getItems();
-            $firstAccountId = $items[0]->getId();
-
-            $webproperties = $analytics->management_webproperties
-                ->listManagementWebproperties($firstAccountId);
-
-            if (count($webproperties->getItems()) > 0) {
-                $items = $webproperties->getItems();
-                $firstWebpropertyId = $items[0]->getId();
-
-                $profiles = $analytics->management_profiles
-                    ->listManagementProfiles($firstAccountId, $firstWebpropertyId);
-
-                if (count($profiles->getItems()) > 0) {
-                    $items = $profiles->getItems();
-                    return $items[0]->getId();
-
-                } else {
-                    throw new Exception('No views (profiles) found for this user.');
-                }
-            } else {
-                throw new Exception('No webproperties found for this user.');
-            }
-        } else {
-            throw new Exception('No accounts found for this user.');
-        }
-    }
-
     /**
      * Administration panel home
      *
@@ -139,33 +103,8 @@ class SettingsController
         $latest['pages'] = $app['repository.page']->getLatest(5);
         $settings = $this->settingsRepository->getCurrent();
 
-        /** @var GoogleApiAccount $google */
-        if ($google = $this->settings->getApiAccount('google', 1)) {
-            if ($token = $google->getAccessToken()) {
-                $client = new \Google_Client();
-                $client->setApplicationName('nv3-simplex');
-                $client->setClientId('1055133477287-s79s6fh7dtoht2626l2op5r2j4cqocq5.apps.googleusercontent.com');
-                $client->setClientSecret('0U4N_j8vJbmdAgjFDvs6y98g');
-                $client->setRedirectUri('http://simplex.envee.eu/HelloAnalyticsApi.php');
-                $client->setDeveloperKey('AIzaSyAqqpLkCaQnvWTULMs-hBl2r9nk0uvGGU0');
-                $client->setScopes(array('https://www.googleapis.com/auth/analytics.edit'));
-                $client->setAccessToken($token);
-
-                $analytics = new \Google_Service_Analytics($client);
-
-                $profileId = $this->getFirstprofileId($analytics);
-
-                $ga = $analytics->data_ga->get(
-                    'ga:'.$profileId,
-                    '2015-01-01',
-                    '2015-01-14',
-                    'ga:sessions,ga:pageviews,ga:sessionDuration,ga:exits'
-                );
-            }
-
-        }
-
-
+        // @todo Interpret analytics data (charts)
+        $ga = '';
         $published = '';
         $exposed = '';
 
@@ -214,7 +153,6 @@ class SettingsController
                 'title' => 'Settings',
             )
         );
-
     }
 
     /**
@@ -369,108 +307,6 @@ class SettingsController
         );
     }
 
-    public function twitterCallback()
-    {
-        if (!$this->settings->getApiAccount('twitter', 1)) {
-            exit('no twitter');
-        }
-        /** @var TwitterApiAccount $twitter */
-        $twitter = $this->settings->getApiAccount('twitter', 1);
-
-        $request_token = [];
-        $request_token['oauth_token'] = $_SESSION['oauth_token'];
-        $request_token['oauth_token_secret'] = $_SESSION['oauth_token_secret'];
-
-        if (isset($_REQUEST['oauth_token']) && $request_token['oauth_token'] !== $_REQUEST['oauth_token']) {
-            // Abort
-        }
-
-        $connection = new TwitterOAuth($twitter->getConsumerKey(), $twitter->getConsumerSecret(), $request_token['oauth_token'], $request_token['oauth_token_secret']);
-        $access_token = $connection->oauth("oauth/access_token", array("oauth_verifier" => $_REQUEST['oauth_verifier']));
-        $_SESSION['access_token'] = $access_token;
-        $twitter->setAccessToken($access_token);
-        $this->settings->addApiAccount($twitter);
-        $this->settingsRepository->save($this->settings);
-
-        return true;
-    }
-
-    public function authenticateTwitterApi()
-    {
-        if (!$this->settings->getApiAccount('twitter', 1)) {
-            exit('no twitter');
-        }
-        /** @var TwitterApiAccount $twitter */
-        $twitter = $this->settings->getApiAccount('twitter', 1);
-        $connection = new TwitterOAuth($twitter->getConsumerKey(), $twitter->getConsumerSecret());
-        $request_token = $connection->oauth('oauth/request_token', array('oauth_callback' => $twitter->getOauthCallback()));
-        $_SESSION['oauth_token'] = $request_token['oauth_token'];
-        $_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
-        $url = $connection->url('oauth/authorize', array('oauth_token' => $request_token['oauth_token']));
-        echo '<a href="'.$url.'">Twitter</a>';
-
-        return true;
-    }
-
-    public function authenticateGoogleApi()
-    {
-        if (!$this->settings->getApiAccount('google')) {
-            exit('no google');
-        }
-
-        /** @var GoogleApiAccount $google */
-        $google = $this->settings->getApiAccount('google', 1);
-
-        $client = new \Google_Client();
-        $client->setApplicationName($google->getAppName());
-        $client->setClientId($google->getClientId());
-        $client->setClientSecret($google->getClientSecret());
-        $client->setRedirectUri($google->getRedirectUri());
-        $client->setDeveloperKey($google->getApiKey());
-        $client->addScope('https://www.googleapis.com/auth/youtube');
-        $client->addScope('https://www.googleapis.com/auth/drive');
-        $client->addScope('https://www.googleapis.com/auth/analytics.readonly');
-        $client->setAccessType('offline');
-
-        if (isset($_GET['code'])) {
-            $client->authenticate($_GET['code']);
-            $_SESSION['token'] = $client->getAccessToken();
-            $token = json_decode($_SESSION['token'], 1);
-            $g = $this->settings->getApiAccount('google', 1);
-            if ($g instanceof GoogleApiAccount) {
-                $g->setAccessToken($_SESSION['token']);
-                if (array_key_exists('refresh_token', $token)) {
-                    $g->setRefreshToken($token['refresh_token']);
-                }
-                $this->settings->addApiAccount($g);
-                $this->settingsRepository->save($this->settings);
-            }
-            $redirect = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
-            header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL));
-        }
-
-        if (isset($_SESSION['token'])) {
-            $client->setAccessToken($_SESSION['token']);
-        }
-
-        if (!$client->getAccessToken()) {
-            $authUrl = $client->createAuthUrl();
-            echo "<a class='login' href='$authUrl'>Connect Me!</a>";
-        } else {
-            try {
-                $youtube = new \Google_Service_YouTube($client);
-                echo '<br>Authorized to YouTube API<br>';
-            } catch (\Google_Service_Exception $e) {
-                echo 'A service error occurred: ' . htmlspecialchars($e->getMessage()) . '<br>';
-            } catch (\Google_Exception $e) {
-                echo 'A client error occurred: ' . htmlspecialchars($e->getMessage()) . '<br>';
-            }
-        }
-        $this->gclient = $client;
-
-        return true;
-    }
-
     /**
      * Integration services section
      *
@@ -500,6 +336,11 @@ class SettingsController
                 $ga->setAccountLogin($params['accountLogin']);
                 $ga->setApiKey($params['apiKey']);
 
+                if ($existing_ga = $this->settings->getApiAccount('google', 1)) {
+                    $ga->setAccessToken($existing_ga->getAccessToken());
+                    $ga->setRefreshToken($existing_ga->getRefreshToken());
+                }
+
                 $settings->addApiAccount($ga);
 
                 $ta = new TwitterApiAccount($params['twitter_ConsumerKey'], $params['twitter_ConsumerSecret']);
@@ -511,6 +352,10 @@ class SettingsController
 
                 $ta->setAccountLogin($params['twitter_AccountLogin']);
                 $ta->setOauthCallback($params['twitter_OauthCallback']);
+
+                if ($existing_ta = $this->settings->getApiAccount('twitter', 1)) {
+                    $ta->setAccessToken($existing_ta->getAccessToken());
+                }
 
                 $settings->addApiAccount($ta);
                 $this->settingsRepository->save($settings);

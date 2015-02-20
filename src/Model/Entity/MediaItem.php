@@ -316,7 +316,7 @@ abstract class MediaItem extends TimestampableAbstract
 
         return null === $this->getPath()
             ? null
-            : $this->getUploadDir().'/'.$this->getPath();
+            : '/uploads/'.$this->getPath();
     }
 
     /**

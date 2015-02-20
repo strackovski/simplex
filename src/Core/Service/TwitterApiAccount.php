@@ -8,16 +8,32 @@ namespace nv\Simplex\Core\Service;
  */
 class TwitterApiAccount extends ApiAccountAbstract
 {
+    /**
+     * Twitter Consumer Key
+     *
+     * @var string
+     */
     private $consumerKey;
 
+    /**
+     * Twitter Consumer Secret
+     *
+     * @var string
+     */
     private $consumerSecret;
 
+    /**
+     * Twitter oAuth Callback URL
+     *
+     * @var string
+     */
     private $oauthCallback;
 
-    private $oauthToken;
-
-    private $oauthTokenSecret;
-
+    /**
+     * Access token
+     *
+     * @var array
+     */
     private $accessToken;
 
     public function __construct($consumer_key = null, $consumer_secret = null, $oauth_callback = null)
@@ -33,8 +49,6 @@ class TwitterApiAccount extends ApiAccountAbstract
         $r['consumerKey'] = $this->consumerKey;
         $r['consumerSecret'] = $this->consumerSecret;
         $r['oauthCallback'] = $this->oauthCallback;
-        $r['oauthToken'] = $this->oauthToken;
-        $r['oauthTokenSecret'] = $this->oauthTokenSecret;
         $r['accessToken'] = $this->accessToken;
 
         return $r;
@@ -91,41 +105,12 @@ class TwitterApiAccount extends ApiAccountAbstract
     /**
      * @return mixed
      */
-    public function getOauthToken()
-    {
-        return $this->oauthToken;
-    }
-
-    /**
-     * @param mixed $oauthToken
-     */
-    public function setOauthToken($oauthToken)
-    {
-        $this->oauthToken = $oauthToken;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOauthTokenSecret()
-    {
-        return $this->oauthTokenSecret;
-    }
-
-    /**
-     * @param mixed $oauthTokenSecret
-     */
-    public function setOauthTokenSecret($oauthTokenSecret)
-    {
-        $this->oauthTokenSecret = $oauthTokenSecret;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getAccessToken()
     {
-        return $this->accessToken;
+        if (!is_null($this->accessToken)) {
+            return $this->accessToken;
+        }
+        return false;
     }
 
     /**
@@ -133,13 +118,6 @@ class TwitterApiAccount extends ApiAccountAbstract
      */
     public function setAccessToken($accessToken)
     {
-        if (!is_null($accessToken)) {
-            if (array_key_exists('oauth_token', $accessToken) and array_key_exists('oauth_token_secret', $accessToken)) {
-                $this->setOauthToken($accessToken['oauth_token']);
-                $this->setOauthTokenSecret($accessToken['oauth_token_secret']);
-            }
-        }
-
         $this->accessToken = $accessToken;
     }
 }

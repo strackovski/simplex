@@ -108,7 +108,6 @@ class MediaListener extends EntityListenerAbstract
                     $faceLoc = json_decode($this->imageManager->getFaceDetector()->toJson(), 1);
 
                     if (is_array($faceLoc)) {
-                        // @todo Crop2???
                         $this->imageManager->crop2(
                             $image,
                             array(

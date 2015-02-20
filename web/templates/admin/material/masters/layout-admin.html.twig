@@ -117,6 +117,7 @@
                     <a class="{% if 'media/settings' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/media/settings') }}">Media</a>
                     <a class="{% if 'settings/themes' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/themes') }}">Themes</a>
                     <a class="{% if 'settings/mail' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/mail') }}">Mailing</a>
+                    <a class="{% if 'settings/api' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/api') }}">Integration</a>
                 </div>
 
                 <a class="{% if 'admin/users' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/users') }}">Users</a>

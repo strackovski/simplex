@@ -2,6 +2,8 @@
 
 namespace nv\Simplex\Provider\Service;
 
+use FFMpeg\FFMpeg;
+use FFMpeg\FFMpegServiceProvider;
 use Neutron\Silex\Provider\ImagineServiceProvider;
 use nv\Simplex\Controller\Admin\ImageController;
 use nv\Simplex\Controller\Admin\MediaController;
@@ -30,6 +32,7 @@ class MediaServiceProvider implements ServiceProviderInterface, ControllerProvid
     public function register(Application $app)
     {
         $app->register(new ImagineServiceProvider());
+        $app->register(new FFMpegServiceProvider());
 
         $app['image.face.detector'] = $app->share(function () use ($app) {
             if (file_exists($file = dirname(dirname(dirname(__DIR__))) . '/config/facedata.dat')) {
@@ -46,7 +49,7 @@ class MediaServiceProvider implements ServiceProviderInterface, ControllerProvid
         });
 
         $app['video.manager'] = $app->share(function () use ($app) {
-            return new VideoManager($app['imagine']);
+            return new VideoManager($app['imagine'], $app['ffmpeg']);
         });
 
         $app['media.listener'] = $app->share(function ($app) {

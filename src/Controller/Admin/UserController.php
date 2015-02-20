@@ -83,7 +83,7 @@ class UserController extends ActionControllerAbstract
         UserManager $manager,
         Logger $logger
     ) {
-        parent::__construct($settings, $twig, $formFactory, $security, $session, $url, $imagine, $logger);
+        parent::__construct($settings, $twig, $formFactory, $security, $session, $url, $logger);
         $this->users = $users;
         $this->mailer = $mailer;
         $this->imagine = $imagine;

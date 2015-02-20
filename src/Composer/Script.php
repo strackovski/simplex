@@ -41,7 +41,7 @@ class Script
         self::mkdir('web/assets', 0777);
         print "\033[32mDONE\033[0m\n";
         chmod('bin/console', 0500);
-        print "Rebuilding the database...";
+        print "(Re)building the database...";
         exec('bin/rebuild-database');
         print "\033[32mDONE\033[0m\n";
         print "Dumping assets...";

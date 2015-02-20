@@ -12,6 +12,8 @@
 
 namespace nv\Simplex\Core\Media;
 
+use Imagine\Exception\OutOfBoundsException;
+use Imagine\Exception\RuntimeException;
 use Imagine\Image\Box;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Point;
@@ -198,12 +200,18 @@ class ImageManager implements MediaManagerInterface
         $point = new Point($srcX, $srcY);
         $box = new Box($targetWidth, $targetHeight);
 
-        $imageTemp->crop($point, $box)
-            ->save(
-                APPLICATION_ROOT_PATH .
-                '/web/uploads/crops/' .
-                $image->getPath()
-            );
+        try{
+            $imageTemp->crop($point, $box)
+                ->save(
+                    APPLICATION_ROOT_PATH .
+                    '/web/uploads/crops/' .
+                    $image->getPath()
+                );
+        } catch (RuntimeException $e) {
+            throw $e;
+        } catch (OutOfBoundsException $e) {
+            throw $e;
+        }
     }
 
     /**

@@ -57,32 +57,27 @@ class PostManager
      */
     public function metadata(Post $post)
     {
-        try {
-            $collectedMeta = array();
-            $classifications = $this->readClassifiers($post);
-            $annotations = $this->readAnnotations($post);
+        $collectedMeta = array();
+        $classifications = $this->readClassifiers($post);
+        $annotations = $this->readAnnotations($post);
 
-            if ($classifications instanceof UclassifyResponse) {
-                $collectedMeta['c'] = json_decode($classifications->getResponse(), 1);
-            } elseif ($classifications instanceof \Exception) {
-                $collectedMeta['error'] = $classifications->getMessage();
-            } else {
-                $collectedMeta['error'] = $classifications;
-            }
-
-            if ($annotations instanceof OpenCalaisResponse) {
-                $collectedMeta['a'] = json_decode($annotations->getResponse(), 1);
-            } elseif ($annotations instanceof \Exception) {
-                $collectedMeta['error'] = $annotations->getMessage();
-            } else {
-                $collectedMeta['error'] = $annotations;
-            }
-
-            return $post->setMetadata(new Metadata($collectedMeta));
-
-        } catch (\Exception $e) {
-            return $post->setMetadata(array($e->getMessage()));
+        if ($classifications instanceof UclassifyResponse) {
+            $collectedMeta['c'] = json_decode($classifications->getResponse(), 1);
+        } elseif ($classifications instanceof \Exception) {
+            $collectedMeta['error'] = $classifications->getMessage();
+        } else {
+            $collectedMeta['error'] = $classifications;
         }
+
+        if ($annotations instanceof OpenCalaisResponse) {
+            $collectedMeta['a'] = json_decode($annotations->getResponse(), 1);
+        } elseif ($annotations instanceof \Exception) {
+            $collectedMeta['error'] = $annotations->getMessage();
+        } else {
+            $collectedMeta['error'] = $annotations;
+        }
+
+        return $post->setMetadata(new Metadata($collectedMeta));
     }
 
     /**
@@ -110,8 +105,6 @@ class PostManager
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-
-        return false;
     }
 
     /**
@@ -130,8 +123,6 @@ class PostManager
         } catch (\Exception $e) {
             return $e->getMessage();
         }
-
-        return false;
     }
 
     /**
@@ -190,12 +181,7 @@ class PostManager
                     $newTag = new Tag($tagItem);
                     $newTag->addPost($post);
                     $post->addTag($newTag);
-                    try {
-                        // $this->app['orm.em']->persist($newTag);
-                        $this->tags->save($newTag);
-                    } catch (\Exception $e) {
-                        return $e->getMessage();
-                    }
+                    $this->tags->save($newTag);
                 }
             }
         }
@@ -221,8 +207,8 @@ class PostManager
             }
 
             return $processed = array_unique($processed);
-        } else {
-            return $processed = null;
         }
+
+        return $processed = null;
     }
 }

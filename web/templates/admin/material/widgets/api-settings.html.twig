@@ -17,6 +17,25 @@
 <div class="settings-section">
     <div class="settings-name">
         <h3 id="google">Google</h3>
+        <div class="google-status"></div>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $.ajax({
+                    url: 'http://simplex.envee.eu/admin/service/google/check'
+                })
+                        .done(function (data) {
+                            if (data == 200) {
+                                $('.google-status').html('Status: Authorized');
+                            } else {
+                                $('.google-status').html('Status: ' + data);
+                            }
+                        })
+                        .error(function (x, f, msg) {
+                            console.log(msg)
+                        })
+            })
+        </script>
     </div>
 
     <div class="settings-content">
@@ -112,8 +131,8 @@
             {{ form_errors(form.accountLogin) }}
         </div>
 
-        <div class="form-group form-element">
-            <a href="#">Authenticate now</a>
+        <div class="form-group form-element google-auth">
+            <a href="#">Authenticate your app now</a>
         </div>
     </div>
 </div>
@@ -121,6 +140,25 @@
 <div class="settings-section">
     <div class="settings-name">
         <h3 id="twitter">Twitter</h3>
+        <div class="twitter-status"></div>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $.ajax({
+                    url: 'http://simplex.envee.eu/admin/service/twitter/check'
+                })
+                        .done(function (data) {
+                            if (data == 200) {
+                                $('.twitter-status').html('Status: Authorized');
+                            } else {
+                                $('.twitter-status').html('Status: ' + data);
+                            }
+                        })
+                        .error(function (x, f, msg) {
+                            console.log(msg)
+                        })
+            })
+        </script>
     </div>
 
     <div class="settings-content">
@@ -201,6 +239,7 @@
             {% endif %}
             {{ form_errors(form.twitter_AccountLogin) }}
         </div>
+
     </div>
 </div>
 

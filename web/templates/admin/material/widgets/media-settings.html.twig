@@ -170,7 +170,7 @@
         </div>
         {% if settings.getWatermark %}
             <div class="single-item-box select-image">
-                <img src="{{ app.request.getBasePath() ~ '/uploads/' ~ settings.getWatermark }}.jpeg" width="80" />
+                <img src="{{ settings.getWatermark.getWebPath() }}" width="80" />
             </div>
         {% endif %}
         <div class="watermark-file">

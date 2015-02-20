@@ -5,10 +5,14 @@
  *****************************************************/
 var baseURL;
 var debug;
+
+// Dropzone
 var theDropzone;
 Dropzone.autoDiscover = false;
 
-// functions
+/**
+ *
+ */
 function deactivateRightBar() {
     $('.grid-outer').removeClass('active-right-bar');
     $('.item-fixed-header').removeClass('active-right-bar')
@@ -19,6 +23,9 @@ function deactivateRightBar() {
     $('.meta-btn').removeClass('active'); //post meta-btn
 }
 
+/**
+ *
+ */
 function activateRightBar() {
     $('.grid-outer').addClass('active-right-bar');
     $('.item-fixed-header').addClass('active-right-bar');
@@ -28,6 +35,11 @@ function activateRightBar() {
     $('.right-bar').addClass('active-right-bar');
 }
 
+/**
+ * AJAX ERROR LOGGER for debug mode
+ * @param msg   The error message
+ * @param xhr   The xhr object
+ */
 function logXhrError(msg, xhr) {
     if (debug == 1) {
         console.log('*** ERROR ***');
@@ -36,16 +48,28 @@ function logXhrError(msg, xhr) {
     }
 }
 
+/**
+ * MEDIA DROPZONE HANDLER
+ */
 function handleDropzone() {
+    var defaultDropzoneControlHtml = '<div class="dropzone dropzone-clickable"><div class="dz-message">' +
+        '<i class="fa fa-upload fa-3x"></i>' +
+        '<p>Drag items here or click to open the file browser.'+
+        '</p></div></div>';
+
+    var mediaDropzonePreviewHtml = '<div class="dz-preview dz-file-preview col-xs-3">'+
+        '<div class="dz-details">'+
+        '<img data-dz-thumbnail />' +
+        '</div>' +
+        '<div class="dz-progress">'+'' +
+        '<span class="dz-upload" data-dz-uploadprogress></span>' +
+        '</div>' +
+        '</div>';
+
     $('input[type="file"]').remove();
     $('.dropzone').remove();
-    $('.upload-modal .modal-body').append('<div class="dropzone dropzone-clickable"><div class="dz-message">' +
-    '<i class="fa fa-upload fa-3x"></i>' +
-    '<p>Drag items here or click to open the file browser.'+
-    '</p></div></div>');
+    $('.upload-modal .modal-body').append(defaultDropzoneControlHtml);
 
-    //$('.file-overflow').remove();
-    //$('.file-hider').remove();
     var name, type, urlType, allowedFiles;
 
     if($('.media-tabs a[href="#images"]').closest('li').hasClass('active')) {
@@ -53,8 +77,7 @@ function handleDropzone() {
         type = 'media';
         urlType = 'images';
         allowedFiles = 'image/*';
-    }
-    else {
+    } else {
         name = 'vd-';
         type = 'video';
         urlType = 'videos';
@@ -67,15 +90,7 @@ function handleDropzone() {
         autoProcessQueue: true,
         thumbnailWidth: null,
         thumbnailHeight: 200,
-        previewTemplate:
-        '<div class="dz-preview dz-file-preview col-xs-3">'+
-        '<div class="dz-details">'+
-        '<img data-dz-thumbnail />' +
-        '</div>' +
-        '<div class="dz-progress">'+'' +
-        '<span class="dz-upload" data-dz-uploadprogress></span>' +
-        '</div>' +
-        '</div>',
+        previewTemplate: mediaDropzonePreviewHtml,
         previewsContainer: '.dropzone',
         createImageThumbnails: true,
         acceptedFiles: allowedFiles
@@ -87,31 +102,25 @@ function handleDropzone() {
         $('.upload-modal .modal-footer .btn').prop('disabled', true);
         $('.modal-header .sr-only').prop('disabled', true);
         $('.page-loader').show();
-
     });
 
     theDropzone.on("queuecomplete", function (file) {
-
         $.ajax({
             beforeSend: function () {
                 // $('.main-content .tab-pane.active').animate({opacity: 0});
             },
-            // url: '//192.168.64.13/simplex/web/index_dev.php/admin/media/' + urlType
-            url:  '/simplex/admin/media/' + urlType
+            url: '/admin/media/' + urlType
         })
             .done(function (data) {
                 $('.page-loader').hide();
                 $('.progress').addClass('hidden');
                 $('.progress-bar').attr('style', 'width: 1%');
-
                 $('.tab-content .tab-pane.active').html(data);
                 $('.upload-modal .modal-footer .btn').prop('disabled', false).click();
                 $('.upload-modal .modal-header .sr-only').prop('disabled', false);
-
             })
             .fail(function (xhr, unknown, error) {
                 var flash = '<div class="flash-error">Oh-oooh. QueueComplete failed.</div>';
-                console.log ('error:' + xhr);
                 logXhrError(error, xhr);
                 $('body').append(flash);
                 $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
@@ -199,389 +208,13 @@ function addQueryFormDeleteLink($queryFormLi) {
     });
 }
 
-/*
-function querySelection() {
-    var contentTypeField, columnField, operatorField, valueField, sortByField, limitMaxField;
-
-    if ($('.editQuery-form').length) {
-        $('.add-pq-form').attr("data-proto", '');
-        $('.new-query-form').remove();
-        //$('.edit-form').wrap('<div class="row"></div>').removeClass('edit-form').addClass('edit-form-group').find('label.control-label').first().hide();
-        contentTypeField = $('#page_queries_0_contentType');
-        columnField = $('#page_queries_0_column');
-        operatorField = $('#page_queries_0_operator');
-        valueField = $('#page_queries_0_value');
-        sortByField = $('#page_queries_0_sortBy');
-        limitMaxField = $('#page_queries_0_limitMax');
-    } else {
-        var forma = $('.add-pq-form').attr("data-proto");
-        $('.add-pq-form').attr("data-proto", '');
-        $('.tab-pane#data').prepend(forma);
-        contentTypeField = $('#page_queries___name___contentType');
-        columnField = $('#page_queries___name___column');
-        operatorField = $('#page_queries___name___operator');
-        valueField = $('#page_queries___name___value');
-        sortByField = $('#page_queries___name___sortBy');
-        limitMaxField = $('#page_queries___name___limitMax');
-    }
-
-    var authors = $('#page_authors').closest('.data-group');
-    var tags = $('#page_tags').closest('.data-group');
-
-    // move tags and authors in the correct field
-    $('#page_authors').closest('.data-group').remove();
-    authors.insertAfter(valueField.closest('.data-group'));
-
-    $('#page_tags').closest('.data-group').remove();
-    tags.insertAfter(valueField.closest('.data-group'));
-
-    // hide authors & tags form
-    //$('#page_authors').closest('.data-group').addClass('hidden');
-    //$('#page_tags').closest('.data-group').addClass('hidden');
-    authors.addClass('hidden');
-    tags.addClass('hidden');
-
-    var column = columnField.val();
-    var value = valueField.val();
-
-    // arrays to be inserted into valueField field
-    var tagsCheckboxes = [];
-    var authorsCheckboxes = [];
-    var dates = [];
-
-    // hide operator options, unhide them later, based on columnField selection
-    operatorField.find('option').addClass('hidden');
-
-
-    // if contentType is not defined, a new page is being created
-    if (!columnField.val()) {
-        //hide all secondary options, unhide first choices
-        contentTypeField.closest('.data-group').nextAll().addClass('hidden');
-        columnField.closest('.data-group').removeClass('hidden');
-        operatorField.closest('.data-group').removeClass('hidden');
-        operatorField.find('option[value="eq"]').removeClass('hidden').prop('selected', true);
-        operatorField.find('option[value="in"]').removeClass('hidden');
-        valueField.closest('.data-group').removeClass('hidden');
-        limitMaxField.closest('.data-group').removeClass('hidden');
-        sortByField.closest('.data-group').removeClass('hidden');
-        //operatorField.find('option').removeClass('hidden');
-
-    } else {
-        if (column == 'title') {
-            // show 'equals' and 'contains' options in operandField
-            operatorField.find('option[value="eq"]').removeClass('hidden');
-            operatorField.find('option[value="in"]').removeClass('hidden');
-
-        } else if (column == 'created_at' || column == 'updated_at') {
-
-            // hide valueField field
-            valueField.closest('.data-group').addClass('hidden');
-
-            // show 'after', 'before' and 'between' options in operandField
-            operatorField.find('option[value="before"]').removeClass('hidden');
-            operatorField.find('option[value="after"]').removeClass('hidden');
-            operatorField.find('option[value="between"]').removeClass('hidden');
-
-            // conjure up date fields, if they have not been created yet, apply datepicker() on them
-            if (!($('.dateField').length)) {
-                var valueFieldClone2 = valueField.closest('.data-group').clone().addClass('dateField toDateField').removeClass('hidden');
-                $('<div class="field-addon"><i class="fa fa-calendar"></i></div>').appendTo(valueFieldClone2.find('.form-element'));
-                valueFieldClone2.find('.form-element').addClass('prepend-icon');
-                // change label, id, remove 'required' attr
-                valueFieldClone2.find('label').text('And date:').attr('for', 'date_2');
-                valueFieldClone2.find('input').attr({id: 'date_2', name: ''}).removeAttr('required').addClass('datepickerField').datepicker({
-                    onClose: function (dateText) {
-                        // call a function that collects dateField values and inserts them into valueField field
-                        dateChange();
-                    }
-                });
-                valueFieldClone2.insertAfter(valueField.closest('.data-group'));
-
-                // change label, id, remove 'required' attr, unhide forms
-                var valueFieldClone1 = valueField.closest('.data-group').clone().addClass('dateField fromDateField').removeClass('hidden');
-                $('<div class="field-addon"><i class="fa fa-calendar"></i></div>').appendTo(valueFieldClone1.find('.form-element'));
-                valueFieldClone1.find('.form-element').addClass('prepend-icon');
-                valueFieldClone1.find('label').text('Date: ').attr('for', 'date_1');
-                valueFieldClone1.find('input').attr({id: 'date_1', name: ''}).removeAttr('required').addClass('datepickerField').datepicker({
-                    onClose: function (dateText) {
-                        // call a function that collects dateField values and inserts them into valueField field
-                        dateChange();
-                    }
-                });
-                valueFieldClone1.insertAfter(valueField.closest('.data-group'));
-            }
-
-            // collect comma separated values from the valueField and insert them into correct dateFields and unhide them
-            var datesArray = value.split(',');
-            if (operatorField.val() == 'before' || operatorField.val() == 'after') {
-                $('.fromDateField').find('input#date_1').val(datesArray[0]);
-                $('.toDateField').addClass('hidden').find('input#date_2').val('');
-            } else if (operatorField.val() == 'between') {
-                $('.fromDateField').find('input#date_1').val(datesArray[0]);
-                $('.toDateField').find('input#date_2').val(datesArray[1]);
-            }
-        } else if (column == 'author') {
-            authorsAction('edit');
-        } else if (column == 'tags') {
-            tagsAction('edit');
-        }
-
-    }
-
-    // Input changes
-    contentTypeField.on('change', function () {
-        // hide all sibling .form-groups
-        //$(this).closest('.row').siblings().find('.data-group').addClass('hidden');
-        //$(this).closest('.data-group').nextAll().addClass('hidden');
-
-        // hide tags and authors // NEW
-        //$('#page_tags').closest('.form-group').addClass('hidden');
-        //$('#page_authors').closest('.form-group').addClass('hidden');
-
-        // unhide columnField
-        //$(this).closest('.data-group').next().removeClass('hidden');
-
-        // set columnField to 'Select a column ...'
-        columnField.find('option:eq(0)').prop('selected', true);
-        operatorField.find('option').addClass('hidden');
-        operatorField.find('option[value="eq"]').removeClass('hidden').prop('selected', true);
-        operatorField.find('option[value="in"]').removeClass('hidden');
-        valueField.val('');
-        valueField.closest('.data-group').removeClass('hidden');
-        tags.addClass('hidden');
-        authors.addClass('hidden');
-        $('.dateField').addClass('hidden');
-        $('.dateField').val('');
-    });
-
-    columnField.on('change', function () {
-        operatorField.find('option').addClass('hidden');
-        valueField.val('');
-        valueField.closest('.data-group').addClass('hidden');
-
-        $('.dateField').val('');
-        $('.dateField').closest('.data-group').addClass('hidden');
-
-        authors.addClass('hidden');
-        tags.addClass('hidden');
-
-        tagsCheckboxes.length = 0;
-        authorsCheckboxes.length = 0;
-        dates.length = 0;
-
-        var columnCurrent = $(this).val();
-
-        if (columnCurrent == 'title') {
-            valueField.closest('.data-group').removeClass('hidden');
-
-            // operatorField, show 'equals' and 'contains' options
-            operatorField.closest('.data-group').removeClass('hidden');
-            operatorField.find('option[value="eq"]').removeClass('hidden').prop('selected', true);
-            operatorField.find('option[value="in"]').removeClass('hidden');
-
-        } else if (columnCurrent == 'updated_at' || columnCurrent == 'created_at') {
-
-            // show operatorField, show 'after', 'before' and 'between' options, make 'between' the selected one
-            //$('.dateField').removeClass('hidden');
-            operatorField.closest('.data-group').removeClass('hidden');
-            operatorField.find('option[value="before"]').removeClass('hidden');
-            operatorField.find('option[value="after"]').removeClass('hidden');
-            operatorField.find('option[value="between"]').removeClass('hidden').prop('selected', true);
-
-            // conjure up date fields, if they have not been created yet, apply datepicker() on them
-            if (!($('.dateField').length)) {
-                var valueFieldClone2 = valueField.closest('.data-group').clone().addClass('dateField toDateField').removeClass('hidden');
-                $('<div class="field-addon"><i class="fa fa-calendar"></i></div>').appendTo(valueFieldClone2.find('.form-element'));
-                valueFieldClone2.find('.form-element').addClass('prepend-icon');
-                valueFieldClone2.find('label').text('And date: ').attr('for', 'date_2');
-                valueFieldClone2.find('input').attr({id: 'date_2', name: ''}).removeAttr('required').addClass('datepickerField').datepicker({
-                    onClose: function (dateText) {
-                        dateChange();
-                    }
-                });
-                valueFieldClone2.insertAfter(valueField.closest('.data-group'));
-
-                var valueFieldClone1 = valueField.closest('.data-group').clone().addClass('dateField fromDateField').removeClass('hidden');
-                $('<div class="field-addon"><i class="fa fa-calendar"></i></div>').appendTo(valueFieldClone1.find('.form-element'));
-                valueFieldClone1.find('.form-element').addClass('prepend-icon');
-                valueFieldClone1.find('label').text('Date:').attr('for', 'date_1');
-                valueFieldClone1.find('input').attr({id: 'date_1', name: ''}).removeAttr('required').addClass('datepickerField').datepicker({
-                    onClose: function (dateText) {
-                        dateChange();
-                    }
-                });
-                valueFieldClone1.insertAfter(valueField.closest('.data-group'));
-            } else { // just unhide dateFields
-                $('.dateField').removeClass('hidden');
-            }
-
-        } else if (columnCurrent == 'author') {
-            authorsAction();
-
-        } else if (columnCurrent == 'tags') {
-            tagsAction();
-        }
-        //limitMinField.closest('.data-group').removeClass('hidden');
-        //limitMaxField.closest('.data-group').removeClass('hidden');
-        //sortByField.closest('.data-group').removeClass('hidden');
-
-    });
-
-    operatorField.on('change', function () {
-        dates.length = 0;
-        var columnCurrent;
-        if ($('#page_queries___name___column').length) {
-            columnCurrent = $('#page_queries___name___column').val();
-        } else {
-            columnCurrent = $('#page_queries_0_column').val();
-        }
-
-        var currentOperator = $(this).val();
-        if (columnCurrent == 'updated_at' || columnCurrent == 'created_at') {
-            $('.dateField').addClass('hidden').find('input').val('');
-            if (currentOperator == 'between') {
-                valueField.val('');
-                $('.dateField').removeClass('hidden');
-            } else if (currentOperator == 'before' || currentOperator == 'after') {
-                $('.fromDateField').removeClass('hidden');
-                valueField.val('');
-            }
-        }
-    });
-
-    function dateChange() {
-        dates.length = 0;
-        var operatorCurrent;
-        if ($('#page_queries___name___operator').length) {
-            operatorCurrent = $('#page_queries___name___operator').val();
-        } else {
-            operatorCurrent = $('#page_queries_0_operator').val();
-        }
-
-        if (operatorCurrent == 'before' || operatorCurrent == 'after') {
-            dates.push($('#date_1').val());
-        } else if (operatorCurrent == 'between') {
-            if (!($('#date_2').val())) {
-                dates.push($('#date_1').val());
-            } else if (!($('#date_1').val())) {
-                dates.push($('#date_2').val());
-            } else {
-                dates.push($('#date_1').val());
-                dates.push($('#date_2').val());
-            }
-        }
-        var joinedString = dates.join(',');
-        valueField.val(joinedString);
-    }
-
-    $('#page_tags > .checkbox').find('input[type="checkbox"]').off('change').on('change', function () {
-        var joinedString;
-        var $this = $(this);
-        var $thisValue = $this.val();
-
-        if ($this.is(':checked')) {
-            // add to array
-            if ($.inArray($thisValue, tagsCheckboxes)  == -1) {
-                tagsCheckboxes.push($thisValue);
-                joinedString = tagsCheckboxes.join(',');
-                valueField.val(joinedString);
-            }
-        } else {
-            // remove from array
-            tagsCheckboxes = jQuery.grep(tagsCheckboxes, function (value) {
-                return value != $thisValue;
-            });
-
-            joinedString = tagsCheckboxes.join(',');
-            valueField.val(joinedString);
-        }
-    });
-
-    $('#page_authors > .checkbox').find('input[type="checkbox"]').off('change').on('change', function () {
-        var joinedString;
-        var $this = $(this);
-        var $thisValue = $this.val();
-
-        if ($this.is(':checked')) {
-            // add to array
-            if ($.inArray($thisValue, authorsCheckboxes)  == -1) {
-                authorsCheckboxes.push($thisValue);
-                joinedString = authorsCheckboxes.join(',');
-                valueField.val(joinedString);
-            }
-        } else {
-            // remove from array
-            authorsCheckboxes = jQuery.grep(authorsCheckboxes, function (value) {
-                return value != $thisValue;
-            });
-
-            joinedString = authorsCheckboxes.join(',');
-            valueField.val(joinedString);
-        }
-    });
-
-    function authorsAction(edit) {
-        // get author checkboxes on the page
-        var pageAuthors = $('#page_authors > .checkbox').find('input[type="checkbox"]');
-
-        // get author values from the valueField
-        var authorsArray = [];
-        if (edit) {
-            if (value != '') {
-                authorsArray = value.split(',');
-            }
-        }
-        authorsCheckboxes = authorsArray;
-
-        // trigger checkbox click if ids match - click triggers $(...).on('change'), handled later
-        $.each(authorsArray, function (index, item) {
-            $.each(pageAuthors, function () {
-                if (item == $(this).val()) {
-                    $(this).trigger('click');
-                }
-            });
-        });
-
-        // show form, hide operatorField and valueField
-        $('#page_authors').closest('.data-group').removeClass('hidden');
-        operatorField.closest('.data-group').addClass('hidden');
-        valueField.closest('.data-group').addClass('hidden');
-        $('.dateField').closest('.data-group').addClass('hidden');
-    }
-
-    function tagsAction(edit) {
-        var pageTags = $('#page_tags > .checkbox').find('input[type="checkbox"]');
-
-        // get tag values from the valueField
-        var tagsArray = [];
-        if (edit) {
-            if (value != '') {
-                tagsArray = value.split(',');
-            }
-        }
-
-        tagsCheckboxes = tagsArray;
-
-        $.each(tagsArray, function (index, item) {
-            $.each(pageTags, function () {
-                if (item == $(this).val()) {
-                    $(this).trigger('click');
-                }
-            });
-        });
-
-        // show form, hide operatorField and valueField
-        $('#page_tags').closest('.data-group').removeClass('hidden');
-        operatorField.closest('.data-group').addClass('hidden');
-        valueField.closest('.data-group').addClass('hidden');
-        $('.dateField').closest('.data-group').addClass('hidden');
-    }
-}
-*/
+/**
+ * Initialize the rich text editor
+ *
+ * @param height Initial editor height
+ */
 function initRichEditor(height) {
-    if (!height) {
-        height = 300;
-    }
+    if (!height) { height = 300; }
 
     tinymce.init({
         selector: "textarea.rte",
@@ -602,11 +235,9 @@ function initRichEditor(height) {
                     $('.cmd-edit-modal').trigger('click');
                 }
             });
-
             ed.on('keyUp', function () {
                 $('textarea.rte').text(tinyMCE.activeEditor.getContent({format: 'raw'}));
             });
-
             ed.on('click', function () {
                 $('textarea.rte').text(tinyMCE.activeEditor.getContent({format: 'raw'}));
             });
@@ -614,6 +245,9 @@ function initRichEditor(height) {
     });
 }
 
+/**
+ *
+ */
 function fileInputAction() {
     var wrapper = $('<div class="file-hider"></div>').css({height: 0, width: 0, 'overflow': 'hidden'});
     var fileInput = $(':file').wrap(wrapper);
@@ -635,7 +269,6 @@ function fileInputAction() {
         } else {
             fileInput.val('');
         }
-
     }
 
     fileInput.off('change').on('change', function () {
@@ -652,20 +285,14 @@ function fileInputAction() {
 
     $('.file-chooser').off('click').on('click', function () {
         fileInput.click();
-
     });
     $('.img-chooser-overlay').off('click').on('click', function (e) {
         fileInput.click();
     });
-
     /* New user image file chooser */
-
     $('.user-profile-image-chooser-overlay').off('click').on('click', function () {
         fileInput.click();
     });
-
-
-
     /* New code for :file click handling */
     $('.select-overlay').on('click', function () {
         if ($('.ab-content').length) {
@@ -703,6 +330,9 @@ function fileInputAction() {
     });
 }
 
+/**
+ * Modal center
+ */
 function centerModal() {
     var modalContentHeight = $('.media-modal .modal-content').height() + 50;
     var windowHeight = $(window).height();
@@ -710,6 +340,9 @@ function centerModal() {
     $('.media-modal .modal-content').css('margin-top', m);
 }
 
+/**
+ * Media modal handler
+ */
 function mediaModalAction() {
     $('.media-modal .modal-body img').on('load', function () {
         centerModal();
@@ -729,6 +362,9 @@ function mediaModalAction() {
     });
 }
 
+/**
+ * Show help display
+ */
 function showSectionHelper() {
     var sectionHref = window.location.href;
     var section = sectionHref.substr(sectionHref.lastIndexOf('/') + 1);
@@ -750,6 +386,9 @@ function showSectionHelper() {
     }
 }
 
+/**
+ * On document ready...
+ */
 $(document).ready(function () {
     //showSectionHelper();
 
@@ -797,29 +436,20 @@ $(document).ready(function () {
                 beforeSend: function () {
 
                 }
-            })
-                .fail(function (xhr, msg) {
-                    logXhrError(msg, xhr);
-                });
-
+            }).fail(function (xhr, msg) {logXhrError(msg, xhr);});
             $('.confirm-modal').modal('hide');
         });
 
     });
 
-
     // baseURL = '//192.168.64.13/simplex/web/index_dev.php/admin/';
-    baseURL = $('body').attr('data-base') + '/index_dev.php/admin/';
-    console.log(baseURL);
+    baseURL = $('body').attr('data-base') + '/admin/';
     debug = $('body').attr('data-env');
 
     if (debug == 1) {
         console.log('*** APPLICATION IS IN DEBUG MODE ***');
+        console.log(baseURL);
     }
-
-
-        //$('[data-toggle="popover"]').popover()
-
 
     $('.grid').on('click', '.dismiss-popover', function(e) {
         e.preventDefault();
@@ -833,7 +463,6 @@ $(document).ready(function () {
             return false;
         }
         e.preventDefault();
-        console.log('click');
         var el = $(this);
 
         $.ajax({
@@ -842,13 +471,9 @@ $(document).ready(function () {
         })
             .done(function (d) {
                 el.popover({content: d, html: true, viewport: 'body', trigger: 'manual'}).popover('show');
-            })
-            .fail(function (xhr, msg) {
-                logXhrError(msg, xhr);
-            });
-    });
+            }).fail(function (xhr, msg) {logXhrError(msg, xhr);});
 
-    //$('.user-popover').click();
+    });
 
     /* side-nav submenu */
     var activeSideMenu = $('.side-nav a.submenu-open.active').attr('href');
@@ -955,7 +580,6 @@ $(document).ready(function () {
     $('.morph-initial').on('click', function(e) {
         e.preventDefault();
         var $this = $(this);
-
         $this.closest('.float-wrap').toggleClass('morphed');
         $this.find('i.fa').toggleClass('fa-plus fa-minus');
     });
@@ -965,7 +589,6 @@ $(document).ready(function () {
             if($('.controls-hidden').is(":visible")) {
                 $('.float-wrap').toggleClass('morphed');
                 $('.float-wrap').find('i.fa').toggleClass('fa-plus fa-minus');
-
             }
         }
     });
@@ -973,10 +596,9 @@ $(document).ready(function () {
     // flat forms
     $('body').on('focus', '.form-element > input', function (e) {
         $(this).parent().addClass('field-focus');
-    })
-        .on('blur', '.form-element > input', function (e) {
-            $(this).parent().removeClass('field-focus');
-        });
+    }).on('blur', '.form-element > input', function (e) {
+        $(this).parent().removeClass('field-focus');
+    });
 
     $('body').on('change', '.field.option input[type="checkbox"]', function (e) {
         $(this).next('.checksquare').toggleClass('checksquare-selected');
@@ -997,12 +619,10 @@ $(document).ready(function () {
             //querySelection();
             opened = 1;
         }
-
     });
 
     $('.new-post-tabs a[href="#media"]').on('click', function() {
         var $this = $('.new-post-tabs a[href="#media"]')
-
         if (!($this.closest('li').hasClass('active'))) {
             $this.find('.fa').removeClass('fa-camera').addClass('fa-spin fa-spinner');
         }
@@ -1016,9 +636,7 @@ $(document).ready(function () {
         var tabHref = e.target.href;
         var realTabHref = tabHref.substr(tabHref.indexOf('#') + 1);
         var targetEl = $('#' + realTabHref);
-
         $('.tab-pane.active').html('');
-
         $.ajax({
             beforeSend: function () {
                 $('.page-loader').show();
@@ -1026,7 +644,6 @@ $(document).ready(function () {
             url: 'media/' + realTabHref
         })
             .done(function (data) {
-
                 $('.page-loader').hide(0);
                 targetEl.html(data);
             })
@@ -1113,8 +730,6 @@ $(document).ready(function () {
         $('.images-dropdown').removeClass('shown');
         var text = $(this).html();
         $('.images-filter').html(text + ' <i class="fa fa-angle-down"></i>');
-
-
     });
 
     $(document).click(function(event) {
@@ -1344,9 +959,7 @@ $(document).ready(function () {
 
     $('.grid').on('click', '.delete-btn', function (e) {
         e.preventDefault();
-
         var href = $(this).attr('href');
-
         if ( $(e.target).closest('.right-aux-toolbar').length > 0 ) {
             $('.confirm-modal').modal();
             $('.confirm-modal .btn-confirm').off('click').on('click', function (e) {
@@ -1439,7 +1052,6 @@ $(document).ready(function () {
     $('.grid .media-content').on('click', '.thumbnail', function (e) {
         e.preventDefault();
         var $this;
-
         if ( $(event.target).closest('.thumb-check').length > 0 ) {
             $this = $(this).find('.thumb-check');
             if ($this.hasClass('active')) {
@@ -1473,7 +1085,6 @@ $(document).ready(function () {
 
         if($('#images').length || $('#videos').length) {
             $this = $(this);
-
             $.ajax({
                 beforeSend: function () {
                 },
@@ -1498,7 +1109,6 @@ $(document).ready(function () {
                         $('.flash-error').remove();
                     });
                 });
-
         }
     });
 
@@ -1579,6 +1189,9 @@ $(window).resize(function () {
     }
 });
 
+/**
+ *
+ */
 function resizeend() {
     if (new Date() - rtime < delta) {
         setTimeout(resizeend, delta);

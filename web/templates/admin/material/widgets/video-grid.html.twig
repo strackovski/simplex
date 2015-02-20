@@ -1,8 +1,21 @@
+{% if yt|length > 0 %}
+{% for y in yt %}
+    <div class="tb-col removable col-lg-2 col-md-3 col-sm-4 col-xs-6">
+        <div class="thumbnail">
+            <a class="view-link" href="#">
+                <img src="{{ y.modelData.snippet.thumbnails.high.url }}">
+            </a>
+            <input type="checkbox" name="delete_items[]" value="#" />
+            <a class="text-center thumb-action thumb-check" href="#"><i class="fa fa-check"></i></a>
+        </div>
+    </div>
+{% endfor %}
+{% endif %}
+
 {% if videos|length > 0 %}
     {% for video in videos %}
         <div class="tb-col removable col-lg-2 col-md-3 col-sm-4 col-xs-6">
             <div class="thumbnail">
-                {#<img src="{{ app.request.basepath ~ '/uploads/crops/' ~ video.getMediaId ~ '.jpeg' }}">#}
                 <a class="view-link" href="{{ app.url_generator.generate('admin/media/view', {id:video.getId}) }}">
                     <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ video.getMediaId ~ '.jpeg' }}">
                 </a>
@@ -11,7 +24,9 @@
             </div>
         </div>
     {% endfor %}
-{% else %}
+{% endif %}
+
+{% if videos|length < 1 and yt|length < 1 %}
     <div class="empty-msg">
         <h1 class="ghost big">No videos added yet</h1>
         <div class="holder">

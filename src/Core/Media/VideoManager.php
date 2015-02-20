@@ -12,6 +12,7 @@
 
 namespace nv\Simplex\Core\Media;
 
+use FFMpeg\FFMpeg;
 use Imagine\Image\Box;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Point;
@@ -21,6 +22,8 @@ use nv\Simplex\Model\Entity\Video;
 /**
  * Video Manager
  *
+ * @todo use php-ffmpeg
+ *
  * @package nv\Simplex\Core\Media
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
@@ -28,6 +31,9 @@ class VideoManager implements MediaManagerInterface
 {
     /** @var ImagineInterface */
     private $imagine;
+
+    /** @var FFMpeg $ffmpeg */
+    private $ffmpeg;
 
     /**
      * Constructor
@@ -37,9 +43,10 @@ class VideoManager implements MediaManagerInterface
      *
      * @internal param Video $video The video object
      */
-    public function __construct(ImagineInterface $imagine, $debug = false)
+    public function __construct(ImagineInterface $imagine, FFMpeg $ffmpeg, $debug = false)
     {
         $this->imagine = $imagine;
+        $this->ffmpeg = $ffmpeg;
     }
 
     /**
@@ -56,10 +63,24 @@ class VideoManager implements MediaManagerInterface
      */
     public function thumbnail(MediaItem $video, array $options = null)
     {
-        if ($this->getStillFrame($video)) {
+        try {
+            $still = $this->getStillFrame($video);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        if ($still) {
             foreach ($options as $dimension => $values) {
                 if (in_array($dimension, array('small', 'medium', 'large'))) {
                     list($width, $height) = $values;
+
+                    if (!file_exists(
+                        APPLICATION_ROOT_PATH .
+                        '/web/uploads/'. $video->getMediaId() . '.jpeg'
+                    )) {
+                        throw new \InvalidArgumentException("Unable to obtain video still frame while generating thumbnails.");
+                    }
+
                     $this->imagine
                         ->open(
                             APPLICATION_ROOT_PATH .
@@ -88,6 +109,13 @@ class VideoManager implements MediaManagerInterface
      */
     public function autoCrop(MediaItem $video, array $options = null)
     {
+        if (!file_exists(
+            APPLICATION_ROOT_PATH .
+            '/web/uploads/'. $video->getMediaId() . '.jpeg'
+        )) {
+            throw new \InvalidArgumentException("Unable to obtain video still frame.");
+        }
+
         $image = $this->imagine->open(
             APPLICATION_ROOT_PATH .
             '/web/uploads/thumbnails/large/'. $video->getMediaId() . '.jpeg'
@@ -134,6 +162,13 @@ class VideoManager implements MediaManagerInterface
      */
     public function watermark(MediaItem $video, $pathToWatermark)
     {
+        if (!file_exists(
+            APPLICATION_ROOT_PATH .
+            '/web/uploads/'. $video->getMediaId() . '.jpeg'
+        )) {
+            throw new \InvalidArgumentException("Unable to obtain video still frame while watermarking.");
+        }
+
         if (! file_exists($pathToWatermark)) {
             throw new \InvalidArgumentException("Invalid path to watermark {$pathToWatermark}.");
         }
@@ -161,13 +196,7 @@ class VideoManager implements MediaManagerInterface
      */
     public function metadata(MediaItem $video)
     {
-        try {
-            return $this->interpretMetadata($video);
-        } catch (\Exception $e) {
-
-        }
-
-        return false;
+        return $this->interpretMetadata($video);
     }
 
     /**
@@ -232,7 +261,6 @@ class VideoManager implements MediaManagerInterface
         return json_decode($json, true);
     }
 
-
     /**
      * Interpret & aggregate extracted metadata
      *
@@ -244,12 +272,16 @@ class VideoManager implements MediaManagerInterface
     {
         $data = $this->ffprobe($video);
 
+        if (!is_array($data)) {
+            throw new \Exception('Metadata extraction failed, data unavailable.');
+        }
+
         if (!array_key_exists('format', $data)) {
-            throw new \Exception('Metadata extraction failed or metadata unavailable.');
+            throw new \Exception('Failed interpreting metadata, no format info found.');
         }
 
         if (!array_key_exists('streams', $data) and !array($data['streams'])) {
-            throw new \Exception('Metadata extraction failed or metadata unavailable.');
+            throw new \Exception('Failed interpreting metadata, no streams found.');
         }
 
         $format = $data['format'];

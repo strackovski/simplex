@@ -81,7 +81,6 @@ class VideoController extends ActionControllerAbstract
 
         $ytvids = array();
 
-        // @todo ISOLATE
         /** @var \nv\Simplex\Core\Service\GoogleApiAccount $google */
         if ($google = $this->settings->getApiAccount('google', 1)) {
             if ($token = $google->getAccessToken()) {
@@ -125,15 +124,16 @@ class VideoController extends ActionControllerAbstract
                         }
                     }
                 } catch (\Google_Service_Exception $e) {
-                    echo 'GSE: ' . $e->getMessage();
+                    $this->logger->addError('YouTube API: ' . $e->getMessage());
+                    $data['errors'] = 'YouTube Data Unavailable';
                 } catch (\Google_Exception $e) {
-                    $e->getTraceAsString();
-                    echo 'GE: ' . $e->getMessage();
+                    $this->logger->addError('YouTube API: ' . $e->getMessage());
+                    $data['errors'] = 'YouTube Data Unavailable';
                 }
             }
         }
 
-        $data['yt'] = $ytvids; // @todo Join with 'videos'
+        $data['yt'] = $ytvids;
         $data['form'] = $form->createView();
         $data['videos'] = $this->media->getLibraryVideos();
 
@@ -219,51 +219,21 @@ class VideoController extends ActionControllerAbstract
             $video->setName($uploadedFile->getClientOriginalName());
             $video->setMetadata($metadata = new Metadata());
             $this->media->save($video);
-            $video->setMetadata($metadata->setData($this->manager->metadata($video)));
+
+            try {
+                $video->setMetadata($metadata->setData($this->manager->metadata($video)));
+            } catch (\Exception $e) {
+                $this->logger->addError('Failed retrieving video metadata: ' . $e->getMessage());
+            }
 
             try {
                 $this->media->save($video);
             } catch (\Exception $e) {
+                $this->logger->addError('Failed adding video: ' . $e->getMessage());
                 $this->media->delete($video);
             }
         }
 
         return new JsonResponse([$files]);
-    }
-
-    /**
-     * Index image items
-     *
-     * @todo Remove (points to non-existent template)?
-     *
-     * @param Request     $request
-     * @return mixed
-     */
-    public function listVideoAction(Request $request)
-    {
-        $form = $this->form->createNamedBuilder(
-            null,
-            'form',
-            array('test' => '')
-        )
-            ->add(
-                'test',
-                'text',
-                array(
-                    'label' => 'Email',
-                    'required' => false,
-                    'attr' => array(
-                        'name' => 'test'
-                    )
-                )
-            )->getForm();
-
-        $data['form'] = $form->createView();
-        $data['videos'] = $this->media->getVideos();
-
-        return $this->twig->render(
-            'admin/'.$this->settings->getAdminTheme().'/views/partials/video-list.html.twig',
-            $data
-        );
     }
 }

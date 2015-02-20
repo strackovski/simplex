@@ -26,6 +26,7 @@ use nv\Simplex\Core\User\UserListener;
 use nv\Simplex\Model\Listener\EntityListenerResolver;
 use nv\Simplex\Model\Listener\PageListener;
 use nv\Simplex\Provider\Service\ContentServiceProvider;
+use nv\Simplex\Provider\Service\IntegrationServiceProvider;
 use nv\Simplex\Provider\Service\SiteServiceProvider;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
@@ -115,23 +116,7 @@ class Simplex extends Application
 
         $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
             $twig->addFilter(new \Twig_SimpleFilter('timeago', function ($datetime) use ($app) {
-                /*
-                 * @todo
-                  0 <-> 29 secs                                                             # => less than a minute
-                  30 secs <-> 1 min, 29 secs                                                # => 1 minute
-                  1 min, 30 secs <-> 44 mins, 29 secs                                       # => [2..44] minutes
-                  44 mins, 30 secs <-> 89 mins, 29 secs                                     # => about 1 hour
-                  89 mins, 29 secs <-> 23 hrs, 59 mins, 29 secs                             # => about [2..24] hours
-                  23 hrs, 59 mins, 29 secs <-> 47 hrs, 59 mins, 29 secs                     # => 1 day
-                  47 hrs, 59 mins, 29 secs <-> 29 days, 23 hrs, 59 mins, 29 secs            # => [2..29] days
-                  29 days, 23 hrs, 59 mins, 30 secs <-> 59 days, 23 hrs, 59 mins, 29 secs   # => about 1 month
-                  59 days, 23 hrs, 59 mins, 30 secs <-> 1 yr minus 1 sec                    # => [2..12] months
-                  1 yr <-> 2 yrs minus 1 secs                                               # => about 1 year
-                  2 yrs <-> max time or date                                                # => over [2..X] years
-                 */
-
                 $time = time() - strtotime($datetime);
-
                 $units = array (
                     31536000 => 'year',
                     2592000 => 'month',
@@ -149,7 +134,6 @@ class Simplex extends Application
                         (($numberOfUnits>1) ? $numberOfUnits : 'a')
                         .' '.$val.(($numberOfUnits>1) ? 's' : '').' ago';
                 }
-
             }));
 
             return $twig;
@@ -159,7 +143,7 @@ class Simplex extends Application
          * Asset: resolve asset path by asset name and type (image, font, ...)
          * Return empty placeholder image when not found
          *
-         * @todo Fix & enable twig 'asset'
+         * @todo Fix twig 'asset', use it
          */
         $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
             $twig->addFunction(new \Twig_SimpleFunction('asset', function ($asset) use ($app) {
@@ -186,7 +170,7 @@ class Simplex extends Application
          *
          * example display('crops:mediaId')
          *
-         * @todo Fix & enable twig 'display'
+         * @todo Fix twig 'display', use it
          */
         $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
             $twig->addFunction(new \Twig_SimpleFunction('display', function ($asset) use ($app) {
@@ -298,7 +282,6 @@ class Simplex extends Application
         $this->register(new SimplexServiceProvider());
 
         $this['swiftmailer.options'] = $this['settings']->getMailConfig();
-
         $this['system.mailer'] = $this->share(function ($app) {
             return new SystemMailer(
                 $app['mailer'],
@@ -322,6 +305,9 @@ class Simplex extends Application
         $this->register($siteProvider = new SiteServiceProvider());
         $this->mount('/', $siteProvider);
 
+        $this->register($integrationsProvider = new IntegrationServiceProvider());
+        $this->mount('/admin', $integrationsProvider);
+
         $this->register($settingsProvider = new SettingsServiceProvider());
         $this->mount('/admin', $settingsProvider);
 
@@ -339,6 +325,8 @@ class Simplex extends Application
 
         $this->register($contentProvider = new ContentServiceProvider());
         $this->mount('/admin', $contentProvider);
+
+        echo get_class($this['yt']);
     }
 
     /**

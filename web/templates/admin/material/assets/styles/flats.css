@@ -211,6 +211,30 @@
     margin-left: 0;
 }
 
+.option.list .form-group {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.field.option {
+    margin-bottom: 20px;
+}
+
+.option .control-label {
+    font-size: 13px;
+    color: #666;
+}
+
+.option .checkbox {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.option.list .checkbox {
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
 .form-group input[type="checkbox"],
 .form-group input[type="radio"] {
     display: none;
@@ -417,7 +441,7 @@ input, textarea {
 
 .controls-group .form-btn {
     display: block;
-    color: #2196F3;
+    color: #323232;
 }
 
 .controls-group .form-btn i.fa{

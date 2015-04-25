@@ -10,6 +10,21 @@ var debug;
 var theDropzone;
 Dropzone.autoDiscover = false;
 
+$(function() {
+    $('body').on('click', '.section-link', function() {
+        if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+            var target = $(this.hash);
+            target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+            if (target.length) {
+                $('html,body').animate({
+                    scrollTop: target.offset().top - 240
+                }, 250);
+                return false;
+            }
+        }
+    });
+});
+
 /**
  *
  */
@@ -127,7 +142,6 @@ function handleDropzone() {
                     $('.flash-error').remove();
                 });
             });
-
     });
 
     theDropzone.on("error", function (file, msg, xhr) {
@@ -176,7 +190,7 @@ function addQueryForm($collectionHolder, $newLinkLi) {
     $collectionHolder.data('index', index + 1);
 
     // Display the form in the page in an li, before the "Add a query" link li
-    var $newFormLi = $('<li></li>').append(newForm);
+    var $newFormLi = $('<li class="clearfix query-form"></li>').append(newForm);
     $newLinkLi.before($newFormLi);
 
     // add a delete link to the new form
@@ -192,7 +206,7 @@ function addQueryForm($collectionHolder, $newLinkLi) {
  * @param $queryFormLi
  */
 function addQueryFormDeleteLink($queryFormLi) {
-    var $removeFormA = $('<a href="#">Delete this query</a>');
+    var $removeFormA = $('<a href="#" class="delete_query_link">Delete this query</a>');
     $queryFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {
@@ -206,6 +220,16 @@ function addQueryFormDeleteLink($queryFormLi) {
         // remove the li for the tag form
         $queryFormLi.remove();
     });
+}
+
+function getQueryResult(queryId) {
+    $.ajax({
+        url: baseURL + '/admin/page/query/' + queryId,
+        method: "POST"
+    })
+        .done(function(data){
+            return data;
+        })
 }
 
 /**
@@ -401,8 +425,8 @@ $(document).ready(function () {
      */
     var $collectionHolder;
     // setup an "add a query" link
-    var $addQueryLink = $('<a href="#" class="add_query_link">Add a query</a>');
-    var $newLinkLi = $('<li></li>').append($addQueryLink);
+    var $addQueryLink = $('<a href="#" class="add_query_link btn-cta">Add a query</a>');
+    var $newLinkLi = $('<li class="text-center"></li>').append($addQueryLink);
     // Get the ul that holds the collection of queries
     $collectionHolder = $('ul.queries');
     // add a delete link to all of the existing query form li elements

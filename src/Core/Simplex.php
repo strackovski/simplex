@@ -325,8 +325,6 @@ class Simplex extends Application
 
         $this->register($contentProvider = new ContentServiceProvider());
         $this->mount('/admin', $contentProvider);
-
-        echo get_class($this['yt']);
     }
 
     /**
@@ -336,10 +334,6 @@ class Simplex extends Application
     {
         $self = $this;
         $this->error(function (\Exception $e, $code) use ($self) {
-            if ($self['debug']) {
-                return;
-            }
-
             $templates = array(
                 'errors/'.$code.'.html.twig',
                 'errors/'.substr($code, 0, 2).'x.html.twig',

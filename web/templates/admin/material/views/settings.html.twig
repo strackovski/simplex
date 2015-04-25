@@ -33,7 +33,7 @@
                     <div class="big-tabs tabs settings-tabs">
                         <ul>
                             {% for key, panel in tabs.panels %}
-                                <li class="{{ panel.active ? 'active' : '' }}"><a href="#{{ key }}" role="tab" data-url="{{ panel.url }}" data-toggle="tab">{{ key|capitalize }}</a></li>
+                                <li class="{{ panel.active ? 'active' : '' }}"><a href="#{{ key }}" role="tab" data-url="{{ panel.url }}" data-toggle="tab">{{ key|capitalize|replace('_', ' ') }}</a></li>
                             {% endfor %}
                         </ul>
                     </div>

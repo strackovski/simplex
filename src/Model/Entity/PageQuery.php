@@ -74,9 +74,9 @@ class PageQuery
     /**
      * View position, defines the position of the returned data in the view (optional)
      *
-     * @Column(name="view_pos", type="string", length=255, nullable=true, unique=false)
+     * @Column(name="output_var", type="string", length=255, nullable=true, unique=false)
      */
-    protected $viewPosition;
+    protected $outputVariable;
 
     /**
      * @var QueryManager
@@ -292,17 +292,17 @@ class PageQuery
     /**
      * @return mixed
      */
-    public function getViewPosition()
+    public function getOutputVariable()
     {
-        return $this->viewPosition;
+        return $this->outputVariable;
     }
 
     /**
-     * @param mixed $viewPosition
+     * @param mixed $outputVariable
      */
-    public function setViewPosition($viewPosition)
+    public function setOutputVariable($outputVariable)
     {
-        $this->viewPosition = $viewPosition;
+        $this->outputVariable = $outputVariable;
     }
 
     /**

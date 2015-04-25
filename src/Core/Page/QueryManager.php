@@ -70,6 +70,7 @@ class QueryManager
                     )
                 );
                 break;
+
             case 'author':
                 $qb->select(array('u'))
                     ->from($contentType, 'u');
@@ -84,11 +85,25 @@ class QueryManager
                 );
                 break;
 
+            case 'contentLabel':
+                $qb->select(array('u'))
+                    ->from($contentType, 'u');
+                $qb->where($qb->expr()->eq('u.contentLabel', '?1'))
+                    ->andWhere($qb->expr()->eq('u.published', '?2'));
+
+                $qb->setParameters(
+                    array(
+                        1 => $this->query->getValue(),
+                        2 => true
+                    )
+                );
+                break;
+
             case 'tags':
                 $qb->select(array('u'))
                     ->from($contentType, 'u')
                     ->leftJoin('u.tags', 'x')
-                    ->where($qb->expr()->in('x.id', '?1'))
+                    ->where($qb->expr()->in('x.name', '?1'))
                     ->andWhere($qb->expr()->eq('u.published', '?2'));
 
                 $qb->setParameters(

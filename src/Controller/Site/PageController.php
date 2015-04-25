@@ -35,6 +35,10 @@ class PageController
      */
     public function indexAction(Request $request, Application $app)
     {
+        if (!$app['settings']->getLive()) {
+            die('offline');
+        }
+
         $settings = $app['repository.settings']->getPublicSettings();
 
         return $app['twig']->render(
@@ -55,6 +59,10 @@ class PageController
      */
     public function viewAction(Request $request, Application $app)
     {
+        if (!$app['settings']->getLive()) {
+            die('offline');
+        }
+
         /** @var \nv\Simplex\Model\Entity\Page $page */
         $page = $app['repository.page']->findOneBy(array('slug' => $request->get('slug')));
         $content = array();
@@ -62,7 +70,11 @@ class PageController
         if ($page instanceof Page and $page->getQueries()) {
             foreach ($page->getQueries() as $query) {
                 try{
-                    $content[] = $query->getManager()->buildQuery($app['orm.em'])->getResult();
+                    if (!is_null($query->getOutputVariable())) {
+                        $content[$query->getOutputVariable()] = $query->getManager()->buildQuery($app['orm.em'])->getResult();
+                    } else {
+                        $content[] = $query->getManager()->buildQuery($app['orm.em'])->getResult();
+                    }
                 } catch (QueryException $e) {
                     $app['monolog']->addError(
                         'Failed building query in Site\\PageController:viewAction: ' . $e->getMessage()

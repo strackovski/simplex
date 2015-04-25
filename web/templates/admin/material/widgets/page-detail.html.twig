@@ -19,19 +19,42 @@
         </div>
 
         <div class="section-entity">
-            {% for query in page.getQueries %}
-                <p>{{ query.toArray|join(' | ') }}</p>
-            {% endfor %}
+            {% if page.getQueries.count > 0 %}
+                {% for query in page.getQueries %}
+                    <p>{{ query.toArray|join(' | ') }}</p>
+                {% endfor %}
+            {% else %}
+                <p>No queries</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-title">
+             Details
+        </div>
+
+        <div class="section-entity narrow-entity">
+            <div class="dt">
+                Accessible at
+            </div>
+            <div class="dd">
+                http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/' ~ page.getSlug }}
+            </div>
         </div>
     </div>
 
     <div class="content-section">
         <div class="section-entity">
             <div class="dt">
-                Accessible at
+                Content label
             </div>
             <div class="dd">
-                <i class="fa fa-link"></i> {{ page.getSlug }}
+                {% if page.getContentLabel %}
+                    {{ page.getContentLabel }}
+                {% else %}
+                    NO LABEL
+                {% endif %}
             </div>
         </div>
     </div>

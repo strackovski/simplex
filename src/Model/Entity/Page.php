@@ -90,6 +90,11 @@ class Page extends TimestampableAbstract implements ObservableInterface
     protected $keywords;
 
     /**
+     * @Column(name="label", type="string", nullable=true, unique=false)
+     */
+    protected $contentLabel;
+
+    /**
      * Attached page queries
      *
      * @ManyToMany(targetEntity="PageQuery", orphanRemoval=true, cascade={"persist"})
@@ -431,5 +436,21 @@ class Page extends TimestampableAbstract implements ObservableInterface
     public function setKeywords($keywords)
     {
         $this->keywords = $keywords;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContentLabel()
+    {
+        return $this->contentLabel;
+    }
+
+    /**
+     * @param mixed $contentLabel
+     */
+    public function setContentLabel($contentLabel)
+    {
+        $this->contentLabel = $contentLabel;
     }
 }

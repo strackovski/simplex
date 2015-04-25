@@ -12,6 +12,7 @@
 
 namespace nv\Simplex\Controller\Admin;
 
+use Doctrine\DBAL\Query\QueryException;
 use nv\Simplex\Controller\ActionControllerAbstract;
 use Silex\Application;
 use nv\Simplex\Model\Entity\Settings;
@@ -21,6 +22,7 @@ use nv\Simplex\Core\Page\PageManager;
 use nv\Simplex\Model\Repository\PageRepository;
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -80,6 +82,24 @@ class PageController extends ActionControllerAbstract
             'admin/'.$this->settings->getAdminTheme().'/views/pages.html.twig',
             array('pages' => $this->pages->findAll())
         );
+    }
+
+    public function runQueryAction(Request $request, Application $app)
+    {
+        $page = $this->pages->findOneBy(array('id' => $request->get('page')));
+        $content[] = array();
+
+        foreach ($page->getQueries() as $query) {
+            try{
+                $content[$query->getId()] = $query->getManager()->buildQuery($app['orm.em'])->getArrayResult();
+            } catch (QueryException $e) {
+                $this->logger->addError(
+                    'Failed building query in Admin\\PageController:buildQueryAction: ' . $e->getMessage()
+                );
+            }
+        }
+
+        return new JsonResponse($content);
     }
 
    /**

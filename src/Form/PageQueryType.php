@@ -38,19 +38,19 @@ class PageQueryType extends AbstractType
             ->add('contentType', 'choice', array(
                 'choices' => array('post' => 'Post', 'image' => 'Image', 'video' => 'Video'),
                 'data' => 'post',
-                'empty_value' => 'Select content type...',
+                'empty_value' => 'Select type of content to retrieve...',
             ))
             ->add('column', 'choice', array(
                 'choices' => array(
+                    'contentLabel' => 'Content label',
                     'title' => 'Title',
                     'created_at' => 'Date created',
                     'updated_at' => 'Date modified',
                     'author' => 'Author',
                     'tags' => 'Tags',
-                    'hasFace' => 'With faces',
                     'inLibrary' => 'In library',
                 ),
-                'empty_value' => 'Select a column filter...'
+                'empty_value' => 'Select a column to filter by...'
             ))
             ->add('operator', 'choice', array(
                 'choices' => array(
@@ -60,6 +60,7 @@ class PageQueryType extends AbstractType
                     'before' => 'Before',
                     'after' => 'After'
                 ),
+                'empty_value' => 'Select search operator...',
                 'required' => false
             ))
             ->add('value', 'text', array(
@@ -73,13 +74,9 @@ class PageQueryType extends AbstractType
             ->add('limitMax', 'text', array(
                 'required' => false
             ))
-            ->add('viewPosition', 'choice', array(
-                'choices' => array(
-                    'eq' => 'Equals',
-                    'in' => 'Contains',
-                    'between' => 'Between',
-                    'before' => 'Before',
-                    'after' => 'After'
+            ->add('outputVariable', 'text', array(
+                'attr' => array(
+                    'placeholder' => 'Output variable name (empty to merge)'
                 ),
                 'required' => false
             ));

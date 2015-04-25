@@ -77,6 +77,9 @@ class PageServiceProvider implements ServiceProviderInterface, ControllerProvide
         $controllers->match('/page/delete/{page}', 'page.controller:deleteAction')
             ->bind('admin/page/delete');
 
+        $controllers->match('/page/query/{page}', 'page.controller:runQueryAction')
+            ->bind('admin/page/query');
+
         return $controllers;
     }
 

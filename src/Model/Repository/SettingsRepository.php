@@ -166,10 +166,13 @@ class SettingsRepository extends EntityRepository
                         $version = (string)$xml->theme->attributes()->version;
                         if (isset($xml->theme->authors->author)) {
                             $authors = (array) $xml->theme->authors;
-                            $results[$name] = ucfirst(
-                                $name . ' v' . $version .
-                                ' by ' . implode(' & ', $authors['author'])
-                            );
+                            if (count($authors['author']) > 1) {
+                                $aString = implode(' & ', $authors['author']);
+                            } else {
+                                $aString = $authors['author'];
+                            }
+                            $results[$name] = ucfirst($name . ' v' . $version . ' by ' . $aString);
+
                         } else {
                             $results[$name] = ucfirst($name . ' v' . $version);
                         }

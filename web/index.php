@@ -10,8 +10,6 @@
  * file that was distributed with this source code or visit the link above.
  */
 
-ini_set('display_errors', 0);
-
 define('APPLICATION_ENVIRONMENT', 'production');
 
 if (!file_exists(dirname(__DIR__) . '/config/parameters.json')) {
@@ -20,6 +18,5 @@ if (!file_exists(dirname(__DIR__) . '/config/parameters.json')) {
 }
 
 require __DIR__.'/../src/bootstrap.php';
+$app['debug'] = false;
 $app->run();
-
-

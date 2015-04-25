@@ -67,7 +67,7 @@
                                 </div>
 
                                 <div class="item">
-                                    <div><a href="#">{{ item.getTitle }}</a></div>
+                                    <div><a class="detail-btn" href="{{ app.url_generator.generate('admin/content/get', {type: item.getType, id:item.getId}) }}">{{ item.getTitle }}</a></div>
                                 </div>
 
                                 <div class="item">

@@ -25,7 +25,6 @@
     <div class="dashboard-grid-header">
         <div class="dashboard-grid-header-outer clearfix">
             <div class="header-box info-box">
-
                 <div class="info-image">
                     {% if user.getAvatar %}
                         <img src="{{ display('crops:' ~ user.getAvatar.getPath) }}" alt="" />
@@ -38,12 +37,10 @@
                     <p>Welcome back, <b>{{ user.displayName }}</b>!</p>
                     <a href="{{ app.url_generator.generate('admin/user/profile') }}">Manage your profile</a>
                 </div>
-
             </div>
 
             <div class="header-box info-box status-type right-info-box">
                 <div class="info-app-button">
-
                     <div class="dropdown">
                         <a id="settings-menu" data-toggle="dropdown" aria-expanded="true" class="dropdown-toggle btn-large" href="{{ app.url_generator.generate('admin/settings') }}">
                             <i class="fa fa-cog"></i>
@@ -66,9 +63,9 @@
                     </div>
                 </div>
                 <div class="info-app-status">
-                    <p><b>{{ app.request.getHost ~ app.request.getBaseURL() }}</b></p>
+                    <p><b><a target="_blank" href="http://{{ app.request.getHost ~ app.request.getBaseURL() }}">{{ app.request.getHost ~ app.request.getBaseURL() }}</a></b></p>
                     {% if app.settings.getLive == 1 %}
-                        <p><a target="_blank" href="{{ app.url_generator.generate('/') }}">Site is online</a></p>
+                        <p>Site is online</p>
                     {% else %}
                         <p>Site is offline</p>
                     {% endif %}
@@ -289,7 +286,7 @@
                 <div class="card-wrap col-xs-12">
                     <div class="card bg">
                         <p class="ghost big">GOOGLE ANALYTICS DATA NOT AVAILABLE</p>
-                        {{ dump(analytics) }}
+
                     </div>
                 </div>
             </div>

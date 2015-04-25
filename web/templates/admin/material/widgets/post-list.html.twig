@@ -1,5 +1,5 @@
 <div class="item-list post-list">
-    <div class="item-wrap">
+    <div class="item-wrap item-fixed-header">
         <div class="item text-center">
             <div>
 
@@ -39,7 +39,11 @@
                 </div>
             </div>
             <div class="item">
-                <div><a href="{{ app.url_generator.generate('admin/post/view', {post:post.getId}) }}">{{ post.getTitle }}</a></div>
+                <div>
+                    <a class="detail-btn" href="{{ app.url_generator.generate('admin/post/get', {post:post.getId}) }}">
+                        {{ post.getTitle }}
+                    </a>
+                </div>
             </div>
             <div class="item">
                 <div>{{ post.getAuthor }}</div>

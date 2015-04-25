@@ -1,7 +1,7 @@
 {% extends app.request.isXmlHttpRequest ? "admin/material/masters/layout-tabs-panel.html.twig" : "admin/material/views/settings.html.twig" %}
 
 {% block tabPaneHeader %}
-<div class="controls-group">
+<div class="controls-group controls-group-fixed">
     <div class="left-controls">
         <h3>General configuration</h3>
     </div>
@@ -114,10 +114,10 @@
     </div>
     <div class="settings-content condensed">
         <div class="des">
-            This will enable public access to your published items directly.
+            Put your site online or offline.
         </div>
-        <div class="field form-group option">
-            {{ form_row(form.enableQueryStringAccess) }}
+        <div class="form-group field option">
+            {{ form_row(form.live) }}
         </div>
         <div class="des">
             Annotations bring in-depth classification and enrichment capabilities to your text content. You can enable this feature globally here.
@@ -126,10 +126,10 @@
             {{ form_row(form.enableAnnotations) }}
         </div>
         <div class="des">
-            Put your site online or offline.
+            This will enable public access to your published items directly.
         </div>
-        <div class="form-group field option">
-            {{ form_row(form.live) }}
+        <div class="field form-group option">
+            {{ form_row(form.enableQueryStringAccess) }}
         </div>
         <div class="des">
             This will allow your public template to implement a user registration form. Registered users are assigned the user role, and don't get access to the administration panel.

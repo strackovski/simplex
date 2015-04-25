@@ -33,6 +33,10 @@ class PostController
      */
     public function indexAction(Request $request, Application $app)
     {
+        if (!$app['settings']->getLive()) {
+            die('offline');
+        }
+
         $content = $app['repository.post']->getPublished();
         $menu = $app['repository.page']->getMenuPages();
 
@@ -55,6 +59,10 @@ class PostController
      */
     public function viewAction(Request $request, Application $app)
     {
+        if (!$app['settings']->getLive()) {
+            die('offline');
+        }
+
         $content = $app['repository.post']->findOneBy(array('slug' => $request->get('slug')));
         $menu = $app['repository.page']->getMenuPages();
 

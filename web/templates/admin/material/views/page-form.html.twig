@@ -16,19 +16,6 @@
                         </span>
                     </div>
                 </div>
-               <!-- <div class="bottom-header-wrapper">
-                    <div class="tabs">
-                        <ul>
-                            <li class="active">
-                                <a href="#home" role="tab" data-toggle="tab">Page</a>
-                            </li>
-                            <li class="">
-                                <a href="#data" role="tab" data-toggle="tab">Data</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                -->
             </div>
         </div>
     </header>
@@ -139,6 +126,19 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="data-group">
+                                <div class="form-group">
+                                    <div class="form-group form-element">
+                                        {{ form_label(form.contentLabel) }}
+                                        {{ form_widget(form.contentLabel) }}
+                                        {{ form_errors(form.contentLabel) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="data-group">
                                 <div class="form-group">
@@ -161,14 +161,11 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="data">
-
-                        {#<div class="add-pq-form" data-proto="{% filter escape %}{% include 'admin/material/widgets/add-query-form.html.twig' %}{% endfilter %}"></div> #}
-                        {#<ul class="queries" data-prototype="{{ form_widget(form.queries.vars.prototype)|e }}">#}
                         {% if form.queries|length < 1 %}
                             <div class="li-empty">
                                 <div>
                                     <p class="ghost big">This page has no data queries defined.</p>
-                                    <p class="ghost">This page has no data queries defined.</p>
+                                    <p class="ghost mw80">Page queries allow you to bind your data to a page. Click the "Add query" button below to add a query now.</p>
                                 </div>
                             </div>
                         {% endif %}
@@ -177,27 +174,6 @@
                                 <li>{% include 'admin/material/widgets/edit-query-form.html.twig' with {form: query.vars.form} %}</li>
                             {% endfor %}
                         </ul>
-
-                        {#
-                        <div class="data-group">
-                            <div class="form-group form-element">
-                                {{ form_label(form.authors) }}
-                                <div class="field option">
-                                    {{ form_widget(form.authors) }}
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="data-group">
-                            <div class="form-group form-element">
-                                {{ form_label(form.tags) }}
-                                <div class="field option">
-                                    {{ form_widget(form.tags) }}
-                                </div>
-                            </div>
-                        </div>
-                        #}
                     </div>
                 </div>
                 <div class="form-group submit-controls page-submit-controls form-action">

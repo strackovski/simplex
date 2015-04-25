@@ -141,6 +141,11 @@ abstract class MediaItem extends TimestampableAbstract
     protected $mediaCategory;
 
     /**
+     * @Column(name="label", type="string", nullable=true, unique=false)
+     */
+    private $contentLabel;
+
+    /**
      * @ManyToOne(targetEntity="User")
      * @JoinColumn(name="user_id", referencedColumnName="id")
      **/
@@ -551,5 +556,21 @@ abstract class MediaItem extends TimestampableAbstract
     public function getMediaId()
     {
         return $this->mediaId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContentLabel()
+    {
+        return $this->contentLabel;
+    }
+
+    /**
+     * @param mixed $contentLabel
+     */
+    public function setContentLabel($contentLabel)
+    {
+        $this->contentLabel = $contentLabel;
     }
 }

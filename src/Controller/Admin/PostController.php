@@ -239,7 +239,7 @@ class PostController extends ActionControllerAbstract
             'request' => $request
         );
 
-        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/post-form2.html.twig', $data);
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/post-form.html.twig', $data);
     }
 
     /**
@@ -299,7 +299,7 @@ class PostController extends ActionControllerAbstract
         );
 
         return $this->twig->render(
-            'admin/'.$this->settings->getAdminTheme().'/views/post-form2.html.twig',
+            'admin/'.$this->settings->getAdminTheme().'/views/post-form.html.twig',
             $data
         );
     }

@@ -17,21 +17,6 @@
                         </span>
                     </div>
                 </div>
-                <div class="bottom-header-wrapper">
-                    <div class="tabs">
-                        <ul>
-                            <li class="active">
-                                <a href="#home" role="tab" data-toggle="tab">Content</a>
-                            </li>
-                            <li class="">
-                                <a href="#media" role="tab" data-toggle="tab">Media</a>
-                            </li>
-                            <li class="">
-                                <a href="#settings" role="tab" data-toggle="tab">Settings</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
             </div>
         </div>
     </header>
@@ -51,23 +36,44 @@
 {% endblock %}
 
 {% block content %}
-
-    <div class="grid grid-clear">
+    {{ form_start(form) }}
+    <div class="grid-header">
+        <div class="grid-header-outer">
+            <div class="header-box">
+                <div class="form-group title form-element">
+                    {{ form_widget(form.title) }}
+                    {{ form_errors(form.title) }}
+                </div>
+            </div>
+            <div class="header-box">
+                <div class="post-addition">
+                    <ul class="new-post-tabs">
+                        <li class="active">
+                            <a href="#home" role="tab" data-toggle="tab"><i class="fa fa-pencil"></i></a>
+                        </li>
+                        <li class="">
+                            <a href="#media" role="tab" data-toggle="tab"><i class="fa fa-camera"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid grid-post">
         <div class="grid-outer">
             <script type="text/javascript" src="{{ app.request.basepath }}/assets/tinymce/tinymce.min.js"></script>
-            {{ form_start(form) }}
             <div class="tab-wrap form">
                 <div class="tab-content">
                     <div class="tab-pane active" id="home">
-                        <div class="form-group title form-element">
-                            {{ form_label(form.title) }}
-                            {{ form_widget(form.title) }}
-                            {{ form_errors(form.title) }}
-                        </div>
                         <div class="form-group form-element">
                             {{ form_label(form.subtitle) }}
                             {{ form_widget(form.subtitle) }}
                             {{ form_errors(form.subtitle) }}
+                        </div>
+                        <div class="form-group form-element">
+                            {{ form_label(form.body) }}
+                            {{ form_widget(form.body | raw) }}
+                            {{ form_errors(form.body) }}
                         </div>
 
                         <div class="form-group form-element">
@@ -85,13 +91,45 @@
                         </div>
 
                         <div class="form-group form-element">
-                            {{ form_label(form.body) }}
-                            {{ form_widget(form.body | raw) }}
-                            {{ form_errors(form.body) }}
+                            {{ form_label(form.contentLabel) }}
+                            {{ form_widget(form.contentLabel) }}
+                            {{ form_errors(form.contentLabel) }}
                         </div>
-                        <a href="#" class="btn-cmd cmd-edit-modal"></a>
 
-                        {# {{ form_row(form.body) }}#}
+                        <div class="form-group form-element">
+                            {{ form_label(form.positionWeight) }}
+                            {{ form_widget(form.positionWeight) }}
+                            {{ form_errors(form.positionWeight) }}
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="field option list">
+                                <label class="control-label">Visibility</label>
+                                {{ form_row(form.published) }}
+                                {{ form_row(form.exposed) }}
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="field option list">
+                                <label class="control-label">Interactivity</label>
+                                {{ form_row(form.allow_ratings) }}
+                                {{ form_row(form.allow_comments) }}
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="field option">
+                                <label class="control-label">Social channels</label>
+                                {{ form_row(form.channels) }}
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6">
+                            <div class="field option">
+                                <label class="control-label">Add to page(s)</label>
+                                {{ form_row(form.pages) }}
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane" id="media">
                         <div class="tiles">
@@ -113,84 +151,27 @@
                             {% endfor %}
                         </div>
                     </div>
-
-                    <div class="tab-pane" id="settings">
-                        <div class="panel-box">
-                            <h4>Publishing options</h4>
-
-                            <div class="col-xs-6">
-                                <div class="field option">
-                                    {{ form_row(form.published) }}
-                                </div>
-                            </div>
-
-                            <div class="col-xs-6">
-                                <div class="field option">
-                                    {{ form_row(form.exposed) }}
-                                </div>
-                            </div>
-
-                            <div class="col-xs-6">
-                                <div class="col-xs-8">
-                                    <div class="form-group form-element prepend-icon">
-                                        {{ form_label(form.published_interval) }}
-                                        {{ form_widget(form.published_interval) }}
-                                        <div class="field-addon"><i class="fa fa-calendar"></i></div>
-                                        {{ form_errors(form.published_interval) }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="col-xs-8">
-                                    <div class="form-group form-element prepend-icon">
-                                        {{ form_label(form.exposed_interval) }}
-                                        {{ form_widget(form.exposed_interval) }}
-                                        <div class="field-addon"><i class="fa fa-calendar"></i></div>
-                                        {{ form_errors(form.exposed_interval) }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel-box panel-condensed">
-                            <h4>Comments & ratings</h4>
-                            <div class="col-xs-12">
-                                <div class="field option">
-                                    {{ form_row(form.allow_ratings) }}
-                                </div>
-                            </div>
-                            <div class="col-xs-12">
-                                <div class="field option">
-                                    {{ form_row(form.allow_comments) }}
-                                </div>
-                            </div>
-                            <div class="col-xs-12">
-                                <div class="field option">
-                                    {{ form_row(form.channels) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-                <div class="form-group submit-controls post-submit-controls">
+                <div class="form-group submit-controls post-submit-controls form-action">
                     {{ form_widget(form.cancel) }}
                     {{ form_widget(form.save) }}
                 </div>
             </div>
-            {{ form_end(form) }}
         </div>
     </div>
+    {{ form_end(form) }}
 
-<div id="modal-editor" class="modal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <span class="modal-title">Modal title</span>
-            </div>
-            <div class="modal-body">
-                <p>One fine body&hellip;</p>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+    <div id="modal-editor" class="modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <span class="modal-title">Modal title</span>
+                </div>
+                <div class="modal-body">
+                    <p>One fine body&hellip;</p>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 {% endblock %}

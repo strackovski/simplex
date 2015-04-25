@@ -49,12 +49,9 @@
                             </p>
                         </div>
                     {% else %}
-                        <div class="item-list">
-                            <div class="item-wrap item-header">
-                                <div class="item">
-
-                                </div>
-                                <div class="item">
+                            <div class="item-wrap item-header item-fixed-header">
+                                <div class="item"></div>
+                                <div class="item title">
                                     <div>Title</div>
                                 </div>
                                 <div class="item">
@@ -63,8 +60,7 @@
                                 <div class="item">
                                     <div>Last Modified</div>
                                 </div>
-                                <div class="item">
-                                </div>
+                                <div class="item"></div>
                             </div>
                             {% for page in pages %}
                                 <div class="item-wrap">
@@ -76,7 +72,7 @@
                                             <div class="status-icon"><i class="fa fa-sitemap"></i></div>
                                         {% endif %}
 
-                                        {% if page.getSlug == '/' %}
+                                        {% if page.getSlug == '/' or page.getSlug|length < 1 %}
                                             <div class="page-icon"><i class="fa fa-circle-thin fa-2x"></i></div>
                                         {% else %}
                                             <div class="page-icon"><i class="fa fa-circle-thin fa-2x icon-{{ page.getTypeColor }}"></i></div>
@@ -84,14 +80,14 @@
                                         </div>
                                     </div>
                                     <div class="item">
-                                        {% if page.getSlug == '/' %}
-                                            <div>{{ page.getTitle }}</div>
-                                        {% else %}
-                                            <div>{{ page.getTitle }}</div>
-                                        {% endif %}
+                                        <a class="detail-btn" href="{{ app.url_generator.generate('admin/page/get', {page:page.getId}) }}">{{ page.getTitle }}</a>
                                     </div>
                                     <div class="item">
-                                        <div><a href="{# {{ app.url_generator.generate(page.getSlug) }} #}#">{{ page.getSlug }}</a></div>
+                                        {% if page.getSlug|length < 1 %}
+                                            <div><a target="_blank" href="http://{{ app.request.getHost ~ app.request.getBaseURL()}}">http://{{ app.request.getHost ~ app.request.getBaseURL()}}</a></div>
+                                        {% else %}
+                                            <div><a target="_blank" href="http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/' ~ page.getSlug }}">http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/' ~ page.getSlug }}</a></div>
+                                        {% endif %}
                                     </div>
                                     <div class="item">
                                         <div>{{ page.getCreatedAt|date }}</div>
@@ -103,7 +99,6 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                        </div>
                     {% endif %}
                 </div>
             </div>

@@ -4,7 +4,7 @@
             <div>Title</div>
         </div>
         <div class="item">
-            <div>Author</div>
+            <div>Status</div>
         </div>
         <div class="item">
             <div>Last Modified</div>
@@ -17,7 +17,17 @@
                 <div><a href="{{ app.url_generator.generate('admin/post/view', {post:post.getId}) }}">{{ post.getTitle }}</a></div>
             </div>
             <div class="item">
-                <div>{{ post.getAuthor }}</div>
+                <div>
+                    {% if post.getPublished %}
+                        PUBLISHED
+                    {% else %}
+                        NOT PUBLISHED
+                    {% endif %}
+
+                    {% if post.getExposed %}
+                        EXPOSED
+                    {% endif %}
+                </div>
             </div>
             <div class="item">
                 <div>{{ post.getCreatedAt|date }}</div>

@@ -61,24 +61,11 @@ class PageType extends AbstractType
         }
 
         foreach (glob($tplDir .$this->settings->getPublicTheme().'/views/*.twig') as $file) {
-
             if (basename($file) !== 'post.html.twig') {
                 $files[basename($file, '.html.twig')] = ucfirst(basename($file, '.html.twig'));
             }
         }
-
-        $authors = $this->pages->getAuthors();
-        $authorItems = array();
-        foreach ($authors as $author) {
-            $authorItems[$author->getId()] = $author->displayName();
-        }
-
-        $tags = $this->pages->getTags();
-        $tagItems = array();
-        foreach ($tags as $tag) {
-            $tagItems[$tag->getId()] = $tag->getName();
-        }
-
+        
         $builder
             ->add('title', 'text', array(
                 'constraints' => new Assert\NotBlank(),
@@ -89,19 +76,19 @@ class PageType extends AbstractType
             ->add('description', 'textarea', array(
                 'required' => false,
                 'attr' => array(
-                    'placeholder' => 'Enter description (optional)'
+                    'placeholder' => 'A short description of the page (optional)'
                 )
             ))
             ->add('keywords', 'text', array(
                 'required' => false,
                 'attr' => array(
-                    'placeholder' => 'Enter keywords (optional)'
+                    'placeholder' => 'A list of keywords, separated by comma (optional)'
                 )
             ))
             ->add('slug', 'text', array(
                 'constraints' => new Assert\NotBlank(),
                 'attr' => array(
-                    'placeholder' => 'Enter slug for this page'
+                    'placeholder' => 'URL slug'
                 )
             ))
             ->add('typeColor', 'choice', array(
@@ -116,6 +103,13 @@ class PageType extends AbstractType
                 'empty_value' => 'Select a color...',
                 'multiple' => false,
                 'required' => false
+            ))
+            ->add('contentLabel', 'text', array(
+                'mapped' => true,
+                'required' => false,
+                'attr' => array(
+                    'placeholder' => 'Content label'
+                )
             ))
             ->add('master', 'choice', array(
                 'choices' => $masters,
@@ -139,24 +133,6 @@ class PageType extends AbstractType
                     'by_reference' => false
                 )
             )
-            /*
-            ->add('authors', 'choice', array(
-                'choices' => $authorItems,
-                'empty_value' => 'Select authors...',
-                'mapped' => false,
-                'multiple' => true,
-                'expanded' => true,
-                'required' => false
-            ))
-            ->add('tags', 'choice', array(
-                'choices' => $tagItems,
-                'empty_value' => 'Select tags...',
-                'mapped' => false,
-                'multiple' => true,
-                'expanded' => true,
-                'required' => false
-            ))
-            */
             ->add('in_menu', 'checkbox', array(
                 'required' => false,
                 'label' => 'Include a link to this page in main menu'

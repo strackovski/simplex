@@ -80,6 +80,20 @@ class PostType extends AbstractType
                     'placeholder' => 'Comma separated list of keywords'
                 )
             ))
+            ->add('positionWeight', 'text', array(
+                'mapped' => true,
+                'required' => false,
+                'attr' => array(
+                    'placeholder' => 'Position weight'
+                )
+            ))
+            ->add('contentLabel', 'text', array(
+                'mapped' => true,
+                'required' => false,
+                'attr' => array(
+                    'placeholder' => 'Content label'
+                )
+            ))
             ->add('subtitle', 'textarea', array(
                 'attr' => array(
                     'rows' => '3',
@@ -96,7 +110,7 @@ class PostType extends AbstractType
             ))
             ->add('channels', 'choice', array(
                 'mapped' => true,
-                'label' => 'Publish to channels',
+                'label' => false,
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,
@@ -145,7 +159,7 @@ class PostType extends AbstractType
             ))
             ->add('pages', 'choice', array(
                 'mapped' => false,
-                'label' => 'Add to page(s)',
+                'label' => false,
                 'required' => false,
                 'multiple' => true,
                 'expanded' => true,

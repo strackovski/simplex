@@ -14,6 +14,7 @@ namespace nv\Simplex\Model\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use nv\Simplex\Model\Entity\Metadata;
 use nv\Simplex\Model\Entity\Post;
 use nv\Simplex\Model\Entity\Tag;
 
@@ -37,6 +38,21 @@ class PostRepository extends EntityRepository
     public function save(Post $post)
     {
         $this->getEntityManager()->persist($post);
+        $this->getEntityManager()->flush();
+
+        return $post;
+    }
+
+    /**
+     * Update post and flush store
+     *
+     * @param Post $post Instance of post to update
+     *
+     * @return Post
+     */
+    public function update(Post $post)
+    {
+        $this->getEntityManager()->merge($post);
         $this->getEntityManager()->flush();
 
         return $post;

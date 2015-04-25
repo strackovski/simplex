@@ -30,7 +30,7 @@
                 Accessible at
             </div>
             <div class="dd">
-                <i class="fa fa-link"></i> {{ post.getSlug }}
+                http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/post/' ~ post.getSlug }}
             </div>
         </div>
     </div>
@@ -45,6 +45,68 @@
                 {% endif %}
 
                 {{ post.getCreatedAt|date('M d h:i') }}
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-entity">
+            <div class="dt">
+                Visibility status
+            </div>
+            <div class="dd">
+                {% if post.getPublished %}
+                    PUBLISHED
+                {% else %}
+                    NOT PUBLISHED
+                {% endif %}
+
+                {% if post.getExposed %}
+                    EXPOSED
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-entity">
+            <div class="dt">
+                Content label
+            </div>
+            <div class="dd">
+                {% if post.getContentLabel %}
+                    {{ post.getContentLabel }}
+                {% else %}
+                    NO LABEL
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-entity">
+            <div class="dt">
+                Tags
+            </div>
+            <div class="dd">
+                {% if post.getTags.count > 0 %}
+                    {% for tag in post.getTags %}
+                        {{ tag }}
+                    {% endfor %}
+                {% else %}
+                    NO TAGS
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-entity">
+            <div class="dt">
+                Pages
+            </div>
+            <div class="dd">
+                In {{ post.getPages.count }} pages (excluding dynamic)
             </div>
         </div>
     </div>

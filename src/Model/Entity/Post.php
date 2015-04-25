@@ -72,7 +72,7 @@ class Post extends TimestampableAbstract implements ObservableInterface
     protected $mediaItems;
 
     /**
-     * @OneToOne(targetEntity="Metadata", cascade={"persist"})
+     * @OneToOne(targetEntity="Metadata", cascade={"all"})
      * @JoinColumn(name="metadata_id", referencedColumnName="id")
      **/
     protected $metadata;
@@ -140,6 +140,16 @@ class Post extends TimestampableAbstract implements ObservableInterface
      * @JoinTable(name="posts_pages")
      **/
     private $pages;
+
+    /**
+     * @Column(name="label", type="string", nullable=true, unique=false)
+     */
+    private $contentLabel;
+
+    /**
+     * @Column(name="position_weight", type="integer", nullable=true)
+     */
+    private $positionWeight;
 
     /**
      * @param $slug
@@ -608,4 +618,38 @@ class Post extends TimestampableAbstract implements ObservableInterface
     {
         $this->pages = $pages;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getContentLabel()
+    {
+        return $this->contentLabel;
+    }
+
+    /**
+     * @param mixed $contentLabel
+     */
+    public function setContentLabel($contentLabel)
+    {
+        $this->contentLabel = $contentLabel;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPositionWeight()
+    {
+        return $this->positionWeight;
+    }
+
+    /**
+     * @param mixed $positionWeight
+     */
+    public function setPositionWeight($positionWeight)
+    {
+        $this->positionWeight = $positionWeight;
+    }
+
+
 }

@@ -37,7 +37,7 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\Security\Core\SecurityContext;
 
 /**
- * Class PostController
+ * Class User Controller
  *
  * Defines actions to perform on requests regarding Post objects.
  *
@@ -211,12 +211,6 @@ class UserController extends ActionControllerAbstract
                         $emailChanged = 1;
                     }
 
-                    /*
-                    if ($emailChanged === 1) {
-                        $this->manager->changeEmail($user, $email);
-                    }
-                    */
-
                     $this->users->save($user);
                     $message = 'The account for ' . $user->getUsername() . ' has been changed and must be reactivated.';
                     $this->session->getFlashBag()->add('success', $message);
@@ -279,15 +273,12 @@ class UserController extends ActionControllerAbstract
                 throw new \Exception("The user with email {$form->get('email')->getData()} does not exist.");
             }
 
-           // $um = new UserManager($user, $this->users, $this->url, $this->mailer);
-            // $um->resetPassword();
-
             $this->manager->resetPassword($user);
             $this->users->save($user);
 
             return $this->twig->render(
                 'admin/'.$this->settings->getAdminTheme().'/views/notification-public.html.twig',
-                array('message' => 'WE SENT YOU YOUR PASSWORD IN PLAIN TEXT! CHECK YOUR MAIL!')
+                array('message' => 'Password reset instructions sent to your email.')
             );
         }
 
@@ -331,12 +322,7 @@ class UserController extends ActionControllerAbstract
 
         if ($form->isValid()) {
             $pass = $form->get('password')->getData();
-            // $user->setEncodedPassword($app, $pass);
             $user->setEncodedPassword($this->manager->getEncoder(), $pass);
-
-
-            //$um = new UserManager($user, $this->users, $this->url, $this->mailer);
-            // $um->activateAccount();
             $this->manager->activateAccount($user);
             $this->users->save($user);
 
@@ -542,14 +528,7 @@ class UserController extends ActionControllerAbstract
             $files = $request->files;
             $form->bind($request);
             if ($form->isValid()) {
-                // $email = $form->get('email')->getData();
                 $user->setRoles($form->get('roles')->getData());
-
-                /*
-                if ($email !== $userEmail) {
-                    $this->manager->changeEmail($user, $email);
-                }
-                */
 
                 foreach ($files as $uploadedFile) {
                     if (array_key_exists('avatarFile', $uploadedFile)) {

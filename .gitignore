@@ -13,3 +13,4 @@ composer.lock
 var/cache/*
 var/logs/*
 web/.htaccess
+web/templates/site/blog-simple

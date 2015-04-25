@@ -1,11 +1,13 @@
 {% extends app.request.isXmlHttpRequest ? "admin/material/masters/layout-tabs-panel.html.twig" : "admin/material/views/settings.html.twig" %}
 
 {% block tabPaneHeader %}
-    <div class="controls-group">
+    <div class="controls-group controls-group-fixed">
         <div class="left-controls">
             <h3>Integration services</h3>
-            <a href="#google">GOOGLE</a>
-            <a href="#twitter">TWITTER</a>
+        </div>
+        <div class="right-controls">
+            <a class="form-btn pull-right section-link" href="#twitter"><i class="fa fa-twitter"></i> Twitter</a>
+            <a class="form-btn pull-right section-link" href="#google"><i class="fa fa-google"></i> Google</a>
         </div>
     </div>
 {% endblock %}

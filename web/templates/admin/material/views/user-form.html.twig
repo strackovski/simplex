@@ -10,6 +10,7 @@
                     <div class="header-title">
                         <span>
                             {% if user is defined %}
+                                {{ user.displayName }}
                             {% else %}
                                 New user
                             {% endif %}

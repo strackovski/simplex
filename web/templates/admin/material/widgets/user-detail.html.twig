@@ -45,7 +45,7 @@
                 Assigned roles
             </div>
             <div class="dd">
-                {{ user.getRoles|join(', ') }}
+                {{ user.getRoles|join(', ')|split('ROLE_')[1] }}
             </div>
         </div>
 

@@ -23,7 +23,7 @@
             </a>
 
             {% if users|length < 1 %}
-                <span class="label label-error">impossibru</span>
+                <span class="label label-error"></span>
             {% else %}
                 <div class="item-list user-list">
                     <div class="item-wrap item-header">
@@ -38,11 +38,9 @@
                         </div>
                         <div class="item">
                             <div>
-
                             </div>
                         </div>
                     </div>
-
                     {% for user in users %}
                         <div class="item-wrap">
                             <div class="item">
@@ -51,17 +49,25 @@
                                         <div class="user-image">
                                             <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ user.getAvatar }}.jpeg" alt="" height="60" />
                                         </div>
-                                        <div>{{ user.displayName|upper }}</div>
+                                        <div>
+                                            <a class="detail-btn" href="{{ app.url_generator.generate('admin/user/get', {user:user.getId}) }}">
+                                                {{ user.displayName }}
+                                            </a>
+                                        </div>
                                     {% else %}
                                         <div class="user-image">
                                             <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt="" height="60" />
                                         </div>
-                                        <div>{{ user.displayName|upper }}</div>
+                                        <div>
+                                            <a class="detail-btn" href="{{ app.url_generator.generate('admin/user/get', {user:user.getId}) }}">
+                                                {{ user.displayName }}
+                                            </a>
+                                        </div>
                                     {% endif %}
                                 </div>
                             </div>
                             <div class="item">
-                                <div>{{ user.getRoles|join(', ')|replace('_', ' ') }}</div>
+                                <div>{{ user.getRoles|join(', ')|split('ROLE_')[1] }}</div>
                             </div>
                             <div class="item">
                                 <div>{{ user.getCreatedAt|date('M d \'y h:i') }}</div>
@@ -75,59 +81,8 @@
                     {% endfor %}
                 </div>
             {% endif %}
-
         </div>
     </div>
-
     <div class="right-bar">
-        <div class="right-bar-header">
-            <div class="top-header">
-                <div class="right-aux-toolbar">
-                    <div class="right-aux-toolbar">
-                        <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fa fa-times"></i></a>
-                        <a href="#" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
-                        <a href="newpost.html" class="paper-btn edit-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="fa fa-pencil"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="bottom-header">
-                <h4>User Name</h4>
-            </div>
-        </div>
-
-        <div class="right-bar-content">
-            <div class="content-section">
-                <div class="section-entity">
-                    <div class="dt">
-                        Status
-                    </div>
-                    <div class="dd">
-                        Offline
-                    </div>
-                </div>
-            </div>
-            <div class="content-section">
-                <div class="section-title">
-                    Time frame
-                </div>
-                <div class="section-entity">
-                    <div class="dt">
-                        Created
-                    </div>
-                    <div class="dd">
-                        6. 9. 1984
-                    </div>
-                </div>
-                <div class="section-entity">
-                    <div class="dt">
-                        Modified
-                    </div>
-                    <div class="dd">
-                        26. 3. 1989
-                    </div>
-                </div>
-            </div>
-
-        </div>
     </div>
 {% endblock %}

@@ -1,0 +1,106 @@
+
+    <div class="pf-header clearfix">
+        <h3>Field: <span></span></h3>
+        <div class="fieldForm-right"></div>
+    </div>
+    <div class="addField-form new-field-form">
+        <div class="data-group">
+            <div class="form-group form-element">
+                {{ form_label(form.fields.vars.prototype.type) }}
+                {{ form_widget(form.fields.vars.prototype.type, { 'attr': {'class': 'trigger'}}) }}
+                {{ form_errors(form.fields.vars.prototype.type) }}
+            </div>
+        </div>
+
+        <div class="data-group">
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="form-group form-element">
+                        {{ form_row(form.fields.vars.prototype.name, { 'attr': {'class': 'trigger'}}) }}
+                    </div>
+                </div>
+
+                <div class="col-xs-6">
+                    <div class="form-group form-element">
+                        {{ form_row(form.fields.vars.prototype.placeholder) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="">
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group form-element">
+                            {{ form_row(form.fields.vars.prototype.options) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group form-element">
+                            {{ form_row(form.fields.vars.prototype.value) }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <div class="form-group form-element">
+                            {{ form_row(form.fields.vars.prototype.min) }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <div class="form-group form-element">
+                            {{ form_row(form.fields.vars.prototype.max) }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <div class="form-group form-element">
+                            {{ form_row(form.fields.vars.prototype.size) }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <div class="form-group form-element">
+                            {{ form_row(form.fields.vars.prototype.maxlength) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group field option">
+                            {{ form_row(form.fields.vars.prototype.autoFocus) }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <div class="form-group field option">
+                            {{ form_row(form.fields.vars.prototype.autoComplete) }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <div class="form-group field option">
+                            {{ form_row(form.fields.vars.prototype.checked) }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <div class="form-group field option">
+                            {{ form_row(form.fields.vars.prototype.disabled) }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <div class="form-group field option">
+                            {{ form_row(form.fields.vars.prototype.required) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+

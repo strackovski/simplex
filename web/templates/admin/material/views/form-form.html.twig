@@ -1,0 +1,209 @@
+{% extends "admin/material/masters/layout-admin.html.twig" %}
+
+{% form_theme form with ['bootstrap.html.twig', 'admin/material/masters/flat-form.html.twig'] %}
+
+{% block pageHeader %}
+    <header class="">
+        <div class="header-wrapper">
+            <div class="inner-header-wrapper">
+                <div class="top-header-wrapper">
+                    <div class="header-title">
+                        <span>
+                            {% if user_form is defined %}
+                            {% else %}
+                                New form
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block rightBlock %}
+    <nav class="">
+        <div class="right-toolbar">
+            <a href="{{ app.url_generator.generate('admin/forms') }}" class="paper-btn back-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Back"><i class="fa fa-times"></i></a>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <script>
+        var $collectionHolder;
+
+        // setup an "add a tag" link
+        // var $addTagLink = $('<a href="#" class="add_field_link">Add a field</a>');
+        var $addTagLink2 = $('<a href="#" class="add_field_link"><i class="fa fa-plus-circle"></i></a>');
+        var $newLinkLi = $('<div></div>').append($addTagLink2);
+
+        jQuery(document).ready(function() {
+
+            // Get the ul that holds the collection of tags
+            $collectionHolder = $('div.fields');
+
+            $collectionHolder.accordion({
+                header: ".pf-header",
+                collapsible: true,
+                icons: false,
+                heightStyle: 'content'
+            });
+
+            $(document.body).on('change', '.trigger', function() {
+                if ($(this).is('select')) {
+                    $(this).parent().parent().parent().prev().find('h3 span').append($(this).val());
+                } else if ($(this).is('input[type="text"]')) {
+                    $(this).parent().parent().parent().parent().parent().parent().prev().find('h3 span').append(' ' + $(this).val());
+                }
+
+
+            });
+
+            // add the "add a tag" anchor and li to the tags ul
+            $collectionHolder.append($newLinkLi);
+
+            // add a delete link to all of the existing tag form li elements
+            $collectionHolder.find('div').each(function() {
+                addFieldFormDeleteLink($(this));
+            });
+
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+            $addTagLink2.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+                // add a new tag form (see next code block)
+                addFieldForm($collectionHolder, $newLinkLi);
+            });
+        });
+
+        function addFieldForm($collectionHolder, $newLinkLi) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            var newForm = prototype.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+//            $collectionHolder.find('.fieldForm-right').html($addTagLink2.html());
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<div></div>').append(newForm);
+            $newFormLi.find('.fieldForm-right').html($addTagLink2);
+            $newLinkLi.before($newFormLi);
+            addFieldFormDeleteLink($newFormLi);
+            $collectionHolder.accordion('refresh');
+        }
+
+        function addFieldFormDeleteLink($tagFormLi) {
+            var $removeFormA = $('<a href="#"><i class="fa fa-minus-circle"></i></a>');
+            $tagFormLi.find('.fieldForm-right').append($removeFormA);
+
+            $removeFormA.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // remove the li for the tag form
+                $tagFormLi.remove();
+            });
+        }
+    </script>
+
+    {{ form_start(form) }}
+    <div class="grid-header">
+        <div class="grid-header-outer">
+            <div class="header-box">
+                <div class="form-group title form-element">
+                    {{ form_widget(form.title) }}
+                    {{ form_errors(form.title) }}
+                </div>
+            </div>
+            <div class="header-box">
+                <div class="post-addition">
+                    <ul class="page-tabs">
+                        <li class="active">
+                            <a href="#home" role="tab" data-toggle="tab">Page</a>
+                        </li>
+                        <li class="">
+                            <a href="#options" role="tab" data-toggle="tab">Fields</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="grid grid-post">
+        <div class="grid-outer">
+            <div class="tab-wrap form">
+                <div class="tab-content page-content">
+                    <div class="tab-pane active" id="home">
+                        <div class="row">
+                            <div class="data-group">
+                                <div class="form-group">
+                                    <div class="form-element">
+                                        {{ form_row(form.title) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="data-group">
+                                <div class="form-group">
+                                    <div class="form-element">
+                                        {{ form_row(form.attributes) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="data-group">
+                                <div class="form-group">
+                                    <div class="form-element">
+                                        {{ form_row(form.contentLabel) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="data-group">
+                                <div class="form-group">
+                                    <div class="form-element">
+                                        {{ form_row(form.published) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="options">
+                        {% if form.fields|length < 1 %}
+                            <div class="li-empty">
+                                <div>
+                                    <p class="ghost big">This page has no fields defined.</p>
+                                    <p class="ghost mw80">Click the "Add field" button below to add a query now.</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="fields" data-prototype="{% filter escape %}{% include 'admin/material/widgets/add-field-form.html.twig' %}{% endfilter %}">
+                            {% for field in form.fields %}
+
+                                {{ form_row(field) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group submit-controls page-submit-controls form-action">
+                    {{ form_widget(form.cancel) }}
+                    {{ form_widget(form.save) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}
+{% endblock %}

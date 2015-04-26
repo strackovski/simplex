@@ -1,0 +1,43 @@
+<div class="item-list post-list">
+    <div class="item-wrap item-fixed-header">
+        <div class="item text-center">
+            <div>ID</div>
+        </div>
+        <div class="item">
+            <div>Title</div>
+        </div>
+        <div class="item">
+            <div># of fields</div>
+        </div>
+        <div class="item">
+            <div>
+                Content Label
+            </div>
+        </div>
+        <div class="item">
+            <div></div>
+        </div>
+    </div>
+
+    {% for form in forms %}
+        <div class="item-wrap">
+            <div class="item text-center">
+                <div>{{ form.getId }}</div>
+            </div>
+            <div class="item">
+                <div>{{ form.getTitle }}</div>
+            </div>
+            <div class="item">
+                <div>{{ form.getFields.count }}</div>
+            </div>
+            <div class="item">
+                <div>{{ form.contentLabel }}</div>
+            </div>
+            <div class="item">
+                <a class="detail-btn" href="{{ app.url_generator.generate('admin/form/get', {form:form.getId}) }}">
+                    <i class="fa fa-ellipsis-v"></i>
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+</div>

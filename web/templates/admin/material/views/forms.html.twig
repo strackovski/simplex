@@ -1,0 +1,69 @@
+{% extends "admin/material/masters/layout-admin.html.twig" %}
+
+{% block pageHeader %}
+    <header class="">
+        <div class="header-wrapper">
+            <div class="inner-header-wrapper">
+                <div class="top-header-wrapper">
+                    <div class="header-title">
+                        <span>Content</span> <span class="page-title"><i class="fa fa-angle-right"></i>Forms</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block content %}
+    <div class="grid grid-clear">
+        <div class="grid-outer-full">
+            <a class="paper-btn float-btn tooltipped" data-toggle="tooltip" data-placement="top" title="New post" href="{{ app.url_generator.generate('admin/form/add') }}">
+                <i class="fa fa-plus"></i>
+            </a>
+            <div class="grid-content">
+
+                {% if forms|length < 1 %}
+                    <div class="empty-msg">
+                        <h1 class="ghost big">No forms added yet</h1>
+                        <div class="holder holder-post">
+                            <div class="p-main">
+                                <div class="p-header">
+                                    <div class="p-flag"></div>
+                                    <div class="p-title"></div>
+                                </div>
+                                <div class="p-content">
+                                    <ul class="p-insides">
+                                        <li class="img"></li>
+                                        <li class="line"></li>
+                                        <li class="line"></li>
+                                        <li class="line"></li>
+                                        <li class="line"></li>
+                                        <li class="line"></li>
+                                        <li class="line"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <p>
+                            <a class="form-btn new-post empty-add" href="{{ app.url_generator.generate('admin/form/add') }}">Add one now</a>
+                        </p>
+                    </div>
+                {% else %}
+                    {% include 'admin/material/widgets/form-list.html.twig' %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="right-bar">
+        <div class="right-bar-header">
+            <div class="top-header">
+                <div class="right-aux-toolbar">
+                </div>
+            </div>
+            <div class="bottom-header">
+                <h4>Form Title</h4>
+            </div>
+        </div>
+    </div>
+{% endblock %}

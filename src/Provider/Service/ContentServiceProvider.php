@@ -24,6 +24,7 @@ class ContentServiceProvider implements ServiceProviderInterface, ControllerProv
     {
         $app['content.controller'] = $app->share(function () use ($app) {
             return new ContentController(
+                $app['repository.form'],
                 $app['repository.post'],
                 $app['repository.media'],
                 $app['repository.page'],

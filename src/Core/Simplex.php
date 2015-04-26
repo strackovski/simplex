@@ -19,6 +19,7 @@ use Braincrafted\Bundle\BootstrapBundle\Twig\BootstrapLabelExtension;
 use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
+use nv\Simplex\Core\Form\FormBuilder;
 use nv\Simplex\Core\Media\ImageListener;
 use nv\Simplex\Core\Media\MediaListener;
 use nv\Simplex\Core\Post\PostListener;
@@ -134,6 +135,14 @@ class Simplex extends Application
                         (($numberOfUnits>1) ? $numberOfUnits : 'a')
                         .' '.$val.(($numberOfUnits>1) ? 's' : '').' ago';
                 }
+            }));
+
+            return $twig;
+        }));
+
+        $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
+            $twig->addFunction(new \Twig_SimpleFunction('myform', function ($form) use ($app) {
+                return $app['form.builder']->buildForm($form);
             }));
 
             return $twig;
@@ -279,6 +288,10 @@ class Simplex extends Application
             ));
         }
 
+        $this['form.builder'] = $this->share(function () {
+            return new FormBuilder();
+        });
+
         $this->register(new SimplexServiceProvider());
 
         $this['swiftmailer.options'] = $this['settings']->getMailConfig();
@@ -319,6 +332,9 @@ class Simplex extends Application
 
         $this->register($postProvider = new PostServiceProvider());
         $this->mount('/admin', $postProvider);
+
+        $this->register($formProvider = new \nv\Simplex\Provider\Service\FormServiceProvider());
+        $this->mount('/admin', $formProvider);
 
         $this->register($pageProvider = new PageServiceProvider());
         $this->mount('/admin', $pageProvider);

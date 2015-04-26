@@ -5,5 +5,7 @@
         {% include 'admin/material/widgets/page-detail.html.twig' with {page: item} %}
     {% elseif item.getType == 'image' or item.getType == 'video' %}
         {% include 'admin/material/widgets/media-detail.html.twig' with {item: item} %}
+    {% elseif item.getType == 'form' %}
+        {% include 'admin/material/widgets/form-detail.html.twig' with {user_form: item} %}
     {% endif %}
 {% endif %}

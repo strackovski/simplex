@@ -503,8 +503,6 @@ header.big-header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.14);
 }
 
-
-
 .grid-header .form-element input {
     border: none;
     height: 64px;
@@ -514,10 +512,13 @@ header.big-header {
     padding-left: 20px;
 }
 
-.grid-header-outer > div {
-    float: left;
+.grid-header-outer > div { float: left; }
 
+.grid-header-outer > div.user-box {
+    width: 50%;
+    text-align: center;
 }
+
 .header-box:first-child {
     width: 70%;
     float: left;
@@ -680,8 +681,8 @@ header.big-header {
 .side-nav {
    /* border-right: 1px solid rgba(0,0,0,0.14); */
     bottom: 0;
-    background: #fff;
-    color: #333;
+    background: #333;
+    color: #fff;
     display: block;
     left: 0;
     position: fixed;
@@ -724,6 +725,8 @@ header.big-header {
 }
 
 .side-nav.side-nav-active {
+    background: #fff;
+    color: #333;
     visibility: visible;
     -webkit-transform: translateX(0);
     -moz-transform: translateX(0);
@@ -740,14 +743,18 @@ header.big-header {
 
 .side-nav .logo {
     line-height: 30px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #424242;
     display: block;
     height: 64px;
     margin: auto;
     text-align: center;
     padding: 17px 24px 15px 18px;
     position: relative;
-    /*background: #2196F3; */
+    background: #262626;
+}
+
+.side-nav.side-nav-active .logo {
+    border-bottom: 1px solid #e0e0e0;
     background: #fff;
 }
 
@@ -776,7 +783,7 @@ header.big-header {
 
 .side-nav nav a {
     border-left: 2px solid transparent;
-    color: #333;
+    color: #fff;
     font-weight: 700;
     margin-top: 0;
     padding: 15px 0 15px 22px;
@@ -786,6 +793,11 @@ header.big-header {
     -ms-transition: border-left 0.15s ease;
     -o-transition: border-left 0.15s ease;
     transition: border-left 0.15s ease;
+}
+
+.side-nav.side-nav-active nav a {
+    color: #2196F3;
+    border-left: 2px solid #fff;
 }
 
 .side-nav nav a:hover {
@@ -798,31 +810,52 @@ header.big-header {
 
 .side-nav nav .submenu a {
     margin-left: 20px;
-    color: #666;
+    color: #fff;
     padding: 8px 0 8px 22px;
     font-weight: normal;
 }
 
+.side-nav.side-nav-active nav .submenu a {
+    color: #666;
+}
+
 .side-nav nav .submenu a:hover {
+    border-left: 2px solid #333;
+    color: #fff;
+}
+
+.side-nav.side-nav-active nav .submenu a:hover {
     border-left: 2px solid #fff;
     color: #333;
 }
 
 .side-nav nav .submenu a.active {
     color: #2196F3;
-    border-left: 2px solid #fff;
+    border-left: 2px solid #333;
     font-weight: bold;
 }
 
+.side-nav.side-nav-active nav .submenu a.active {
+    color: #2196F3;
+    border-left: 2px solid #fff;
+}
+
 .user-corner {
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid #424242;
     bottom: 0;
-    color: #212121;
+    color: #fff;
+    background: #262626;
     font-size: 13px;
     height: 96px;
     padding: 24px;
     position: absolute;
     width: 100%;
+}
+
+.side-nav-active .user-corner {
+    border-top: 1px solid #e0e0e0;
+    color: #212121;
+    background: none;
 }
 
 .avatar-wrap {
@@ -857,14 +890,10 @@ header.big-header {
     line-height: 24px;
 }
 
-.logout-btn {
-    color: #999;
-}
-
-.logout-btn:hover {
-    color: #666;
-}
-
+.logout-btn { color: #fff; }
+.logout-btn:hover { color: #2196F3; }
+.side-nav-active .logout-btn { color: #999; }
+.side-nav-active .logout-btn:hover { color: #666; }
 
 /*=============================
     PAGE MASK - Overlay when SIDE BAR is active
@@ -1141,7 +1170,6 @@ header.big-header {
 
 .section-entity .media-box > img{
     width: 25%;
-    width: 25%;
     display: block;
     float: left;
     padding: 2px;
@@ -1168,6 +1196,14 @@ header.big-header {
     line-height: normal;
     padding: 0 16px;
     margin: 20px 0;
+}
+
+.section-entity.small-entity .dt {
+    margin: 8px 0;
+}
+
+.section-entity.small-entity .dd {
+    margin: 8px 0;
 }
 
 .narrow-entity .dd,
@@ -2224,6 +2260,57 @@ ul.list-box > li {
 
 .li-empty {
 
+}
+
+/* ADD FIELD FORM */
+
+.proto-form {
+    border-bottom: 1px solid blue;
+}
+
+.addField-form .data-group .row {
+
+}
+
+.addField-form {
+    padding-top: 20px;
+    padding-right: 20px;
+
+}
+.addField-form .form-hidden {
+    display: none;
+}
+
+.pf-header h3 {
+    display: block;
+    float: left;
+    width: 80%;
+    line-height: 1.8em;
+}
+
+.pf-header .fieldForm-right {
+    font-size: 1.8em;
+    line-height: 1.2em;
+    text-align: right;
+    width: 20%;
+    float: right;
+
+}
+
+.fieldForm-right a {
+    margin: 0 5px;
+}
+
+.ui-accordion .pf-header.ui-accordion-header,
+.ui-accordion .pf-header.ui-accordion-header {
+    padding: .5em 0 .5em 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+
+.ui-accordion .addField-form.ui-accordion-content {
+    padding: 0;
 }
 
 /* CHIPS 2 */

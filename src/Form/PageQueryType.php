@@ -36,8 +36,12 @@ class PageQueryType extends AbstractType
     {
         $builder
             ->add('contentType', 'choice', array(
-                'choices' => array('post' => 'Post', 'image' => 'Image', 'video' => 'Video'),
-                'data' => 'post',
+                'choices' => array(
+                    'post' => 'Post',
+                    'form' => 'Form',
+                    'image' => 'Image',
+                    'video' => 'Video'
+                ),
                 'empty_value' => 'Select type of content to retrieve...',
             ))
             ->add('column', 'choice', array(

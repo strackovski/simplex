@@ -100,6 +100,10 @@ class QueryManager
                 break;
 
             case 'tags':
+                if ($contentType == 'nv\Simplex\Model\Entity\Form') {
+                    break;
+                }
+
                 $qb->select(array('u'))
                     ->from($contentType, 'u')
                     ->leftJoin('u.tags', 'x')

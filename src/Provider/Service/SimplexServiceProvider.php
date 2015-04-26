@@ -2,6 +2,7 @@
 
 namespace nv\Simplex\Provider\Service;
 
+use nv\Simplex\Model\Repository\FormRepository;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use nv\Simplex\Model\Repository\MediaRepository;
@@ -49,6 +50,13 @@ class SimplexServiceProvider implements ServiceProviderInterface
             return new UserRepository(
                 $app['orm.em'],
                 $app['orm.em']->getClassMetadata('nv\Simplex\Model\Entity\User')
+            );
+        });
+
+        $app['repository.form'] = $app->share(function ($app) {
+            return new FormRepository(
+                $app['orm.em'],
+                $app['orm.em']->getClassMetadata('nv\Simplex\Model\Entity\Form')
             );
         });
 

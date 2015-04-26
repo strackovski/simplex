@@ -14,6 +14,7 @@ namespace nv\Simplex\Controller\Admin;
 
 use nv\Simplex\Controller\ActionControllerAbstract;
 use nv\Simplex\Model\Entity\Settings;
+use nv\Simplex\Model\Repository\FormRepository;
 use nv\Simplex\Model\Repository\MediaRepository;
 use nv\Simplex\Model\Repository\PageRepository;
 use nv\Simplex\Model\Repository\PostRepository;
@@ -42,6 +43,9 @@ class ContentController extends ActionControllerAbstract
     /** @var PostRepository  */
     private $posts;
 
+    /** @var PostRepository  */
+    private $forms;
+
     /** @var MediaRepository  */
     private $media;
 
@@ -53,6 +57,7 @@ class ContentController extends ActionControllerAbstract
 
 
     public function __construct(
+        FormRepository $formRepository,
         PostRepository $postRepository,
         MediaRepository $mediaRepository,
         PageRepository $pageRepository,
@@ -66,6 +71,7 @@ class ContentController extends ActionControllerAbstract
         Logger $logger
     ) {
         parent::__construct($settings, $twig, $formFactory, $security, $session, $url, $logger);
+        $this->forms = $formRepository;
         $this->posts = $postRepository;
         $this->media = $mediaRepository;
         $this->pages = $pageRepository;
@@ -83,13 +89,11 @@ class ContentController extends ActionControllerAbstract
 
         $posts = $this->posts->findAll();
         $pages = $this->pages->findAll();
+        $forms = $this->forms->findAll();
         $media = $this->media->getLibraryMedia();
 
-        $data['content'] = array_merge($posts, $pages, $media);
-
+        $data['content'] = array_merge($posts, $pages, $media, $forms);
         $data['request'] = $request;
-
-
 
         return $this->twig->render(
             'admin/'.$this->settings->getAdminTheme().'/views/content-list.html.twig',
@@ -108,7 +112,7 @@ class ContentController extends ActionControllerAbstract
         $type = $request->get('type');
         $id = $request->get('id');
 
-        if (in_array($type, $array = array('post', 'image', 'video', 'page'))) {
+        if (in_array($type, $array = array('post', 'image', 'video', 'page', 'form'))) {
 
             if ($type === 'post') {
                 $item = $this->posts->findOneBy(array('id' => $id));
@@ -116,6 +120,8 @@ class ContentController extends ActionControllerAbstract
                 $item = $this->media->findOneBy(array('id' => $id));
             } elseif ($type === 'page') {
                 $item = $this->pages->findOneBy(array('id' => $id));
+            } elseif ($type === 'form') {
+                $item = $this->forms->findOneBy(array('id' => $id));
             }
 
             $data = array(

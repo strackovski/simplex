@@ -64,7 +64,7 @@
         <nav>
             <a class="{% if 'admin/dashboard' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/dashboard') }}">Dashboard</a>
 
-            {% if 'admin/content' in app.request.attributes.get('_route') or 'admin/posts' in app.request.attributes.get('_route') or 'admin/pages' in app.request.attributes.get('_route') or 'admin/media' in app.request.attributes.get('_route') %}
+            {% if 'admin/content' in app.request.attributes.get('_route') or 'admin/posts' in app.request.attributes.get('_route') or 'admin/pages' in app.request.attributes.get('_route') or 'admin/media' in app.request.attributes.get('_route') or 'admin/forms' in app.request.attributes.get('_route') %}
                 {% if 'admin/media' in app.request.attributes.get('_route') %}
                     {% if 'admin/media/settings' in app.request.attributes.get('_route') %}
                         <a class="submenu-open" href="#sub-content">Content</a>
@@ -81,6 +81,7 @@
             <div class="submenu hidden" id="sub-content">
                 <a class="{% if 'admin/content' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/content') }}">All</a>
                 <a class="{% if 'admin/posts' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/posts') }}">Posts</a>
+                <a class="{% if 'admin/forms' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/forms') }}">Forms</a>
                 <a class="{% if 'admin/media/settings' in app.request.attributes.get('_route') %}{% elseif 'admin/media' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/media') }}">Media</a>
                 {% if is_granted('ROLE_ADMIN') %}
                     <a class="{% if 'admin/pages' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/pages') }}">Pages</a>

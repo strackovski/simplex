@@ -56,6 +56,7 @@ class ThemeSettingsType extends AbstractType
                 'required' => false,
                 'expanded' => true,
                 'multiple' => false,
+                'attr' => array('type' => 'site'),
                 'choices' => $themes
             ))
             ->add('admin_theme', 'choice', array(
@@ -63,6 +64,7 @@ class ThemeSettingsType extends AbstractType
                 'required' => true,
                 'expanded' => true,
                 'multiple' => false,
+                'attr' => array('type' => 'admin'),
                 'choices' => $adminThemes
             ))
             ->add('save', 'submit', array(

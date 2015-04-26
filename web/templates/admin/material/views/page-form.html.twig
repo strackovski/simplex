@@ -48,6 +48,9 @@
                         <li class="">
                             <a href="#data" role="tab" data-toggle="tab">Data</a>
                         </li>
+                        <li class="">
+                            <a href="#options" role="tab" data-toggle="tab">Options</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -102,6 +105,16 @@
 
                         <div class="row">
                             <div class="data-group">
+                                <div class="field option">
+                                    {{ form_row(form.in_menu) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="options">
+                        <div class="row">
+                            <div class="data-group">
                                 <div class="form-group">
                                     <div class="form-element">
                                         {{ form_label(form.description) }}
@@ -152,13 +165,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="data-group">
-                                <div class="field option">
-                                    {{ form_row(form.in_menu) }}
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="tab-pane" id="data">
                         {% if form.queries|length < 1 %}
@@ -169,7 +175,7 @@
                                 </div>
                             </div>
                         {% endif %}
-                        <ul class="queries" data-prototype="{% filter escape %}{% include 'admin/material/widgets/add-query-form.html.twig' %}{% endfilter %}">
+                            <ul class="queries" data-prototype="{% filter escape %}{% include 'admin/material/widgets/add-query-form.html.twig' %}{% endfilter %}">
                             {% for query in form.queries %}
                                 <li>{% include 'admin/material/widgets/edit-query-form.html.twig' with {form: query.vars.form} %}</li>
                             {% endfor %}

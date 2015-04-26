@@ -94,7 +94,7 @@ class PageController extends ActionControllerAbstract
                 $content[$query->getId()] = $query->getManager()->buildQuery($app['orm.em'])->getArrayResult();
             } catch (QueryException $e) {
                 $this->logger->addError(
-                    'Failed building query in Admin\\PageController:buildQueryAction: ' . $e->getMessage()
+                    'Failed building query in Admin\\PageController:runQueryAction: ' . $e->getMessage()
                 );
             }
         }

@@ -13,4 +13,6 @@ composer.lock
 var/cache/*
 var/logs/*
 web/.htaccess
-web/templates/site/blog-simple
+web/templates/site/*
+!web/templates/site/default
+phpunit.xml

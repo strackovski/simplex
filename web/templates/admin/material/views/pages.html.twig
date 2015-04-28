@@ -4,9 +4,20 @@
     <header class="">
         <div class="header-wrapper">
             <div class="inner-header-wrapper">
+                <div class="images-dropdown">
+                    <ul>
+                        <li class="active"><a href="#">Pages</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/posts') }}">Posts</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/media') }}">Media</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/forms') }}">Forms</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/content') }}">All</a></li>
+                    </ul>
+                </div>
                 <div class="top-header-wrapper">
                     <div class="header-title">
-                        <span>Content</span> <span class="page-title"><i class="fa fa-angle-right"></i>Pages</span>
+                        <span>Content</span>
+                        <span class="page-title"><i class="fa fa-angle-right"></i></span>
+                        <span class="images-filter">Pages <i class="fa fa-angle-down"></i></span>
                     </div>
                 </div>
             </div>
@@ -21,7 +32,7 @@
                 <i class="fa fa-plus"></i>
             </a>
             <div class="grid-content">
-                <div class="item-list page-list">
+                <div class="item-list list-ml item-list-7 page-list">
                     {% if pages|length < 1 %}
                         <div class="empty-msg">
                             <h1 class="ghost big">No pages added yet</h1>
@@ -55,10 +66,16 @@
                                     <div>Title</div>
                                 </div>
                                 <div class="item">
-                                    <div>URL</div>
+                                    <div>Keywords</div>
                                 </div>
-                                <div class="item">
-                                    <div>Last Modified</div>
+                                <div class="item item-s">
+                                    <div><i class="fa fa-ticket"></i></div>
+                                </div>
+                                <div class="item item-s">
+                                    <div><i class="fa fa-columns"></i></div>
+                                </div>
+                                <div class="item item-s">
+                                    <div><i class="fa fa-database"></i></div>
                                 </div>
                                 <div class="item"></div>
                             </div>
@@ -79,18 +96,38 @@
                                         {% endif %}
                                         </div>
                                     </div>
-                                    <div class="item">
+                                    <div class="item ml">
                                         <a class="detail-btn" href="{{ app.url_generator.generate('admin/page/get', {page:page.getId}) }}">{{ page.getTitle }}</a>
-                                    </div>
-                                    <div class="item">
                                         {% if page.getSlug|length < 1 %}
-                                            <div><a target="_blank" href="http://{{ app.request.getHost ~ app.request.getBaseURL()}}">http://{{ app.request.getHost ~ app.request.getBaseURL()}}</a></div>
+                                            <div class="small"><a target="_blank" href="http://{{ app.request.getHost ~ app.request.getBaseURL()}}">http://{{ app.request.getHost ~ app.request.getBaseURL()}}</a></div>
                                         {% else %}
-                                            <div><a target="_blank" href="http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/' ~ page.getSlug }}">http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/' ~ page.getSlug }}</a></div>
+                                            <div class="small"><a target="_blank" href="http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/' ~ page.getSlug }}">http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/' ~ page.getSlug }}</a></div>
                                         {% endif %}
+                                        <div class="small"><p>{{ page.getCreatedAt|date }} {% if page.getAuthor %} by {{ page.getAuthor }}{% endif %}</p></div>
                                     </div>
                                     <div class="item">
-                                        <div>{{ page.getCreatedAt|date }}</div>
+                                        <div>
+                                            {% if page.getKeywords %}
+                                                {{ page.getKeywords }}
+                                            {% else %}
+                                                <span class="empty">This page has no keywords</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="item item-s">
+                                        <div>
+                                            {{ page.getContentLabel }}
+                                        </div>
+                                    </div>
+                                    <div class="item item-s">
+                                        <div>
+                                            {{ page.getView }}
+                                        </div>
+                                    </div>
+                                    <div class="item item-s">
+                                        <div>
+                                            {{ page.getQueries.count }}
+                                        </div>
                                     </div>
                                     <div class="item">
                                         <a class="detail-btn" href="{{ app.url_generator.generate('admin/page/get', {page:page.getId}) }}">

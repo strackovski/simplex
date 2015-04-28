@@ -4,9 +4,20 @@
     <header class="">
         <div class="header-wrapper">
             <div class="inner-header-wrapper">
+                <div class="images-dropdown">
+                    <ul>
+                        <li class="active"><a href="#">Forms</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/posts') }}">Posts</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/media') }}">Media</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/pages') }}">Pages</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/content') }}">All</a></li>
+                    </ul>
+                </div>
                 <div class="top-header-wrapper">
                     <div class="header-title">
-                        <span>Content</span> <span class="page-title"><i class="fa fa-angle-right"></i>Forms</span>
+                        <span>Content</span>
+                        <span class="page-title"><i class="fa fa-angle-right"></i></span>
+                        <span class="images-filter">Forms <i class="fa fa-angle-down"></i></span>
                     </div>
                 </div>
             </div>
@@ -21,7 +32,6 @@
                 <i class="fa fa-plus"></i>
             </a>
             <div class="grid-content">
-
                 {% if forms|length < 1 %}
                     <div class="empty-msg">
                         <h1 class="ghost big">No forms added yet</h1>

@@ -220,6 +220,12 @@
     margin-bottom: 20px;
 }
 
+.field.option.row {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #dfdfdf;
+}
+
 .option .control-label {
     font-size: 13px;
     color: #666;
@@ -251,7 +257,7 @@ input, textarea {
 }
 
 .form-group .checkbox label {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
 }
 .forgot.form-group .checkbox label {
@@ -441,7 +447,7 @@ input, textarea {
 
 .controls-group .form-btn {
     display: block;
-    color: #323232;
+    color: #2196F3;
 }
 
 .controls-group .form-btn i.fa{
@@ -449,7 +455,7 @@ input, textarea {
 }
 
 .form-btn:hover, .form-action .btn:hover, .post-submit-controls .btn:hover {
-    border: 1px solid rgba(0,0,0,0.14);
+    border: 1px solid #2196F3;
 }
 
 .form-btns, .post-submit-controls {
@@ -519,4 +525,8 @@ input, textarea {
 
 .login-wrap .btn-save {
     margin: 0;
+}
+
+.select-hidden, .checkbox-hidden {
+    display: none;
 }

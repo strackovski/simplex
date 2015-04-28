@@ -1,18 +1,19 @@
-<div class="item-list post-list">
+<div class="item-list item-list-f form-list">
     <div class="item-wrap item-fixed-header">
         <div class="item text-center">
-            <div>ID</div>
+            <div></div>
         </div>
         <div class="item">
             <div>Title</div>
         </div>
         <div class="item">
-            <div># of fields</div>
+            <div>Content Label</div>
         </div>
-        <div class="item">
-            <div>
-                Content Label
-            </div>
+        <div class="item item-s">
+            <div><i class="fa fa-file"></i></div>
+        </div>
+        <div class="item item-s">
+            <div><i class="fa fa-tasks"></i></div>
         </div>
         <div class="item">
             <div></div>
@@ -21,18 +22,32 @@
 
     {% for form in forms %}
         <div class="item-wrap">
-            <div class="item text-center">
-                <div>{{ form.getId }}</div>
+            <div class="item status-item text-center post-item">
+                <div class="status-div">
+                    {% if form.getPublished %}
+                        <div class="status-icon"><i class="fa fa-eye active tooltipped" data-toggle="tooltip" data-placement="bottom" title="Published"></i></div>
+                    {% else %}
+                        <div class="status-icon"><i class="fa fa-eye-slash tooltipped" data-toggle="tooltip" data-placement="bottom" title="Not published"></i></div>
+                    {% endif %}
+                </div>
             </div>
             <div class="item">
-                <div>{{ form.getTitle }}</div>
+                <div>
+                    <a class="detail-btn" href="{{ app.url_generator.generate('admin/form/get', {form:form.getId}) }}">
+                        {{ form.getTitle }}
+                    </a>
+                </div>
             </div>
             <div class="item">
+                <div>{{ form.getContentLabel }}</div>
+            </div>
+            <div class="item item-s">
+                <div>{{ form.getPostCount }}</div>
+            </div>
+            <div class="item item-s">
                 <div>{{ form.getFields.count }}</div>
             </div>
-            <div class="item">
-                <div>{{ form.contentLabel }}</div>
-            </div>
+
             <div class="item">
                 <a class="detail-btn" href="{{ app.url_generator.generate('admin/form/get', {form:form.getId}) }}">
                     <i class="fa fa-ellipsis-v"></i>

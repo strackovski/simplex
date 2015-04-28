@@ -76,7 +76,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="data-group">
+                            <div class="col-xs-6">
                                 <div class="form-group">
                                     <div class="form-element">
                                         {{ form_label(form.master) }}
@@ -87,10 +87,8 @@
                                     {{ form_errors(form.master) }}
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="data-group">
+                            <div class="col-xs-6">
                                 <div class="form-group">
                                     <div class="form-element">
                                         {{ form_label(form.view) }}
@@ -104,7 +102,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="data-group">
+                            <div class="col-xs-12">
                                 <div class="field option">
                                     {{ form_row(form.in_menu) }}
                                 </div>
@@ -114,7 +112,7 @@
 
                     <div class="tab-pane" id="options">
                         <div class="row">
-                            <div class="data-group">
+                            <div class="col-xs-12">
                                 <div class="form-group">
                                     <div class="form-element">
                                         {{ form_label(form.description) }}
@@ -127,7 +125,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="data-group">
+                            <div class="col-xs-6">
                                 <div class="form-group">
                                     <div class="form-element">
                                         {{ form_label(form.keywords) }}
@@ -138,10 +136,8 @@
                                     {{ form_errors(form.keywords) }}
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="data-group">
+                            <div class="col-xs-6">
                                 <div class="form-group">
                                     <div class="form-group form-element">
                                         {{ form_label(form.contentLabel) }}
@@ -177,7 +173,7 @@
                         {% endif %}
                             <ul class="queries" data-prototype="{% filter escape %}{% include 'admin/material/widgets/add-query-form.html.twig' %}{% endfilter %}">
                             {% for query in form.queries %}
-                                <li>{% include 'admin/material/widgets/edit-query-form.html.twig' with {form: query.vars.form} %}</li>
+                                <li class="clearfix query-form">{% include 'admin/material/widgets/edit-query-form.html.twig' with {form: query.vars.form} %}</li>
                             {% endfor %}
                         </ul>
                     </div>

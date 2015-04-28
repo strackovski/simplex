@@ -9,227 +9,191 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build/styles.css"/>
     <script type="text/javascript" src="{{ app.request.basepath }}/assets/build/scripts.js"></script>
-
 </head>
 
 <body class="initial-pad" data-base="{{ app.request.getHost ~ app.request.baseUrl }}" data-env="{{ app.debug }}">
-{% block pageHeader %}
-    <header class="">
-        <div class="header-wrapper">
-            <div class="inner-header-wrapper">
-                <div class="top-header-wrapper">
-                    <div class="header-title">
-                        <span>New Page</span>
+    {% block pageHeader %}
+        <header class="">
+            <div class="header-wrapper">
+                <div class="inner-header-wrapper">
+                    <div class="top-header-wrapper">
+                        <div class="header-title">
+                            <span>New Page</span>
+                        </div>
                     </div>
-                </div>
-                <div class="bottom-header-wrapper">
-                    <div class="big-tabs tabs">
-                        <ul>
-                            <li class="active">
-                                <a class="active" href="#page" role="tab" data-toggle="tab">Page</a>
-                            </li>
-                            <li>
-                                <a href="#data" role="tab" data-toggle="tab">Data</a>
-                            </li>
-                        </ul>
+                    <div class="bottom-header-wrapper">
+                        <div class="big-tabs tabs">
+                            <ul>
+                                <li class="active">
+                                    <a class="active" href="#page" role="tab" data-toggle="tab">Page</a>
+                                </li>
+                                <li>
+                                    <a href="#data" role="tab" data-toggle="tab">Data</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
-{% endblock %}
+        </header>
+    {% endblock %}
 
-<nav class="page-nav">
-    <div class="paper-btn nav-btn">
-        <i class="fa fa-bars"></i>
-    </div>
-</nav>
+    <nav class="page-nav"><div class="paper-btn nav-btn"><i class="fa fa-bars"></i></div></nav>
+    {% block rightBlock %}
+        <nav class=""><div class="right-toolbar"></div></nav>
+    {% endblock %}
 
-{% block rightBlock %}
-<nav class="">
-    <div class="right-toolbar">
+    <div class="side-nav">
+        <div class="side-nav-wrapper">
+            <span class="logo">
+                <a href="#">
+                    <img src="{{ app.request.basePath ~ '/assets/images/tetra_gray.png' }}" alt="Simplex Logo"/>
+                </a>
+            </span>
 
-    </div>
-</nav>
-{% endblock %}
-
-<div class="side-nav">
-    <div class="side-nav-wrapper">
-        <span class="logo">
-            <a href="#">
-                <img src="{{ app.request.basePath ~ '/assets/images/tetra_gray.png' }}" alt="Simplex Logo"/>
-            </a>
-        </span>
-
-        <nav>
-            <a class="{% if 'admin/dashboard' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/dashboard') }}">Dashboard</a>
-
-            {% if 'admin/content' in app.request.attributes.get('_route') or 'admin/posts' in app.request.attributes.get('_route') or 'admin/pages' in app.request.attributes.get('_route') or 'admin/media' in app.request.attributes.get('_route') or 'admin/forms' in app.request.attributes.get('_route') %}
-                {% if 'admin/media' in app.request.attributes.get('_route') %}
-                    {% if 'admin/media/settings' in app.request.attributes.get('_route') %}
-                        <a class="submenu-open" href="#sub-content">Content</a>
+            <nav>
+                <a class="{% if 'admin/dashboard' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/dashboard') }}">Dashboard</a>
+                {% if 'admin/content' in app.request.attributes.get('_route') or 'admin/posts' in app.request.attributes.get('_route') or 'admin/pages' in app.request.attributes.get('_route') or 'admin/media' in app.request.attributes.get('_route') or 'admin/forms' in app.request.attributes.get('_route') %}
+                    {% if 'admin/media' in app.request.attributes.get('_route') %}
+                        {% if 'admin/media/settings' in app.request.attributes.get('_route') %}
+                            <a class="submenu-open" href="#sub-content">Content</a>
+                        {% else %}
+                            <a class="submenu-open active" href="#sub-content">Content</a>
+                        {% endif %}
                     {% else %}
                         <a class="submenu-open active" href="#sub-content">Content</a>
                     {% endif %}
                 {% else %}
-                    <a class="submenu-open active" href="#sub-content">Content</a>
+                    <a class="submenu-open" href="#sub-content">Content</a>
                 {% endif %}
-            {% else %}
-                <a class="submenu-open" href="#sub-content">Content</a>
-            {% endif %}
 
-            <div class="submenu hidden" id="sub-content">
-                <a class="{% if 'admin/content' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/content') }}">All</a>
-                <a class="{% if 'admin/posts' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/posts') }}">Posts</a>
-                <a class="{% if 'admin/forms' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/forms') }}">Forms</a>
-                <a class="{% if 'admin/media/settings' in app.request.attributes.get('_route') %}{% elseif 'admin/media' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/media') }}">Media</a>
-                {% if is_granted('ROLE_ADMIN') %}
-                    <a class="{% if 'admin/pages' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/pages') }}">Pages</a>
-                {% endif %}
-            </div>
-
-            {% if is_granted('ROLE_ADMIN') %}
-                <a class="submenu-open {% if 'settings' in app.request.attributes.get('_route') %}active{% endif %}" href="#sub-settings">Settings</a>
-
-                <div class="submenu hidden" id="sub-settings">
-                    <a class="{% if 'settings/' in app.request.attributes.get('_route') %}{% elseif 'settings' in app.request.attributes.get('_route') %}{% if 'media/settings' in app.request.attributes.get('_route') %}{% else %}active{% endif %}{% endif %}" href="{{ app.url_generator.generate('admin/settings') }}">General</a>
-                    <a class="{% if 'media/settings' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/media/settings') }}">Media</a>
-                    <a class="{% if 'settings/themes' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/themes') }}">Themes</a>
-                    <a class="{% if 'settings/mail' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/mail') }}">Mailing</a>
-                    <a class="{% if 'settings/api' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/api') }}">Integration</a>
-                </div>
-
-                <a class="{% if 'admin/users' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/users') }}">Users</a>
-            {% endif %}
-        </nav>
-
-        <div class="user-corner">
-            <div class="corner-item">
-                <div class="avatar-wrap">
-                    {% if app.security.token and app.security.token.user.getAvatar %}
-                        <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ app.security.token.user.getAvatar }}.jpeg" alt="User avatar" />
-                    {% else %}
-                        <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt="User avatar" />
+                <div class="submenu hidden" id="sub-content">
+                    <a class="{% if 'admin/content' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/content') }}">All</a>
+                    <a class="{% if 'admin/posts' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/posts') }}">Posts</a>
+                    <a class="{% if 'admin/forms' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/forms') }}">Forms</a>
+                    <a class="{% if 'admin/media/settings' in app.request.attributes.get('_route') %}{% elseif 'admin/media' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/media') }}">Media</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="{% if 'admin/pages' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/pages') }}">Pages</a>
                     {% endif %}
                 </div>
-            </div>
-            <div class="corner-item">
-                <b><a href="{{ app.url_generator.generate('admin/user/profile') }}">{{ app.security.token ? app.security.token.user.displayName : null }} <i class="fa fa-angle-right"></i></a></b>
-                <a class="logout-btn" href="{{ path('admin_logout') }}">Logout</a>
-            </div>
 
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="submenu-open {% if 'settings' in app.request.attributes.get('_route') %}active{% endif %}" href="#sub-settings">Settings</a>
+                    <div class="submenu hidden" id="sub-settings">
+                        <a class="{% if 'settings/' in app.request.attributes.get('_route') %}{% elseif 'settings' in app.request.attributes.get('_route') %}{% if 'media/settings' in app.request.attributes.get('_route') %}{% else %}active{% endif %}{% endif %}" href="{{ app.url_generator.generate('admin/settings') }}">General</a>
+                        <a class="{% if 'media/settings' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/media/settings') }}">Media</a>
+                        <a class="{% if 'settings/themes' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/themes') }}">Themes</a>
+                        <a class="{% if 'settings/mail' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/mail') }}">Mailing</a>
+                        <a class="{% if 'settings/api' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/api') }}">Integration</a>
+                    </div>
+                    <a class="{% if 'admin/users' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/users') }}">Users</a>
+                {% endif %}
+            </nav>
 
+            <div class="user-corner">
+                <div class="corner-item">
+                    <div class="avatar-wrap">
+                        {% if app.security.token and app.security.token.user.getAvatar %}
+                            <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ app.security.token.user.getAvatar }}.jpeg" alt="User avatar" />
+                        {% else %}
+                            <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt="User avatar" />
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="corner-item">
+                    <b><a href="{{ app.url_generator.generate('admin/user/profile') }}">{{ app.security.token ? app.security.token.user.displayName : null }} <i class="fa fa-angle-right"></i></a></b>
+                    <a class="logout-btn" href="{{ path('admin_logout') }}">Logout</a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-{% block content %}
-{% endblock %}
+    {% block content %}
+    {% endblock %}
 
-<div class="modal media-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-left">
+    <div class="modal media-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-left">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4 title">
+                    <div class="paper-btn modal-prev"><i class="fa fa-arrow-left"></i></div>
+                    <div class="paper-btn modal-next"><i class="fa fa-arrow-right"></i></div>
+                </div>
+                <div class="col-xs-4"><a href="#" class="popover-link" data-toggle="popover" title="Share this" data-content="Share links..."><i class="fa fa-share"></i></a></div>
+            </div>
+        </div>
+
+        <div class="modal-right-bar">
+            <div class="right-bar-header">
+                <div class="top-header">
+                    <div class="right-aux-toolbar"></div>
+                </div>
+                <div class="bottom-header"><h4>Post Title</h4></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade upload-modal">
         <div class="modal-dialog">
             <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Upload</h4>
+                </div>
                 <div class="modal-body">
+                    <div class="progress hidden">
+                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 4%">
+                        </div>
+                    </div>
+                    <div class="dropzone dropzone-clickable">
+
+                        <div class="dz-message">
+                            <i class="fa fa-upload fa-3x"></i>
+                            <p>Drag items here or click to open the file browser.</p>
+                        </div>
+                    </div>
 
                 </div>
+                <div class="modal-footer">
+                    <div class="text-right">
+                        <button type="button" class="btn btn-default form-btn" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <div class="col-xs-4"></div>
-            <div class="col-xs-4 title">
-                <div class="paper-btn modal-prev"><i class="fa fa-arrow-left"></i></div>
-                <div class="paper-btn modal-next"><i class="fa fa-arrow-right"></i></div>
-            </div>
-            <div class="col-xs-4"><a href="#" class="popover-link" data-toggle="popover" title="Share this" data-content="Share links..."><i class="fa fa-share"></i></a></div>
         </div>
     </div>
 
-    <div class="modal-right-bar">
-        <div class="right-bar-header">
-            <div class="top-header">
-                <div class="right-aux-toolbar">
+    <div class="modal confirm-modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Confirm action</h4>
                 </div>
-            </div>
-            <div class="bottom-header">
-                <h4>Post Title</h4>
+                <div class="modal-body">
+                    <p>Are you sure you want to remove the selected items?</p>
+                    <p>The items you delete cannot be restored.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-confirm btn-primary form-btn">Remove</button>
+                    <button type="button" class="btn btn-default form-btn" data-dismiss="modal">Cancel</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade upload-modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">Upload</h4>
-            </div>
-            <div class="modal-body">
-                <div class="progress hidden">
-                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 4%">
-                    </div>
-                </div>
-                <div class="dropzone dropzone-clickable">
-
-                    <div class="dz-message">
-                        <i class="fa fa-upload fa-3x"></i>
-                        <p>
-                            Drag items here or click to open the file browser.
-                        </p>
-                    </div>
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <div class="text-right">
-                    <button type="button" class="btn btn-default form-btn" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<div class="modal confirm-modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title">Confirm action</h4>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to remove the selected items?</p>
-                <p>The items you delete cannot be restored.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-confirm btn-primary form-btn">Remove</button>
-                <button type="button" class="btn btn-default form-btn" data-dismiss="modal">Cancel</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<div class="modal fade help-modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-           5
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<div class="page-mask"></div>
-
-<div class="page-loader">
-    <p>
-        <i class="fa fa-spinner fa-spin fa-2x"></i>
-    </p>
-</div>
-
-<div class="right-bar-loader">
-    <p>
-        <i class="fa fa-spinner fa-spin fa-2x"></i>
-    </p>
-</div>
-
+    <div class="modal fade help-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">5</div>
+        </div>
+    </div>
+    <div class="page-mask"></div>
+    <div class="page-loader"><p><i class="fa fa-spinner fa-spin fa-2x"></i></p></div>
+    <div class="right-bar-loader"><p><i class="fa fa-spinner fa-spin fa-2x"></i></p></div>
 </body>
 </html>

@@ -6,17 +6,12 @@
             <a href="{{ app.url_generator.generate('admin/page/edit', {page:page.getId}) }}" class="paper-btn edit-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="fa fa-pencil"></i></a>
         </div>
     </div>
-
-    <div class="bottom-header">
-        <h4>{{ page.getTitle }}</h4>
-    </div>
+    <div class="bottom-header"><h4>{{ page.getTitle }}</h4></div>
 </div>
 
 <div class="right-bar-content">
     <div class="content-section">
-        <div class="section-title">
-            Page Queries
-        </div>
+        <div class="section-title">Page Queries</div>
 
         <div class="section-entity">
             {% if page.getQueries.count > 0 %}
@@ -35,26 +30,16 @@
         </div>
 
         <div class="section-entity narrow-entity">
-            <div class="dt">
-                Accessible at
-            </div>
-            <div class="dd">
-                http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/' ~ page.getSlug }}
-            </div>
+            <div class="dt">Accessible at</div>
+            <div class="dd">http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/' ~ page.getSlug }}</div>
         </div>
     </div>
 
     <div class="content-section">
         <div class="section-entity">
-            <div class="dt">
-                Content label
-            </div>
+            <div class="dt">Content label</div>
             <div class="dd">
-                {% if page.getContentLabel %}
-                    {{ page.getContentLabel }}
-                {% else %}
-                    NO LABEL
-                {% endif %}
+                {% if page.getContentLabel %}{{ page.getContentLabel }}{% else %}NO LABEL{% endif %}
             </div>
         </div>
     </div>

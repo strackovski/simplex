@@ -25,52 +25,65 @@
             {% if users|length < 1 %}
                 <span class="label label-error"></span>
             {% else %}
-                <div class="item-list user-list">
+                <div class="item-list item-list-8 user-list">
                     <div class="item-wrap item-header">
-                        <div class="item">
-                            <div>User</div>
+                        <div class="item text-center">
                         </div>
                         <div class="item">
-                            <div>Role</div>
+                            <div>Name</div>
                         </div>
                         <div class="item">
                             <div>Joined</div>
                         </div>
+                        <div class="item item-s">
+                            <div>Role</div>
+                        </div>
+                        <div class="item item-s">
+                            <div>Status</div>
+                        </div>
+                        <div class="item item-s">
+                            <div>PA</div>
+                        </div>
+                        <div class="item item-s">
+                            <div>PE</div>
+                        </div>
                         <div class="item">
-                            <div>
-                            </div>
                         </div>
                     </div>
                     {% for user in users %}
                         <div class="item-wrap">
-                            <div class="item">
-                                <div class="user-name">
+                            <div class="item status-item text-center">
+                                <div class="status-div">
                                     {% if user.getAvatar %}
                                         <div class="user-image">
                                             <img src="{{ app.request.basepath ~ '/uploads/crops/' ~ user.getAvatar }}.jpeg" alt="" height="60" />
-                                        </div>
-                                        <div>
-                                            <a class="detail-btn" href="{{ app.url_generator.generate('admin/user/get', {user:user.getId}) }}">
-                                                {{ user.displayName }}
-                                            </a>
                                         </div>
                                     {% else %}
                                         <div class="user-image">
                                             <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt="" height="60" />
                                         </div>
-                                        <div>
-                                            <a class="detail-btn" href="{{ app.url_generator.generate('admin/user/get', {user:user.getId}) }}">
-                                                {{ user.displayName }}
-                                            </a>
-                                        </div>
                                     {% endif %}
                                 </div>
                             </div>
                             <div class="item">
-                                <div>{{ user.getRoles|join(', ')|split('ROLE_')[1] }}</div>
+                                <a class="detail-btn" href="{{ app.url_generator.generate('admin/user/get', {user:user.getId}) }}">
+                                    {{ user.displayName }}
+                                </a>
                             </div>
                             <div class="item">
                                 <div>{{ user.getCreatedAt|date('M d \'y h:i') }}</div>
+                            </div>
+                            <div class="item item-s">
+                                <div>{{ user.getRoles|join(', ')|split('ROLE_')[1]|lower|capitalize }}</div>
+                            </div>
+                            <div class="item item-s">
+                                <div>{% if user.getIsActive %} Active {% else %} Inactive {% endif %}</div>
+                            </div>
+                            <div class="item item-s">
+                                <div>{{ user.getPostsAuthored.count }}</div>
+                            </div>
+                            <div class="item item-s">
+                                <div>{{ user.getPostsEdited.count }}</div>
                             </div>
                             <div class="item">
                                 <a class="detail-btn" href="{{ app.url_generator.generate('admin/user/get', {user:user.getId}) }}">

@@ -51,11 +51,19 @@
             });
 
             $(document.body).on('change', '.trigger', function() {
-                if ($(this).is('select')) {
+                if ($(this).val() == 'select') {
+                    $(this).parent().parent().parent().find('.fs-shown').css('display', 'none');
+                    $(this).parent().parent().parent().find('.select-hidden').css('display', 'block').toggleClass('fs-shown');
                     $(this).parent().parent().parent().prev().find('h3 span').append($(this).val());
-                } else if ($(this).is('input[type="text"]')) {
+                } else if ($(this).val() == 'text') {
                     $(this).parent().parent().parent().parent().parent().parent().prev().find('h3 span').append(' ' + $(this).val());
+                } else if ($(this).val() == 'checkbox' || $(this).val() == 'radio') {
+                    $(this).parent().parent().parent().find('.fs-shown').css('display', 'none');
+                    $(this).parent().parent().parent().find('.checkbox-hidden').css('display', 'block').toggleClass('fs-shown');
+                } else {
+                    $(this).parent().parent().parent().find('.fs-shown').css('display', 'none');
                 }
+
 
 
             });
@@ -132,7 +140,7 @@
                 <div class="post-addition">
                     <ul class="page-tabs">
                         <li class="active">
-                            <a href="#home" role="tab" data-toggle="tab">Page</a>
+                            <a href="#home" role="tab" data-toggle="tab">Form</a>
                         </li>
                         <li class="">
                             <a href="#options" role="tab" data-toggle="tab">Fields</a>
@@ -151,31 +159,73 @@
                             <div class="data-group">
                                 <div class="form-group">
                                     <div class="form-element">
-                                        {{ form_row(form.title) }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="data-group">
-                                <div class="form-group">
-                                    <div class="form-element">
-                                        {{ form_row(form.attributes) }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="data-group">
-                                <div class="form-group">
-                                    <div class="form-element">
                                         {{ form_row(form.contentLabel) }}
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="data-group">
-                                <div class="form-group">
-                                    <div class="form-element">
-                                        {{ form_row(form.published) }}
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <div class="form-group form-element">
+                                        {{ form_row(form.encType) }}
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-4">
+                                    <div class="form-group form-element">
+                                        {{ form_row(form.method) }}
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-4">
+                                    <div class="form-group form-element">
+                                        {{ form_row(form.target) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <div class="form-group form-element">
+                                        {{ form_row(form.name) }}
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-4">
+                                    <div class="form-group form-element">
+                                        {{ form_row(form.action) }}
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-4">
+                                    <div class="form-group form-element">
+                                        {{ form_row(form.acceptCharset) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <div class="form-group field option">
+                                        <div class="form-element">
+                                            {{ form_row(form.published) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-4">
+                                    <div class="form-group field option">
+                                        <div class="form-element">
+                                            {{ form_row(form.autoComplete) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-4">
+                                    <div class="form-group field option">
+                                        <div class="form-element">
+                                            {{ form_row(form.noValidate) }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -192,8 +242,7 @@
                         {% endif %}
                         <div class="fields" data-prototype="{% filter escape %}{% include 'admin/material/widgets/add-field-form.html.twig' %}{% endfilter %}">
                             {% for field in form.fields %}
-
-                                {{ form_row(field) }}
+                                {% include 'admin/material/widgets/edit-field-form.html.twig' with {form: field.vars.form} %}
                             {% endfor %}
                         </div>
                     </div>

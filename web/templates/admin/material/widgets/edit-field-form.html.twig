@@ -1,8 +1,12 @@
-<div class="addField-form editField-form">
+<div class="pf-header clearfix">
+    <h3>Field: <span></span></h3>
+    <div class="fieldForm-right"></div>
+</div>
+<div class="addField-form new-field-form">
     <div class="data-group">
         <div class="form-group form-element">
             {{ form_label(form.type) }}
-            {{ form_widget(form.type) }}
+            {{ form_widget(form.type, { 'attr': {'class': 'trigger'}}) }}
             {{ form_errors(form.type) }}
         </div>
     </div>
@@ -10,147 +14,81 @@
     <div class="data-group">
         <div class="row">
             <div class="col-xs-6">
-                <div class="form-group field option">
-                    {{ form_row(form.autoComplete) }}
-                </div>
-            </div>
-
-            <div class="col-xs-6">
-                <p>Specifies whether the element should have autocomplete enabled</p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="form-group field option">
-                    {{ form_row(form.autoFocus) }}
-                </div>
-            </div>
-
-            <div class="col-xs-6">
-                <p>Specifies that an input element should automatically get focus when the page loads</p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="form-group field option">
-                    {{ form_row(form.checked) }}
-                </div>
-            </div>
-
-            <div class="col-xs-6">
-                <p>Specifies that an input element should be pre-selected when the page loads (for type="checkbox" or type="radio")</p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="form-group field option">
-                    {{ form_row(form.disabled) }}
-                </div>
-            </div>
-
-            <div class="col-xs-6">
-                <p>Specifies that an input element should be disabled</p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="form-group field option">
-                    {{ form_row(form.required) }}
-                </div>
-            </div>
-
-            <div class="col-xs-6">
-                <p>Specifies that an input field must be filled out before submitting the form</p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-6">
                 <div class="form-group form-element">
-                    {{ form_row(form.value) }}
+                    {{ form_row(form.name, { 'attr': {'class': 'trigger'}}) }}
                 </div>
             </div>
 
-            <div class="col-xs-6">
-                <p>Specifies the value of an input element</p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="form-group form-element">
-                    {{ form_row(form.max) }}
-                </div>
-            </div>
-
-            <div class="col-xs-6">
-                <p>Specifies the maximum value for an input element</p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="form-group form-element">
-                    {{ form_row(form.maxlength) }}
-                </div>
-            </div>
-
-            <div class="col-xs-6">
-                <p>Specifies the maximum number of characters allowed in an input element</p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="form-group form-element">
-                    {{ form_row(form.name) }}
-                </div>
-            </div>
-
-            <div class="col-xs-6">
-                <p>Specifies the name of an input element</p>
-            </div>
-        </div>
-
-        <div class="row">
             <div class="col-xs-6">
                 <div class="form-group form-element">
                     {{ form_row(form.placeholder) }}
                 </div>
             </div>
-
-            <div class="col-xs-6">
-                <p>Specifies a short hint that describes the expected value of an input element</p>
-            </div>
         </div>
 
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="form-group form-element">
-                    {{ form_row(form.size) }}
+        <div class="">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group form-element">
+                        {{ form_row(form.options) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="form-group form-element">
+                        {{ form_row(form.value) }}
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="form-group form-element">
+                        {{ form_row(form.min) }}
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="form-group form-element">
+                        {{ form_row(form.max) }}
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="form-group form-element">
+                        {{ form_row(form.size) }}
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="form-group form-element">
+                        {{ form_row(form.maxlength) }}
+                    </div>
                 </div>
             </div>
 
-            <div class="col-xs-6">
-                <p>Specifies the width, in characters, of an input element</p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="form-group form-element">
-                    {{ form_row(form.options) }}
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="form-group field option">
+                        {{ form_row(form.autoFocus) }}
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="form-group field option">
+                        {{ form_row(form.autoComplete) }}
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="form-group field option">
+                        {{ form_row(form.checked) }}
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="form-group field option">
+                        {{ form_row(form.disabled) }}
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="form-group field option">
+                        {{ form_row(form.required) }}
+                    </div>
                 </div>
             </div>
-
-            <div class="col-xs-6">
-                <p>Select options</p>
-            </div>
         </div>
-
     </div>
 </div>

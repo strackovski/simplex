@@ -1,7 +1,6 @@
 {% extends app.request.isXmlHttpRequest ? "admin/material/masters/layout-modal-media.html.twig" : "admin/material/masters/layout-admin.html.twig" %}
 
 {% block content %}
-    
     {% block modalRight %}
         <div class="modal-right-bar">
             <div class="right-bar-header">
@@ -12,39 +11,22 @@
                         <a href="#" class="paper-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Share"><i class="fa fa-share"></i></a>
                     </div>
                 </div>
-                <div class="bottom-header">
-                    <h4>{{ item.getName }}</h4>
-                </div>
+                <div class="bottom-header"><h4>{{ item.getName }}</h4></div>
             </div>
 
             <div class="right-bar-content">
-
                 <div class="content-section">
-                    <div class="section-title">
-                        Author info
-                    </div>
+                    <div class="section-title">Author info</div>
                     <div class="section-entity">
-                        <div class="dt">
-                            License
-                        </div>
+                        <div class="dt">License</div>
                         <div class="dd">
-                            {% if item.getLicense %}
-                                {{ item.getLicense }}
-                            {% else %}
-                                No information available
-                            {% endif %}
+                            {% if item.getLicense %}{{ item.getLicense }}{% else %}No information available{% endif %}
                         </div>
                     </div>
                     <div class="section-entity">
-                        <div class="dt">
-                            Author
-                        </div>
+                        <div class="dt">Author</div>
                         <div class="dd">
-                            {% if item.getAuthor %}
-                                {{ item.getAuthor }}
-                            {% else %}
-                                No information available
-                            {% endif %}
+                            {% if item.getAuthor %}{{ item.getAuthor }}{% else %}No information available{% endif %}
                         </div>
                     </div>
                 </div>
@@ -53,23 +35,16 @@
                     {% for metakey, metaval in item.getMetadata.getData %}
                         {% if item.getType == 'image' and metakey == 'gps' %}
                             <div class="content-section">
-                                <div class="section-title">
-                                    Location info
-                                </div>
-
+                                <div class="section-title">Location info</div>
                                 <div class="section-entity">
-                                    <div class="dt">
-                                        Latitude
-                                    </div>
+                                    <div class="dt">Latitude</div>
                                     <div class="dd">
                                         {{ metaval.gps_latitude|join('.') ~ ' ' ~ metaval.gps_latitude_ref }}
                                     </div>
                                 </div>
 
                                 <div class="section-entity">
-                                    <div class="dt">
-                                        Longitude
-                                    </div>
+                                    <div class="dt">Longitude</div>
                                     <div class="dd">
                                         {{ metaval.gps_longitude|join('.') ~ ' ' ~ metaval.gps_longitude_ref }}
                                     </div>
@@ -80,9 +55,7 @@
                 {% endif %}
 
                 <div class="content-section">
-                    <div class="section-title">
-                        Metadata
-                    </div>
+                    <div class="section-title">Metadata</div>
                     {% if item.getMetadata %}
                         {% for metakey, metaval in item.getMetadata.getData %}
                             {% if item.getType == 'image' and metaval != '@todo' and metakey != 'gps' %}
@@ -177,23 +150,17 @@
                 </div>
 
                 <div class="content-section">
-                    <div class="section-title">
-                        Available variations
-                    </div>
+                    <div class="section-title">Available variations</div>
                     <div class="section-entity">
                         {% if item.getType == 'image' %}
-                            <div class="dt">
-                                Sizes
-                            </div>
+                            <div class="dt">Sizes</div>
                             <div class="dd">
                                 {% for key, val in item.getVariations %}
-                                    {{ key }}
+                                    <div class="label label-primary">{{ key }}</div>
                                 {% endfor %}
                             </div>
                         {% else %}
-                            <div class="dt">
-                                Encoded formats
-                            </div>
+                            <div class="dt">Encoded formats</div>
                             <div class="dd">
 
                             </div>

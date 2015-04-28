@@ -12,42 +12,25 @@
 {% endblock %}
 
 {% block tabPaneContent %}
-
-{{ form_start(form) }}
-
-<div class="settings-section">
-    <div class="settings-name">
-        <h4>Site theme</h4>
-    </div>
-
-    <div class="settings-content">
-        <div class="des">
-            Theme for public pages.
+    {{ form_start(form) }}
+        <div class="settings-section">
+            <div class="settings-name"><h4>Site theme</h4></div>
+            <div class="settings-content">
+                <div class="des">Theme for public pages.</div>
+                <div class="form-group field field-small option">{{ form_widget(form.public_theme) }}</div>
+            </div>
         </div>
-        <div class="form-group field field-small option">
-            {{ form_widget(form.public_theme) }}
-        </div>
-    </div>
-</div>
 
-<div class="settings-section">
-    <div class="settings-name">
-        <h4>Admin theme</h4>
-    </div>
-
-    <div class="settings-content">
-        <div class="des">
-            Administrator area theme.
+        <div class="settings-section">
+            <div class="settings-name"><h4>Admin theme</h4></div>
+            <div class="settings-content">
+                <div class="des">Administrator area theme.</div>
+                <div class="form-group field field-small option">{{ form_widget(form.admin_theme) }}</div>
+            </div>
         </div>
-        <div class="form-group field field-small option">
-            {{ form_widget(form.admin_theme) }}
+        <div class="form-action">
+            {{ form_row(form.cancel) }}
+            {{ form_row(form.save) }}
         </div>
-    </div>
-</div>
-<div class="form-action">
-    {{ form_row(form.cancel) }}
-    {{ form_row(form.save) }}
-</div>
-{{ form_end(form) }}
-
+    {{ form_end(form) }}
 {% endblock %}

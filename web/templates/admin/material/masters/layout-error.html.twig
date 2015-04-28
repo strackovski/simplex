@@ -10,26 +10,23 @@
     <link rel="stylesheet" href="{{ app.request.basepath }}/assets/build2/error.css"/>
 </head>
 <body>
-
-<div class="container-full">
-</div>
-<div class="content">
-    <div class="holder">
-        <div class="robot-wrap">
-            <div class="robot-head">
-                <div class="robot-eyes">
-                    <div class="robot-left-eye"></div>
-                    <div class="robot-right-eye"></div>
-                </div>
-                <div class="robot-mouth"></div>
-            </div>
-            <div class="robot-body"><div class="robot-feet"></div></div>
-        </div>
+    <div class="container-full">
     </div>
+    <div class="content">
+        <div class="holder">
+            <div class="robot-wrap">
+                <div class="robot-head">
+                    <div class="robot-eyes">
+                        <div class="robot-left-eye"></div>
+                        <div class="robot-right-eye"></div>
+                    </div>
+                    <div class="robot-mouth"></div>
+                </div>
+                <div class="robot-body"><div class="robot-feet"></div></div>
+            </div>
+        </div>
 
-    {% block content %}
-        Error
-    {% endblock %}
-</div>
+        {% block content %}Error{% endblock %}
+    </div>
 </body>
 </html>

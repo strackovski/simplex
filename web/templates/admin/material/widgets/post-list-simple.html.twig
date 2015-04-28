@@ -1,20 +1,16 @@
 <div class="item-list">
     <div class="simple-item-wrap simple-item-header">
-        <div class="item">
-            <div>Title</div>
-        </div>
-        <div class="item">
-            <div>Status</div>
-        </div>
-        <div class="item">
-            <div>Last Modified</div>
-        </div>
+        <div class="item"><div>Title</div></div>
+        <div class="item"><div>Status</div></div>
+        <div class="item"><div>Last Modified</div></div>
     </div>
 
     {% for post in posts %}
         <div class="simple-item-wrap">
             <div class="item">
-                <div><a href="{{ app.url_generator.generate('admin/post/view', {post:post.getId}) }}">{{ post.getTitle }}</a></div>
+                <div>
+                    <a href="{{ app.url_generator.generate('admin/post/view', {post:post.getId}) }}">{{ post.getTitle }}</a>
+                </div>
             </div>
             <div class="item">
                 <div>
@@ -29,9 +25,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="item">
-                <div>{{ post.getCreatedAt|date }}</div>
-            </div>
+            <div class="item"><div>{{ post.getCreatedAt|date }}</div></div>
         </div>
     {% endfor %}
 </div>

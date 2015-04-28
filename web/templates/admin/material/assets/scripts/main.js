@@ -416,6 +416,19 @@ function showSectionHelper() {
 $(document).ready(function () {
     //showSectionHelper();
 
+    $('#imageResampleQuality-slider').slider({
+        min: 10,
+        max: 100,
+        value: $('#media_settings_imageResampleQuality').val(),
+        slide: function(event, ui) {
+            $('#media_settings_imageResampleQuality').val(ui.value)
+        }
+    });
+
+    $('body').on('change', '#media_settings_imageResampleQuality', function (e) {
+        $('#imageResampleQuality-slider').slider('value', $('#media_settings_imageResampleQuality').val());
+    });
+
     /**
      * [ QUERY FORM ]
      *
@@ -507,6 +520,8 @@ $(document).ready(function () {
     var activeInnerMenu = $('.side-nav .submenu a.active');
     activeInnerMenu.closest('.submenu').removeClass('hidden');
     */
+
+    $('.datepicker').datepicker();
 
     $('.submenu-open').on('click', function(e) {
         e.preventDefault();
@@ -732,6 +747,16 @@ $(document).ready(function () {
                 if(realTabHref == 'themes') {
                     //bindButtons();
                 }
+                if(realTabHref == 'media') {
+                    $('#imageResampleQuality-slider').slider({
+                        min: 10,
+                        max: 100,
+                        value: $('#media_settings_imageResampleQuality').val(),
+                        slide: function(event, ui) {
+                            $('#media_settings_imageResampleQuality').val(ui.value)
+                        }
+                    });
+                }
             })
             .fail(function (xhr, msg) {
                 logXhrError(msg, xhr);
@@ -748,6 +773,7 @@ $(document).ready(function () {
 
     });
 
+    /*
     $('.images-dropdown a').on('click', function (e) {
         e.preventDefault();
         $(this).closest('li').addClass('active').siblings().removeClass('active');
@@ -755,6 +781,7 @@ $(document).ready(function () {
         var text = $(this).html();
         $('.images-filter').html(text + ' <i class="fa fa-angle-down"></i>');
     });
+    */
 
     $(document).click(function(event) {
         if(!$(event.target).closest('.images-dropdown').length && !$(event.target).closest('.header-title').length ) {
@@ -763,6 +790,7 @@ $(document).ready(function () {
             }
         }
     });
+
 
     // page navigation, add mask
     $('.nav-btn').on('click', function () {

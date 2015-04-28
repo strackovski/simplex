@@ -4,9 +4,20 @@
     <header class="">
         <div class="header-wrapper">
             <div class="inner-header-wrapper">
+                <div class="images-dropdown">
+                    <ul>
+                        <li class="active"><a href="#">Posts</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/media') }}">Media</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/forms') }}">Forms</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/pages') }}">Pages</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/content') }}">All</a></li>
+                    </ul>
+                </div>
                 <div class="top-header-wrapper">
                     <div class="header-title">
-                        <span>Content</span> <span class="page-title"><i class="fa fa-angle-right"></i>Posts</span>
+                        <span>Content</span>
+                        <span class="page-title"><i class="fa fa-angle-right"></i></span>
+                        <span class="images-filter">Posts <i class="fa fa-angle-down"></i></span>
                     </div>
                 </div>
             </div>

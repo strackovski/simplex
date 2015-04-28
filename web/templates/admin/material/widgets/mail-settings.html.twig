@@ -41,15 +41,22 @@
             {{ form_widget(form.mailTransport) }}
             {{ form_errors(form.mailTransport) }}
         </div>
-        <div class="form-group form-element">
-            {{ form_label(form.mailHost) }}
-            {{ form_widget(form.mailHost) }}
-            {{ form_errors(form.mailHost) }}
-        </div>
-        <div class="form-group form-element">
-            {{ form_label(form.mailPort) }}
-            {{ form_widget(form.mailPort) }}
-            {{ form_errors(form.mailPort) }}
+
+        <div class="row">
+            <div class="col-xs-7">
+                <div class="form-group form-element">
+                    {{ form_label(form.mailHost) }}
+                    {{ form_widget(form.mailHost) }}
+                    {{ form_errors(form.mailHost) }}
+                </div>
+            </div>
+            <div class="col-xs-5">
+                <div class="form-group form-element">
+                    {{ form_label(form.mailPort) }}
+                    {{ form_widget(form.mailPort) }}
+                    {{ form_errors(form.mailPort) }}
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -62,47 +69,49 @@
         <div class="des">
             Account credentials provided by mail service provider.
         </div>
-        <div class="form-group form-element">
-            {{ form_label(form.mailPassword) }}
-            {{ form_widget(form.mailPassword) }}
-            {{ form_errors(form.mailPassword) }}
-        </div>
-        <div class="form-group form-element">
-            {{ form_label(form.mailUsername) }}
-            {{ form_widget(form.mailUsername) }}
-            {{ form_errors(form.mailUsername) }}
-        </div>
-    </div>
-</div>
-<div class="settings-section">
-    <div class="settings-name">
-        <h4>Mail encryption</h4>
-    </div>
-
-    <div class="settings-content">
-        <div class="des">
-            Mail server encryption mechanism
-        </div>
-        <div class="form-group field field-small">
-            {{ form_label(form.mailEncryption) }}
-            {{ form_widget(form.mailEncryption) }}
-            {{ form_errors(form.mailEncryption) }}
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group form-element">
+                    {{ form_label(form.mailPassword) }}
+                    {{ form_widget(form.mailPassword) }}
+                    {{ form_errors(form.mailPassword) }}
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group form-element">
+                    {{ form_label(form.mailUsername) }}
+                    {{ form_widget(form.mailUsername) }}
+                    {{ form_errors(form.mailUsername) }}
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <div class="settings-section">
     <div class="settings-name">
-        <h4>Mail auth mode</h4>
+        <h4>Encryption & authentication</h4>
     </div>
 
     <div class="settings-content">
         <div class="des">
-            Mail server authentication method
+            Mail server encryption mechanism and authentication method
         </div>
-        <div class="form-group field field-small">
-            {{ form_label(form.mailAuthMode) }}
-            {{ form_widget(form.mailAuthMode) }}
-            {{ form_errors(form.mailAuthMode) }}
+
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="form-group field field-small">
+                    {{ form_label(form.mailEncryption) }}
+                    {{ form_widget(form.mailEncryption) }}
+                    {{ form_errors(form.mailEncryption) }}
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="form-group field field-small">
+                    {{ form_label(form.mailAuthMode) }}
+                    {{ form_widget(form.mailAuthMode) }}
+                    {{ form_errors(form.mailAuthMode) }}
+                </div>
+            </div>
         </div>
     </div>
 </div>

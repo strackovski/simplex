@@ -4,9 +4,20 @@
     <header class="">
         <div class="header-wrapper">
             <div class="inner-header-wrapper">
+                <div class="images-dropdown">
+                    <ul>
+                        <li class="active"><a href="#">All</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/posts') }}">Posts</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/media') }}">Media</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/forms') }}">Forms</a></li>
+                        <li><a href="{{ app.url_generator.generate('admin/pages') }}">Pages</a></li>
+                    </ul>
+                </div>
                 <div class="top-header-wrapper">
                     <div class="header-title">
-                        <span>Content</span> <span class="page-title"><i class="fa fa-angle-right"></i>All</span>
+                        <span>Content</span>
+                        <span class="page-title"><i class="fa fa-angle-right"></i></span>
+                        <span class="images-filter">All <i class="fa fa-angle-down"></i></span>
                     </div>
                 </div>
             </div>
@@ -26,72 +37,68 @@
             </div>
 
             <div class="grid-content">
-
-                {% if content|length < 1 %}
-                    <h1 class="ghost big">No content added yet</h1>
-                {% else %}
+                {% if content|length < 1 %}<h1 class="ghost big">No content added yet</h1>{% else %}
 
                 <div class="item-list item-list-6">
                     <div class="item-wrap item-header item-fixed-header">
-                        <div class="item">
-                            <div></div>
-                        </div>
-
-                        <div class="item">
-                            <div>Title</div>
-                        </div>
-                        <div class="item">
-                            <div>Author</div>
-                        </div>
-                        <div class="item">
-                            <div>Last Modified</div>
-                        </div>
-                        <div class="item">
-                            <div>
-                            </div>
-                        </div>
+                        <div class="item"><div></div></div>
+                        <div class="item"><div>Title</div></div>
+                        <div class="item"><div>Author</div></div>
+                        <div class="item"><div>Last Modified</div></div>
+                        <div class="item"><div></div></div>
                     </div>
+                    {% for item in content %}
+                        <div class="item-wrap">
+                            <div class="item">
+                                {% if item.getType == 'post' %}
+                                    <div class="badge-icon badge-img badge-blue">
+                                        <img src="{{ app.request.basePath ~ '/assets/images/ico-post_clr.png' }}" alt=""/>
+                                    </div>
+                                {% elseif item.getType == 'page' %}
+                                    <div class="badge-icon badge-img badge-violet">
+                                        <img src="{{ app.request.basePath ~ '/assets/images/ico-page_clr.png' }}" alt=""/>
+                                    </div>
+                                {% elseif item.getType == 'image' %}
+                                    <div class="badge-icon badge-img badge-red">
+                                        <img src="{{ app.request.basePath ~ '/assets/images/ico-image_clr.png' }}" alt=""/>
+                                    </div>
+                                {% elseif item.getType == 'video' %}
+                                    <div class="badge-icon badge-img badge-green">
+                                        <img src="{{ app.request.basePath ~ '/assets/images/ico-video_clr.png' }}" alt=""/>
+                                    </div>
+                                {% elseif item.getType == 'form' %}
+                                    <div class="badge-icon badge-img badge-darkgray">
+                                        <img src="{{ app.request.basePath ~ '/assets/images/ico-form_clr.png' }}" alt=""/>
+                                    </div>
+                                {% endif %}
+                            </div>
 
-                        {% for item in content %}
-                            <div class="item-wrap">
-                                <div class="item">
-                                    {% if item.getType == 'post' %}
-                                        <div class="badge-icon badge-blue"><i class="fa fa-2x fa-file-text"></i></div>
-                                    {% elseif item.getType == 'page' %}
-                                        <div class="badge-icon badge-violet"><i class="fa fa-2x fa-list"></i></div>
-                                    {% elseif item.getType == 'image' %}
-                                        <div class="badge-icon badge-red"><i class="fa fa-2x fa-image"></i></div>
-                                    {% elseif item.getType == 'video' %}
-                                        <div class="badge-icon badge-green"><i class="fa fa-2x fa-video-camera"></i></div>
-                                    {% elseif item.getType == 'form' %}
-                                        <div class="badge-icon badge-green"><i class="fa fa-2x fa-eraser"></i></div>
-                                    {% endif %}
-                                </div>
-
-                                <div class="item">
-                                    <div><a class="detail-btn" href="{{ app.url_generator.generate('admin/content/get', {type: item.getType, id:item.getId}) }}">{{ item.getTitle }}</a></div>
-                                </div>
-
-                                <div class="item">
-                                    {% if item.getAuthor %}
-                                        <div>{{ item.getAuthor }}</div>
-                                    {% else %}
-                                        <div>unknown author</div>
-                                    {% endif %}
-                                </div>
-
-                                <div class="item">
-                                    <div>{{ item.getCreatedAt|date|timeago }}</div>
-                                </div>
-
-                                <div class="item">
-                                    <a class="detail-btn" href="{{ app.url_generator.generate('admin/content/get', {type: item.getType, id:item.getId}) }}">
-                                        <i class="fa fa-ellipsis-v"></i>
-                                    </a>
+                            <div class="item">
+                                <div>
+                                    <a class="detail-btn" href="{{ app.url_generator.generate('admin/content/get', {type: item.getType, id:item.getId}) }}">{{ item.getTitle }}</a>
                                 </div>
                             </div>
-                        {% endfor %}
-                    {% endif %}
+
+                            <div class="item">
+                                {% if item.getAuthor %}
+                                    <div>{{ item.getAuthor }}</div>
+                                {% else %}
+                                    <div>unknown author</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="item">
+                                <div>{{ item.getCreatedAt|date|timeago }}</div>
+                            </div>
+
+                            <div class="item">
+                                <a class="detail-btn" href="{{ app.url_generator.generate('admin/content/get', {type: item.getType, id:item.getId}) }}">
+                                    <i class="fa fa-ellipsis-v"></i>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
                 </div>
             </div>
         </div>

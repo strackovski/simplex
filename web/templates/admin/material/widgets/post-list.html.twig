@@ -1,23 +1,12 @@
-<div class="item-list post-list">
-    <div class="item-wrap item-fixed-header">
-        <div class="item text-center">
-            <div>
-
-            </div>
-        </div>
-        <div class="item">
-            <div>Title</div>
-        </div>
-        <div class="item">
-            <div>Author</div>
-        </div>
-        <div class="item">
-            <div>Last Modified</div>
-        </div>
-        <div class="item">
-            <div>
-            </div>
-        </div>
+<div class="item-list list-ml item-list-7 post-list">
+    <div class="item-wrap item-header item-fixed-header">
+        <div class="item text-center"><div></div></div>
+        <div class="item"><div>Title</div></div>
+        <div class="item"><div>Label</div></div>
+        <div class="item item-s"><div><i class="fa fa-image"></i></div></div>
+        <div class="item item-s"><div><i class="fa fa-cube"></i></div></div>
+        <div class="item item-s"><div><i class="fa fa-tags"></i></div></div>
+        <div class="item"><div></div></div>
     </div>
 
     {% for post in posts %}
@@ -38,18 +27,28 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="item">
+            <div class="item ml">
                 <div>
                     <a class="detail-btn" href="{{ app.url_generator.generate('admin/post/get', {post:post.getId}) }}">
                         {{ post.getTitle }}
                     </a>
+                    <div class="small"><p>{{ post.getCreatedAt|date }} {% if post.getAuthor %} by {{ post.getAuthor }}{% endif %}</p></div>
                 </div>
             </div>
             <div class="item">
-                <div>{{ post.getAuthor }}</div>
+                <div>{{ post.getContentLabel }}</div>
             </div>
-            <div class="item">
-                <div>{{ post.getCreatedAt|date }}</div>
+            <div class="item item-s">
+                <div>{{ post.getMediaItems.count }}</div>
+            </div>
+            <div class="item item-s">
+                <div>
+                    {% if post.getMetadata and post.getMetadata.getData(1).a is defined %}<span class="label label-info">A</span>{% else %}{% endif %}
+                    {% if post.getMetadata and post.getMetadata.getData(1).c is defined %}<span class="label label-info">C</span>{% else %}{% endif %}
+                </div>
+            </div>
+            <div class="item item-s">
+                <div>{{ post.getTags.count }}</div>
             </div>
             <div class="item">
                 <a class="detail-btn" href="{{ app.url_generator.generate('admin/post/get', {post:post.getId}) }}">

@@ -1,139 +1,92 @@
 <div class="content-section">
-    <div class="section-title">
-        Status
-    </div>
-
+    <div class="section-title">Status</div>
     <div class="section-entity">
-        <div class="dt">
-            Published
-        </div>
+        <div class="dt">Visibility status</div>
         <div class="dd">
             {% if post.getPublished %}
-                Yes
+                <div class="label label-success"><i class="fa fa-eye"></i> Published</div>
             {% else %}
-                No
+                <div class="label label-default"><i class="fa fa-eye-slash"></i> Not published</div>
             {% endif %}
-        </div>
-    </div>
-    <div class="section-entity">
-        <div class="dt">
-            Exposed
-        </div>
-        <div class="dd">
+
             {% if post.getExposed %}
-                Yes
-            {% else %}
-                No
-            {% endif %}
-        </div>
-    </div>
-    <div class="section-entity">
-        <div class="dt">
-            Allow Ratings
-        </div>
-        <div class="dd">
-            {% if post.getAllowRatings %}
-                Yes
-            {% else %}
-                No
-            {% endif %}
-        </div>
-    </div>
-    <div class="section-entity">
-        <div class="dt">
-            Allow Comments
-        </div>
-        <div class="dd">
-            {% if post.getAllowComments %}
-                Yes
-            {% else %}
-                No
+                <div class="label label-danger"><i class="fa fa-star"></i> Exposed</div>
             {% endif %}
         </div>
     </div>
 </div>
 
+<div class="content-section">
+    <div class="section-entity">
+        <div class="dt">Interactivity</div>
+        <div class="dd">
+            {% if post.getAllowComments %}
+                <div class="label label-success"><i class="fa fa-comments"></i></div>
+            {% else %}
+                <div class="label label-default"><i class="fa fa-comments-o"></i></div>
+            {% endif %}
+
+            {% if post.getAllowRatings %}
+                <div class="label label-danger"><i class="fa fa-thumbs-up"></i></div>
+            {% else %}
+                <div class="label label-default"><i class="fa fa-thumbs-o-up"></i></div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 
 <div class="content-section">
-    <div class="section-title">
-        Info
-    </div>
+    <div class="section-title">Info</div>
     <div class="section-entity">
-        <div class="dt">
-            Slug
-        </div>
-        <div class="dd">
-            <i class="fa fa-link"></i> {{ post.getSlug }}
-        </div>
+        <div class="dt">Accessible at</div>
+        <div class="dd">http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/post/' ~ post.getSlug }}</div>
     </div>
+</div>
+<div class="content-section">
     <div class="section-entity">
-        <div class="dt">
-            Media
-        </div>
-        <div class="dd">
-            {{ post.getMediaItems.count }} media items attached
-        </div>
-    </div>
-    <div class="section-entity">
-        <div class="dt">
-            Author
-        </div>
+        <div class="dt">Created</div>
         <div class="dd">
             {% if post.getAuthor %}
-                <span><i class="fa fa-user"></i> {{ post.getAuthor.displayName }}</span>
-            {% else %}
-                <span class="header"><i class="fa fa-user"></i> n\a</span>
+                {{ post.getAuthor.displayName }},
             {% endif %}
-        </div>
-    </div>
-    <div class="section-entity">
-        <div class="dt">
-            Editor
-        </div>
-        <div class="dd">
-            {% if post.getEditor %}
-                <span class="header"><i class="fa fa-user"></i> {{ post.getEditor.displayName }}</span>
-            {% else %}
-                <span class="header"><i class="fa fa-user"></i> n\a</span>
-            {% endif %}
-        </div>
-    </div>
-    <div class="section-entity">
-        <div class="dt">
-            Created
-        </div>
-        <div class="dd">
             {{ post.getCreatedAt|date('M d h:i') }}
         </div>
     </div>
+</div>
+
+<div class="content-section">
     <div class="section-entity">
-        <div class="dt">
-            Modified
-        </div>
+        <div class="dt">Content label</div>
         <div class="dd">
-            {{ post.getUpdatedAt|date('M d h:i') }}
+            {% if post.getContentLabel %}{{ post.getContentLabel }}{% else %}NO LABEL{% endif %}
         </div>
     </div>
+</div>
+
+<div class="content-section">
     <div class="section-entity">
-        <div class="dt">
-            Tags
-        </div>
+        <div class="dt">Tags</div>
         <div class="dd">
             {% if post.getTags.count > 0 %}
                 {% for tag in post.getTags %}
-                    <span class="label label-primary tag-label-xl"><i class="fa fa-tag"></i> {{ tag.getName }}</span>
+                    <div class="label label-primary"><i class="fa fa-tag"></i> {{ tag|lower }}</div>
                 {% endfor %}
             {% else %}
                 This post is not tagged
-
             {% endif %}
         </div>
     </div>
 </div>
+
 <div class="content-section">
-    <div class="section-title">
-        Classification Results
+    <div class="section-entity">
+        <div class="dt">Pages</div>
+        <div class="dd">In {{ post.getPages.count }} pages (excluding dynamic)</div>
     </div>
+</div>
+
+<div class="content-section">
+    <div class="section-title">Classification Results</div>
     <div class="section-entity">
         {% if post.getMetadata and post.getMetadata.getData(1)|length > 0 %}
             {% if post.getMetadata.getData(1).c|length > 0 %}
@@ -171,17 +124,14 @@
         {% else %}
             <div class="text-center">
                 <i class="fa fa-3x fa-cubes"></i>
-                <p>This post has no auto metadata</p>
+                <p>This post has no metadata</p>
             </div>
         {% endif %}
     </div>
 </div>
 
 <div class="content-section">
-    <div class="section-title">
-        Annotation Results
-    </div>
-
+    <div class="section-title">Annotation Results</div>
     <div class="section-entity">
         {% if post.getMetadata and post.getMetadata.getData(1).a is defined %}
             {% if post.getMetadata.getData(1).a|length > 0 %}
@@ -192,7 +142,6 @@
                         {% endif %}
 
                         {% if dataKey != 'doc' %}
-
                             {% if data._typeGroup == 'socialTag' %}
                                 <a class="label label-warning tag-label-xl" href="{{ dataKey }}"><i class="fa fa-tag"></i> {{ data.name }} <span>{{ data.importance }}</span></a>
                             {% elseif data._typeGroup == 'entities' %}
@@ -201,7 +150,6 @@
                         {% endif %}
                     {% endfor %}
                 </div>
-
             {% else %}
                 <div class="text-center">
                     <i class="fa fa-3x fa-cubes"></i>
@@ -211,96 +159,9 @@
         {% else %}
             <div class="text-center">
                 <i class="fa fa-3x fa-cubes"></i>
-                <p>This post has no auto metadata</p>
+                <p>This post has no metadata</p>
             </div>
         {% endif %}
     </div>
 </div>
 
-{#
-<table class="table table-condensed table-vertical small">
-    <tr>
-        <td>
-            {% if post.getMetadata %}
-                {% if post.getMetadata.getData(1).c|length > 0 %}
-                    <ul class="list-group list-group-clear">
-                    {% for data in post.getMetadata.getData(1).c %}
-                        {% if data.textCoverage > 0 %}
-                            {% if data.classifier is defined %}
-                            <li class="list-group-item">
-                                <span class="">{{ data.classifier }}</span>
-                                {% set max = max(data.classes) %}
-                                {% for key, val in data.classes %}
-                                    {% if val == max %}
-                                        <div class="pull-right score label label-success">{{ val|round(2, 'floor') }}</div>
-                                        <span class="nw pull-right">{{ key }}</span>
-                                    {% endif %}
-                                {% endfor %}
-                            </li>
-                            {% endif %}
-                        {% else %}
-                        <li class="list-group-item">
-                            <span class="">{{ data.classifier }}</span>
-                            <div class="pull-right score label label-success">Text coverage too low</div>
-                        </li>
-                        {% endif %}
-                    {% endfor %}
-                    </ul>
-                {% else %}
-                    <div class="text-center">
-                        <i class="fa fa-3x fa-cubes"></i>
-                        <p>This post is not classified</p>
-                    </div>
-                {% endif %}
-            {% else %}
-                <div class="text-center">
-                    <i class="fa fa-3x fa-cubes"></i>
-                    <p>This post has no auto metadata</p>
-                </div>
-            {% endif %}
-        </td>
-    </tr>
-
-    <tr class="title-col">
-        <td>
-            Annotation results
-        </td>
-    </tr>
-    <tr>
-        <td class="big">
-            {% if post.getMetadata and post.getMetadata.getData(1).a is defined %}
-                {% if post.getMetadata.getData(1).a|length > 0 %}
-                    <div class="label-bag">
-                    {% for dataKey, data in post.getMetadata.getData(1).a %}
-                        {% if dataKey == 'doc' %}
-                            
-                        {% endif %}
-
-                        {% if dataKey != 'doc' %}
-
-                            {% if data._typeGroup == 'socialTag' %}
-                                <a class="label label-warning tag-label-xl" href="{{ dataKey }}"><i class="fa fa-tag"></i> {{ data.name }} <span>{{ data.importance }}</span></a>
-                            {% elseif data._typeGroup == 'entities' %}
-                                <a class="label label-success tag-label-xl" href="{{ data._typeReference }}"><i class="fa fa-cube"></i> {{ data._type }} [{{ data.name }}] <span>{{ data.relevance|round(2, 'floor') }}</span></a>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                    </div>
-
-                {% else %}
-                    <div class="text-center">
-                        <i class="fa fa-3x fa-cubes"></i>
-                        <p>This post is not annotated</p>
-                    </div>
-                {% endif %}
-            {% else %}
-                <div class="text-center">
-                    <i class="fa fa-3x fa-cubes"></i>
-                    <p>This post has no auto metadata</p>
-                </div>
-            {% endif %}
-
-
-        </td>
-    </tr>
-</table>#}

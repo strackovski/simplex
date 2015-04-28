@@ -1,5 +1,4 @@
 {% extends "admin/material/masters/layout-admin.html.twig" %}
-
 {% form_theme form with ['bootstrap.html.twig', 'admin/material/masters/flat-form.html.twig', _self] %}
 
 {% block pageHeader %}
@@ -7,10 +6,11 @@
         <div class="header-wrapper">
             <div class="images-dropdown">
                 <ul>
-                    <li class="active"><a href="#">All</a></li>
-                    <li><a href="#">Faces</a></li>
-                    <li><a href="#">Filter</a></li>
-                    <li><a href="#">Filter</a></li>
+                    <li class="active"><a href="#">Media</a></li>
+                    <li><a href="{{ app.url_generator.generate('admin/posts') }}">Posts</a></li>
+                    <li><a href="{{ app.url_generator.generate('admin/forms') }}">Forms</a></li>
+                    <li><a href="{{ app.url_generator.generate('admin/pages') }}">Pages</a></li>
+                    <li><a href="{{ app.url_generator.generate('admin/content') }}">All</a></li>
                 </ul>
             </div>
             <div class="inner-header-wrapper">
@@ -18,8 +18,7 @@
                     <div class="header-title">
                         <span>Content</span>
                         <span class="page-title"><i class="fa fa-angle-right"></i></span>
-                        <span class="images-filter">All <i class="fa fa-angle-down"></i></span>
-
+                        <span class="images-filter">Media <i class="fa fa-angle-down"></i></span>
                     </div>
                 </div>
                 <div class="bottom-header-wrapper">
@@ -39,13 +38,7 @@
     </header>
 {% endblock %}
 
-{% block rightBlock %}
-    <nav class="">
-        <div class="right-toolbar">
-
-        </div>
-    </nav>
-{% endblock %}
+{% block rightBlock %}<nav class=""><div class="right-toolbar"></div></nav>{% endblock %}
 
 {% block content %}
     <div class="grid">
@@ -77,11 +70,7 @@
                     {% endblock %}
                 </div>
 
-                <div id="videos" class="tab-pane fade">
-                    {% block videos %}
-
-                    {% endblock %}
-                </div>
+                <div id="videos" class="tab-pane fade">{% block videos %}{% endblock %}</div>
         </div>
     </div>
     <div class="right-bar">
@@ -97,6 +86,4 @@
             </div>
         </div>
     </div>
-
-
 {% endblock %}

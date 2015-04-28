@@ -2,48 +2,34 @@
     <div class="top-header">
         <div class="right-aux-toolbar">
             <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fa fa-times"></i></a>
-            <a href="{{  app.url_generator.generate('admin/post/delete', {post:post.getId}) }}" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
+            <a href="{{ app.url_generator.generate('admin/post/delete', {post:post.getId}) }}" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
             <a href="{{ app.url_generator.generate('admin/post/edit', {post:post.getId}) }}" class="paper-btn edit-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Edit"><i class="fa fa-pencil"></i></a>
             <a href="{{ app.url_generator.generate('admin/post/view', {post:post.getId}) }}" class="paper-btn edit-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="View"><i class="fa fa-eye"></i></a>
         </div>
     </div>
-
-    <div class="bottom-header">
-        <h4>{{ post.getTitle }}</h4>
-    </div>
+    <div class="bottom-header"><h4>{{ post.getTitle }}</h4></div>
 </div>
 
 <div class="right-bar-content">
     <div class="content-section">
-        <div class="section-title">
-            Details
-        </div>
-
+        <div class="section-title">Details</div>
         <div class="section-entity">
-            <p>{{ post.getSubtitle }}</p>
+            <div class="dt">Subtitle</div>
+            <div class="dd">{{ post.getSubtitle }}</div>
         </div>
     </div>
 
     <div class="content-section">
         <div class="section-entity">
-            <div class="dt">
-                Accessible at
-            </div>
-            <div class="dd">
-                http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/post/' ~ post.getSlug }}
-            </div>
+            <div class="dt">Accessible at</div>
+            <div class="dd">http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/post/' ~ post.getSlug }}</div>
         </div>
     </div>
     <div class="content-section">
         <div class="section-entity">
-            <div class="dt">
-                Created
-            </div>
+            <div class="dt">Created</div>
             <div class="dd">
-                {% if post.getAuthor %}
-                    {{ post.getAuthor.displayName }},
-                {% endif %}
-
+                {% if post.getAuthor %}{{ post.getAuthor.displayName }},{% endif %}
                 {{ post.getCreatedAt|date('M d h:i') }}
             </div>
         </div>
@@ -51,18 +37,15 @@
 
     <div class="content-section">
         <div class="section-entity">
-            <div class="dt">
-                Visibility status
-            </div>
+            <div class="dt">Visibility status</div>
             <div class="dd">
                 {% if post.getPublished %}
-                    PUBLISHED
+                    <div class="label label-success"><i class="fa fa-eye"></i> Published</div>
                 {% else %}
-                    NOT PUBLISHED
+                    <div class="label label-default"><i class="fa fa-eye-slash"></i> Not published</div>
                 {% endif %}
-
                 {% if post.getExposed %}
-                    EXPOSED
+                    <div class="label label-danger"><i class="fa fa-star"></i> Exposed</div>
                 {% endif %}
             </div>
         </div>
@@ -70,14 +53,17 @@
 
     <div class="content-section">
         <div class="section-entity">
-            <div class="dt">
-                Content label
-            </div>
+            <div class="dt">Interactivity</div>
             <div class="dd">
-                {% if post.getContentLabel %}
-                    {{ post.getContentLabel }}
+                {% if post.getAllowComments %}
+                    <div class="label label-success"><i class="fa fa-comments"></i></div>
                 {% else %}
-                    NO LABEL
+                    <div class="label label-default"><i class="fa fa-comments-o"></i></div>
+                {% endif %}
+                {% if post.getAllowRatings %}
+                    <div class="label label-danger"><i class="fa fa-thumbs-up"></i></div>
+                {% else %}
+                    <div class="label label-default"><i class="fa fa-thumbs-o-up"></i></div>
                 {% endif %}
             </div>
         </div>
@@ -85,40 +71,37 @@
 
     <div class="content-section">
         <div class="section-entity">
-            <div class="dt">
-                Tags
+            <div class="dt">Content label</div>
+            <div class="dd">
+                {% if post.getContentLabel %}{{ post.getContentLabel }}{% else %}This post has no labels{% endif %}
             </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-entity">
+            <div class="dt">Tags</div>
             <div class="dd">
                 {% if post.getTags.count > 0 %}
                     {% for tag in post.getTags %}
-                        {{ tag }}
+                        <div class="label label-primary"><i class="fa fa-tag"></i> {{ tag|lower }}</div>
                     {% endfor %}
-                {% else %}
-                    NO TAGS
-                {% endif %}
+                {% else %}This post is not tagged{% endif %}
             </div>
         </div>
     </div>
 
     <div class="content-section">
         <div class="section-entity">
-            <div class="dt">
-                Pages
-            </div>
-            <div class="dd">
-                In {{ post.getPages.count }} pages (excluding dynamic)
-            </div>
+            <div class="dt">Pages</div>
+            <div class="dd">In {{ post.getPages.count }} pages (excluding dynamic)</div>
         </div>
     </div>
 
     <div class="content-section">
         <div class="section-entity">
-            <div class="dt">
-                Media
-            </div>
-            <div class="dd">
-                {{ post.getMediaItems.count }} media items attached
-            </div>
+            <div class="dt">Media</div>
+            <div class="dd">{{ post.getMediaItems.count }} media items attached</div>
         </div>
 
         <div class="section-entity">

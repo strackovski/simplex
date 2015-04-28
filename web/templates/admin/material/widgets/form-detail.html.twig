@@ -15,27 +15,37 @@
 <div class="right-bar-content">
     <div class="content-section">
         <div class="section-title">
-            Form attributes
-        </div>
-
-        <div class="section-entity">
-            <p>{{ user_form.getAttributes }}</p>
+            Fields in this form
         </div>
     </div>
 
-    <div class="content-section">
-        <div class="section-title">
-            Fields in this form
-        </div>
-        <div class="section-entity small-entity">
-            {% for field in user_form.getFields %}
+    {% for field in user_form.getFields %}
+        <div class="content-section">
+            <div class="section-entity">
                 <div class="dt">
                     {{ field.getType }}
                 </div>
                 <div class="dd">
                     {{ field.getName }}
                 </div>
-            {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="content-section">
+        <div class="section-title">
+            Form info
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-entity">
+            <div class="dt">
+                Content Label
+            </div>
+            <div class="dd">
+                {{ user_form.getContentLabel }}
+            </div>
         </div>
     </div>
 
@@ -46,6 +56,21 @@
             </div>
             <div class="dd">
                 {{ user_form.getCreatedAt|date('M d h:i') }}
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-entity">
+            <div class="dt">
+                Created by
+            </div>
+            <div class="dd">
+                {% if user_form.getAuthor %}
+                    {{ user_form.getAuthor }}
+                {% else %}
+                    Unknown author
+                {% endif %}
             </div>
         </div>
     </div>

@@ -1,7 +1,6 @@
 {% extends app.request.isXmlHttpRequest ? "admin/material/masters/layout-ajax.html.twig" : "admin/material/masters/layout-min.html.twig" %}
 
 {% block content %}
-
     <div class="flash-messages">
         {% for message in app.session.getFlashBag.get('success') %}
             <span class="alert alert-flash-message alert-success">{{ message|raw }}</span>
@@ -10,12 +9,10 @@
 
     <div class="login-wrap">
         <form class="form-signin" action="{{ path('admin_login_check') }}" method="post">
-
             <h4 class="text-center">Sign in to Simplex</h4>
             <div class="text-center">
                 <img src="{{ app.request.basepath ~ '/assets/images/tetra_gray.png' }}" alt="logo" width="50"/>
             </div>
-
 
             <div class="form-group form-element">
                 <label for="email_"></label>
@@ -36,21 +33,14 @@
                             <span>Remember me</span>
                         </label>
                     </div>
-
                 </div>
                 <span class="pull-right forgot-password text-right"><a href="{{ path('help/password') }}"><i class="fa fa-question-circle"></i> Hilfe</a></span>
             </div>
 
-
             <div class="form-group text-center sign-in">
                 <button type="submit" class="btn-save">Login</button>
             </div>
-
-
-
             {{ error }}
-
-           <!--<input type="submit" class="btn btn-lg btn-primary btn-block" />-->
         </form>
     </div>
 {% endblock %}

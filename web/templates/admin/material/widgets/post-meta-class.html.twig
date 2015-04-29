@@ -37,11 +37,11 @@
                                             {% for className, classValue in data.classes %}
                                                 {% if loop.last %}
                                                     <div class="progress-bar" role="progressbar" aria-valuenow="{{ classValue|round(2, 'floor') }}" aria-valuemin="0" aria-valuemax="1" style="width: {{ classValue * 100 }}%;">
-                                                        {{ className ~ " " ~ classValue|round(2, 'floor') }}
+                                                        <span>{{ className ~ " " ~ classValue|round(2, 'floor') }}</span>
                                                     </div>
                                                 {% else %}
                                                     <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ classValue|round(2, 'floor') }}" aria-valuemin="0" aria-valuemax="1" style="width: {{ classValue * 100 }}%;">
-                                                        {{ className ~ " " ~ classValue|round(2, 'floor') }}
+                                                        <span>{{ className ~ " " ~ classValue|round(2, 'floor') }}</span>
                                                     </div>
                                                 {% endif %}
                                             {% endfor %}
@@ -51,8 +51,8 @@
                                     {% for className, classValue in data.classes %}
                                         <li class="list-group-item">
                                             <div class="progress">
+                                                <span>{{ className ~ " " ~ classValue|round(2, 'floor') }}</span>
                                                 <div class="progress-bar" role="progressbar" aria-valuenow="{{ classValue|round(2, 'floor') }}" aria-valuemin="0" aria-valuemax="1" style="width: {{ classValue * 100 }}%;">
-                                                    {{ className ~ " " ~ classValue|round(2, 'floor') }}
                                                 </div>
                                             </div>
                                         </li>

@@ -173,12 +173,12 @@ class IntegrationController extends ActionControllerAbstract
 
         if ($client->isAccessTokenExpired()) {
             if ($google->getRefreshToken()) {
-                echo 'found refresh';
+                echo '';
             }
 
             $authUrl = $client->createAuthUrl();
             $_SESSION['service_auth_required'] = 1;
-            return "<a class='login' href='$authUrl'>Expired, connect now!</a>";
+            return "<a class='login' href='$authUrl'><div class='label label-danger'>REFRESH NOW</div></a>";
         } else {
             try {
                 $youtube = new \Google_Service_YouTube($client);
@@ -223,15 +223,15 @@ class IntegrationController extends ActionControllerAbstract
             if (200 !== $connection->lastHttpCode()) {
                 // Token invalid
                 if (429 == $connection->lastHttpCode()) {
-                    return 'Too many requests in time window, API rate limiting in effect.';
+                    return "<div class='label label-danger'>RATE LIMITED</div>";
                 }
-                echo 'No token or token invalid! ';
+                echo 'No token or token invalid!';
                 $connection = new TwitterOAuth($twitter->getConsumerKey(), $twitter->getConsumerSecret());
                 $request_token = $connection->oauth('oauth/request_token', array('oauth_callback' => $twitter->getOauthCallback()));
                 $_SESSION['oauth_token'] = $request_token['oauth_token'];
                 $_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
                 $url = $connection->url('oauth/authorize', array('oauth_token' => $request_token['oauth_token']));
-                return '<a href="'.$url.'">Connect to Twitter now</a>';
+                return '<a href="'.$url.'"><div class="label label-success">AUTHORIZE NOW</div></a>';
             }
 
             return $connection->lastHttpCode();
@@ -243,7 +243,7 @@ class IntegrationController extends ActionControllerAbstract
             $_SESSION['oauth_token'] = $request_token['oauth_token'];
             $_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
             $url = $connection->url('oauth/authorize', array('oauth_token' => $request_token['oauth_token']));
-            return '<a href="'.$url.'">Connect to Twitter now</a>';
+            return '<a href="'.$url.'"><div class="label label-success">AUTHORIZE NOW</div></a>';
         }
     }
 

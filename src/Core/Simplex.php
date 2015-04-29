@@ -141,8 +141,8 @@ class Simplex extends Application
         }));
 
         $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
-            $twig->addFunction(new \Twig_SimpleFunction('myform', function ($form) use ($app) {
-                return $app['form.builder']->buildForm($form);
+            $twig->addFunction(new \Twig_SimpleFunction('buildForm', function ($form, $format = false) use ($app) {
+                return $app['form.builder']->getForm($form, $format);
             }));
 
             return $twig;

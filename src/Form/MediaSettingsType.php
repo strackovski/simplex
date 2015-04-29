@@ -78,11 +78,11 @@ class MediaSettingsType extends AbstractType
                 'image_resize_medium_width',
                 'text',
                 array(
-                    'label' => 'Width',
+                    'label' => false,
                     'required' => false,
                     'mapped' => false,
                     'attr' => array(
-                        'placeholder' => 'Width'
+                        'placeholder' => 'Width',
                     )
                 )
             )
@@ -90,11 +90,11 @@ class MediaSettingsType extends AbstractType
                 'image_resize_medium_height',
                 'text',
                 array(
-                    'label' => 'Height',
+                    'label' => false,
                     'required' => false,
                     'mapped' => false,
                     'attr' => array(
-                        'placeholder' => 'Height'
+                        'placeholder' => 'Height',
                     )
                 )
             )
@@ -102,7 +102,7 @@ class MediaSettingsType extends AbstractType
                 'image_resize_large_width',
                 'text',
                 array(
-                    'label' => 'Width',
+                    'label' => false,
                     'required' => false,
                     'mapped' => false,
                     'attr' => array(
@@ -114,7 +114,7 @@ class MediaSettingsType extends AbstractType
                 'image_resize_large_height',
                 'text',
                 array(
-                    'label' => 'Height',
+                    'label' => false,
                     'required' => false,
                     'mapped' => false,
                     'attr' => array(

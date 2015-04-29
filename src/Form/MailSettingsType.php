@@ -49,7 +49,7 @@ class MailSettingsType extends AbstractType
         $builder
             ->add('enableMailing', 'checkbox', array('required' => false, 'label' => 'Enable mailing'))
             ->add('mailTransport', 'choice', array(
-                'empty_value' => 'Select a mail transport mode',
+                'empty_value' => 'Select transport mode',
                 'mapped' => true,
                 'required' => false,
                 'multiple' => false,
@@ -62,7 +62,7 @@ class MailSettingsType extends AbstractType
             ->add('mailHost', 'text', array(
                 'required' => false,
                 'attr' => array(
-                    'placeholder' => 'Mail server domain or IP address'
+                    'placeholder' => 'Server domain or IP address'
                 )
             ))
             ->add('mailPort', 'text', array(
@@ -74,7 +74,7 @@ class MailSettingsType extends AbstractType
             ->add('mailUsername', 'text', array(
                 'required' => false,
                 'attr' => array(
-                    'placeholder' => 'Mail account username (or email)'
+                    'placeholder' => 'Mail account username'
                 )
             ))
             ->add('mailPassword', 'password', array(
@@ -84,7 +84,7 @@ class MailSettingsType extends AbstractType
                 )
             ))
             ->add('mailEncryption', 'choice', array(
-                'empty_value' => 'Select email authentication encryption mode',
+                'empty_value' => 'Select encryption mode',
                 'mapped' => true,
                 'required' => false,
                 'multiple' => false,
@@ -94,7 +94,7 @@ class MailSettingsType extends AbstractType
                 )
             ))
             ->add('mailAuthMode', 'choice', array(
-                'empty_value' => 'Select email authentication mode',
+                'empty_value' => 'Select authentication mode',
                 'mapped' => true,
                 'required' => false,
                 'multiple' => false,

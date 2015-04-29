@@ -42,7 +42,7 @@ class PageQueryType extends AbstractType
                     'image' => 'Image',
                     'video' => 'Video'
                 ),
-                'empty_value' => 'Select type of content to retrieve...',
+                'empty_value' => 'Select type of content...',
             ))
             ->add('column', 'choice', array(
                 'choices' => array(
@@ -54,7 +54,7 @@ class PageQueryType extends AbstractType
                     'tags' => 'Tags',
                     'inLibrary' => 'In library',
                 ),
-                'empty_value' => 'Select a column to filter by...'
+                'empty_value' => 'Select filter column...'
             ))
             ->add('operator', 'choice', array(
                 'choices' => array(
@@ -76,11 +76,16 @@ class PageQueryType extends AbstractType
                 'choices' => array('asc' => 'Ascending', 'desc' => 'Descending'),
             ))
             ->add('limitMax', 'text', array(
-                'required' => false
+                'label' => 'Maximum limit',
+                'required' => false,
+                'attr' => array(
+                    'placeholder' => 'Result count limit (number)'
+                ),
             ))
             ->add('outputVariable', 'text', array(
+                'label' => 'Output variable name',
                 'attr' => array(
-                    'placeholder' => 'Output variable name (empty to merge)'
+                    'placeholder' => 'Leave empty to merge'
                 ),
                 'required' => false
             ));

@@ -102,7 +102,7 @@ class PostType extends AbstractType
                 )
             ))
             ->add('published', 'checkbox', array(
-                'label' => 'Publish this post',
+                'label' => 'Publish',
                 'required' => false,
                 'attr' => array(
                 'class' => ''
@@ -119,34 +119,60 @@ class PostType extends AbstractType
                     'facebook' => 'Facebook'
                 )
             ))
-            /*->add('published_interval', 'datetime', array(
-                'label' => 'Publish during this interval',
+            ->add('published_from', 'datetime', array(
+                'label' => 'Publish from',
+                'mapped' => false,
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
                 'required' => false,
                 'attr' => array(
-                    'class' => ''
+                    'class' => 'datepicker',
+                    'placeholder' => 'Publish start date'
                 )
             ))
-            ->add('exposed_interval', 'datetime', array(
-                'label' => 'Expose during this interval',
+            ->add('published_to', 'datetime', array(
+                'label' => 'Publish until',
+                'mapped' => false,
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
                 'required' => false,
                 'attr' => array(
-                    'class' => 'flat-input'
+                    'class' => 'datepicker',
+                    'placeholder' => 'Publish end date'
                 )
-            ))*/
+            ))
+            ->add('exposed_from', 'datetime', array(
+                'label' => 'Expose from',
+                'widget' => 'single_text',
+                'mapped' => false,
+                'format' => 'yyyy-MM-dd',
+                'required' => false,
+                'attr' => array(
+                    'class' => 'datepicker',
+                    'placeholder' => 'Expose start date',
+                )
+            ))
+            ->add('exposed_to', 'datetime', array(
+                'label' => 'Expose until',
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+                'mapped' => false,
+                'required' => false,
+                'attr' => array(
+                    'class' => 'datepicker',
+                    'placeholder' => 'Expose end date',
+                )
+            ))
             ->add('exposed', 'checkbox', array(
-                'label' => 'Expose this post',
+                'label' => 'Expose',
                 'required' => false
             ))
             ->add('allow_ratings', 'checkbox', array(
-                'label' => 'Allow users to rate this post',
+                'label' => 'Allow ratings',
                 'required' => false
             ))
             ->add('allow_comments', 'checkbox', array(
-                'label' => 'Allow users to comment on this post',
+                'label' => 'Allow comments',
                 'required' => false
             ))
             ->add('body', 'textarea', array(

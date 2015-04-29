@@ -40,7 +40,7 @@ class Tag
 
     /**
      * Tagged posts
-     * @ManyToMany(targetEntity="Post", mappedBy="tags")
+     * @ManyToMany(targetEntity="Post", mappedBy="tags", cascade={"persist"})
      **/
     protected $posts;
 

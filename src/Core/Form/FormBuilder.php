@@ -18,14 +18,29 @@ use nv\Simplex\Model\Entity\FormField;
 /**
  * User Form Builder
  *
- * @todo Use php-ffmpeg lib
- *
  * @package nv\Simplex\Core\Media
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class FormBuilder
 {
-    public function buildForm(Form $form)
+    /**
+     * Form getter
+     *
+     * @param Form $form Form instance
+     * @return array Array of HTML form fields
+     */
+    public function getForm(Form $form)
+    {
+        return $this->buildForm($form);
+    }
+
+    /**
+     * Form builder
+     *
+     * @param Form $form Form instance
+     * @return array Array of HTML form fields
+     */
+    protected function buildForm(Form $form)
     {
         $formResult = array();
         $r = null;
@@ -81,23 +96,18 @@ class FormBuilder
                     $field->getRequired() ? $r .= 'required ' : null;
                     $field->getSize() ? $r .= 'size="'.$field->getSize().'"' : null;
                     $r .= '>';
-
                     $o = explode(',', $field->getOptions());
-
-
-
                     foreach ($o as $name) {
                         $r .= '<option value="'.$name.'">'.$name.'</option>';
                     }
-
                     $r .= '</select>';
 
                     break;
 
                 case 'submit':
                     $r  = '<input type="submit"';
-                    $field->getValue() ? $r .= 'value="'.$field->getValue().'"' : null;
-                    $field->getName() ? $r .= 'name="'.$field->getName().'"' : null;
+                    $field->getValue() ? $r .= 'value="'.$field->getValue().'" ' : null;
+                    $field->getName() ? $r .= 'name="'.$field->getName().'" ' : null;
                     $field->getAutoFocus() ? $r .= 'autofocus ' : null;
                     $field->getDisabled() ? $r .= 'disabled' : null;
                     $r .= '/>';
@@ -106,8 +116,8 @@ class FormBuilder
 
                 case 'reset':
                     $r  = '<input type="reset"';
-                    $field->getValue() ? $r .= 'value="'.$field->getValue().'"' : null;
-                    $field->getName() ? $r .= 'name="'.$field->getName().'"' : null;
+                    $field->getValue() ? $r .= 'value="'.$field->getValue().'" ' : null;
+                    $field->getName() ? $r .= 'name="'.$field->getName().'" ' : null;
                     $field->getAutoFocus() ? $r .= 'autofocus ' : null;
                     $field->getDisabled() ? $r .= 'disabled' : null;
                     $r .= '/>';
@@ -119,9 +129,22 @@ class FormBuilder
                     break;
             }
 
-            $formResult[] = $r;
+            $formResult[$field->getName()] = $r;
         }
 
-        return implode("", $formResult);
+        // define form markup (form open, close)
+        $f  = '<form ';
+        $f .= 'action="'.$form->getAction().'" ';
+        $f .= 'method="'.$form->getMethod().'" ';
+        $form->getTarget() ? $f .= 'target="'.$form->getTarget().'" ' : null;
+        $form->getName() ? $f .= 'name="'.$form->getName().'" ' : null;
+        $form->getAcceptCharset() ? $f .= 'accept-charset="'.$form->getAcceptCharset().'" ' : null;
+        $form->getEncType() ? $f .= 'enctype="'.$form->getEncType().'" ' : null;
+        $f .= '>';
+
+        $formResult['form_start'] = $f;
+        $formResult['form_end'] = '</form>';
+
+        return $formResult;
     }
 }

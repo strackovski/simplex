@@ -32,7 +32,7 @@ use Symfony\Component\Security\Core\SecurityContext;
 /**
  * Class PageController
  *
- * Defines actions to perform on requests regarding Post objects.
+ * Defines actions to perform on requests regarding Page objects.
  *
  * @package nv\Simplex\Controller\Admin
  * @author Vladimir Stračkovski <vlado@nv3.org>

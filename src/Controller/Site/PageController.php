@@ -13,6 +13,8 @@
 namespace nv\Simplex\Controller\Site;
 
 use Doctrine\DBAL\Query\QueryException;
+use nv\Simplex\Model\Entity\Form;
+use nv\Simplex\Model\Entity\FormResult;
 use nv\Simplex\Model\Entity\Page;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;

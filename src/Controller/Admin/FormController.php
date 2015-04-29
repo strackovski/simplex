@@ -159,7 +159,6 @@ class FormController extends ActionControllerAbstract
         );
     }
 
-
     /**
      * Delete form
      *

@@ -120,7 +120,7 @@ class FormField
     protected $type;
 
     /**
-     *
+     * Field options
      *
      * @var array
      * @Column(type="json_array", name="options", nullable=true)

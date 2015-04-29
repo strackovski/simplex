@@ -171,10 +171,10 @@ class SettingsRepository extends EntityRepository
                             } else {
                                 $aString = $authors['author'];
                             }
-                            $results[$name] = ucfirst($name . ' v' . $version . ' by ' . $aString);
+                            $results[$name] = ucfirst($name . ' by ' . $aString . ' (v' . $version . ')' );
 
                         } else {
-                            $results[$name] = ucfirst($name . ' v' . $version);
+                            $results[$name] = ucfirst($name . ' (v' . $version . ')');
                         }
                     }
                 }

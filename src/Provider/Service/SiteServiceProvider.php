@@ -29,6 +29,10 @@ class SiteServiceProvider implements ServiceProviderInterface, ControllerProvide
         $app['page.site.controller'] = $app->share(function () use ($app) {
             return new Site\PageController();
         });
+
+        $app['form.site.controller'] = $app->share(function () use ($app) {
+            return new Site\FormController();
+        });
     }
 
     /**
@@ -49,6 +53,9 @@ class SiteServiceProvider implements ServiceProviderInterface, ControllerProvide
 
         $app->match('/post/{slug}', 'post.site.controller:viewAction')
             ->bind('post/{slug}');
+
+        $app->match('/form/{formId}', 'form.site.controller:formAction')
+            ->bind('form/{formId}');
 
         return $controllers;
     }

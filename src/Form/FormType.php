@@ -35,16 +35,81 @@ class FormType extends AbstractType
     {
         $builder
             ->add('title', 'text', array(
-                'required' => true
+                'required' => true,
+                'label' => 'Form title',
+                'attr' => array(
+                    'placeholder' => 'Form title/name'
+                )
             ))
-            ->add('attributes', 'text', array(
-                'required' => true
+            ->add('acceptCharset', 'text', array(
+                'required' => false,
+                    'label' => 'Accepted Charset',
+                'attr' => array(
+                    'placeholder' => 'Accepted character set'
+                )
+            ))
+            ->add('action', 'text', array(
+                'required' => false,
+                'label' => 'Action',
+                'attr' => array(
+                    'placeholder' => 'Action URL'
+                )
+            ))
+            ->add('autoComplete', 'checkbox', array(
+                'label' => 'Auto Complete',
+                'required' => false
+            ))
+            ->add('encType', 'choice', array(
+                'required' => false,
+                'label' => 'Encoding Type',
+                'choices' => array(
+                    'application/x-www-form-urlencoded' => 'application/x-www-form-urlencoded',
+                    'multipart/form-data' => 'multipart/form-data',
+                    'text/plain' => 'text/plain'
+                ),
+                'empty_value' => 'Select data encoding type...'
+            ))
+            ->add('method', 'choice', array(
+                'required' => false,
+                'label' => 'Method',
+                'choices' => array(
+                    'POST' => 'HTTP POST',
+                    'GET' => 'HTTP GET'
+                ),
+                'empty_value' => 'Select form\'s HTTP method...'
+            ))
+            ->add('name', 'text', array(
+                'required' => false,
+                'label' => 'Name',
+                'attr' => array(
+                    'placeholder' => 'Form name'
+                )
+            ))
+            ->add('target', 'choice', array(
+                'required' => false,
+                'label' => 'Response target',
+                'choices' => array(
+                    '_blank' => 'New window',
+                    '_self' => 'Current window',
+                    '_parent' => 'Parent',
+                    '_top' => 'Top'
+                ),
+                'empty_value' => 'Select where to display results...'
+            ))
+            ->add('noValidate', 'checkbox', array(
+                'label' => 'Disable validation',
+                'required' => false
             ))
             ->add('contentLabel', 'text', array(
-                'required' => true
+                'required' => true,
+                'label' => 'Content Label',
+                'attr' => array(
+                    'placeholder' => 'Content label'
+                )
             ))
             ->add('published', 'checkbox', array(
-                'required' => false
+                'required' => false,
+                'label' => 'Publish this form',
             ))
             ->add('fields', 'collection', array(
                 'type' => new FormFieldType(),

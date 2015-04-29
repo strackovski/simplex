@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class FormFieldType
  *
- * Defines the Form form
+ * Defines the Form Field form
  *
  * @package nv\Simplex\Form
  * @author Vladimir Stračkovski <vlado@nv3.org>
@@ -47,48 +47,80 @@ class FormFieldType extends AbstractType
                 'empty_value' => 'Select a field type...'
             ))
             ->add('autoComplete', 'checkbox', array(
-                'label' => 'autocomplete',
+                'label' => 'Auto Complete',
                 'required' => false
             ))
             ->add('autoFocus', 'checkbox', array(
-                'label' => 'autofocus',
+                'label' => 'Auto Focus',
                 'required' => false
             ))
             ->add('checked', 'checkbox', array(
-                'label' => 'checked',
+                'label' => 'Checked',
                 'required' => false
             ))
             ->add('disabled', 'checkbox', array(
-                'label' => 'disabled',
+                'label' => 'Disabled',
                 'required' => false
             ))
             ->add('required', 'checkbox', array(
-                'label' => 'required',
+                'label' => 'Required',
                 'required' => false
             ))
             ->add('max', 'text', array(
-                'required' => false
+                'required' => false,
+                'label' => 'Maximum',
+                'attr' => array(
+                    'placeholder' => 'Max value'
+                )
             ))
             ->add('min', 'text', array(
-                'required' => false
+                'required' => false,
+                'label' => 'Minimum',
+                'attr' => array(
+                    'placeholder' => 'Min value',
+                 )
             ))
             ->add('maxlength', 'text', array(
-                'required' => false
+                'required' => false,
+                'label' => 'Max Length',
+                'attr' => array(
+                    'placeholder' => 'Max characters',
+                )
             ))
             ->add('name', 'text', array(
-                'required' => false
+                'required' => false,
+                'label' => 'Name',
+                'attr' => array(
+                    'placeholder' => 'Field name'
+                )
             ))
             ->add('placeholder', 'text', array(
-                'required' => false
+                'required' => false,
+                'label' => 'Placeholder',
+                'attr' => array(
+                    'placeholder' => 'Field description'
+                )
             ))
             ->add('value', 'text', array(
-                'required' => false
+                'required' => false,
+                'label' => 'Value',
+                'attr' => array(
+                    'placeholder' => 'Field value'
+                )
             ))
             ->add('size', 'text', array(
-                'required' => false
+                'required' => false,
+                'label' => 'Size',
+                'attr' => array(
+                    'placeholder' => 'Size (px)'
+                )
             ))
             ->add('options', 'text', array(
-                'required' => false
+                'required' => false,
+                'label' => 'Options',
+                'attr' => array(
+                    'placeholder' => 'Field options'
+                )
             ));
     }
 

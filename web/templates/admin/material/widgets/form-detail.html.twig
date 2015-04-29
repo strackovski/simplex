@@ -15,25 +15,6 @@
 <div class="right-bar-content">
     <div class="content-section">
         <div class="section-title">
-            Fields in this form
-        </div>
-    </div>
-
-    {% for field in user_form.getFields %}
-        <div class="content-section">
-            <div class="section-entity">
-                <div class="dt">
-                    {{ field.getType }}
-                </div>
-                <div class="dd">
-                    {{ field.getName }}
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-
-    <div class="content-section">
-        <div class="section-title">
             Form info
         </div>
     </div>
@@ -74,4 +55,45 @@
             </div>
         </div>
     </div>
+
+    <div class="content-section">
+        <div class="section-title">Fields</div>
+    </div>
+
+    {% for field in user_form.getFields %}
+        <div class="content-section">
+            <div class="section-entity">
+                <div class="dt">{{ field.getType|capitalize }}</div>
+                <div class="dd">{{ field.getName }}</div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="content-section">
+        <div class="section-title">Saved results</div>
+        {% if user_form.getResults.count < 1 %}
+            <div class="text-center">
+                <i class="fa fa-3x fa-asterisk"></i>
+                <p>This form has not been submitted yet</p>
+            </div>
+        {% endif %}
+    </div>
+
+    {% for result in user_form.getResults %}
+        <div class="content-section">
+            <div class="section-entity multi">
+                <div class="header">
+                    <div class="dt">Result #{{ result.getId }}</div>
+                    <div class="dd">From {{ result.getClientIpAddress }} on {{ result.getCreatedAt|date('M d h:i') }}</div>
+                </div>
+
+                <div class="list">
+                    {% for i, saved in result.getFormData %}
+                        <div class="dt">{{ i }}</div>
+                        <div class="dd">{{ saved }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 </div>

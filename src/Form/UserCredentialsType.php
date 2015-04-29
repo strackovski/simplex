@@ -43,7 +43,11 @@ class UserCredentialsType extends AbstractType
                 'mapped' => false
 
             ))
-            ->add('save', 'submit')
+            ->add('save', 'submit', array(
+                'attr' => array(
+                    'class' => 'btn-save'
+                )
+            ))
             ->add('cancel', 'button', array(
                 'attr' => array(
                     'class' => 'btn-cmd cmd-cancel btn-cancel'

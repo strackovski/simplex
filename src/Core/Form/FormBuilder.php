@@ -44,13 +44,18 @@ class FormBuilder
     {
         $formResult = array();
         $r = null;
+        $label = null;
         foreach ($form->getFields() as $field) {
             /** @var FormField $field */
             switch ($field->getType()) {
                 case 'text':
-                    $r  = '<input type="text" ';
+
+                    $label = '<label for="form_'.$form->getName().'_'.$field->getName().'">'.$field->getName().'</label>';
+                    $r = '<input type="text" class="form-control" ';
                     $field->getValue() ? $r .= 'value="'.$field->getValue().'" ' : null;
                     $field->getName() ? $r .= 'name="'.$field->getName().'" ' : null;
+                    $r .= 'id="form_'.$form->getName().'_'.$field->getName().'" ';
+                    $field->getPlaceholder() ? $r .= 'placeholder="'.$field->getPlaceholder().'" ' : null;
                     $field->getAutoComplete() ? $r .= 'autocomplete="on" ' : $r .= 'autocomplete="off" ';
                     $field->getAutoFocus() ? $r .= 'autofocus  ' : null;
                     $field->getDisabled() ? $r .= 'disabled ' : null;
@@ -62,13 +67,28 @@ class FormBuilder
                     break;
 
                 case 'textarea':
-
+                    $label  = '<label for="form_'.$form->getName().'_'.$field->getName().'">'.$field->getName().'</label>';
+                    $r = '<textarea  class="form-control" ';
+                    $field->getValue() ? $r .= 'value="'.$field->getValue().'" ' : null;
+                    $field->getName() ? $r .= 'name="'.$field->getName().'" ' : null;
+                    $r .= 'id="form_'.$form->getName().'_'.$field->getName().'" ';
+                    $field->getPlaceholder() ? $r .= 'placeholder="'.$field->getPlaceholder().'" ' : null;
+                    $field->getAutoComplete() ? $r .= 'autocomplete="on" ' : $r .= 'autocomplete="off" ';
+                    $field->getAutoFocus() ? $r .= 'autofocus  ' : null;
+                    $field->getDisabled() ? $r .= 'disabled ' : null;
+                    $field->getReadOnly() ? $r .= 'readonly ' : null;
+                    $field->getRequired() ? $r .= 'required ' : null;
+                    $field->getMaxLength() ? $r .= 'maxlength="'.$field->getMaxLength().'" ' : null;
+                    $field->getSize() ? $r .= 'size="'.$field->getSize().'" ' : null;
+                    $r .= '></textarea>';
                     break;
 
                 case 'checkbox':
-                    $r  = '<input type="checkbox" ';
+                    $label  = '<label for="form_'.$form->getName().'_'.$field->getName().'">'.$field->getName().'</label>';
+                    $r = '<input type="checkbox"  class="form-control" ';
                     $field->getValue() ? $r .= 'value="'.$field->getValue().'"' : null;
                     $field->getName() ? $r .= 'name="'.$field->getName().'"' : null;
+                    $r .= 'id="form_'.$form->getName().'_'.$field->getName().'" ';
                     $field->getAutoFocus() ? $r .= 'autofocus ' : null;
                     $field->getChecked() ? $r .= 'checked  ' : null;
                     $field->getDisabled() ? $r .= 'disabled ' : null;
@@ -78,9 +98,11 @@ class FormBuilder
                     break;
 
                 case 'radio':
-                    $r  = '<input type="radio" ';
+                    $label  = '<label for="form_'.$form->getName().'_'.$field->getName().'">'.$field->getName().'</label>';
+                    $r = '<input type="radio" ';
                     $field->getValue() ? $r .= 'value="'.$field->getValue().'"' : null;
                     $field->getName() ? $r .= 'name="'.$field->getName().'"' : null;
+                    $r .= 'id="form_'.$form->getName().'_'.$field->getName().'" ';
                     $field->getAutoFocus() ? $r .= 'autofocus ' : null;
                     $field->getChecked() ? $r .= 'checked ' : null;
                     $field->getDisabled() ? $r .= 'disabled ' : null;
@@ -90,8 +112,10 @@ class FormBuilder
                     break;
 
                 case 'select':
-                    $r  = '<select name="'.$field->getName().'" ';
+                    $label  = '<label for="form_'.$form->getName().'_'.$field->getName().'">'.$field->getName().'</label>';
+                    $r = '<select name="'.$field->getName().'" ';
                     $field->getAutoFocus() ? $r .= 'autofocus ' : null;
+                    $r .= 'id="form_'.$form->getName().'_'.$field->getName().'" ';
                     $field->getDisabled() ? $r .= 'disabled ' : null;
                     $field->getRequired() ? $r .= 'required ' : null;
                     $field->getSize() ? $r .= 'size="'.$field->getSize().'"' : null;
@@ -105,7 +129,8 @@ class FormBuilder
                     break;
 
                 case 'submit':
-                    $r  = '<input type="submit"';
+                    $r = '<input type="submit"';
+                    $r .= 'id="form_'.$form->getName().'_'.$field->getName().'" ';
                     $field->getValue() ? $r .= 'value="'.$field->getValue().'" ' : null;
                     $field->getName() ? $r .= 'name="'.$field->getName().'" ' : null;
                     $field->getAutoFocus() ? $r .= 'autofocus ' : null;
@@ -115,9 +140,10 @@ class FormBuilder
                     break;
 
                 case 'reset':
-                    $r  = '<input type="reset"';
+                    $r = '<input type="reset"';
                     $field->getValue() ? $r .= 'value="'.$field->getValue().'" ' : null;
                     $field->getName() ? $r .= 'name="'.$field->getName().'" ' : null;
+                    $r .= 'id="form_'.$form->getName().'_'.$field->getName().'" ';
                     $field->getAutoFocus() ? $r .= 'autofocus ' : null;
                     $field->getDisabled() ? $r .= 'disabled' : null;
                     $r .= '/>';
@@ -129,7 +155,8 @@ class FormBuilder
                     break;
             }
 
-            $formResult[$field->getName()] = $r;
+            $formResult[$field->getName()]['control'] = $r;
+            $formResult[$field->getName()]['label'] = $label;
         }
 
         // define form markup (form open, close)

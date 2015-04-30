@@ -171,6 +171,7 @@ class VideoController extends ActionControllerAbstract
             if (null !== $token) {
                 $video->setAuthor($token->getUser());
             }
+            $video->setPublished(true);
             $video->setInLibrary(true);
             $video->setFile($uploadedFile);
             $video->setName($uploadedFile->getClientOriginalName());

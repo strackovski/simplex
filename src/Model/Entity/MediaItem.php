@@ -133,6 +133,11 @@ abstract class MediaItem extends TimestampableAbstract
     /**
      * @Column(type="boolean", nullable=true)
      */
+    protected $published;
+
+    /**
+     * @Column(type="boolean", nullable=true)
+     */
     protected $hasFace;
 
     /**
@@ -175,7 +180,6 @@ abstract class MediaItem extends TimestampableAbstract
         $this->author = $author;
     }
 
-
     /**
      * @return mixed
      */
@@ -212,6 +216,22 @@ abstract class MediaItem extends TimestampableAbstract
     /**
      * @return mixed
      */
+    public function getPublished()
+    {
+        return $this->published;
+    }
+
+    /**
+     * @param bool $published
+     */
+    public function setPublished($published = false)
+    {
+        $this->published = $published;
+    }
+
+    /**
+     * @return mixed
+     */
     public function isInLibrary()
     {
         return $this->inLibrary;
@@ -222,9 +242,7 @@ abstract class MediaItem extends TimestampableAbstract
      */
     public function setInLibrary($inLibrary = false)
     {
-        if ($inLibrary) {
-            $this->inLibrary = true;
-        }
+        $this->inLibrary = $inLibrary;
     }
 
     /**

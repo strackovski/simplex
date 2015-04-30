@@ -15,12 +15,12 @@ namespace nv\Simplex\Controller\Admin;
 use Imagine\Image\ImagineInterface;
 use nv\Simplex\Controller\ActionControllerAbstract;
 use nv\Simplex\Core\Media\ImageManager;
+use nv\Simplex\Form\MediaType;
 use Silex\Application;
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use nv\Simplex\Form\ImageType;
 use nv\Simplex\Model\Entity\Image;
 use nv\Simplex\Model\Entity\Metadata;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -118,6 +118,7 @@ class ImageController extends ActionControllerAbstract
             if (null !== $token) {
                 $image->setAuthor($token->getUser());
             }
+            $image->setPublished(true);
             $image->setInLibrary(true);
             $image->setFile($uploadedFile);
             $image->setName($uploadedFile->getClientOriginalName());
@@ -145,7 +146,7 @@ class ImageController extends ActionControllerAbstract
     {
         $image = new Image();
         /** @var $form Form */
-        $form = $this->form->create(new ImageType(), $image);
+        $form = $this->form->create(new MediaType(), $image);
 
         if ($request->isMethod('POST')) {
             $form->bind($request);

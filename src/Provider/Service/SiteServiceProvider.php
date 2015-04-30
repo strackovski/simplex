@@ -45,8 +45,7 @@ class SiteServiceProvider implements ServiceProviderInterface, ControllerProvide
         /** @var $controllers ControllerCollection */
         $controllers = $app['controllers_factory'];
 
-        $app->get('/', 'page.site.controller:indexAction')
-            ->bind('/');
+        $app->get('/', 'page.site.controller:indexAction')->bind('/');
 
         $app->match('/{slug}', 'page.site.controller:viewAction')
             ->bind('{slug}');

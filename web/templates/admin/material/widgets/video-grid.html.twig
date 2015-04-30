@@ -1,3 +1,4 @@
+{#
 {% if yt|length > 0 %}
     {% for y in yt %}
         <div class="tb-col removable col-lg-2 col-md-3 col-sm-4 col-xs-6">
@@ -9,6 +10,7 @@
         </div>
     {% endfor %}
 {% endif %}
+#}
 
 {% if videos|length > 0 %}
     {% for video in videos %}
@@ -24,7 +26,7 @@
     {% endfor %}
 {% endif %}
 
-{% if videos|length < 1 and yt|length < 1 %}
+{% if videos|length < 1 %}
     <div class="empty-msg">
         <h1 class="ghost big">No videos added yet</h1>
         <div class="holder">

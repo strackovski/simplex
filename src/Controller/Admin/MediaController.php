@@ -14,6 +14,7 @@ namespace nv\Simplex\Controller\Admin;
 
 use nv\Simplex\Controller\ActionControllerAbstract;
 use nv\Simplex\Form\MediaSettingsType;
+use nv\Simplex\Form\MediaType;
 use nv\Simplex\Model\Entity\Settings;
 use nv\Simplex\Model\Repository\MediaRepository;
 use Silex\Application;
@@ -118,10 +119,11 @@ class MediaController extends ActionControllerAbstract
     public function viewAction(Request $request)
     {
         $item = $this->media->filter(array('id' => $request->get('id')));
+        $form = $this->form->create(new MediaType(), $item);
 
         return $this->twig->render(
             'admin/'.$this->settings->getAdminTheme().'/views/media-view.html.twig',
-            array('item' => $item)
+            array('item' => $item, 'form' => $form->createView())
         );
     }
 
@@ -227,5 +229,34 @@ class MediaController extends ActionControllerAbstract
     public function helpAction()
     {
         return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/widgets/help-media.html.twig');
+    }
+
+    /**
+     * Edit media
+     *
+     * @param Request     $request
+     * @return mixed
+     */
+    public function editAction(Request $request)
+    {
+        $image = $this->media->findOneBy(array('id' => $request->get('id')));
+
+        /** @var $form Form */
+        $form = $this->form->create(new MediaType(), $image);
+
+        if ($request->isMethod('POST')) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $this->media->save($image);
+                return 1;
+            }
+        }
+
+        $data = array(
+            'form' => $form->createView(),
+            'title' => 'Edit image',
+        );
+
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/widgets/media-form.html.twig', $data);
     }
 }

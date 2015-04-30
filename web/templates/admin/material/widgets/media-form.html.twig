@@ -1,0 +1,47 @@
+
+{% form_theme form with ['bootstrap.html.twig', 'admin/material/masters/flat-form.html.twig'] %}
+
+
+{{ form_start(form, {'action': app.url_generator.generate('admin/media/edit', {'id': item.getId }) }) }}
+    <div class="form-group title form-element">
+        {{ form_label(form.title) }}
+        {{ form_widget(form.title) }}
+        {{ form_errors(form.title) }}
+    </div>
+
+    <div class="form-group title form-element">
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description) }}
+        {{ form_errors(form.description) }}
+    </div>
+
+    <div class="form-group title form-element">
+        {{ form_label(form.contentLabel) }}
+        {{ form_widget(form.contentLabel) }}
+        {{ form_errors(form.contentLabel) }}
+    </div>
+
+    <div class="form-group title form-element">
+        {{ form_label(form.mediaCategory) }}
+        {{ form_widget(form.mediaCategory) }}
+        {{ form_errors(form.mediaCategory) }}
+    </div>
+
+    <div class="form-group title form-element">
+        {{ form_label(form.originalAuthor) }}
+        {{ form_widget(form.originalAuthor) }}
+        {{ form_errors(form.originalAuthor) }}
+    </div>
+
+    <div class="form-group title form-element">
+        {{ form_label(form.license) }}
+        {{ form_widget(form.license) }}
+        {{ form_errors(form.license) }}
+    </div>
+
+    <div class="form-group title form-element">
+        <div class="field option">
+            {{ form_row(form.published) }}
+        </div>
+    </div>
+{{ form_end(form) }}

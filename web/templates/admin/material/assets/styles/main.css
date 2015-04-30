@@ -3279,3 +3279,45 @@ div.badge-icon > img {
     margin: 0 auto;
     top: -13px;
 }
+
+.section-entity .full input, .section-entity .full textarea {
+    margin-top: 0;
+    font-size: 13px;
+    padding: 8px 0;
+    color: #686868;
+    font-weight: 500;
+}
+
+.section-entity .full label {
+    font-size: 12px;
+}
+
+.section-entity .full {
+    padding-bottom: 20px;
+}
+
+.section-entity .full textarea {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+.section-entity .full textarea:focus {
+    border-bottom: 1px solid #2196F3;
+    border-right: 1px solid #2196F3;
+}
+
+.section-entity .full .btn-save,
+.section-entity .full .btn-cancel {
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    height: 28px;
+    line-height: 28px;
+}
+
+.section-entity .full .form-group {
+    margin-bottom: 16px;
+    line-height: 1.2;
+}

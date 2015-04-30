@@ -2,8 +2,7 @@
     <div class="top-header">
         <div class="right-aux-toolbar">
             <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fa fa-times"></i></a>
-            <a href="{{  app.url_generator.generate('admin/media/delete', {id:item.getId}) }}" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
-            <a href="{{ app.url_generator.generate('admin/media/view', {id:item.getId}) }}" class="paper-btn edit-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="View"><i class="fa fa-eye"></i></a>
+            <a href="{{ app.url_generator.generate('admin/media/delete', {id:item.getId}) }}" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
         </div>
     </div>
     <div class="bottom-header"><h4>{{ item.getTitle }}</h4></div>
@@ -11,7 +10,7 @@
 
 <div class="right-bar-content">
     <div class="content-section clear-section">
-        <img src="{{ display('thumbnails/medium:' ~ item.getPath) }}" alt=""/>
+        <img src="{{ app.request.basepath ~ '/uploads/' ~ item.getWebPath('medium') }}" alt=""/>
     </div>
 
     <div class="content-section">

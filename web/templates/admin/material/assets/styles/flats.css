@@ -305,6 +305,39 @@ input, textarea {
     resize: none;
 }
 
+.form-element textarea {
+    padding: 8px;
+}
+
+.form-element input[type='text'] {
+    padding: 8px 1px;
+}
+
+.form-element select {
+    background: none;
+    display: block;
+    width: 100%;
+    margin: 0;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    border-radius: 0;
+    padding: 8px 1px;
+    font-size: 14px;
+    color: #555;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.14);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: none;
+    -webkit-transition: border-color ease-in-out .25s;
+    -o-transition: border-color ease-in-out .25s;
+    transition: border-color ease-in-out .25s;
+    resize: none;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAjklEQVQ4T+3SMQrCYAyG4ad6Aa/h4gVcBK9Q9JoODr2Ek4sIYic3ERHESeWHFkpt+w/dpBnzJS/JlyR6RtKz3x8Cpjjj1eHNDHt8Qk3dgzHW2ODZAJnjikOpNZk4KiBbPCqQBS44VsFtVwj5FTLcsUSOU32qrjMGLcUbuwLws1XsD4I+wa3N1Bgg+qgDgC+KjhQRlo1IvAAAAABJRU5ErkJggg==');
+    background-position: 98% 70%;
+    background-repeat: no-repeat;
+}
+
 .form-element textarea, button {
     border: 1px solid rgba(0,0,0,0.14);
 }
@@ -443,6 +476,11 @@ input, textarea {
     -o-transition: background 0.15s ease, box-shadow 0.15s ease;
     transition: background 0.15s ease, box-shadow 0.15s ease;
 
+}
+
+select {
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
 }
 
 .controls-group .form-btn {

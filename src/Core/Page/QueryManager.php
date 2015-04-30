@@ -42,6 +42,8 @@ class QueryManager
     }
 
     /**
+     * Query Builder
+     *
      * @param EntityManager $em
      * @return \Doctrine\ORM\Query
      */
@@ -52,7 +54,6 @@ class QueryManager
         switch ($this->query->getColumn()) {
             case 'title':
                 $qb->select(array('u'))
-                    // ->from('nv\Simplex\Model\Entity\Post', 'u');
                     ->from($contentType, 'u');
                 if ($this->query->getOperator() == 'contains') {
                     $qb->where($qb->expr()->in('u.title', '?1'))
@@ -135,7 +136,6 @@ class QueryManager
                         )
                     );
                 } else {
-                    // $qb->select(array('u'))->from('nv\Simplex\Model\Entity\Post', 'u');
                     $qb->select(array('u'))->from($contentType, 'u');
                     if ($this->query->getOperator() == 'before') {
                         $qb->where($qb->expr()->lte('u.'.$this->query->getColumn(), '?1'))
@@ -160,6 +160,7 @@ class QueryManager
                 break;
         }
 
+        // @todo Add option for 'sort', rename 'sortBy' to 'orderBy' [w/ PageQuery]
         $qb->orderBy('u.created_at', $this->query->getSortBy());
 
         if ($this->query->getLimitMax()) {

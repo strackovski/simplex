@@ -115,6 +115,9 @@ class Simplex extends Application
             return $twig;
         });
 
+        /**
+         * Time-ago extension for Twig
+         */
         $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
             $twig->addFilter(new \Twig_SimpleFilter('timeago', function ($datetime) use ($app) {
                 $time = time() - strtotime($datetime);
@@ -140,6 +143,9 @@ class Simplex extends Application
             return $twig;
         }));
 
+        /**
+         * FormBuilder Twig Extension
+         */
         $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
             $twig->addFunction(new \Twig_SimpleFunction('buildForm', function ($form, $format = false) use ($app) {
                 return $app['form.builder']->getForm($form, $format);
@@ -185,29 +191,19 @@ class Simplex extends Application
             $twig->addFunction(new \Twig_SimpleFunction('display', function ($asset) use ($app) {
                 $basePath = dirname(dirname(dirname(__FILE__))) . '/web/uploads/';
                 $baseUrl = $app['url_generator']->getContext()->getBaseUrl();
-
-                if ($index = strpos($baseUrl, 'index_dev.php')) {
-                    $baseUrl = str_replace('index_dev.php', '', $baseUrl);
-                } else {
-                    $baseUrl = str_replace('index_dev.php', '', $baseUrl) . '/';
-                }
-
                 if (strpos($asset, ":") !== false) {
                     list($type, $name) = explode(":", $asset);
                     if (file_exists($file = $basePath . $type . '/' . $name)) {
                         return $baseUrl . 'uploads/' . $type . '/' . $name;
                     }
                 }
-
                 return $baseUrl . 'assets/images/empty.png';
             }));
 
             return $twig;
         }));
 
-        $this->register(new TranslationServiceProvider(), array(
-            'locale_fallbacks' => array('en')
-        ));
+        $this->register(new TranslationServiceProvider(), array('locale_fallbacks' => array('en')));
 
         $app['user.provider'] = $this->share(function ($app) {
             return new UserProvider($app['orm.em']->getConnection(), $app);

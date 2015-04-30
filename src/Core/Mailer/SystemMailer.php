@@ -54,4 +54,8 @@ class SystemMailer
 
         }
     }
+
+    public function sendClientConfirmationEmail($address, array $confirmationData) {
+        // @todo Implement client notification email
+    }
 }

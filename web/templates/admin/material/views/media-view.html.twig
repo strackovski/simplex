@@ -8,13 +8,21 @@
                     <div class="right-aux-toolbar">
                         <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fa fa-times"></i></a>
                         <a href="{{ app.url_generator.generate('admin/media/delete', {id:item.getId}) }}" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
-                        <a href="#" class="paper-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Share"><i class="fa fa-share"></i></a>
                     </div>
                 </div>
                 <div class="bottom-header"><h4>{{ item.getName }}</h4></div>
             </div>
 
             <div class="right-bar-content">
+                <div class="content-section">
+                    <div class="section-title">Media Properties</div>
+                    <div class="section-entity">
+                        <div class="full clearfix">
+                            {% include 'admin/material/widgets/media-form.html.twig' with {'form':form, 'item': item} %}
+                        </div>
+                    </div>
+                </div>
+
                 <div class="content-section">
                     <div class="section-title">Author info</div>
                     <div class="section-entity">
@@ -60,31 +68,31 @@
                         {% for metakey, metaval in item.getMetadata.getData %}
                             {% if item.getType == 'image' and metaval != '@todo' and metakey != 'gps' %}
                                 {% if metakey == 'time_originated' %}
-                                <div class="section-entity">
-                                    <div class="dt">
-                                        Time originated
+                                    <div class="section-entity">
+                                        <div class="dt">
+                                            Time originated
+                                        </div>
+                                        <div class="dd">
+                                            {{ metaval|date('M d, Y H:i') }}
+                                        </div>
                                     </div>
-                                    <div class="dd">
-                                        {{ metaval|date('M d, Y H:i') }}
+                                    <div class="section-entity">
+                                        <div class="dt">
+                                            Time uploaded
+                                        </div>
+                                        <div class="dd">
+                                            {{ item.getCreatedAt|date('M d, Y H:i') }}
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="section-entity">
-                                    <div class="dt">
-                                        Time uploaded
-                                    </div>
-                                    <div class="dd">
-                                        {{ item.getCreatedAt|date('M d, Y H:i') }}
-                                    </div>
-                                </div>
                                 {% else %}
-                                <div class="section-entity">
-                                    <div class="dt">
-                                        {{ metakey|capitalize|replace('_', ' ') }}
+                                    <div class="section-entity">
+                                        <div class="dt">
+                                            {{ metakey|capitalize|replace('_', ' ') }}
+                                        </div>
+                                        <div class="dd">
+                                            {{ metaval }}
+                                        </div>
                                     </div>
-                                    <div class="dd">
-                                        {{ metaval }}
-                                    </div>
-                                </div>
                                 {% endif %}
                             {% elseif item.getType == 'video' %}
                                 {% if metakey != 'video_stream' and metakey != 'audio_stream' and metakey != 'audio' and metakey != 'video' and metakey != 'height' and metakey != 'gps' %}

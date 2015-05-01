@@ -107,26 +107,34 @@
                                     </div>
                                     <div class="item">
                                         <div>
+                                            <span class="small">
                                             {% if page.getKeywords %}
                                                 {{ page.getKeywords }}
                                             {% else %}
-                                                <span class="empty">This page has no keywords</span>
+                                                This page has no keywords
                                             {% endif %}
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="item item-s">
                                         <div>
-                                            {{ page.getContentLabel }}
+                                            <span class="small">
+                                                {{ page.getContentLabel }}
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="item item-s">
                                         <div>
-                                            {{ page.getView }}
+                                            <span class="small">
+                                                {{ page.getView }}
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="item item-s">
                                         <div>
-                                            {{ page.getQueries.count }}
+                                            <span class="small">
+                                                {{ page.getQueries.count }}
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="item">

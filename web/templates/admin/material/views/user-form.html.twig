@@ -9,6 +9,9 @@
                     <div class="header-title">
                         <span>
                             {% if user is defined %}
+                                <a href="{{ app.url_generator.generate('admin/users') }}">
+                                    <span class="type">Users <i class="fa fa-angle-right"></i></span>
+                                </a>
                                 {{ user.displayName }}
                             {% else %}
                                 New user

@@ -10,6 +10,10 @@
                     <div class="header-title">
                         <span>
                             {% if user_form is defined %}
+                                <a href="{{ app.url_generator.generate('admin/forms') }}">
+                                    <span class="type">Form <i class="fa fa-angle-right"></i></span>
+                                </a>
+                                {{ user_form.getTitle }}
                             {% else %}
                                 New form
                             {% endif %}
@@ -140,10 +144,10 @@
                 <div class="post-addition">
                     <ul class="page-tabs">
                         <li class="active">
-                            <a href="#home" role="tab" data-toggle="tab">Form</a>
+                            <a href="#home" role="tab" data-toggle="tab"><i class="fa fa-paper-plane"></i></a>
                         </li>
                         <li class="">
-                            <a href="#options" role="tab" data-toggle="tab">Fields</a>
+                            <a href="#options" role="tab" data-toggle="tab"><i class="fa fa-paragraph"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -156,50 +160,56 @@
                 <div class="tab-content page-content">
                     <div class="tab-pane active" id="home">
                         <div class="row">
-                            <div class="data-group">
-                                <div class="form-group">
-                                    <div class="form-element">
-                                        {{ form_row(form.contentLabel) }}
-                                    </div>
+
+                            <div class="col-xs-6">
+                                <div class="form-group form-element">
+                                    {{ form_row(form.contentLabel) }}
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <div class="form-group form-element">
-                                        {{ form_row(form.encType) }}
-                                    </div>
-                                </div>
-
-                                <div class="col-xs-4">
-                                    <div class="form-group form-element">
-                                        {{ form_row(form.method) }}
-                                    </div>
-                                </div>
-
-                                <div class="col-xs-4">
-                                    <div class="form-group form-element">
-                                        {{ form_row(form.target) }}
-                                    </div>
+                            <div class="col-xs-6">
+                                <div class="form-group form-element">
+                                    {{ form_row(form.name) }}
                                 </div>
                             </div>
-
-                            <div class="row">
-                                <div class="col-xs-4">
-                                    <div class="form-group form-element">
-                                        {{ form_row(form.name) }}
-                                    </div>
+                        </div>
+                        <div class="row">
+                            <div class="widget-advanced">
+                                <div class="widget-header">
+                                    <h5>Advanced options</h5>
+                                    <a href="#" class="pull-right close-btn"><i class="fa fa-close"></i></a>
                                 </div>
+                                <div class="widget-body">
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <div class="form-group form-element">
+                                                {{ form_row(form.encType) }}
+                                            </div>
+                                        </div>
 
-                                <div class="col-xs-4">
-                                    <div class="form-group form-element">
-                                        {{ form_row(form.action) }}
-                                    </div>
-                                </div>
+                                        <div class="col-xs-4">
+                                            <div class="form-group form-element">
+                                                {{ form_row(form.method) }}
+                                            </div>
+                                        </div>
 
-                                <div class="col-xs-4">
-                                    <div class="form-group form-element">
-                                        {{ form_row(form.acceptCharset) }}
+                                        <div class="col-xs-4">
+                                            <div class="form-group form-element">
+                                                {{ form_row(form.target) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-6 ls">
+                                            <div class="form-group form-element">
+                                                {{ form_row(form.action) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-6 ls">
+                                            <div class="form-group form-element">
+                                                {{ form_row(form.acceptCharset) }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

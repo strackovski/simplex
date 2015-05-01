@@ -27,7 +27,8 @@
             <div class="header-box info-box">
                 <div class="info-image">
                     {% if user.getAvatar %}
-                        <img src="{{ display('crops:' ~ user.getAvatar.getPath) }}" alt="" />
+                        <img src="{{ app.request.basepath ~ '/uploads/' ~ user.getAvatar.getWebPath('crop') }}" />
+
                     {% else %}
                         <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt=""/>
                     {% endif %}
@@ -126,7 +127,7 @@
                                                     <div class="chip2-content-info">
                                                         {% if latestPost.getAuthor %}
                                                             {% if latestPost.getAuthor.getAvatar %}
-                                                                <img src="{{ display('crops:' ~ latestPost.getAuthor.getAvatar.getPath) }}" alt=""/>
+                                                                <img src="{{ app.request.basepath ~ '/uploads/' ~ user.getAvatar.getWebPath('crop') }}" />
                                                             {% else %}
                                                                 <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt=""/>
                                                             {% endif %}
@@ -187,7 +188,7 @@
                                                    <div class="chip2-content-info">
                                                        {% if latestPage.getAuthor %}
                                                            {% if latestPage.getAuthor.getAvatar %}
-                                                               <img src="{{ display('crops:' ~ latestPage.getAuthor.getAvatar.getPath) }}" alt=""/>
+                                                               <img src="{{ app.request.basepath ~ '/uploads/' ~ user.getAvatar.getWebPath('crop') }}" />
                                                            {% else %}
                                                                <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt=""/>
                                                            {% endif %}
@@ -254,7 +255,7 @@
                                                     <div class="chip2-content-info">
                                                         {% if latestMedia.getAuthor %}
                                                             {% if latestMedia.getAuthor.getAvatar %}
-                                                                <img src="{{ display('crops:' ~ latestMedia.getAuthor.getAvatar.getPath) }}" alt=""/>
+                                                                <img src="{{ app.request.basepath ~ '/uploads/' ~ user.getAvatar.getWebPath('crop') }}" />
                                                             {% else %}
                                                                 <img src="{{ app.request.basepath ~ '/assets/images/default-user-icon-profile.png' }}" alt=""/>
                                                             {% endif %}
@@ -266,7 +267,7 @@
                                                     </div>
 
                                                     <div class="chip2-content-main">
-                                                        <img height="250" src="{{ display('thumbnails/medium:' ~ latestMedia.getPath) }}" alt="{{ latestMedia.getTitle }}"/>
+                                                        <img height="250" src="{{ app.request.basepath ~ '/uploads/' ~ latestMedia.getWebPath('medium') }}" alt="{{ latestMedia.getTitle }}"/>
                                                     </div>
                                                 </div>
                                             </div>

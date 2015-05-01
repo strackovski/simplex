@@ -39,7 +39,7 @@
             <div class="grid-content">
                 {% if content|length < 1 %}<h1 class="ghost big">No content added yet</h1>{% else %}
 
-                <div class="item-list item-list-6">
+                <div class="item-list item-list-6 mixed-list">
                     <div class="item-wrap item-header item-fixed-header">
                         <div class="item"><div></div></div>
                         <div class="item"><div>Title</div></div>
@@ -81,14 +81,18 @@
 
                             <div class="item">
                                 {% if item.getAuthor %}
-                                    <div>{{ item.getAuthor }}</div>
+                                    <div>
+                                        <span class="small">
+                                        {{ item.getAuthor }}
+                                        </span>
+                                    </div>
                                 {% else %}
-                                    <div>unknown author</div>
+                                    <div><span class="small">unknown author</span></div>
                                 {% endif %}
                             </div>
 
                             <div class="item">
-                                <div>{{ item.getCreatedAt|date|timeago }}</div>
+                                <div><span class="small">{{ item.getCreatedAt|date|timeago }}</span></div>
                             </div>
 
                             <div class="item">

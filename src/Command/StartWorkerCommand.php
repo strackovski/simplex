@@ -57,8 +57,6 @@ class StartWorkerCommand extends ApplicationAwareCommand
             $workload = json_decode($job->workload());
             echo "Processing image: " . print_r($workload, 1);
             sleep(5);
-            // You would then, of course, actually call this:
-            //mail($workload->email, $workload->subject, $workload->body);
         });
 
         while ($worker->work());

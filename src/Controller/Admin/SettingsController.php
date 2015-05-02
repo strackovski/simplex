@@ -97,37 +97,14 @@ class SettingsController
      */
     public function dashboardAction(Request $request, Application $app)
     {
-        $posts = $app['repository.post']->findAll();
         $latest['posts'] = $app['repository.post']->getLatest(5);
         $latest['media'] = $app['repository.media']->getLatest(5);
         $latest['pages'] = $app['repository.page']->getLatest(5);
         $settings = $this->settingsRepository->getCurrent();
 
-        // @todo Interpret analytics data (charts)
-        $ga = '';
-        $published = '';
-        $exposed = '';
-
-        /** @var \nv\Simplex\Model\Entity\Post $post */
-        foreach ($posts as $post) {
-            if ($post->getExposed()) {
-                $exposed[] = $post;
-            }
-
-            if ($post->getPublished()) {
-                $published[] = $post;
-            }
-        }
-
         $data = array(
-            'posts_select' => array(
-                'published' => $exposed,
-                'exposed' => $published,
-            ),
-            'posts' => $posts,
             'latest' => $latest,
-            'settings' => $settings,
-            'analytics' => $ga
+            'settings' => $settings
         );
 
         if (null !== $app['security']->getToken()) {
@@ -177,7 +154,7 @@ class SettingsController
     /**
      * Export settings
      *
-     * @todo Fix error generating XML
+     * @todo Fix error when generating Settings XML
      *
      * @param Request     $request
      * @return Response

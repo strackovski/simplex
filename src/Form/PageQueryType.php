@@ -14,7 +14,6 @@ namespace nv\Simplex\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -42,7 +41,7 @@ class PageQueryType extends AbstractType
                     'image' => 'Image',
                     'video' => 'Video'
                 ),
-                'empty_value' => 'Select type of content...',
+                'empty_value' => 'Content type...',
             ))
             ->add('column', 'choice', array(
                 'choices' => array(
@@ -57,7 +56,7 @@ class PageQueryType extends AbstractType
                 'attr' => array(
                     'data-opt' => 'column'
                 ),
-                'empty_value' => 'Select filter column...'
+                'empty_value' => 'Column...'
             ))
             ->add('operator', 'choice', array(
                 'choices' => array(
@@ -70,17 +69,9 @@ class PageQueryType extends AbstractType
                 'attr' => array(
                     'data-opt' => 'operator'
                 ),
-                'empty_value' => 'Select search operator...',
+                'empty_value' => 'Operator...',
                 'required' => false
             ))
-            /*
-            ->add('value', 'text', array(
-                'attr' => array(
-                    'placeholder' => 'Value',
-                    'data-opt' => 'value'
-                )
-            ))
-            */
             ->add('value', 'collection', array(
                 'type'   => 'text',
                 'allow_add' => true,
@@ -89,7 +80,8 @@ class PageQueryType extends AbstractType
                     'required'  => false,
                     'label' => 'Value',
                     'attr'      => array(
-                        'data-opt' => 'value'
+                        'data-opt' => 'value',
+                        'placeholder' => 'Value'
                     )
                 ),
                 'attr' => array(
@@ -105,24 +97,27 @@ class PageQueryType extends AbstractType
                     'updated_at' => 'Date modified',
                     'exposed' => 'Exposed'
                 ),
+                'empty_value' => 'Sort by...',
             ))
             ->add('sortOrder', 'choice', array(
-                'choices' => array('ASC' => 'Ascending', 'DESC' => 'Descending'),
+                'choices' => array(
+                    'ASC' => 'Ascending',
+                    'DESC' => 'Descending'
+                ),
+                'empty_value' => 'Order...',
             ))
             ->add('limitMin', 'text', array(
                 'label' => 'Min limit',
                 'required' => false,
                 'attr' => array(
-                    'placeholder' => 'Min results',
-                    'data-opt' => 'minlimit'
+                    'placeholder' => 'Min results'
                 ),
             ))
             ->add('limitMax', 'text', array(
                 'label' => 'Max limit',
                 'required' => false,
                 'attr' => array(
-                    'placeholder' => 'Result count limit (number)',
-                    'data-opt' => 'maxlimit'
+                    'placeholder' => 'Max results'
                 ),
             ))
             ->add('outputVariable', 'text', array(
@@ -132,7 +127,6 @@ class PageQueryType extends AbstractType
                 ),
                 'required' => false
             ));
-
     }
 
     /**

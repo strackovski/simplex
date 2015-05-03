@@ -259,7 +259,6 @@ class Form extends TimestampableAbstract
     }
 
     /**
-     * @todo This should be 'getContentType'
      * @return string
      */
     public function getType()

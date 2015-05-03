@@ -1,62 +1,77 @@
 <div class="pf-header clearfix">
-    <h3>Query <span></span></h3>
-    <div class="fieldForm-right"></div>
+    <div class="row">
+        <div class="col-xs-2"><h3>Query {{ loop.index }}</h3></div>
+        <div class="fieldForm-right col-xs-1 pull-right"></div>
+    </div>
 </div>
-<div class="addQuery-form editQuery-form">
-    <div class="data-group row">
-        <div class="col-xs-4">
+<div class="addQuery-form editQuery-form query-form-widget cx-form">
+    <div class="data-group row variable">
+        <div class="col-xs-3">
             <div class="form-group form-element select">
                 {{ form_label(form.contentType) }}
                 {{ form_widget(form.contentType) }}
                 {{ form_errors(form.contentType) }}
             </div>
         </div>
-        <div class="col-xs-4">
+        <div class="col-xs-3">
             <div class="form-group form-element select">
                 {{ form_label(form.column) }}
                 {{ form_widget(form.column) }}
                 {{ form_errors(form.column) }}
             </div>
         </div>
-        <div class="col-xs-4">
+        <div class="col-xs-2">
             <div class="form-group form-element select">
                 {{ form_label(form.operator) }}
                 {{ form_widget(form.operator) }}
                 {{ form_errors(form.operator) }}
             </div>
         </div>
+        {% for val in form.value %}
+            <div class="col-xs-2 col val">
+                <div class="form-group form-element text-center">
+                    {{ form_label(val) }}
+                    {{ form_widget(val) }}
+                    {{ form_errors(val) }}
+                </div>
+            </div>
+        {% endfor %}
     </div>
 
     <div class="data-group row">
-        <div class="col-xs-4">
-            <div class="form-group form-element">
-                {{ form_label(form.value) }}
-                {{ form_widget(form.value) }}
-                {{ form_errors(form.value) }}
+        <div class="col-xs-3">
+            <div class="form-group form-element select">
+                {{ form_label(form.sortColumn) }}
+                {{ form_widget(form.sortColumn) }}
+                {{ form_errors(form.sortColumn) }}
             </div>
         </div>
-        <div class="col-xs-4">
-            <div class="form-group form-element">
+        <div class="col-xs-2">
+            <div class="form-group form-element select">
+                {{ form_label(form.sortOrder) }}
+                {{ form_widget(form.sortOrder) }}
+                {{ form_errors(form.sortOrder) }}
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="form-group form-element text-center">
+                {{ form_label(form.limitMin) }}
+                {{ form_widget(form.limitMin) }}
+                {{ form_errors(form.limitMin) }}
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="form-group form-element text-center">
                 {{ form_label(form.limitMax) }}
                 {{ form_widget(form.limitMax) }}
                 {{ form_errors(form.limitMax) }}
             </div>
         </div>
-        <div class="col-xs-4">
-            <div class="form-group form-element">
+        <div class="col-xs-3">
+            <div class="form-group form-element text-center">
                 {{ form_label(form.outputVariable) }}
                 {{ form_widget(form.outputVariable) }}
                 {{ form_errors(form.outputVariable) }}
-            </div>
-        </div>
-    </div>
-
-    <div class="data-group row">
-        <div class="col-xs-12">
-            <div class="form-group form-element select">
-                {{ form_label(form.sortBy) }}
-                {{ form_widget(form.sortBy) }}
-                {{ form_errors(form.sortBy) }}
             </div>
         </div>
     </div>

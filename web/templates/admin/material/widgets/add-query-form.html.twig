@@ -1,60 +1,75 @@
 <div class="pf-header clearfix">
-    <h3>Query <span></span></h3>
-    <div class="fieldForm-right"></div>
+    <div class="row">
+        <div class="col-xs-2"><h3>New Query</h3></div>
+        <div class="fieldForm-right col-xs-1 pull-right"></div>
+    </div>
 </div>
-<div class="addQuery-form new-query-form">
-    <div class="data-group row">
-        <div class="col-xs-4">
+
+<div class="addQuery-form new-query-form query-form-widget cx-form">
+    <div class="data-group row variable">
+        <div class="col-xs-3">
             <div class="form-group form-element select">
                 {{ form_label(form.queries.vars.prototype.contentType) }}
                 {{ form_widget(form.queries.vars.prototype.contentType) }}
                 {{ form_errors(form.queries.vars.prototype.contentType) }}
             </div>
         </div>
-        <div class="col-xs-4">
+        <div class="col-xs-3">
             <div class="form-group form-element select">
                 {{ form_label(form.queries.vars.prototype.column) }}
                 {{ form_widget(form.queries.vars.prototype.column) }}
                 {{ form_errors(form.queries.vars.prototype.column) }}
             </div>
         </div>
-        <div class="col-xs-4">
+        <div class="col-xs-2">
             <div class="form-group form-element select">
                 {{ form_label(form.queries.vars.prototype.operator) }}
                 {{ form_widget(form.queries.vars.prototype.operator) }}
                 {{ form_errors(form.queries.vars.prototype.operator) }}
             </div>
         </div>
-    </div>
-    <div class="data-group row">
-        <div class="col-xs-4">
-            <div class="form-group form-element">
-                {{ form_label(form.queries.vars.prototype.value) }}
+        <div class="col-xs-2 col val">
+            <div class="form-group form-element text-center">
                 {{ form_widget(form.queries.vars.prototype.value) }}
                 {{ form_errors(form.queries.vars.prototype.value) }}
             </div>
         </div>
-        <div class="col-xs-4">
-            <div class="form-group form-element">
+    </div>
+
+    <div class="data-group row">
+        <div class="col-xs-3">
+            <div class="form-group form-element select">
+                {{ form_label(form.queries.vars.prototype.sortColumn) }}
+                {{ form_widget(form.queries.vars.prototype.sortColumn) }}
+                {{ form_errors(form.queries.vars.prototype.sortColumn) }}
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="form-group form-element select">
+                {{ form_label(form.queries.vars.prototype.sortOrder) }}
+                {{ form_widget(form.queries.vars.prototype.sortOrder) }}
+                {{ form_errors(form.queries.vars.prototype.sortOrder) }}
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="form-group form-element text-center">
+                {{ form_label(form.queries.vars.prototype.limitMin) }}
+                {{ form_widget(form.queries.vars.prototype.limitMin) }}
+                {{ form_errors(form.queries.vars.prototype.limitMin) }}
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="form-group form-element text-center">
                 {{ form_label(form.queries.vars.prototype.limitMax) }}
                 {{ form_widget(form.queries.vars.prototype.limitMax) }}
                 {{ form_errors(form.queries.vars.prototype.limitMax) }}
             </div>
         </div>
-        <div class="col-xs-4">
-            <div class="form-group form-element">
+        <div class="col-xs-3">
+            <div class="form-group form-element text-center">
                 {{ form_label(form.queries.vars.prototype.outputVariable) }}
                 {{ form_widget(form.queries.vars.prototype.outputVariable) }}
                 {{ form_errors(form.queries.vars.prototype.outputVariable) }}
-            </div>
-        </div>
-    </div>
-    <div class="data-group row">
-        <div class="col-xs-12">
-            <div class="form-group form-element select">
-                {{ form_label(form.queries.vars.prototype.sortBy) }}
-                {{ form_widget(form.queries.vars.prototype.sortBy) }}
-                {{ form_errors(form.queries.vars.prototype.sortBy) }}
             </div>
         </div>
     </div>

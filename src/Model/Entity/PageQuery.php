@@ -52,19 +52,24 @@ class PageQuery
     protected $operator;
 
     /**
-     * @Column(name="value", type="json_array", nullable=false, unique=false)
+     * @Column(name="value", type="simple_array", nullable=false, unique=false)
      */
     protected $value;
 
     /**
-     * @Column(name="sort_by", type="string", nullable=true, unique=false)
+     * @Column(name="sort_order", type="string", nullable=true, unique=false)
      */
-    protected $sortBy;
+    protected $sortOrder;
 
     /**
-     * @Column(name="sort_column", type="integer", nullable=false, unique=false)
+     * @Column(name="sort_column", type="string", nullable=false, unique=false)
      */
     protected $sortColumn;
+
+    /**
+     * @Column(name="limit_min", type="integer", nullable=true, unique=false)
+     */
+    protected $limitMin;
 
     /**
      * @Column(name="limit_max", type="integer", nullable=true, unique=false)
@@ -88,7 +93,7 @@ class PageQuery
      */
     public function __construct()
     {
-        $this->sortBy = 'ASC';
+        $this->sortOrder = 'ASC';
         $this->sortColumn = 'created_at';
         $this->manager = new QueryManager($this);
     }
@@ -100,10 +105,11 @@ class PageQuery
             'contentType' => $this->contentType,
             'column' => $this->column,
             'operator' => $this->operator,
-            'value' => $this->value,
-            'sortBy' => $this->sortBy,
+            'value' => implode(' - ', $this->value),
+            'sortOrder' => $this->sortOrder,
             'sortColumn' => $this->sortColumn,
-            'limitMax' => $this->limitMax
+            'limitMax' => $this->limitMax,
+            'limitMin' => $this->limitMin
         );
     }
 
@@ -154,7 +160,7 @@ class PageQuery
      */
     public function setOperator($operator)
     {
-        if (!in_array($operator, array('eq', 'in', 'after', 'before', 'between'))) {
+        if (!in_array($operator, array('eq', 'neq', 'in', 'after', 'before', 'between', 'true', 'false', ))) {
             throw new \Exception(sprintf('Operator %s not allowed.', $operator));
         }
 
@@ -240,6 +246,22 @@ class PageQuery
     /**
      * @return mixed
      */
+    public function getLimitMin()
+    {
+        return $this->limitMin;
+    }
+
+    /**
+     * @param mixed $limitMin
+     */
+    public function setLimitMin($limitMin)
+    {
+        $this->limitMin = $limitMin;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getLimitMax()
     {
         return $this->limitMax;
@@ -272,21 +294,21 @@ class PageQuery
     /**
      * @return mixed
      */
-    public function getSortBy()
+    public function getSortOrder()
     {
-        return $this->sortBy;
+        return $this->sortOrder;
     }
 
     /**
      * @param mixed $sortBy
      * @throws \Exception
      */
-    public function setSortBy($sortBy)
+    public function setSortOrder($sortBy)
     {
         if (!in_array($option = strtoupper($sortBy), array('ASC', 'DESC'))) {
             throw new \Exception('Invalid sort parameter.');
         }
-        $this->sortBy = $option;
+        $this->sortOrder = $option;
     }
 
     /**

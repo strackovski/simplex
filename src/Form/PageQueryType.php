@@ -48,11 +48,14 @@ class PageQueryType extends AbstractType
                 'choices' => array(
                     'contentLabel' => 'Content label',
                     'title' => 'Title',
-                    'created_at' => 'Date created',
-                    'updated_at' => 'Date modified',
                     'author' => 'Author',
                     'tags' => 'Tags',
-                    'inLibrary' => 'In library',
+                    'created_at' => 'Date created',
+                    'updated_at' => 'Date modified',
+                    'exposed' => 'Exposed'
+                ),
+                'attr' => array(
+                    'data-opt' => 'column'
                 ),
                 'empty_value' => 'Select filter column...'
             ))
@@ -62,24 +65,64 @@ class PageQueryType extends AbstractType
                     'in' => 'Contains',
                     'between' => 'Between',
                     'before' => 'Before',
-                    'after' => 'After'
+                    'after' => 'After',
+                ),
+                'attr' => array(
+                    'data-opt' => 'operator'
                 ),
                 'empty_value' => 'Select search operator...',
                 'required' => false
             ))
+            /*
             ->add('value', 'text', array(
                 'attr' => array(
-                    'placeholder' => 'Value'
+                    'placeholder' => 'Value',
+                    'data-opt' => 'value'
                 )
             ))
-            ->add('sortBy', 'choice', array(
-                'choices' => array('asc' => 'Ascending', 'desc' => 'Descending'),
+            */
+            ->add('value', 'collection', array(
+                'type'   => 'text',
+                'allow_add' => true,
+                'prototype' => true,
+                'options'  => array(
+                    'required'  => false,
+                    'label' => 'Value',
+                    'attr'      => array(
+                        'data-opt' => 'value'
+                    )
+                ),
+                'attr' => array(
+                    'class' => 'value-box'
+                )
             ))
-            ->add('limitMax', 'text', array(
-                'label' => 'Maximum limit',
+            ->add('sortColumn', 'choice', array(
+                'choices' => array(
+                    'contentLabel' => 'Content label',
+                    'title' => 'Title',
+                    'author' => 'Author',
+                    'created_at' => 'Date created',
+                    'updated_at' => 'Date modified',
+                    'exposed' => 'Exposed'
+                ),
+            ))
+            ->add('sortOrder', 'choice', array(
+                'choices' => array('ASC' => 'Ascending', 'DESC' => 'Descending'),
+            ))
+            ->add('limitMin', 'text', array(
+                'label' => 'Min limit',
                 'required' => false,
                 'attr' => array(
-                    'placeholder' => 'Result count limit (number)'
+                    'placeholder' => 'Min results',
+                    'data-opt' => 'minlimit'
+                ),
+            ))
+            ->add('limitMax', 'text', array(
+                'label' => 'Max limit',
+                'required' => false,
+                'attr' => array(
+                    'placeholder' => 'Result count limit (number)',
+                    'data-opt' => 'maxlimit'
                 ),
             ))
             ->add('outputVariable', 'text', array(

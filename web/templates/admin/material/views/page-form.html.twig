@@ -10,9 +10,11 @@
                     <div class="header-title">
                         <span>
                             {% if page is defined %}
-                            {% else %}
-                                New page
-                            {% endif %}
+                            <a href="{{ app.url_generator.generate('admin/pages') }}">
+                                <span class="type">Pages <i class="fa fa-angle-right"></i></span>
+                            </a>
+                            {{ page.getTitle }}
+                            {% else %}New page{% endif %}
                         </span>
                     </div>
                 </div>
@@ -43,13 +45,13 @@
                 <div class="post-addition">
                     <ul class="page-tabs">
                         <li class="active">
-                            <a href="#home" role="tab" data-toggle="tab">Page</a>
+                            <a href="#home" role="tab" data-toggle="tab"><i class="fa fa-file"></i></a>
                         </li>
                         <li class="">
-                            <a href="#data" role="tab" data-toggle="tab">Data</a>
+                            <a href="#data" role="tab" data-toggle="tab"><i class="fa fa-database"></i></a>
                         </li>
                         <li class="">
-                            <a href="#options" role="tab" data-toggle="tab">Options</a>
+                            <a href="#options" role="tab" data-toggle="tab"><i class="fa fa-gear"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -63,76 +65,34 @@
                     <div class="tab-pane active" id="home">
                         <div class="row">
                             <div class="data-group">
-                                <div class="form-group">
-                                    <div class="form-element">
-                                        {{ form_label(form.slug) }}
-                                    </div>
-                                    <div class="form-element">
-                                        {{ form_widget(form.slug) }}
-                                    </div>
+                                <div class="form-group form-element select">
+                                    {{ form_label(form.slug) }}
+                                    {{ form_widget(form.slug) }}
                                     {{ form_errors(form.slug) }}
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-xs-6">
-                                <div class="form-group">
-                                    <div class="form-element">
-                                        {{ form_label(form.master) }}
-                                    </div>
-                                    <div class="form-element select">
-                                        {{ form_widget(form.master) }}
-                                    </div>
+                                <div class="form-group form-element select">
+                                    {{ form_label(form.master) }}
+                                    {{ form_widget(form.master) }}
                                     {{ form_errors(form.master) }}
                                 </div>
                             </div>
-
                             <div class="col-xs-6">
-                                <div class="form-group">
-                                    <div class="form-element">
-                                        {{ form_label(form.view) }}
-                                    </div>
-                                    <div class="form-element select">
-                                        {{ form_widget(form.view) }}
-                                    </div>
+                                <div class="form-group form-element select">
+                                    {{ form_label(form.view) }}
+                                    {{ form_widget(form.view) }}
                                     {{ form_errors(form.view) }}
                                 </div>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="field option">
-                                    {{ form_row(form.in_menu) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane" id="options">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="form-group">
-                                    <div class="form-element">
-                                        {{ form_label(form.description) }}
-                                    </div>
-                                    <div class="form-element">
-                                        {{ form_widget(form.description) }}
-                                    </div>
-                                    {{ form_errors(form.description) }}
-                                </div>
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-xs-6">
-                                <div class="form-group">
-                                    <div class="form-element">
-                                        {{ form_label(form.keywords) }}
-                                    </div>
-                                    <div class="form-element">
-                                        {{ form_widget(form.keywords) }}
-                                    </div>
+                                <div class="form-group form-element">
+                                    {{ form_label(form.keywords) }}
+                                    {{ form_widget(form.keywords) }}
                                     {{ form_errors(form.keywords) }}
                                 </div>
                             </div>
@@ -147,16 +107,31 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="field option">
+                                    {{ form_row(form.in_menu) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="options">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group form-element select">
+                                    {{ form_label(form.description) }}
+                                    {{ form_widget(form.description) }}
+                                    {{ form_errors(form.description) }}
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="data-group">
-                                <div class="form-group">
-                                    <div class="form-element">
-                                        {{ form_label(form.typeColor) }}
-                                    </div>
-                                    <div class="form-element select">
-                                        {{ form_widget(form.typeColor) }}
-                                    </div>
+                                <div class="form-group form-element select">
+                                    {{ form_label(form.typeColor) }}
+                                    {{ form_widget(form.typeColor) }}
                                     {{ form_errors(form.typeColor) }}
                                 </div>
                             </div>
@@ -167,13 +142,23 @@
                             <div class="li-empty">
                                 <div>
                                     <p class="ghost big">This page has no data queries defined.</p>
-                                    <p class="ghost mw80">Page queries allow you to bind your data to a page. Click the "Add query" button below to add a query now.</p>
+                                    <p class="ghost mw80">
+                                        Page queries allow you to bind your data to a page.
+                                        Click the "Add query" button below to add a query now.
+                                    </p>
                                 </div>
                             </div>
                         {% endif %}
-                            <ul class="queries" data-prototype="{% filter escape %}{% include 'admin/material/widgets/add-query-form.html.twig' %}{% endfilter %}">
+                        <ul class="queries"
+                            data-prototype="
+                            {% filter escape %}
+                            {% include 'admin/material/widgets/add-query-form.html.twig' %}
+                            {% endfilter %}">
                             {% for query in form.queries %}
-                                <li class="clearfix query-form">{% include 'admin/material/widgets/edit-query-form.html.twig' with {form: query.vars.form} %}</li>
+                                <li class="clearfix query-form">
+                                    {% include 'admin/material/widgets/edit-query-form.html.twig'
+                                    with {form: query.vars.form } %}
+                                </li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -185,5 +170,5 @@
             </div>
         </div>
     </div>
-{{ form_end(form) }}
+    {{ form_end(form) }}
 {% endblock %}

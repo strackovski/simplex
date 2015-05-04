@@ -26,7 +26,7 @@ $(function() {
 });
 
 /**
- *
+ * Sidebar detail-panel handlers
  */
 function deactivateRightBar() {
     $('.grid-outer').removeClass('active-right-bar');
@@ -38,9 +38,6 @@ function deactivateRightBar() {
     $('.meta-btn').removeClass('active'); //post meta-btn
 }
 
-/**
- *
- */
 function activateRightBar() {
     $('.grid-outer').addClass('active-right-bar');
     $('.item-fixed-header').addClass('active-right-bar');
@@ -176,25 +173,21 @@ function handleDropzone() {
  * @param $newLinkLi The new query link
  */
 function addQueryForm($collectionHolder, $newLinkLi) {
-    // Get the data-prototype
+    // Add new form
     var prototype = $collectionHolder.data('prototype');
-
-    // get the new index
     var index = $collectionHolder.data('index');
-
-    // Replace '__name__' in the prototype's HTML to
-    // instead be a number based on how many items we have
     var newForm = prototype.replace(/__name__/g, index);
-
-    // increase the index with one for the next item
     $collectionHolder.data('index', index + 1);
-
-    // Display the form in the page in an li, before the "Add a query" link li
     var $newFormLi = $('<li class="clearfix query-form"></li>').append(newForm);
-    $newLinkLi.before($newFormLi);
-
-    // add a delete link to the new form
-    addQueryFormDeleteLink($newFormLi);
+    $newLinkLi.after($newFormLi);
+    addQueryFormDeleteLink($newFormLi.find('.fieldForm-right'));
+    // Init collection field
+    var count = $newFormLi.find('input[data-opt="value"]').length;
+    var valuePrototype = $(newForm).find('.value-box').attr('data-prototype');
+    var newValueForm = valuePrototype.replace(/\[value\]\[[0-9]+\]/g, '[value]['+count+']');
+    newValueForm = newValueForm.replace(/value_[0-9]+/g, 'value_'+count);
+    $newFormLi.find('.value-box').prepend(newValueForm);
+    $newFormLi.find('.val').find('.form-group').addClass('form-element');
 }
 
 /**
@@ -206,22 +199,50 @@ function addQueryForm($collectionHolder, $newLinkLi) {
  * @param $queryFormLi
  */
 function addQueryFormDeleteLink($queryFormLi) {
-    var $removeFormA = $('<a href="#" class="delete_query_link">Delete this query</a>');
+    var $removeFormA = $('<a href="#" class="delete_query_link"><i class="fa fa-minus-square-o"></i></a>');
     $queryFormLi.append($removeFormA);
-
     $removeFormA.on('click', function(e) {
-        // prevent the link from creating a "#" on the URL
         e.preventDefault();
-        console.log($queryFormLi.siblings())
+        console.log($queryFormLi.closest('li.query-form').siblings());
         if ($queryFormLi.siblings().length===1) {
             $('.li-empty > div').removeClass('hidden');
         }
-
-        // remove the li for the tag form
-        $queryFormLi.remove();
+        $queryFormLi.closest('li.query-form').remove();
     });
 }
 
+/**
+ * ADD FORM FIELD FORM
+ */
+function addFieldForm($fieldCollectionHolder, $newLinkLi) {
+    var prototype = $fieldCollectionHolder.data('prototype');
+    var index = $fieldCollectionHolder.data('index');
+    var newForm = prototype.replace(/__name__/g, index);
+    $fieldCollectionHolder.data('index', index + 1);
+    var $newFormLi = $('<div></div>').append(newForm);
+    $newLinkLi.after($newFormLi);
+    addFieldFormDeleteLink($newFormLi);
+}
+
+/**
+ * ADD FORM FIELD FORM DELETE LINK
+ */
+function addFieldFormDeleteLink($fieldFormLi) {
+    var $removeFormA = $('<a href="#"><i class="fa fa-minus-square"></i></a>');
+    $fieldFormLi.find('.fieldForm-right').append($removeFormA);
+    $removeFormA.on('click', function(e) {
+        e.preventDefault();
+        if ($fieldFormLi.siblings().length===1) {
+            $('.li-empty > div').removeClass('hidden');
+        }
+        $fieldFormLi.remove();
+    });
+}
+
+/**
+ * Get query result
+ * @param queryId
+ */
 function getQueryResult(queryId) {
     $.ajax({
         url: baseURL + '/admin/page/query/' + queryId,
@@ -413,9 +434,168 @@ function showSectionHelper() {
 /**
  * On document ready...
  */
-$(document).ready(function () {
-    //showSectionHelper();
+$(document).ready(function ()
+{
+    /**
+     * PAGE FORM HANDLERS
+     */
+    if ($('form[name="page"]').length) {
+        var queryForms = $('li.query-form');
+        // Valid 'operator' options by 'column' value
+        var dateOpSelectValues = {after: 'After', before: 'Before', between: 'Between', eq: 'Equals'};
+        var stringOpSelectValues = {eq: 'Equals', 'in': 'Contains'};
+        var tagOpSelectValues = {eq: 'Has exact tags', 'in': 'Has any of tags'};
+        var boolOpSelectValues = {'true': 'True', 'false': 'False'};
+        var authorOpSelectValues = {'eq': 'Is', 'neq': 'Is not'};
 
+        // Valid 'column' values
+        var stringColValues = ['contentLabel', 'title'];
+        var boolColValues = ['exposed'];
+        var tagColValues = ['tags'];
+        var dateColValues = ['updated_at', 'created_at'];
+
+        // Check if any date fields and apply datepicker
+        queryForms.each(function() {
+            if (dateColValues.indexOf($(this).find('select[data-opt="column"]').val()) != -1) {
+                $(this).find('.val').find('input').datepicker();
+            }
+        });
+
+        /**
+         * PageQuery 'column' option change handler
+         *
+         * Modify operator select options list according to selected column value
+         * Populate operator select with options for each column type defined above
+         */
+        $(document.body).on('change', 'select[data-opt="column"]', function () {
+            var $column = $(this);
+            var $opSelect = $column.closest('.data-group').find('select[data-opt="operator"]');
+            var $valText = $column.closest('.data-group').find('input[data-opt="value"]');
+            $valText.datepicker('destroy');
+
+            // Detect 'column' value and populate select with correct options
+            if (stringColValues.indexOf($column.val()) != -1) {
+                $opSelect.find('option').each(function () { $(this).remove(); });
+                $.each(stringOpSelectValues, function (key, value) {
+                    $opSelect.append($('<option>', {value: key}).text(value));
+                });
+            } else if (dateColValues.indexOf($column.val()) != -1) {
+                $opSelect.find('option').each(function () { $(this).remove(); });
+                $.each(dateOpSelectValues, function (key, value) {
+                    $opSelect.append($('<option>', {value: key}).text(value));
+                });
+                $valText.datepicker();
+            } else if (tagColValues.indexOf($column.val()) != -1) {
+                $opSelect.find('option').each(function () { $(this).remove(); });
+                $.each(tagOpSelectValues, function (key, value) {
+                    $opSelect.append($('<option>', {value: key}).text(value));
+                });
+            } else if (boolColValues.indexOf($column.val()) != -1) {
+                $opSelect.find('option').each(function () { $(this).remove(); });
+                $.each(boolOpSelectValues, function (key, value) {
+                    $opSelect.append($('<option>', {value: key}).text(value));
+                });
+            } else if ($column.val() == 'author') {
+                $opSelect.find('option').each(function () { $(this).remove(); });
+                $.each(authorOpSelectValues, function (key, value) {
+                    $opSelect.append($('<option>', {value: key}).text(value));
+                });
+            }
+            $opSelect.trigger('change');
+        });
+
+        /**
+         * PageQuery 'operator' option change handler
+         *
+         * When 'operator' changes, check if more value fields are needed
+         */
+        $(document.body).on('change', 'select[data-opt="operator"]', function () {
+            var $parentGroup = $(this).closest('.variable');
+            // Range value: add new 'value' field
+            if ($(this).val() == 'between') {
+                var count = $parentGroup.find('input[data-opt="value"]').length;
+                var valuePrototype = $parentGroup.find('.value-box').attr('data-prototype');
+                var newValueForm = valuePrototype.replace(/\[value\]\[[0-9]+\]/g, '[value]['+count+']');
+                newValueForm = newValueForm.replace(/value_[0-9]+/g, 'value_'+count);
+                var $newValueField = $('<div class="col-xs-2 col val"></div>').append(newValueForm);
+                $newValueField.insertAfter($parentGroup.find('.val'));
+                $parentGroup.find('.val').find('.form-group').addClass('form-element');
+                // Init Datepicker if field is a date
+                if (dateColValues.indexOf($parentGroup.find('select[data-opt="column"]').val()) != -1) {
+                    $newValueField.find('input').datepicker();
+                }
+            } else {
+                $parentGroup.find('.val').next('.val').remove();
+            }
+        });
+
+        /**
+         * ADD NEW QUERY FORM
+         *
+         *  Read data-prototype attribute and dynamically add new
+         *  query forms when the user clicks on "Add a query" link.
+         */
+        var $collectionHolder;
+        var $addQueryLink = $('<a href="#" class="add_query_link pull-right"><i class="fa fa-plus-square"></i></a>');
+        var $newLinkLi = $('<li class="data-header clearfix"><h5>Page Queries</h5></li>').append($addQueryLink);
+        $collectionHolder = $('ul.queries');
+        $collectionHolder.find('li').each(function() {
+            addQueryFormDeleteLink($(this).find('.fieldForm-right'));
+        });
+        $collectionHolder.prepend($newLinkLi);
+        $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+        $addQueryLink.on('click', function(e) {
+            e.preventDefault();
+            $('.li-empty > div').addClass('hidden');
+            addQueryForm($collectionHolder, $newLinkLi);
+        });
+    }
+
+    /**
+     * FORM FORM HANDLERS
+     */
+    if ($('form[name="form"]').length) {
+        var $fieldCollectionHolder;
+        var $addFieldLink = $('<a href="#" class="add_field_link pull-right"><i class="fa fa-plus-square"></i></a>');
+        var $newFormLinkLi = $('<div class="data-header clearfix"><h5>Form Fields</h5></div>').append($addFieldLink);
+        $fieldCollectionHolder = $('div.fields');
+
+        $(document.body).on('change', '.trigger', function() {
+            var $trigger = $(this);
+            var $triggerGroup = $trigger.closest('.data-group');
+            var $formGroup = $trigger.closest('.field-form');
+            $triggerGroup.find('.cx-hidden').addClass('hidden');
+            if ($trigger.val() == 'select') {
+                $triggerGroup.find('.select-hidden').removeClass('hidden');
+            } else if ($trigger.val() == 'text') {
+            } else if ($trigger.val() == 'checkbox' || $trigger.val() == 'radio') {
+                $triggerGroup.find('.checkbox-hidden').removeClass('hidden');
+            }
+            $formGroup.find('.new').hide();
+            $formGroup.find('.pf-header .type').html($trigger.val());
+        });
+
+        $(document.body).on('change', '.field-form .name-tg', function() {
+            var $formGroup = $(this).closest('.field-form');
+            $formGroup.find('.pf-header .name').html($(this).val());
+        });
+
+        $fieldCollectionHolder.append($newFormLinkLi);
+        $fieldCollectionHolder.find('div').each(function() {
+            addFieldFormDeleteLink($(this));
+        });
+        $fieldCollectionHolder.data('index', $fieldCollectionHolder.find(':input').length);
+        $addFieldLink.on('click', function(e) {
+            e.preventDefault();
+            $('.li-empty > div').addClass('hidden');
+            addFieldForm($fieldCollectionHolder, $newFormLinkLi);
+        });
+    }
+
+    /**
+     * Media Settings Image Quality Slider
+     */
     $('#imageResampleQuality-slider').slider({
         min: 10,
         max: 100,
@@ -427,36 +607,6 @@ $(document).ready(function () {
 
     $('body').on('change', '#media_settings_imageResampleQuality', function (e) {
         $('#imageResampleQuality-slider').slider('value', $('#media_settings_imageResampleQuality').val());
-    });
-
-    /**
-     * [ QUERY FORM ]
-     *
-     *  Use JavaScript to read data-prototype attribute and
-     *  dynamically add new tag forms when the user clicks
-     *  a "Add a query" link.
-     */
-    var $collectionHolder;
-    // setup an "add a query" link
-    var $addQueryLink = $('<a href="#" class="add_query_link btn-cta">Add a query</a>');
-    var $newLinkLi = $('<li class="text-center"></li>').append($addQueryLink);
-    // Get the ul that holds the collection of queries
-    $collectionHolder = $('ul.queries');
-    // add a delete link to all of the existing query form li elements
-    $collectionHolder.find('li').each(function() {
-        addQueryFormDeleteLink($(this));
-    });
-    // add the "add a query" anchor and li to the query ul
-    $collectionHolder.append($newLinkLi);
-    // count the current form inputs we have (e.g. 2), use that as the new
-    // index when inserting a new item (e.g. 2)
-    $collectionHolder.data('index', $collectionHolder.find(':input').length);
-
-    $addQueryLink.on('click', function(e) {
-        e.preventDefault();
-        $('.li-empty > div').addClass('hidden');
-        // add a new query form
-        addQueryForm($collectionHolder, $newLinkLi);
     });
 
     // Status toggles
@@ -479,7 +629,6 @@ $(document).ready(function () {
 
     });
 
-    // baseURL = '//192.168.64.13/simplex/web/index_dev.php/admin/';
     baseURL = $('body').attr('data-base') + '/admin/';
     debug = $('body').attr('data-env');
 
@@ -521,7 +670,7 @@ $(document).ready(function () {
     activeInnerMenu.closest('.submenu').removeClass('hidden');
     */
 
-    $('.datepicker').datepicker();
+    //$('.datepicker').datepicker();
 
     $('.submenu-open').on('click', function(e) {
         e.preventDefault();
@@ -541,9 +690,7 @@ $(document).ready(function () {
     });
 
     $('.chip2-header').on('click', function (e) {
-        if($('.animated-loader').length) {
-            return false;
-        }
+        if($('.animated-loader').length) { return false; }
 
         if (!($(e.target).closest('.chip2-controls').length > 0)) {
             var $this = $(this);
@@ -791,7 +938,6 @@ $(document).ready(function () {
         }
     });
 
-
     // page navigation, add mask
     $('.nav-btn').on('click', function () {
         $('.side-nav').addClass('side-nav-active');
@@ -875,7 +1021,6 @@ $(document).ready(function () {
     });
 
     // right-bar handlers
-    // todo: make it work for every view, not just pages/posts
     $('body').keydown(function (e) {
         if (e.keyCode == 27 && $('.right-bar').hasClass('active-right-bar')) {
             $('.right-bar .close-btn').click();
@@ -923,7 +1068,6 @@ $(document).ready(function () {
         $('.thumbnail').find('input').prop('checked', true);
         $('.media-count').html($('.thumb-check.active').length + ' selected');
     });
-
 
     $('.grid').on('click', '.media-deselect-all', function (e) {
         e.preventDefault();
@@ -1196,7 +1340,6 @@ $(window).load(function () {
             // This is because we can optionally choose to support HTML4 browsers or not.
             return false;
         }
-
         var anchor;
 
         // Bind to StateChange Event

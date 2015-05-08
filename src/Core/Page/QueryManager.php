@@ -40,6 +40,12 @@ class QueryManager
         $this->query = $query;
     }
 
+    /**
+     * @todo Testing
+     *
+     * @param EntityManager $em
+     * @return \Doctrine\ORM\Query
+     */
     public function buildQuery2(EntityManager $em) {
         // content should be transparent (exception is tags for form)
         // all content has same columns
@@ -47,10 +53,8 @@ class QueryManager
         $qb = $em->createQueryBuilder();
         $contentType = $this->query->getContentType(1);
 
-        // query ex:
         // select from [contentType] where [column] [operator] [value]
         // authors and tags need joining
-
         if ($this->query->getColumn() == 'author' || $this->query->getColumn() == 'tags') {
             // build join query
             $qb->select(array('u'))
@@ -67,9 +71,7 @@ class QueryManager
             );
 
         } else {
-
             $qb->select(array('u'))->from($contentType, 'u');
-
             switch ($this->query->getOperator()) {
                 case 'eq':
                     $qb->where($qb->expr()->eq('u.' . $this->query->getColumn(), '?1'))
@@ -81,8 +83,8 @@ class QueryManager
                             2 => true
                         )
                     );
-
                     break;
+
                 case 'in':
                     $qb->where($qb->expr()->in('u.' . $this->query->getColumn(), '?1'))
                         ->andWhere($qb->expr()->eq('u.published', '?2'));
@@ -93,7 +95,6 @@ class QueryManager
                             2 => true
                         )
                     );
-
                     break;
 
                 case 'between':
@@ -108,7 +109,6 @@ class QueryManager
                             3 => true
                         )
                     );
-
                     break;
 
                 case 'before':
@@ -121,7 +121,6 @@ class QueryManager
                             2 => true
                         )
                     );
-
                     break;
 
                 case 'after':
@@ -134,7 +133,6 @@ class QueryManager
                             2 => true
                         )
                     );
-
                     break;
             }
         }
@@ -155,7 +153,7 @@ class QueryManager
 
     /**
      * Query Builder
-     *
+     * @todo remove when #2 is tested
      * @param EntityManager $em
      * @return \Doctrine\ORM\Query
      */
@@ -279,7 +277,5 @@ class QueryManager
         }
 
         return $qb->getQuery();
-
-
     }
 }

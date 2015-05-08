@@ -247,13 +247,23 @@ span.page-title {
 }
 
 .tooltip {
+    z-index: 999;
+}
+
+/*
+.tooltip {
     z-index: 30;
     position: fixed;
+    background-color: #fff;
+    color: red;
 }
 
 .right-toolbar .tooltip-inner {
     max-width: 600px;
+    background-color: #fff;
+    color: red;
 }
+*/
 
 /*=============================
     BTNs
@@ -1749,9 +1759,9 @@ span.empty {
     border: 1px solid rgba(0,0,0,0.14);
 }
 
+/*
 .tooltip-inner {
     padding: 6px 12px;
-    background-color: #434343;
     border-radius: 2px;
     font-weight: 500;
 }
@@ -1768,6 +1778,7 @@ span.empty {
 .tooltip.top .tooltip-arrow {
     border-top-color: transparent;
 }
+*/
 
 .removable:after {
     content: '';

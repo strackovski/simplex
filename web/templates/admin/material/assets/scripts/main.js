@@ -1,6 +1,7 @@
 /*****************************************************
  Simplex UI script for Material Theme
- by Neja Dolinar <neja@nv3.org>
+ Neja Dolinar <dolinar.neja@gmail.com>
+ Vladimir Stračkovski <vlado@nv3.org>
  2014
  *****************************************************/
 var baseURL;
@@ -30,7 +31,7 @@ $(function() {
  */
 function deactivateRightBar() {
     $('.grid-outer').removeClass('active-right-bar');
-    $('.item-fixed-header').removeClass('active-right-bar')
+    $('.item-fixed-header').removeClass('active-right-bar');
     $('.grid-outer-full').removeClass('active-right-bar');
     $('.right-toolbar').removeClass('active-right-bar');
     $('.float-btn').removeClass('active-right-bar');
@@ -122,23 +123,21 @@ function handleDropzone() {
                 // $('.main-content .tab-pane.active').animate({opacity: 0});
             },
             url: '/admin/media/' + urlType
-        })
-            .done(function (data) {
-                $('.page-loader').hide();
-                $('.progress').addClass('hidden');
-                $('.progress-bar').attr('style', 'width: 1%');
-                $('.tab-content .tab-pane.active').html(data);
-                $('.upload-modal .modal-footer .btn').prop('disabled', false).click();
-                $('.upload-modal .modal-header .sr-only').prop('disabled', false);
-            })
-            .fail(function (xhr, unknown, error) {
-                var flash = '<div class="flash-error">Oh-oooh. QueueComplete failed.</div>';
-                logXhrError(error, xhr);
-                $('body').append(flash);
-                $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
-                    $('.flash-error').remove();
-                });
+        }).done(function (data) {
+            $('.page-loader').hide();
+            $('.progress').addClass('hidden');
+            $('.progress-bar').attr('style', 'width: 1%');
+            $('.tab-content .tab-pane.active').html(data);
+            $('.upload-modal .modal-footer .btn').prop('disabled', false).click();
+            $('.upload-modal .modal-header .sr-only').prop('disabled', false);
+        }).fail(function (xhr, unknown, error) {
+            var flash = '<div class="flash-error">Oh-oooh. QueueComplete failed.</div>';
+            logXhrError(error, xhr);
+            $('body').append(flash);
+            $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
+                $('.flash-error').remove();
             });
+        });
     });
 
     theDropzone.on("error", function (file, msg, xhr) {
@@ -148,7 +147,6 @@ function handleDropzone() {
         $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
             $('.flash-error').remove();
         });
-
     });
 
     theDropzone.on("totaluploadprogress", function (progress, totalBytes, bytesSent) {
@@ -229,12 +227,13 @@ function addFieldForm($fieldCollectionHolder, $newLinkLi) {
  */
 function addFieldFormDeleteLink($fieldFormLi) {
     var $removeFormA = $('<a href="#"><i class="fa fa-minus-square"></i></a>');
-    $fieldFormLi.find('.fieldForm-right').append($removeFormA);
+    $fieldFormLi.find('.fieldForm-right').html($removeFormA);
     $removeFormA.on('click', function(e) {
         e.preventDefault();
         if ($fieldFormLi.siblings().length===1) {
             $('.li-empty > div').removeClass('hidden');
         }
+        console.log($fieldFormLi)
         $fieldFormLi.remove();
     });
 }
@@ -247,10 +246,9 @@ function getQueryResult(queryId) {
     $.ajax({
         url: baseURL + '/admin/page/query/' + queryId,
         method: "POST"
-    })
-        .done(function(data){
-            return data;
-        })
+    }).done(function(data){
+        return data;
+    });
 }
 
 /**
@@ -306,8 +304,7 @@ function fileInputAction() {
                 if ($('.select-image img').length) {
                     $('.select-image img').attr('src', e.target.result);
                 } else if ($('.user-form-image').length) {
-                    $('.user-form-image img').attr('src', e.target.result)
-                        .width(300);
+                    $('.user-form-image img').attr('src', e.target.result).width(300);
                 }
             };
             reader.readAsDataURL(input.files[0]);
@@ -419,14 +416,13 @@ function showSectionHelper() {
         setTimeout(function() {
             $.ajax({
                 url: baseURL + section + '/help'
-            })
-                .done(function (data) {
-                    $('.page-loader').hide(0);
-                    $('.help-modal .modal-content').html(data);
-                    $('.help-modal').modal();
-                    $('.help-modal .btn-confirm').off('click').on('click', function (e) {
-                    })
-                });
+            }).done(function (data) {
+                $('.page-loader').hide(0);
+                $('.help-modal .modal-content').html(data);
+                $('.help-modal').modal();
+                $('.help-modal .btn-confirm').off('click').on('click', function (e) {
+                })
+            });
         }, 500);
     }
 }
@@ -436,6 +432,14 @@ function showSectionHelper() {
  */
 $(document).ready(function ()
 {
+    if ($('.label-flash').length) {
+        var $flashLabel = $('.label-flash');
+        $flashLabel.css('margin-left', - $flashLabel.width() / 2);
+        $flashLabel.animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
+            $('.label-flash').remove();
+        });
+    }
+
     /**
      * PAGE FORM HANDLERS
      */
@@ -569,6 +573,7 @@ $(document).ready(function ()
             if ($trigger.val() == 'select') {
                 $triggerGroup.find('.select-hidden').removeClass('hidden');
             } else if ($trigger.val() == 'text') {
+                //
             } else if ($trigger.val() == 'checkbox' || $trigger.val() == 'radio') {
                 $triggerGroup.find('.checkbox-hidden').removeClass('hidden');
             }
@@ -581,8 +586,8 @@ $(document).ready(function ()
             $formGroup.find('.pf-header .name').html($(this).val());
         });
 
-        $fieldCollectionHolder.append($newFormLinkLi);
-        $fieldCollectionHolder.find('div').each(function() {
+        $fieldCollectionHolder.prepend($newFormLinkLi);
+        $fieldCollectionHolder.find('div.field-form').each(function() {
             addFieldFormDeleteLink($(this));
         });
         $fieldCollectionHolder.data('index', $fieldCollectionHolder.find(':input').length);
@@ -641,7 +646,7 @@ $(document).ready(function ()
         e.preventDefault();
         var $this = $(this);
         $this.closest('.chip2-content-info').find('.popover').popover('hide');
-    })
+    });
 
     $('.user-popover').on('click', function(e) {
         var $this = $(this);
@@ -654,10 +659,9 @@ $(document).ready(function ()
         $.ajax({
             url: el.attr('href'),
             data: {'view': 'user-card'}
-        })
-            .done(function (d) {
-                el.popover({content: d, html: true, viewport: 'body', trigger: 'manual'}).popover('show');
-            }).fail(function (xhr, msg) {logXhrError(msg, xhr);});
+        }).done(function (d) {
+            el.popover({content: d, html: true, viewport: 'body', trigger: 'manual'}).popover('show');
+        }).fail(function (xhr, msg) {logXhrError(msg, xhr);});
 
     });
 
@@ -727,27 +731,24 @@ $(document).ready(function ()
             $('.confirm-modal').modal();
             $('.confirm-modal .btn-confirm').off('click').on('click', function (e) {
                 e.preventDefault();
-
                 $.ajax({
                     url: href,
                     beforeSend: function () {
                         $('.page-loader').show();
                     }
-                })
-                    .done(function (data) {
-                        $('.page-loader').hide(0);
-                        deactivateRightBar();
-                        $('.grid-content').html(data);
+                }).done(function (data) {
+                    $('.page-loader').hide(0);
+                    deactivateRightBar();
+                    $('.grid-content').html(data);
 
-                    })
-                    .fail(function (xhr, msg) {
-                        logXhrError(msg, xhr);
-                        var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
-                        $('body').append(flash);
-                        $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
-                            $('.flash-error').remove();
-                        });
+                }).fail(function (xhr, msg) {
+                    logXhrError(msg, xhr);
+                    var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
+                    $('body').append(flash);
+                    $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
+                        $('.flash-error').remove();
                     });
+                });
                 $('.confirm-modal').modal('hide');
             });
         }
@@ -828,19 +829,17 @@ $(document).ready(function ()
                 $('.page-loader').show();
             },
             url: 'media/' + realTabHref
-        })
-            .done(function (data) {
-                $('.page-loader').hide(0);
-                targetEl.html(data);
-            })
-            .fail(function (xhr, msg) {
-                logXhrError(msg, xhr);
-                var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
-                $('body').append(flash);
-                $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
-                    $('.flash-error').remove();
-                });
+        }).done(function (data) {
+            $('.page-loader').hide(0);
+            targetEl.html(data);
+        }).fail(function (xhr, msg) {
+            logXhrError(msg, xhr);
+            var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
+            $('body').append(flash);
+            $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
+                $('.flash-error').remove();
             });
+        });
     });
 
     $('header').on('click', '.user-tabs a' , function (e) {
@@ -854,19 +853,17 @@ $(document).ready(function ()
                         $('.tab-pane#credentials').html('');
                     },
                     url: 'credentials'
-                })
-                    .done(function (html) {
-                        $('.page-loader').hide(0);
-                        $('.tab-pane#credentials').html(html);
-                    })
-                    .fail(function (xhr, msg) {
-                        logXhrError(msg, xhr);
-                        var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
-                        $('body').append(flash);
-                        $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
-                            $('.flash-error').remove();
-                        });
+                }).done(function (html) {
+                    $('.page-loader').hide(0);
+                    $('.tab-pane#credentials').html(html);
+                }).fail(function (xhr, msg) {
+                    logXhrError(msg, xhr);
+                    var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
+                    $('body').append(flash);
+                    $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
+                        $('.flash-error').remove();
                     });
+                });
             }
         }
     });
@@ -884,35 +881,33 @@ $(document).ready(function ()
                 $('.tab-wrap .tab-content .tab-pane').html('');
             },
             url: contentUrl
-        })
-            .done(function (html) {
-                $('.page-loader').hide(0);
-                $('#' + realTabHref).html(html);
-                if(realTabHref == 'media' || realTabHref == 'settings') {
-                    fileInputAction();
-                }
-                if(realTabHref == 'themes') {
-                    //bindButtons();
-                }
-                if(realTabHref == 'media') {
-                    $('#imageResampleQuality-slider').slider({
-                        min: 10,
-                        max: 100,
-                        value: $('#media_settings_imageResampleQuality').val(),
-                        slide: function(event, ui) {
-                            $('#media_settings_imageResampleQuality').val(ui.value)
-                        }
-                    });
-                }
-            })
-            .fail(function (xhr, msg) {
-                logXhrError(msg, xhr);
-                var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
-                $('body').append(flash);
-                $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
-                    $('.flash-error').remove();
+        }).done(function (html) {
+            $('.page-loader').hide(0);
+            $('#' + realTabHref).html(html);
+            if(realTabHref == 'media' || realTabHref == 'settings') {
+                fileInputAction();
+            }
+            if(realTabHref == 'themes') {
+                //bindButtons();
+            }
+            if(realTabHref == 'media') {
+                $('#imageResampleQuality-slider').slider({
+                    min: 10,
+                    max: 100,
+                    value: $('#media_settings_imageResampleQuality').val(),
+                    slide: function(event, ui) {
+                        $('#media_settings_imageResampleQuality').val(ui.value)
+                    }
                 });
+            }
+        }).fail(function (xhr, msg) {
+            logXhrError(msg, xhr);
+            var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
+            $('body').append(flash);
+            $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
+                $('.flash-error').remove();
             });
+        });
     });
 
     $('.images-filter').on('click', function (e) {
@@ -971,51 +966,44 @@ $(document).ready(function ()
                         $('.right-bar .bottom-header h4').html('');
                         $('.right-bar-content').html('');
                     }
-                })
-                    .done(function (data) {
-                        $('.right-bar-loader').hide(0);
-                        $('.right-bar').html(data);
-                        if ($('.tooltipped').length) {
-                            $('.tooltipped').tooltip({ container: 'body' });
-                        }
-
-                    })
-                    .fail(function (xhr, msg) {
-                        logXhrError(msg, xhr);
-                        var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
-                        $('body').append(flash);
-                        $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
-                            $('.flash-error').remove();
-                        });
+                }).done(function (data) {
+                    $('.right-bar-loader').hide(0);
+                    $('.right-bar').html(data);
+                    if ($('.tooltipped').length) {
+                        $('.tooltipped').tooltip({ container: 'body' });
+                    }
+                }).fail(function (xhr, msg) {
+                    logXhrError(msg, xhr);
+                    var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
+                    $('body').append(flash);
+                    $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
+                        $('.flash-error').remove();
                     });
+                });
             } else {
                 $this.closest('.item-wrap').addClass('active');
                 activateRightBar();
-
                 $.ajax({
                     url: $this.attr('href'),
                     beforeSend: function () {
                         $('.right-bar .bottom-header h4').html('');
                         $('.right-bar-content').html('');
                         $('.right-bar-loader').show();
-
                     }
-                })
-                    .done(function (data) {
-                        $('.right-bar-loader').hide(0);
-                        $('.right-bar').html(data);
-                        if ($('.tooltipped').length) {
-                            $('.tooltipped').tooltip({ container: 'body' });
-                        }
-                    })
-                    .fail(function (xhr, msg) {
-                        logXhrError(msg, xhr);
-                        var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
-                        $('body').append(flash);
-                        $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
-                            $('.flash-error').remove();
-                        });
+                }).done(function (data) {
+                    $('.right-bar-loader').hide(0);
+                    $('.right-bar').html(data);
+                    if ($('.tooltipped').length) {
+                        $('.tooltipped').tooltip({ container: 'body' });
+                    }
+                }).fail(function (xhr, msg) {
+                    logXhrError(msg, xhr);
+                    var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
+                    $('body').append(flash);
+                    $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
+                        $('.flash-error').remove();
                     });
+                });
             }
         }
     });
@@ -1105,21 +1093,19 @@ $(document).ready(function ()
                 beforeSend: function () {
                     $('.page-loader').show();
                 }
-            })
-                .done(function (data) {
-                    $('.page-loader').hide(0);
-                    deactivateRightBar();
-                    $('.grid-content').html(data);
+            }).done(function (data) {
+                $('.page-loader').hide(0);
+                deactivateRightBar();
+                $('.grid-content').html(data);
 
-                })
-                .fail(function (xhr, msg) {
-                    logXhrError(msg, xhr);
-                    var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
-                    $('body').append(flash);
-                    $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
-                        $('.flash-error').remove();
-                    });
+            }).fail(function (xhr, msg) {
+                logXhrError(msg, xhr);
+                var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
+                $('body').append(flash);
+                $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
+                    $('.flash-error').remove();
                 });
+            });
             $('.confirm-modal').modal('hide');
         });
     });
@@ -1136,19 +1122,17 @@ $(document).ready(function ()
                 beforeSend: function () {
                     $('.page-loader').show();
                 }
-            })
-                .done(function (data) {
-                    $('.page-loader').hide(0);
-                    window.location = baseURL + 'posts';
-                })
-                .fail(function (xhr, msg) {
-                    logXhrError(msg, xhr);
-                    var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
-                    $('body').append(flash);
-                    $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
-                        $('.flash-error').remove();
-                    });
+            }).done(function (data) {
+                $('.page-loader').hide(0);
+                window.location = baseURL + 'posts';
+            }).fail(function (xhr, msg) {
+                logXhrError(msg, xhr);
+                var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
+                $('body').append(flash);
+                $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
+                    $('.flash-error').remove();
                 });
+            });
             $('.confirm-modal').modal('hide');
         });
     });
@@ -1165,22 +1149,20 @@ $(document).ready(function ()
                     beforeSend: function () {
                         $('.page-loader').show();
                     }
-                })
-                    .done(function (data) {
-                        $('.media-modal').modal('hide');
-                        $('.confirm-modal').modal('hide');
-                        $('.page-loader').hide(0);
-                        $('.tab-pane.active').html(data)
+                }).done(function (data) {
+                    $('.media-modal').modal('hide');
+                    $('.confirm-modal').modal('hide');
+                    $('.page-loader').hide(0);
+                    $('.tab-pane.active').html(data)
 
-                    })
-                    .fail(function (xhr, msg) {
-                        logXhrError(msg, xhr);
-                        var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
-                        $('body').append(flash);
-                        $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
-                            $('.flash-error').remove();
-                        });
+                }).fail(function (xhr, msg) {
+                    logXhrError(msg, xhr);
+                    var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
+                    $('body').append(flash);
+                    $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
+                        $('.flash-error').remove();
                     });
+                });
             });
         } else {
             $('.confirm-modal').modal();
@@ -1194,27 +1176,24 @@ $(document).ready(function ()
                 $('input[name="delete_items[]"]:checked').each(function () {
                     arrayOfIds.push($(this).attr('value'));
                 });
-
                 jsonArrayOfIds = JSON.stringify(arrayOfIds);
                 $.ajax({
                     url: href + '?id=' + jsonArrayOfIds + '&multi=true',
                     beforeSend: function () {
                         $('.page-loader').show();
                     }
-                })
-                    .done(function (data) {
-                        $('.page-loader').hide(0);
-                        $('.tab-pane.active').html(data)
+                }).done(function (data) {
+                    $('.page-loader').hide(0);
+                    $('.tab-pane.active').html(data)
 
-                    })
-                    .fail(function (xhr, msg) {
-                        logXhrError(msg, xhr);
-                        var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
-                        $('body').append(flash);
-                        $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
-                            $('.flash-error').remove();
-                        });
+                }).fail(function (xhr, msg) {
+                    logXhrError(msg, xhr);
+                    var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
+                    $('body').append(flash);
+                    $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
+                        $('.flash-error').remove();
                     });
+                });
                 $('.thumbnail.active').closest('.removable').remove();
                 $('.confirm-modal').modal('hide');
                 $('.media-actions').hide();
@@ -1257,7 +1236,6 @@ $(document).ready(function ()
 
                 if ($('.thumbnail.active').length) {
                     // todo: change how many are selected (media-actions)
-
                 } else {
                     $('.thumbnail').removeClass('edit-mode');
                     $('.media-actions').hide();
@@ -1285,32 +1263,28 @@ $(document).ready(function ()
                 beforeSend: function () {
                 },
                 url: $this.find('a.view-link').attr('href')
-            })
-                .done(function (data) {
-
-                    $('.media-modal').html(data);
-                    if ($('#example_video_1').length) {
-                        var mm = $('.media-modal').find('#example_video_1')[0];
-                        videojs(mm, {"controls": true, "autoplay": false, "preload": "auto" });
-                    }
-                    $('.media-modal').modal({
-                        backdrop: 'static'
-                    });
-                })
-                .fail(function (xhr, msg) {
-                    logXhrError(msg, xhr);
-                    var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
-                    $('body').append(flash);
-                    $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
-                        $('.flash-error').remove();
-                    });
+            }).done(function (data) {
+                $('.media-modal').html(data);
+                if ($('#example_video_1').length) {
+                    var mm = $('.media-modal').find('#example_video_1')[0];
+                    videojs(mm, {"controls": true, "autoplay": false, "preload": "auto" });
+                }
+                $('.media-modal').modal({
+                    backdrop: 'static'
                 });
+            }).fail(function (xhr, msg) {
+                logXhrError(msg, xhr);
+                var flash = '<div class="flash-error">Whoopsie, looks like something went wrong.</div>';
+                $('body').append(flash);
+                $('.flash-error').animate({opacity: 1}, 100).delay(3000).fadeOut(function () {
+                    $('.flash-error').remove();
+                });
+            });
         }
     });
 
     $('body').on('shown.bs.modal', '.media-modal', function () {
         mediaModalAction();
-
     });
 
     $('body').on('show.bs.modal', '.media-modal', function () {
@@ -1327,28 +1301,22 @@ $(document).ready(function ()
         }
     });
     fileInputAction();
-
 });
 
 $(window).load(function () {
     var State;
     $(function() {
-        // Prepare
-        var History = window.History; // Note: We are using a capital H instead of a lower h
+        var History = window.History;
         if (!History.enabled) {
-            // History.js is disabled for this browser.
-            // This is because we can optionally choose to support HTML4 browsers or not.
             return false;
         }
         var anchor;
 
-        // Bind to StateChange Event
-        History.Adapter.bind(window, 'statechange', function() { // Note: We are using statechange instead of popstate
+        History.Adapter.bind(window, 'statechange', function() {
             State = History.getState();
         });
 
         $('.settings-tabs a').click(function(e) {
-
             anchor = baseURL + $(this).attr('data-url');
             e.preventDefault();
             History.pushState(null, $(this).text(), $(this).attr('data-url'));
@@ -1357,16 +1325,13 @@ $(window).load(function () {
         var displayTab = function () {
             $('.settings-tabs a[data-url="' + anchor + '"]').click();
         };
+
         window.addEventListener("popstate", function(e) {
             var location1 = document.location.toString();
             anchor = location1.substr(location1.indexOf('13/') + 2);
-
             if (anchor.length) {
                 displayTab(anchor);
-            } /*else {
-             anchor =  $('.transformer-tabs li.active a');
-             displayTab(anchor);
-             }*/
+            }
         });
     });
 });
@@ -1380,16 +1345,13 @@ $(window).resize(function () {
     rtime = new Date();
     if (timeout === false) {
         timeout = true;
-        setTimeout(resizeend, delta);
+        setTimeout(resizeEnd, delta);
     }
 });
 
-/**
- *
- */
-function resizeend() {
+function resizeEnd() {
     if (new Date() - rtime < delta) {
-        setTimeout(resizeend, delta);
+        setTimeout(resizeEnd, delta);
     } else {
         timeout = false;
         if ($('body').hasClass('modal-open') && $('.media-modal').hasClass('in')) {

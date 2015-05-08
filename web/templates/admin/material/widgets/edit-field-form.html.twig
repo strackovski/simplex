@@ -1,91 +1,102 @@
-<div class="pf-header clearfix">
-    <h3>Field: <span></span></h3>
-    <div class="fieldForm-right"></div>
-</div>
-<div class="addField-form new-field-form">
-    <div class="data-group">
-        <div class="form-group form-element">
-            {{ form_label(form.type) }}
-            {{ form_widget(form.type, { 'attr': {'class': 'trigger'}}) }}
-            {{ form_errors(form.type) }}
-        </div>
+<div class="field-form">
+    <div class="pf-header clearfix">
+        <h3><span class="new">Field</span> <span class="type"></span> <span class="name"></span></h3>
+        <div class="fieldForm-right"></div>
     </div>
-
-    <div class="data-group">
-        <div class="row">
-            <div class="col-xs-6">
-                <div class="form-group form-element">
-                    {{ form_row(form.name, { 'attr': {'class': 'trigger'}}) }}
-                </div>
-            </div>
-
-            <div class="col-xs-6">
-                <div class="form-group form-element">
-                    {{ form_row(form.placeholder) }}
-                </div>
-            </div>
-        </div>
-
-        <div class="">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="form-group form-element">
-                        {{ form_row(form.options) }}
-                    </div>
-                </div>
-            </div>
+    <div class="addField-form new-field-form cx-form">
+        <div class="data-group">
             <div class="row">
                 <div class="col-xs-4">
                     <div class="form-group form-element">
-                        {{ form_row(form.value) }}
+                        {{ form_label(form.type) }}
+                        {{ form_widget(form.type, { 'attr': {'class': 'trigger'}}) }}
+                        {{ form_errors(form.type) }}
                     </div>
                 </div>
-                <div class="col-xs-2">
+
+                <div class="col-xs-4">
                     <div class="form-group form-element">
-                        {{ form_row(form.min) }}
+                        {{ form_row(form.name, { 'attr': {'class': 'name-tg'}}) }}
                     </div>
                 </div>
-                <div class="col-xs-2">
+
+                <div class="col-xs-4">
                     <div class="form-group form-element">
-                        {{ form_row(form.max) }}
-                    </div>
-                </div>
-                <div class="col-xs-2">
-                    <div class="form-group form-element">
-                        {{ form_row(form.size) }}
-                    </div>
-                </div>
-                <div class="col-xs-2">
-                    <div class="form-group form-element">
-                        {{ form_row(form.maxlength) }}
+                        {{ form_row(form.placeholder) }}
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-xs-4">
-                    <div class="form-group field option">
-                        {{ form_row(form.autoFocus) }}
+            <div class="data-group">
+                <div class="row select-hidden cx-hidden hidden">
+                    <div class="col-xs-12">
+                        <div class="form-group form-element">
+                            {{ form_row(form.options) }}
+                        </div>
                     </div>
                 </div>
-                <div class="col-xs-4">
-                    <div class="form-group field option">
-                        {{ form_row(form.autoComplete) }}
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group form-element">
+                            {{ form_row(form.value) }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <div class="form-group form-element">
+                            {{ form_row(form.min) }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <div class="form-group form-element">
+                            {{ form_row(form.max) }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <div class="form-group form-element">
+                            {{ form_row(form.size) }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <div class="form-group form-element">
+                            {{ form_row(form.maxlength) }}
+                        </div>
                     </div>
                 </div>
-                <div class="col-xs-4">
-                    <div class="form-group field option">
-                        {{ form_row(form.checked) }}
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group field option">
+                            {{ form_row(form.autoFocus) }}
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-4">
-                    <div class="form-group field option">
-                        {{ form_row(form.disabled) }}
+
+                    <div class="col-xs-4">
+                        <div class="form-group field option">
+                            {{ form_row(form.autoComplete) }}
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-4">
-                    <div class="form-group field option">
-                        {{ form_row(form.required) }}
+
+                    <div class="col-xs-4 checkbox-hidden cx-hidden hidden">
+                        <div class="form-group field option">
+                            {{ form_row(form.checked) }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <div class="form-group field option">
+                            {{ form_row(form.disabled) }}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-4">
+                        <div class="form-group field option">
+                            {{ form_row(form.required) }}
+                        </div>
                     </div>
                 </div>
             </div>

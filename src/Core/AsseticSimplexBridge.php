@@ -3,11 +3,8 @@
 namespace nv\Simplex\Core;
 
 use Assetic\Asset\AssetCache;
-use Assetic\Asset\FileAsset;
 use Assetic\Asset\GlobAsset;
 use Assetic\AssetManager;
-use Assetic\Factory\AssetFactory;
-use Assetic\Filter\JSMinFilter;
 use Assetic\FilterManager;
 
 /**

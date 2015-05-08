@@ -7,17 +7,23 @@ This is the core development version of Simplex web content management system, b
 Features
 ----
 
-#### Next (in development)
+#### Next version
+   
+   Features planned for next release:
+   
    * Page layout manager and builder
    * Support for multi-conditional page queries
-
+   * User group manager to define group access by modules
+   * Comments and content rating system
+   * Integrate Gearman job server for time-intensive processes
+   
 ####Content features
 
    * Intuitive and easy to use content management and publishing
    * Powerful options to customize your content
    * Transparent support for multimedia content
    * Automatic content enrichment and classification
-   * Per-post keywords and metadata specification
+   * Per-content keywords and metadata specification
    * Social services integration
   
 ####Media features

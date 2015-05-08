@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -119,7 +119,6 @@ class FormController extends ActionControllerAbstract
         return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/form-form.html.twig', $data);
     }
 
-
     /**
      * Edit form
      *
@@ -138,7 +137,7 @@ class FormController extends ActionControllerAbstract
             $form->bind($request);
             if ($form->isValid()) {
                 $this->forms->save($user_form);
-                $message = 'Changes saved to ' . $user_form->getTitle() . '.';
+                $message = 'Changes saved to form "' . $user_form->getTitle() . '"';
                 $this->session->getFlashBag()->add('success', $message);
                 $redirect = $this->url->generate('admin/forms');
 

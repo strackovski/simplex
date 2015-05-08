@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -136,8 +136,8 @@ class MediaController extends ActionControllerAbstract
      */
     public function settingsAction(Request $request, Application $app)
     {
+        /** @var \Symfony\Component\Form\Form $form */
         $form = $this->form->create(new MediaSettingsType(), $this->settings);
-
         if ($request->isMethod('POST')) {
             $files = $request->files;
             $form->bind($request);
@@ -239,16 +239,19 @@ class MediaController extends ActionControllerAbstract
      */
     public function editAction(Request $request)
     {
+        /** @var \nv\Simplex\Model\Entity\MediaItem $image */
         $image = $this->media->findOneBy(array('id' => $request->get('id')));
-
-        /** @var $form Form */
+        /** @var \Symfony\Component\Form\Form $form */
         $form = $this->form->create(new MediaType(), $image);
-
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
                 $this->media->save($image);
-                return 1;
+                $message = 'Changes saved to media "' . $image->getTitle() . '"';
+                $this->session->getFlashBag()->add('success', $message);
+                $redirect = $this->url->generate('admin/media');
+
+                return new RedirectResponse($redirect);
             }
         }
 

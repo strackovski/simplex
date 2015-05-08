@@ -27,6 +27,9 @@
 
 {% block content %}
     <div class="grid grid-clear">
+        {% for message in app.session.getFlashBag.get('success') %}
+            <div class="label label-success label-flash">{{ message }}</div>
+        {% endfor %}
         <div class="grid-outer-full">
             <a class="paper-btn float-btn tooltipped" data-toggle="tooltip" data-placement="top" title="New post" href="{{ app.url_generator.generate('admin/form/add') }}">
                 <i class="fa fa-plus"></i>

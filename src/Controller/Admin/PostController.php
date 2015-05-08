@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -157,6 +157,7 @@ class PostController extends ActionControllerAbstract
             $request->request->get('body')
         );
 
+        /** @var \Symfony\Component\Form\Form $form */
         $form = $this->form->create(new PostType($this->media->getLibraryMedia(), $this->pages), $post);
         if ($request->isMethod('POST')) {
             $form->bind($request);
@@ -171,6 +172,7 @@ class PostController extends ActionControllerAbstract
 
                 if (count($images) > 0) {
                     foreach ($images as $image) {
+                        /** @var \nv\Simplex\Model\Entity\MediaItem $imageObj */
                         $imageObj = $this->media->findOneBy(array('id' => $image));
                         $post->addMediaItem($imageObj);
                     }
@@ -178,6 +180,7 @@ class PostController extends ActionControllerAbstract
 
                 if (count($pages) > 0) {
                     foreach ($pages as $page) {
+                        /** @var \nv\Simplex\Model\Entity\Page $pageObj */
                         $pageObj = $this->pages->findOneBy(array('id' => $page));
                         $post->addPage($pageObj);
                     }
@@ -261,6 +264,8 @@ class PostController extends ActionControllerAbstract
             if ($form->isValid()) {
                 $images = $form->get('media')->getData();
                 $tags = $form->get('tags')->getData();
+                $pages = $form->get('pages')->getData();
+
                 try {
                     $this->manager->tag($post, $tags);
                 } catch (\Exception $e) {
@@ -277,13 +282,22 @@ class PostController extends ActionControllerAbstract
                     }
                 }
 
+
+                if (count($pages) > 0) {
+                    foreach ($pages as $page) {
+                        /** @var \nv\Simplex\Model\Entity\Page $pageObj */
+                        $pageObj = $this->pages->findOneBy(array('id' => $page));
+                        $post->addPage($pageObj);
+                    }
+                }
+
                 if (null !== $token) {
                     /** @var $user User */
                     $post->setEditor($token->getUser());
                 }
 
                 $this->posts->save($post);
-                $message = 'Changes saved to ' . $post->getTitle() . '.';
+                $message = 'Changes saved to post "' . $post->getTitle() . '"';
                 $this->session->getFlashBag()->add('success', $message);
                 $redirect = $this->url->generate('admin/posts');
 

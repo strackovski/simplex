@@ -1,7 +1,7 @@
 /*****************************************************
  Simplex UI Material Theme
  Main stylesheet
- by Neja Dolinar <neja@nv3.org>
+ by Neja Dolinar <dolinar.neja@gmail.com>
  2014
 *****************************************************/
 * {
@@ -188,6 +188,23 @@ header.single-item{
 .header-title span {
     font-size: 24px;
     float: left;
+}
+
+.header-title a {
+    color: #fff;
+}
+
+.header-title a:hover span {
+    opacity: .8;
+}
+
+.header-title span.type {
+    margin-right: 12px;
+    opacity: .5;
+}
+
+.header-title span.type i.fa {
+    margin-left: 8px;
 }
 
 span.page-title {
@@ -1435,6 +1452,16 @@ span.empty {
     background: #E1F5FE;
 }
 
+.item-list span.small {
+    font-size: 95%;
+    font-weight: normal;
+    color: #666;
+}
+
+.mixed-list.item-list span.small {
+    line-height: 1.5;
+}
+
 .user-name {
     display: block;
     height: 48px;
@@ -2416,10 +2443,60 @@ ul.list-box > li {
     float: right;
 }
 
-.query-form {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+.query-form,
+.field-form {
+    margin: 0;
+    padding: 0;
+}
+
+.queries li.query-form,
+.fields .field-form {
+    border: 1px solid #dfdfdf;
+    margin-bottom: 16px;
+}
+
+.queries li.query-form .data-group:last-child .form-group,
+.fields .field-form .data-group:last-child .form-group {
+    margin-bottom: 0;
+}
+
+.queries li.query-form .cx-form,
+.fields .field-form .cx-form {
+    padding: 8px;
+}
+
+.form-group.form-element-inline {
+    margin-bottom: 0;
+}
+
+.form-group.form-element-inline select {
+    margin-bottom: 0;
+    margin-top: 0;
+    border-bottom: none;
+    width: auto;
+    display: inline-block;
+    height: 40px;
+    background-position: 98% 55%;
+}
+
+.form-group.form-element-inline label {
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.data-header {
+    padding: 0 8px;
+    margin-bottom: 16px;
+    font-size: 1.4em;
+    line-height: 2em;
+}
+
+.data-header h5 {
+    opacity: .3;
+    font-size: .7em;
+    text-transform: uppercase;
+    width: 70%;
+    float: left;
 }
 
 .li-empty {
@@ -2445,24 +2522,35 @@ ul.list-box > li {
     display: none;
 }
 
+.pf-header {
+    border-bottom: 1px solid #dfdfdf;
+    padding: 0 8px;
+    margin-bottom: 8px;
+}
+
 .pf-header h3 {
     display: block;
     float: left;
     width: 80%;
-    line-height: 1.8em;
+    line-height: 2.8em;
+    font-size: 1em;
+    font-weight: bold;
 }
 
+.pf-header h3 .type, .pf-header h3 .name {
+    text-transform: capitalize;
+}
+
+
 .pf-header .fieldForm-right {
-    font-size: 1.8em;
-    line-height: 1.2em;
+    font-size: 1.4em;
+    line-height: 2em;
     text-align: right;
-    width: 20%;
-    float: right;
 
 }
 
 .fieldForm-right a {
-    margin: 0 5px;
+    margin: 0;
 }
 
 .ui-accordion .pf-header.ui-accordion-header,
@@ -3238,12 +3326,16 @@ div.badge-icon > img {
 }
 
 .item-list .item.ml {
+    line-height: 1.5em;
+}
+
+.item-list.page-list .item.ml {
     line-height: 1.4em;
 }
 
 .ml .small a {
     font-weight: 500;
-    font-size: .9em;
+    font-size: 1em;
 }
 
 .ml .small p {
@@ -3320,4 +3412,67 @@ div.badge-icon > img {
 .section-entity .full .form-group {
     margin-bottom: 16px;
     line-height: 1.2;
+}
+
+.widget-advanced {
+    border: 1px solid #dfdfdf;
+    margin-bottom: 20px;
+}
+
+.widget-advanced .ls .form-group {
+    margin-bottom: 0;
+}
+
+.widget-advanced h5 {
+    font-size: .9em;
+    color: #666;
+}
+
+.widget-header {
+    padding: 16px;
+    border-bottom: 1px solid #dfdfdf;
+    position: relative;
+}
+
+.widget-body{
+    padding: 16px;
+}
+
+.widget-advanced .close-btn {
+    line-height: 0;
+    position: absolute;
+    right: 19px;
+    top: 19px;
+}
+
+.cx-form .right-aux {
+    line-height: 60px;
+    vertical-align: middle;
+}
+
+.cx-form .variable {
+
+}
+
+.form-group.text-center input,
+.form-group.text-center label {
+    text-align: center
+}
+
+.label-flash {
+    opacity: 0;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    z-index: 999;
+    display: inline;
+    padding: 6px 12px;
+    font-size: 100%;
+    font-weight: bold;
+    line-height: 1;
+    color: #ffffff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0;
 }

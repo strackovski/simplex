@@ -27,12 +27,14 @@
 
 {% block content %}
     <div class="grid grid-clear">
+        {% for message in app.session.getFlashBag.get('success') %}
+            <div class="label label-success label-flash">{{ message }}</div>
+        {% endfor %}
         <div class="grid-outer-full">
             <a class="paper-btn float-btn tooltipped" data-toggle="tooltip" data-placement="top" title="New post" href="{{ app.url_generator.generate('admin/post/add') }}">
                 <i class="fa fa-plus"></i>
             </a>
             <div class="grid-content">
-
                 {% if posts|length < 1 %}
                     <div class="empty-msg">
                         <h1 class="ghost big">No posts added yet</h1>

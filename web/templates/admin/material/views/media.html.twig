@@ -42,6 +42,9 @@
 
 {% block content %}
     <div class="grid">
+        {% for message in app.session.getFlashBag.get('success') %}
+            <div class="label label-success label-flash">{{ message }}</div>
+        {% endfor %}
         <div class="grid-outer-full">
             <a class="paper-btn float-btn tooltipped upload-btn" data-toggle="tooltip" data-placement="top" title="Upload" href="#upload">
                 <i class="fa fa-plus"></i>

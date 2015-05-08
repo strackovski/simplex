@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -54,6 +54,7 @@ class PageController extends ActionControllerAbstract
      * @param Session $session
      * @param UrlGenerator $url
      * @param PageManager $pageManager
+     * @param Logger $logger
      */
     public function __construct(
         PageRepository $pageRepository,
@@ -138,6 +139,7 @@ class PageController extends ActionControllerAbstract
     public function addAction(Request $request)
     {
         $page = new Page($request->request->get('title'), $request->request->get('slug'));
+        /** @var \Symfony\Component\Form\Form $form */
         $form = $this->form->create(new PageType($this->pages, $this->settings), $page);
         $token = $this->security->getToken();
 
@@ -174,10 +176,11 @@ class PageController extends ActionControllerAbstract
      */
     public function editAction(Request $request)
     {
+        /** @var \nv\Simplex\Model\Entity\Page $page */
         $page = $this->pages->findOneBy(array('id' => $request->get('page')));
+        /** @var \Symfony\Component\Form\Form $form */
         $form = $this->form->create(new PageType($this->pages, $this->settings), $page);
         $token = $this->security->getToken();
-
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
@@ -187,7 +190,7 @@ class PageController extends ActionControllerAbstract
                 }
                 $this->manager->slug($page, $form->get('slug')->getData());
                 $this->pages->save($page);
-                $message = 'Changes to page <strong>' . $page->getTitle() . '</strong> have been saved.';
+                $message = 'Changes saved to page "' . $page->getTitle() . '"';
                 $this->session->getFlashBag()->add('success', $message);
                 $redirect = $this->url->generate('admin/pages');
 

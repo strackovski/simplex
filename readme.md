@@ -6,16 +6,8 @@ This is the core development version of Simplex web content management system, b
 
 Features
 ----
-
-#### Next version
    
-   Features planned for next release:
-   
-   * Page layout manager and builder
-   * Support for multi-conditional page queries
-   * User group manager to define group access by modules
-   * Comments and content rating system
-   * Integrate Gearman job server for time-intensive processes
+Click the issues tab to see features currently under development.
    
 ####Content features
 
@@ -54,6 +46,16 @@ Features
    * Support for public user registration
    * Secure password and credentials storage
    * Secure account activation and reactivation procedure
+  
+#### Next version
+   
+   Features planned for next release:
+   
+   * Page layout manager and builder
+   * Support for multi-conditional page queries
+   * User group manager to define group access by modules
+   * Comments and content rating system
+   * Integrate Gearman job server for time-intensive processes   
    
   
 Built with
@@ -69,7 +71,6 @@ Uses the following software packages to work:
    * Imagine imaging library for image processing
    * Composer for dependency management and installation
 
-
 Documentation
 ----
 For complete Simplex documentation visit [the docs page](http://www.envee.eu/projects/simplex/documentation.html]).
@@ -82,7 +83,14 @@ For complete Simplex documentation visit [the docs page](http://www.envee.eu/pro
   4. Depending upon the configuration of your web server, the Simplex application should be available at your-root/simplex-dir/admin
   5. web/uploads and var/logs directories should have appropriate permissions and owner settings to enable file uploads and logging (required)
 
-
 Development
 ----
 Simplex is an open source project that welcomes quality contributions in form of code, suggestions, bug reports, translations, etc.
+
+#### Active developers
+* [Vladimir Stračkovski](https://github.com/strackovski/)
+* [Neja Dolinar](https://github.com/ndolinar/) (themes, frontend, UI)
+
+License
+----
+This software is licensed under the Apache 2 license. To obtain a full copy of the license please [click here](http://www.apache.org/licenses/LICENSE-2.0). Also see the attached license.md for additional information.

@@ -2,10 +2,8 @@
 
 namespace nv\Simplex\Model\Listener;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use nv\Simplex\Core\Post\PostManager;
-use nv\Simplex\Model\Entity\Metadata;
 use nv\Simplex\Model\Entity\Post;
 use nv\Simplex\Model\Entity\Settings;
 use Symfony\Bridge\Monolog\Logger;

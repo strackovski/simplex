@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -49,7 +49,6 @@ class FormBuilder
             /** @var FormField $field */
             switch ($field->getType()) {
                 case 'text':
-
                     $label = '<label for="form_'.$form->getName().'_'.$field->getName().'">'.$field->getName().'</label>';
                     $r = '<input type="text" class="form-control" ';
                     $field->getValue() ? $r .= 'value="'.$field->getValue().'" ' : null;
@@ -155,14 +154,14 @@ class FormBuilder
                     break;
             }
 
-            $formResult[$field->getName()]['control'] = $r;
-            $formResult[$field->getName()]['label'] = $label;
+            $formResult[strtolower($field->getName())]['control'] = $r;
+            $formResult[strtolower($field->getName())]['label'] = $label;
         }
 
         // define form markup (form open, close)
         $f  = '<form ';
-        $f .= 'action="'.$form->getAction().'" ';
-        $f .= 'method="'.$form->getMethod().'" ';
+        $form->getAction() ? $f .= 'action="'.$form->getAction().'/'.$form->getId().'" ' : $f.= 'action="form/'.$form->getId().'" ';
+        $form->getMethod() ? $f .= 'method="'.$form->getMethod().'" ' : $f .= 'method="POST" ';
         $form->getTarget() ? $f .= 'target="'.$form->getTarget().'" ' : null;
         $form->getName() ? $f .= 'name="'.$form->getName().'" ' : null;
         $form->getAcceptCharset() ? $f .= 'accept-charset="'.$form->getAcceptCharset().'" ' : null;

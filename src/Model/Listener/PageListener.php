@@ -15,6 +15,7 @@ class PageListener extends EntityListenerAbstract
 {
     /**
      * @param PageManager $manager
+     * @param Logger $logger
      */
     public function __construct(PageManager $manager, Logger $logger)
     {

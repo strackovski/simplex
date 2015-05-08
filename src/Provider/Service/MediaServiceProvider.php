@@ -2,7 +2,6 @@
 
 namespace nv\Simplex\Provider\Service;
 
-use FFMpeg\FFMpeg;
 use FFMpeg\FFMpegServiceProvider;
 use Neutron\Silex\Provider\ImagineServiceProvider;
 use nv\Simplex\Controller\Admin\ImageController;

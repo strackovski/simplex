@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,6 @@ namespace nv\Simplex\Core\User;
 
 use Imagine\Image\Point;
 use nv\Simplex\Core\Mailer\SystemMailer;
-use nv\Simplex\Core\Simplex;
 use nv\Simplex\Model\Entity\User;
 use nv\Simplex\Model\Repository\UserRepository;
 use Symfony\Component\Routing\Generator\UrlGenerator;

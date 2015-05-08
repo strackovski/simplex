@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,12 +20,7 @@ use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Logger;
 use nv\Simplex\Core\Form\FormBuilder;
-use nv\Simplex\Core\Media\ImageListener;
-use nv\Simplex\Core\Media\MediaListener;
-use nv\Simplex\Core\Post\PostListener;
-use nv\Simplex\Core\User\UserListener;
 use nv\Simplex\Model\Listener\EntityListenerResolver;
-use nv\Simplex\Model\Listener\PageListener;
 use nv\Simplex\Provider\Service\ContentServiceProvider;
 use nv\Simplex\Provider\Service\IntegrationServiceProvider;
 use nv\Simplex\Provider\Service\SiteServiceProvider;
@@ -55,7 +50,6 @@ use nv\Simplex\Provider\Service\SimplexServiceProvider;
 use nv\Simplex\Provider\Service\UserServiceProvider;
 use nv\Simplex\Provider\UserProvider;
 use nv\Simplex\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Simplex

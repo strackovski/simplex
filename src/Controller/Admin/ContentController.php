@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,12 +22,7 @@ use nv\Simplex\Model\Repository\TagRepository;
 use Silex\Application;
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use nv\Simplex\Core\Post\PostManager;
-use nv\Simplex\Form\PostType;
-use nv\Simplex\Model\Entity\Post;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Security\Core\SecurityContext;
@@ -113,7 +108,7 @@ class ContentController extends ActionControllerAbstract
         $id = $request->get('id');
 
         if (in_array($type, $array = array('post', 'image', 'video', 'page', 'form'))) {
-
+            $item = null;
             if ($type === 'post') {
                 $item = $this->posts->findOneBy(array('id' => $id));
             } elseif ($type === 'image' or $type === 'video') {

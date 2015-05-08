@@ -3,9 +3,6 @@
 namespace nv\Simplex\Provider\Service;
 
 use nv\Simplex\Controller\Admin\FormController;
-use nv\Simplex\Controller\Admin\PageController;
-use nv\Simplex\Core\Page\PageManager;
-use nv\Simplex\Model\Listener\PageListener;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Silex\ServiceProviderInterface;

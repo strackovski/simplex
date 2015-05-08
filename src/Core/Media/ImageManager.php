@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -112,6 +112,7 @@ class ImageManager implements MediaManagerInterface
      *
      * @param MediaItem $image
      * @param array $options
+     * @param bool $destination
      */
     public function crop2(MediaItem $image, array $options, $destination = false)
     {
@@ -146,6 +147,7 @@ class ImageManager implements MediaManagerInterface
      *
      * @param MediaItem $image
      * @param array $options
+     * @param bool $destination
      */
     public function crop(MediaItem $image, array $options, $destination = false)
     {

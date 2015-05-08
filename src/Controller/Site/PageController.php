@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,6 @@
 namespace nv\Simplex\Controller\Site;
 
 use Doctrine\DBAL\Query\QueryException;
-use nv\Simplex\Model\Entity\Form;
-use nv\Simplex\Model\Entity\FormResult;
 use nv\Simplex\Model\Entity\Page;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,24 +51,24 @@ class PageController
                         if ($query->getLimitMax() == 1) {
                             try {
                                 $content[$query->getOutputVariable()] =
-                                    $query->getManager()->buildQuery($app['orm.em'])->getOneOrNullResult();
+                                    $query->getManager()->buildQuery2($app['orm.em'])->getOneOrNullResult();
                             } catch (\Exception $e) {
                                 $content[$query->getOutputVariable()] = null;
                             }
                         } else {
-                            $content[$query->getOutputVariable()] = $query->getManager()->buildQuery($app['orm.em'])->getResult();
+                            $content[$query->getOutputVariable()] = $query->getManager()->buildQuery2($app['orm.em'])->getResult();
                         }
 
                     } else {
                         if ($query->getLimitMax() == 1) {
                             try {
                                 $content[$query->getOutputVariable()] =
-                                    $query->getManager()->buildQuery($app['orm.em'])->getOneOrNullResult();
+                                    $query->getManager()->buildQuery2($app['orm.em'])->getOneOrNullResult();
                             } catch (\Exception $e) {
                                 $content[$query->getOutputVariable()] = null;
                             }
                         } else {
-                            $content[] = $query->getManager()->buildQuery($app['orm.em'])->getResult();
+                            $content[] = $query->getManager()->buildQuery2($app['orm.em'])->getResult();
                         }
                     }
                 } catch (QueryException $e) {
@@ -119,24 +117,24 @@ class PageController
                         if ($query->getLimitMax() == 1) {
                             try {
                                 $content[$query->getOutputVariable()] =
-                                    $query->getManager()->buildQuery($app['orm.em'])->getOneOrNullResult();
+                                    $query->getManager()->buildQuery2($app['orm.em'])->getOneOrNullResult();
                             } catch (\Exception $e) {
                                 $content[$query->getOutputVariable()] = null;
                             }
                         } else {
-                            $content[$query->getOutputVariable()] = $query->getManager()->buildQuery($app['orm.em'])->getResult();
+                            $content[$query->getOutputVariable()] = $query->getManager()->buildQuery2($app['orm.em'])->getResult();
                         }
 
                     } else {
                         if ($query->getLimitMax() == 1) {
                             try {
                                 $content[$query->getOutputVariable()] =
-                                    $query->getManager()->buildQuery($app['orm.em'])->getOneOrNullResult();
+                                    $query->getManager()->buildQuery2($app['orm.em'])->getOneOrNullResult();
                             } catch (\Exception $e) {
                                 $content[$query->getOutputVariable()] = null;
                             }
                         } else {
-                            $content[] = $query->getManager()->buildQuery($app['orm.em'])->getResult();
+                            $content[] = $query->getManager()->buildQuery2($app['orm.em'])->getResult();
                         }
                     }
                 } catch (QueryException $e) {
@@ -158,5 +156,31 @@ class PageController
         }
 
         return $app->abort(404, 'Page not found.');
+    }
+
+    /**
+     * View single post
+     *
+     * @param Request     $request
+     * @param Application $app
+     * @return mixed
+     */
+    public function mediaViewAction(Request $request, Application $app)
+    {
+        if (!$app['settings']->getLive()) {
+            die('offline');
+        }
+
+        $content = $app['repository.media']->findOneBy(array('id' => $request->get('id')));
+        $menu = $app['repository.page']->getMenuPages();
+
+        return $app['twig']->render(
+            'site/'.$app['settings']->getPublicTheme().'/widgets/media.html.twig',
+            array(
+                'content' => $content,
+                'menu' => $menu,
+                'settings' => $app['settings']
+            )
+        );
     }
 }

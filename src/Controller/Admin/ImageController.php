@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,6 @@
 
 namespace nv\Simplex\Controller\Admin;
 
-use Imagine\Image\ImagineInterface;
 use nv\Simplex\Controller\ActionControllerAbstract;
 use nv\Simplex\Core\Media\ImageManager;
 use nv\Simplex\Form\MediaType;

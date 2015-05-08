@@ -3,7 +3,6 @@
 namespace nv\Simplex\Model\Listener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PreFlushEventArgs;
 use nv\Simplex\Core\Media\ImageManager;
 use nv\Simplex\Core\Media\VideoManager;
 use nv\Simplex\Model\Entity\Image;
@@ -25,6 +24,7 @@ class MediaListener extends EntityListenerAbstract
      * @param ImageManager $imageManager
      * @param VideoManager $videoManager
      * @param Settings $settings
+     * @param Logger $logger
      * @internal param MediaManagerInterface $manager
      */
     public function __construct(ImageManager $imageManager, VideoManager $videoManager, Settings $settings, Logger $logger)
@@ -47,6 +47,8 @@ class MediaListener extends EntityListenerAbstract
         } elseif ($media instanceof Video) {
             return $this->processVideo($media);
         }
+
+        return false;
     }
 
     /**

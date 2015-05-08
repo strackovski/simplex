@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,6 @@ namespace nv\Simplex\Controller\Site;
 use nv\Simplex\Model\Entity\Form;
 use nv\Simplex\Model\Entity\FormResult;
 use Silex\Application;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -57,7 +56,7 @@ class FormController
                 . $result->getId() . ' was saved.'
         );
 
-        $app['mailer']->sendNotificationEmail($app['settings']->getAdminEmail(), $notification);
+        $app['system.mailer']->sendNotificationEmail($app['settings']->getAdminEmail(), $notification);
 
         return 1;
     }

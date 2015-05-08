@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,6 @@
 
 namespace nv\Simplex\Controller\Admin;
 
-use nv\Simplex\Core\Service\ApiAccountAbstract;
 use nv\Simplex\Core\Service\GoogleApiAccount;
 use nv\Simplex\Core\Service\TwitterApiAccount;
 use nv\Simplex\Form\ApiSettingsType;
@@ -20,7 +19,6 @@ use nv\Simplex\Form\MailSettingsType;
 use nv\Simplex\Form\ThemeSettingsType;
 use nv\Simplex\Model\Entity\Settings;
 use nv\Simplex\Model\Repository\SettingsRepository;
-use PhpAmqpLib\Connection\AMQPConnection;
 use Silex\Application;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -34,7 +32,6 @@ use nv\Simplex\Model\Entity\Image;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Security\Core\SecurityContext;
-use Abraham\TwitterOAuth\TwitterOAuth;
 
 /**
  * Class SettingsController
@@ -240,12 +237,12 @@ class SettingsController
     {
         /** @var \nv\Simplex\Model\Entity\Settings $settings */
         $settings = $this->settingsRepository->getCurrent();
+        /** @var \Symfony\Component\Form\Form $form */
         $form = $this->form->create(new ThemeSettingsType($this->settingsRepository), $settings);
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
-
                 $this->settingsRepository->save($settings);
             }
         }
@@ -383,6 +380,7 @@ class SettingsController
     {
         /** @var \nv\Simplex\Model\Entity\Settings $settings */
         $settings = $this->settingsRepository->getCurrent();
+        /** @var \Symfony\Component\Form\Form $form */
         $form = $this->form->create(new MailSettingsType($this->settingsRepository), $settings);
 
         if ($request->isMethod('POST')) {
@@ -436,6 +434,7 @@ class SettingsController
     {
         /** @var \nv\Simplex\Model\Entity\Settings $settings */
         $settings = $this->settingsRepository->getCurrent();
+        /** @var \Symfony\Component\Form\Form $form */
         $form = $this->form->create(new SettingsType($this->settingsRepository), $settings);
 
         if ($request->isMethod('POST')) {

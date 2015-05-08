@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,6 @@
 
 namespace nv\Simplex\Core\Page;
 
-use Doctrine\DBAL\Query\QueryException;
 use Doctrine\ORM\EntityManager;
 use nv\Simplex\Model\Entity\PageQuery;
 
@@ -39,6 +38,119 @@ class QueryManager
     public function __construct(PageQuery $query)
     {
         $this->query = $query;
+    }
+
+    public function buildQuery2(EntityManager $em) {
+        // content should be transparent (exception is tags for form)
+        // all content has same columns
+        // operator defines methods
+        $qb = $em->createQueryBuilder();
+        $contentType = $this->query->getContentType(1);
+
+        // query ex:
+        // select from [contentType] where [column] [operator] [value]
+        // authors and tags need joining
+
+        if ($this->query->getColumn() == 'author' || $this->query->getColumn() == 'tags') {
+            // build join query
+            $qb->select(array('u'))
+                ->from($contentType, 'u')
+                ->leftJoin('u.'.$this->query->getColumn(), 'x')
+                ->where($qb->expr()->in('x.name', '?1'))
+                ->andWhere($qb->expr()->eq('u.published', '?2'));
+
+            $qb->setParameters(
+                array(
+                    1 => $this->query->getValue(),
+                    2 => true
+                )
+            );
+
+        } else {
+
+            $qb->select(array('u'))->from($contentType, 'u');
+
+            switch ($this->query->getOperator()) {
+                case 'eq':
+                    $qb->where($qb->expr()->eq('u.' . $this->query->getColumn(), '?1'))
+                        ->andWhere($qb->expr()->eq('u.published', '?2'));
+
+                    $qb->setParameters(
+                        array(
+                            1 => $this->query->getValue(),
+                            2 => true
+                        )
+                    );
+
+                    break;
+                case 'in':
+                    $qb->where($qb->expr()->in('u.' . $this->query->getColumn(), '?1'))
+                        ->andWhere($qb->expr()->eq('u.published', '?2'));
+
+                    $qb->setParameters(
+                        array(
+                            1 => $this->query->getValue(),
+                            2 => true
+                        )
+                    );
+
+                    break;
+
+                case 'between':
+                    $qb->where($qb->expr()->gte('u.'.$this->query->getColumn(), '?1'))
+                        ->andWhere($qb->expr()->lte('u.'.$this->query->getColumn(), '?2'))
+                        ->andWhere($qb->expr()->eq('u.published', '?3'));
+
+                    $qb->setParameters(
+                        array(
+                            1 => new \DateTime($this->query->getValue()[0]),
+                            2 => new \DateTime($this->query->getValue()[1]),
+                            3 => true
+                        )
+                    );
+
+                    break;
+
+                case 'before':
+                    $qb->where($qb->expr()->lte('u.'.$this->query->getColumn(), '?1'))
+                        ->andWhere($qb->expr()->eq('u.published', '?2'));
+
+                    $qb->setParameters(
+                        array(
+                            1 => new \DateTime($this->query->getValue()[0]),
+                            2 => true
+                        )
+                    );
+
+                    break;
+
+                case 'after':
+                    $qb->where($qb->expr()->gte('u.'.$this->query->getColumn(), '?1'))
+                        ->andWhere($qb->expr()->eq('u.published', '?2'));
+
+                    $qb->setParameters(
+                        array(
+                            1 => new \DateTime($this->query->getValue()[0]),
+                            2 => true
+                        )
+                    );
+
+                    break;
+            }
+        }
+
+        $qb->orderBy('u.'.$this->query->getSortColumn(), $this->query->getSortOrder());
+
+        if ($this->query->getLimitMin()) {
+            $qb->setMinResults($this->query->getLimitMin());
+        }
+
+        if ($this->query->getLimitMax()) {
+            $qb->setMaxResults($this->query->getLimitMax());
+        }
+
+        return $qb->getQuery();
+
     }
 
     /**
@@ -160,8 +272,7 @@ class QueryManager
                 break;
         }
 
-        // @todo Add option for 'sort', rename 'sortBy' to 'orderBy' [w/ PageQuery]
-        $qb->orderBy('u.created_at', $this->query->getSortBy());
+        $qb->orderBy('u.created_at', $this->query->getSortOrder());
 
         if ($this->query->getLimitMax()) {
             $qb->setMaxResults($this->query->getLimitMax());

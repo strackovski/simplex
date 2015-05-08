@@ -18,6 +18,7 @@ class UserListener extends EntityListenerAbstract
     /**
      * @param UserManager $manager
      * @param Settings $settings
+     * @param Logger $logger
      */
     public function __construct(UserManager $manager, Settings $settings, Logger $logger)
     {

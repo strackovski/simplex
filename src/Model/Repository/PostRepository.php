@@ -3,8 +3,8 @@
 /*
  * This file is part of the Simplex project.
  *
- * Copyright (c) 2014 NV3, Vladimir Stračkovski <vlado@nv3.org>
- * All rights reserved.
+ * 2015 NV3, Vladimir Stračkovski <vlado@nv3.org>
+ *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,9 +14,7 @@ namespace nv\Simplex\Model\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use nv\Simplex\Model\Entity\Metadata;
 use nv\Simplex\Model\Entity\Post;
-use nv\Simplex\Model\Entity\Tag;
 
 /**
  * Post Entity Repository

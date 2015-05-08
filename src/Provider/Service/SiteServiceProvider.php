@@ -56,6 +56,9 @@ class SiteServiceProvider implements ServiceProviderInterface, ControllerProvide
         $app->match('/form/{formId}', 'form.site.controller:formAction')
             ->bind('form/{formId}');
 
+        $app->match('/media/{id}', 'page.site.controller:mediaViewAction')
+            ->bind('form/{id}');
+
         return $controllers;
     }
 

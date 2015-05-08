@@ -7122,7 +7122,7 @@ var tabs = $.widget( "ui.tabs", {
  * http://api.jqueryui.com/tooltip/
  */
 
-
+/*
 var tooltip = $.widget( "ui.tooltip", {
 	version: "1.11.2",
 	options: {
@@ -7554,7 +7554,7 @@ var tooltip = $.widget( "ui.tooltip", {
 		});
 		this.liveRegion.remove();
 	}
-});
+}); */
 
 
 /*!

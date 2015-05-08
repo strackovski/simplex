@@ -1,26 +1,24 @@
 Simplex WCM
 =========
 
-[tech description here]
+This is the core development version of Simplex web content management system, built with PHP 5. Use repository's tags to get working and tested releases. See documentation section for more information about installation and usage.
 
-Status
-----
-This project is in development and is currently being tested. The final version has not been released yet. You are welcome
-to install it and try it out. A working demo can be found here: link.
 
 Features
 ----
-shorten feature list, add link to documentation at bottom
+
+#### Next (in development)
+   * Page layout manager and builder
+   * Support for multi-conditional page queries
 
 ####Content features
 
    * Intuitive and easy to use content management and publishing
-   * Powerful content options to customize and differentiate your work
+   * Powerful options to customize your content
    * Transparent support for multimedia content
-   * Automatic content enrichment, classification and semantic tagging
+   * Automatic content enrichment and classification
    * Per-post keywords and metadata specification
-   * Twitter integration enables automatic tweeting when new content is added
-   * Facebook integration in development
+   * Social services integration
   
 ####Media features
 
@@ -34,30 +32,26 @@ shorten feature list, add link to documentation at bottom
 
 ####Page features
 
-   * Bring structure to your web site with user-defined human friendly links
-   * Use page queries to clearly define publishing criteria and rules for each page
-   * *View templates*
+   * User-defined human friendly links
+   * Page queries for defining publishing criteria for each page
    
 ####Templating and theming
 
    * Supports templates written in pure PHP and Twig templating engine
-   * Theme templates recieve data from pages, no usage-pattern regarding display is enforced
-   * Theme upload and selection supported in UI
    * Create your own theme by following very few very simple rules
-   * Theme assets (styles, scripts) are compressed and minified for maximum performance
+   * Assetic for asset compression and minification available
    
 ####Users and security
 
-   * Multiuser support with very basic content change-tracking
-   * Two user groups for editors and administrators with different levels of access
+   * Two user groups for editors and administrators
    * Full user profile for each user
    * Support for public user registration
    * Secure password and credentials storage
-   * Account activation and reactivation via email
+   * Secure account activation and reactivation procedure
+   
   
-Technical
+Built with
 ----
-
 Uses the following software packages to work:
 
    * Any SQL server supported by Doctrine 2 ORM for data storage
@@ -72,8 +66,7 @@ Uses the following software packages to work:
 
 Documentation
 ----
-
-For Simplex documentation visit [http://www.envee.eu/simplex].
+For complete Simplex documentation visit [the docs page](http://www.envee.eu/projects/simplex/documentation.html]).
 
 ####Installation
 
@@ -81,8 +74,9 @@ For Simplex documentation visit [http://www.envee.eu/simplex].
   2. Run composer install in the directory to which the sources have been downloaded
   3. After Composer finishes the vendor installation it will install the Simplex application and prompt you to create the first user upon completion. If you don’t create the user, it will be generated automatically with preset values (*). 
   4. Depending upon the configuration of your web server, the Simplex application should be available at your-root/simplex-dir/admin
+  5. web/uploads and var/logs directories should have appropriate permissions and owner settings to enable file uploads and logging (required)
 
 
 Development
 ----
-Simplex is an open source project that welcomes quality contributions in form of code, suggestions, bug reports, translations, etc. There is a to-do wishlist and a planned feature roadmap - before contributing please consult the roadmap. 
+Simplex is an open source project that welcomes quality contributions in form of code, suggestions, bug reports, translations, etc.

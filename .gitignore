@@ -6,6 +6,8 @@ config/database.json
 config/mailing.json
 config/parameters.json
 /vendor/
+!*/styles/vendor/
+!*/scripts/vendor/
 web/assets/build/*
 web/assets/dev
 web/uploads/*

@@ -216,8 +216,9 @@ class Simplex extends Application
         $this->register(new RememberMeServiceProvider());
 
         $this['security.firewalls'] = array(
-            'admin' => array(
-                'pattern' => '^/admin*',
+            'main' => array(
+                'pattern' => '^/',
+                'anonymous' => true,
                 'form' => array('login_path' => '/login', 'check_path' => '/admin/login_check'),
                 'logout' => array(
                     'logout_path' => '/admin/logout',
@@ -228,17 +229,13 @@ class Simplex extends Application
                     'always_remember_me' => false,
                 ),
                 'users' => $app['user.provider']
-            ),
-            'api' => array(
-                'pattern' => '^/api*',
-                'http' => true,
-                'stateless' => true,
-                'users' => $app['user.provider']
             )
         );
 
         // Simple role access rules, will be replaced by ACL
         $this['security.access_rules'] = array(
+            array('^/admin', array('ROLE_EDITOR', 'ROLE_ADMIN')),
+            array('^/admin/', array('ROLE_EDITOR', 'ROLE_ADMIN')),
             array('^/admin/pages', 'ROLE_ADMIN'),
             array('^/admin/settings', 'ROLE_ADMIN'),
             array('^/admin/media/settings', 'ROLE_ADMIN'),
@@ -305,6 +302,7 @@ class Simplex extends Application
         $this->match('/login', 'nv\Simplex\Controller\Admin\SecurityController::loginAction')
             ->bind('login');
 
+        /*
         $this->match('/help/password', 'nv\Simplex\Controller\Admin\UserController::forgotPasswordAction')
             ->bind('help/password');
 
@@ -313,6 +311,7 @@ class Simplex extends Application
 
         $this->match('/account/activate', 'nv\Simplex\Controller\Admin\UserController::activateAccountAction')
             ->bind('account/activate');
+        */
 
         $this->register($siteProvider = new SiteServiceProvider());
         $this->mount('/', $siteProvider);

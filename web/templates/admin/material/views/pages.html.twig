@@ -32,7 +32,7 @@
     {% endfor %}
         <div class="grid-outer-full">
             <a class="paper-btn float-btn tooltipped" data-toggle="tooltip" data-placement="top" title="New page" href="{{ app.url_generator.generate('admin/page/add') }}">
-                <i class="fa fa-plus"></i>
+                <i class="fi fi-plus-btb"></i>
             </a>
             <div class="grid-content">
                 <div class="item-list list-ml item-list-7 page-list">
@@ -106,7 +106,7 @@
                                         {% else %}
                                             <div class="small"><a target="_blank" href="http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/' ~ page.getSlug }}">http://{{ app.request.getHost ~ app.request.getBaseURL() ~ '/' ~ page.getSlug }}</a></div>
                                         {% endif %}
-                                        <div class="small"><p>{{ page.getCreatedAt|date }} {% if page.getAuthor %} by {{ page.getAuthor }}{% endif %}</p></div>
+                                        <div class="small"><p>{% if page.getAuthor %} By {{ page.getAuthor }},{% endif %} {{ page.getCreatedAt|date|timeago }}</p></div>
                                     </div>
                                     <div class="item">
                                         <div>

@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="float-wrap">
-            <a href="#" class="float-btn morph-initial morph-float"><i class="fa fa-plus"></i></a>
+            <a href="#" class="float-btn morph-initial morph-float"><i class="fi fi-plus-btb"></i></a>
             <div class="controls-hidden">
                 <a href="{{ app.url_generator.generate('admin/post/add') }}" class="float-btn action-btn tooltipped" data-toggle="tooltip" data-placement="left" title="New post"><i class="fa fa-file-text"></i></a>
                 <a href="{{ app.url_generator.generate('admin/page/add') }}" class="float-btn action-btn tooltipped" data-toggle="tooltip" data-placement="left" title="New page"><i class="fa fa-file"></i></a>
@@ -44,7 +44,7 @@
                 <div class="info-app-button">
                     <div class="dropdown">
                         <a id="settings-menu" data-toggle="dropdown" aria-expanded="true" class="dropdown-toggle btn-large" href="{{ app.url_generator.generate('admin/settings') }}">
-                            <i class="fa fa-cog"></i>
+                            <i class="fi fi-params fi-lg"></i>
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="settings-menu">
@@ -96,9 +96,9 @@
                                                         </div>
 
                                                         <div class="chip2-controls">
-                                                            <a class="delete-page delete-btn btn-small" href="{{ app.url_generator.generate('admin/post/delete', {post:latestPost.getId}) }}"><i class="fa fa-trash"></i></a>
-                                                            <a class="btn-small" href="{{ app.url_generator.generate('admin/post/edit', {post:latestPost.getId}) }}"><i class="fa fa-pencil"></i></a>
-                                                            <a class="btn-small chip-close" href="#"><i class="fa fa-caret-up"></i></a>
+                                                            <a class="delete-page delete-btn btn-small" href="{{ app.url_generator.generate('admin/post/delete', {post:latestPost.getId}) }}"><i class="fi fi-trash-btm fi-lg"></i></a>
+                                                            <a class="btn-small" href="{{ app.url_generator.generate('admin/post/edit', {post:latestPost.getId}) }}"><i class="fi fi-pen-btm fi-lg"></i></a>
+                                                            <a class="btn-small chip-close" href="#"><i class="fi fi-angle-up-btm fi-lg"></i></a>
                                                         </div>
                                                     </div>
 
@@ -161,9 +161,9 @@
                                                        </div>
 
                                                        <div class="chip2-controls">
-                                                           <a class="delete-page delete-btn btn-small" href="{{ app.url_generator.generate('admin/page/delete', {page:latestPage.getId}) }}"><i class="fa fa-trash"></i></a>
-                                                           <a class="btn-small" href="{{ app.url_generator.generate('admin/page/edit', {page:latestPage.getId}) }}"><i class="fa fa-pencil"></i></a>
-                                                           <a class="btn-small chip-close" href="#"><i class="fa fa-caret-up"></i></a>
+                                                           <a class="delete-page delete-btn btn-small" href="{{ app.url_generator.generate('admin/page/delete', {page:latestPage.getId}) }}"><i class="fi fi-trash-btm fi-lg"></i></a>
+                                                           <a class="btn-small" href="{{ app.url_generator.generate('admin/page/edit', {page:latestPage.getId}) }}"><i class="fi fi-pen-btm fi-lg"></i></a>
+                                                           <a class="btn-small chip-close" href="#"><i class="fi fi-angle-up-btm fi-lg"></i></a>
                                                        </div>
                                                    </div>
 
@@ -226,8 +226,8 @@
                                                         </div>
 
                                                         <div class="chip2-controls">
-                                                            <a class="delete-page delete-btn btn-small" href="{{ app.url_generator.generate('admin/media/delete', {id:latestMedia.getId}) }}"><i class="fa fa-trash"></i></a>
-                                                            <a class="btn-small chip-close" href="#"><i class="fa fa-caret-up"></i></a>
+                                                            <a class="delete-page delete-btn btn-small" href="{{ app.url_generator.generate('admin/media/delete', {id:latestMedia.getId}) }}"><i class="fi fi-trash-btm fi-lg"></i></a>
+                                                            <a class="btn-small chip-close" href="#"><i class="fi fi-ange-up-btm fi-lg"></i></a>
                                                         </div>
                                                     </div>
 

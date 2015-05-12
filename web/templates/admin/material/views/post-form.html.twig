@@ -29,9 +29,9 @@
     <nav class="">
         <div class="right-toolbar">
             {% if post is defined %}
-                <a href="{{ app.url_generator.generate('admin/post/view', {post:post.getId}) }}" class="paper-btn back-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Back"><i class="fa fa-times"></i></a>
+                <a href="{{ app.url_generator.generate('admin/post/view', {post:post.getId}) }}" class="paper-btn back-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Back"><i class="fi fi-times-btb"></i></a>
             {% else %}
-                <a href="{{ app.url_generator.generate('admin/posts') }}" class="paper-btn back-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Back"><i class="fa fa-times"></i></a>
+                <a href="{{ app.url_generator.generate('admin/posts') }}" class="paper-btn back-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Back"><i class="fi fi-times-btb"></i></a>
             {% endif %}
 
         </div>
@@ -52,13 +52,13 @@
                 <div class="post-addition">
                     <ul class="new-post-tabs">
                         <li class="active">
-                            <a href="#home" role="tab" data-toggle="tab"><i class="fa fa-pencil"></i></a>
+                            <a href="#home" role="tab" data-toggle="tab"><i class="fi fi-pen-btm fi-lg"></i></a>
                         </li>
                         <li class="">
-                            <a href="#media" role="tab" data-toggle="tab"><i class="fa fa-camera"></i></a>
+                            <a href="#media" role="tab" data-toggle="tab"><i class="fi fi-camera-btm fi-lg"></i></a>
                         </li>
                         <li class="">
-                            <a href="#options" role="tab" data-toggle="tab"><i class="fa fa-gear"></i></a>
+                            <a href="#options" role="tab" data-toggle="tab"><i class="fi fi-params fi-lg"></i></a>
                         </li>
                     </ul>
                 </div>

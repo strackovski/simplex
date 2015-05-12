@@ -32,7 +32,7 @@
                     <a class="detail-btn" href="{{ app.url_generator.generate('admin/post/get', {post:post.getId}) }}">
                         {{ post.getTitle }}
                     </a>
-                    <div class="small"><p>{{ post.getCreatedAt|date }} {% if post.getAuthor %} by {{ post.getAuthor }}{% endif %}</p></div>
+                    <div class="small"><p>{% if post.getAuthor %} By {{ post.getAuthor }},{% endif %} {{ post.getCreatedAt|date|timeago }}</p></div>
                 </div>
             </div>
             <div class="item">

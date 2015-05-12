@@ -286,7 +286,8 @@ span.page-title {
     color: #BBDEFB;
 }
 
-.paper-btn > i.fa {
+.paper-btn > i.fa,
+.paper-btn > i.fi {
     height: 24px;
     width: 24px;
     line-height: 24px;
@@ -606,7 +607,7 @@ header.big-header {
     height: 48px;
     width: 48px;
     text-align: center;
-    line-height: 50px;
+    line-height: 45px;
     margin-left: auto;
     margin-right: auto;
     font-size: 1.3em;
@@ -1859,10 +1860,11 @@ span.empty {
     top: 5px;
 }
 
-.thumb-action i.fa {
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
+.thumb-action i.fa,
+.thumb-action i.fi {
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
     text-align: center;
 }
 

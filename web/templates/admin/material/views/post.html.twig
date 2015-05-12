@@ -17,9 +17,9 @@
 {% block rightBlock %}
     <nav class="">
         <div class="right-toolbar">
-            <a href="{{ app.url_generator.generate('admin/posts') }}" class="paper-btn tooltipped back-btn" data-toggle="tooltip" data-placement="bottom" title="Back"><i class="fa fa-times"></i></a>
-            <a href="#" class="paper-btn meta-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Metadata"><i class="fa fa-pie-chart"></i></a>
-            <a href="{{ app.url_generator.generate('admin/post/delete', {post:post.getId}) }}" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
+            <a href="{{ app.url_generator.generate('admin/posts') }}" class="paper-btn tooltipped back-btn" data-toggle="tooltip" data-placement="bottom" title="Back"><i class="fi fi-times-btb"></i></a>
+            <a href="#" class="paper-btn meta-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Metadata"><i class="fi fi-bar-chart-btm"></i></a>
+            <a href="{{ app.url_generator.generate('admin/post/delete', {post:post.getId}) }}" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fi fi-trash-btb"></i></a>
         </div>
     </nav>
 {% endblock %}
@@ -28,7 +28,7 @@
     <div class="grid">
         <div class="grid-outer paper">
             <a class="paper-btn float-btn tooltipped" data-toggle="tooltip" data-placement="top" title="Edit post" href="{{ app.url_generator.generate('admin/post/edit', {post:post.getId}) }}">
-                <i class="fa fa-pencil"></i>
+                <i class="fi fi-pencil-btb"></i>
             </a>
             <h1 class="paper-title">
                 {{ post.getTitle }}

@@ -6,8 +6,8 @@
             <div class="right-bar-header">
                 <div class="top-header">
                     <div class="right-aux-toolbar">
-                        <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fa fa-times"></i></a>
-                        <a href="{{ app.url_generator.generate('admin/media/delete', {id:item.getId}) }}" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fa fa-trash"></i></a>
+                        <a href="#" class="paper-btn close-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Close"><i class="fi fi-times-btb"></i></a>
+                        <a href="{{ app.url_generator.generate('admin/media/delete', {id:item.getId}) }}" class="paper-btn delete-btn tooltipped" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fi fi-trash-btb"></i></a>
                     </div>
                 </div>
                 <div class="bottom-header"><h4>{{ item.getName }}</h4></div>
@@ -183,7 +183,7 @@
             {% if item.getType() == 'image' %}
                 <div class="image-item-embed">
                     {#<img src="{{ app.request.basepath ~ '/uploads/thumbnails/large/' ~ item.getPath }}" />#}
-                    <img src="{{ app.request.basepath ~ '/uploads/' ~ item.getWebPath('large') }}" />
+                    <img src="{{ app.request.basepath ~ '/uploads/' ~ item.getWebPath('medium') }}" />
                 </div>
             {% elseif item.getType() == 'video' %}
 

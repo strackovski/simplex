@@ -161,7 +161,7 @@ class Simplex extends Application
          * Asset: resolve asset path by asset name and type (image, font, ...)
          * Return empty placeholder image when not found
          *
-         * @todo Fix twig 'asset', use it
+         * @todo Fix twig 'asset'
          */
         $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
             $twig->addFunction(new \Twig_SimpleFunction('asset', function ($asset) use ($app) {
@@ -188,7 +188,7 @@ class Simplex extends Application
          *
          * example display('crops:mediaId')
          *
-         * @todo Fix twig 'display', use it
+         * @todo Fix twig 'display'
          */
         $this['twig'] = $this->share($this->extend('twig', function ($twig, $app) {
             $twig->addFunction(new \Twig_SimpleFunction('display', function ($asset) use ($app) {
@@ -234,8 +234,7 @@ class Simplex extends Application
 
         // Simple role access rules, will be replaced by ACL
         $this['security.access_rules'] = array(
-            array('^/admin', array('ROLE_EDITOR', 'ROLE_ADMIN')),
-            array('^/admin/', array('ROLE_EDITOR', 'ROLE_ADMIN')),
+            array('^/admin/dashboard', array('ROLE_EDITOR', 'ROLE_ADMIN')),
             array('^/admin/pages', 'ROLE_ADMIN'),
             array('^/admin/settings', 'ROLE_ADMIN'),
             array('^/admin/media/settings', 'ROLE_ADMIN'),

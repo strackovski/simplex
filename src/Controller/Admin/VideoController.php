@@ -159,7 +159,6 @@ class VideoController extends ActionControllerAbstract
      */
     private function youTubeUploadTask(Request $request)
     {
-        // @todo Implement YouTube video upload
         return false;
     }
 
@@ -174,7 +173,6 @@ class VideoController extends ActionControllerAbstract
         $files = $request->files;
         $token = $this->security->getToken();
 
-         // @todo Check for YT upload when implemented
         foreach ($files as $uploadedFile) {
             $video = new Video();
             if (null !== $token) {

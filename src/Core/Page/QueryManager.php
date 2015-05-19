@@ -50,7 +50,7 @@ class QueryManager
     }
 
     /**
-     * @todo Testing
+     * @todo https://github.com/strackovski/simplex/issues/4
      *
      * @param EntityManager $em
      * @return \Doctrine\ORM\Query

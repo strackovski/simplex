@@ -278,7 +278,7 @@ class Settings extends TimestampableAbstract
         $this->language = 'en';
         $this->current = $current;
         $this->adminTheme = 'material';
-        $this->publicTheme = 'default';
+        $this->publicTheme = 'blog-simple';
 
         $this->allowPublicUserRegistration = false;
         $this->enableQueryStringAccess = false;
@@ -304,8 +304,6 @@ class Settings extends TimestampableAbstract
             $this->apiAccounts['google'] = $type->toArray();
             return;
         } elseif ($type instanceof TwitterApiAccount) {
-
-
             $this->apiAccounts['twitter'] = $type->toArray();
             return;
         }
@@ -680,7 +678,7 @@ class Settings extends TimestampableAbstract
     public function getPublicTheme()
     {
         if ($this->publicTheme == null) {
-            return 'default';
+            return 'blog-simple';
         }
 
         return $this->publicTheme;

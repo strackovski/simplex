@@ -15,6 +15,13 @@ Click the issues tab to see features currently under development.
    * Transparent support for multimedia content
    * Automatic content enrichment and classification
    * Per-content keywords and metadata specification
+   
+####Form features
+
+   * Support for user defined web forms
+   * Forms get posted to database
+   * Form results available in admin panel
+   * Simple Twig form helper included
   
 ####Media features
 

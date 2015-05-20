@@ -10,13 +10,9 @@
         </div>
         <h2 class="post-title">{{ item.getTitle }}</h2>
         <div class="extract">
-            <p>
-                {{ item.getSubtitle }}
-            </p>
+            <p>{{ item.getSubtitle }}</p>
         </div>
-        <p>
-            {{ item.getBody|raw }}
-        </p>
+        <p>{{ item.getBody|raw }}</p>
         <div class="meta">
             <span>Posted by <a href="#">{{ item.getAuthor.displayName }}</a></span> |
             <span><i class="fa fa-edit"></i> {{ item.getCreatedAt|date }}</span> |
@@ -49,10 +45,7 @@
         <a href="#"><i class="fa fa-angle-left"></i></a>
         <a href="#"><i class="fa fa-angle-right"></i></a>
     </div>
-
-
 {% endblock %}
 
 {% block right_col %}
-
 {% endblock %}

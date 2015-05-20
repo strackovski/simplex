@@ -3,7 +3,6 @@ Simplex WCM
 
 This is the core development version of Simplex web content management system, built with PHP 5. Use repository's tags to get working and tested releases. See documentation section for more information about installation and usage.
 
-
 Features
 ----
    
@@ -11,37 +10,37 @@ Click the issues tab to see features currently under development.
    
 ####Content features
 
-   * Intuitive and easy to use content management and publishing
-   * Powerful options to customize your content
+   * Intuitive content management and publishing
+   * Powerful content publishing options
    * Transparent support for multimedia content
    * Automatic content enrichment and classification
    * Per-content keywords and metadata specification
-   * Social services integration
   
 ####Media features
 
-   * Drag and drop media import supporting multifile uploads
-   * Automatic video and image thumbnail generation
-   * Metadata extraction for images using EXIF data
-   * Metadata extraction for videos using ffmpeg
-   * Automatic image watermarking
-   * User defined image resampling quality
-   * Media library resampling enabled on demand
+   * Drag and drop media import
+   * Automatic media thumbnail generation
+   * Automatic media metadata extraction
+   * Automatic image watermarking if enabled
+   * User defined image sampling quality
 
 ####Page features
 
-   * User-defined human friendly links
-   * Page queries for defining publishing criteria for each page
+   * Structure defined with user-defined SEO-friendly URLs
+   * Page Queries define dynamic data to display on pages
+   * Static content can be included in pages directly
+   * Page-specific metadata supported for every page
    
 ####Templating and theming
 
-   * Supports templates written in pure PHP and Twig templating engine
-   * Create your own theme by following very few very simple rules
-   * Assetic for asset compression and minification available
+   * Supports templates written in pure PHP and Twig
+   * Templates receive data as defined in pages
+   * Creating your own templates is as easy as HTML
+   * Assetic is available for theme asset management
    
 ####Users and security
 
-   * Two user groups for editors and administrators
+   * User groups for editors and administrators
    * Full user profile for each user
    * Support for public user registration
    * Secure password and credentials storage
@@ -51,6 +50,7 @@ Click the issues tab to see features currently under development.
    
    Features planned for next release:
    
+   * OpenCalais upgrade
    * Page layout manager and builder
    * Support for multi-conditional page queries
    * User group manager to define group access by modules
@@ -73,16 +73,16 @@ Uses the following software packages to work:
 
 Documentation
 ----
-For complete Simplex documentation visit [the docs page](http://www.envee.eu/projects/simplex/documentation.html]).
+For complete Simplex documentation visit [the docs page](http://www.envee.eu/projects/simplex/docs]).
 
 ####Installation
 
   1. Clone or download the source files from the repository to your web server
   2. Run composer install in the directory to which the sources have been downloaded
-  3. After Composer finishes the vendor installation it will install the Simplex application and prompt you to create the first user upon completion. If you don’t create the user, it will be generated automatically with preset values (*). 
-  4. Depending upon the configuration of your web server, the Simplex application should be available at your-root/simplex-dir/admin
+  3. After Composer finishes the vendor installation it will install the Simplex application and prompt you to create the first user upon completion. 
+  4. Depending upon the configuration of your web server, the Simplex application should be available at your-root/admin/dashboard (see web/htacess.dist if you need it)
   5. web/uploads and var/logs directories should have appropriate permissions and owner settings to enable file uploads and logging (required)
-
+  
 Development
 ----
 Simplex is an open source project that welcomes quality contributions in form of code, suggestions, bug reports, translations, etc.

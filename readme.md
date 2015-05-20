@@ -67,7 +67,7 @@ Click the issues tab to see features currently under development.
   
 Built with
 ----
-Uses the following software packages to work:
+Uses the following software packages:
 
    * Any SQL server supported by Doctrine 2 ORM for data storage
    * Doctrine 2 ORM for object relation mapping
@@ -78,9 +78,16 @@ Uses the following software packages to work:
    * Imagine imaging library for image processing
    * Composer for dependency management and installation
 
+Online Demo
+----
+A core instance of Simplex WCM is available [online](http://simplex.envee.eu/admin/dashboard). Sign in with the following credentials:
+
+   * Email: test@envee.eu
+   * Password: testing123
+
 Documentation
 ----
-For complete Simplex documentation visit [the docs page](http://www.envee.eu/projects/simplex/docs]).
+For complete Simplex documentation visit [the docs page](http://projects.envee.eu/simplex/docs)).
 
 ####Installation
 
@@ -88,7 +95,13 @@ For complete Simplex documentation visit [the docs page](http://www.envee.eu/pro
   2. Run composer install in the directory to which the sources have been downloaded
   3. After Composer finishes the vendor installation it will install the Simplex application and prompt you to create the first user upon completion. 
   4. Depending upon the configuration of your web server, the Simplex application should be available at your-root/admin/dashboard (see web/htacess.dist if you need it)
-  5. web/uploads and var/logs directories should have appropriate permissions and owner settings to enable file uploads and logging (required)
+  5. web/uploads and var/ directories should have appropriate permissions and owner settings to enable file uploads, cache and logging (required)
+  
+#####Possible installation issues
+
+   * Memory limit / proc_open fork failed error: see [this guide](https://getcomposer.org/doc/articles/troubleshooting.md#proc-open-fork-failed-errors) for solution
+   * Database connection errors: correct database driver must be selected during first installation, [click here for supported drivers](http://doctrine-dbal.readthedocs.org/en/latest/reference/configuration.html#driver)
+
   
 Development
 ----

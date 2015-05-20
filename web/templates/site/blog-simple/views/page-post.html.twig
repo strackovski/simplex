@@ -1,0 +1,108 @@
+{% extends page is defined ? "site/blog-simple/masters/" ~ page.getMaster ~ ".html.twig" : "site/blog-simple/masters/layout-default.html.twig" %}
+
+{# Override default layout's header #}
+{% block header %}
+    {% if content.post is not empty %}
+        <header class="row">
+            <div class="col-md-10 col-md-offset-1 col-sm-12">
+                <h1 class="section-header">{{ content.post.getTitle }}</h1>
+                <div class="meta">
+                    <span>Posted by {{ content.post.getAuthor.displayName }} on {{ content.post.getCreatedAt|date }}</span>
+                </div>
+            </div>
+        </header>
+    {% endif %}
+{% endblock %}
+
+{# Main content (post) block #}
+{% block content %}
+    {% if content.post is not empty %}
+        <div class="post">
+            {# Get first media item and display as hero #}
+            <div class="media">
+                {% if content.post.getMediaItems.count > 0 %}
+                    <img src="{{ app.request.basepath ~ '/uploads/' ~ content.post.getMediaItems.0.getWebPath('large') }}" alt=""/>
+                    <div>{{ content.post.getMediaItems.0.getTitle }}</div>
+                {% endif %}
+            </div>
+            <div class="post-content">
+                <div class="extract"><p>{{ content.post.getSubtitle }}</p></div>
+                <p>{{ content.post.getBody|raw }}</p>
+            </div>
+
+            {# Display the rest of media items, if any #}
+            {% if content.post.getMediaItems.count > 0 %}
+                <div class="thumbs row">
+                    {% for media in content.post.getMediaItems|slice(1) %}
+                        <div class="col-xs-6 col-md-3">
+                            <a href="{{ app.request.baseUrl ~ '/media/' ~ media.getId }}" class="thumbnail">
+                                <img src="{{ app.request.basepath ~ '/uploads/' ~ media.getWebPath('crop') }}" alt="{{ media.getTitle }}">
+                                <div class="thumb-overlay">{{ media.getTitle }}</div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{# Override default layout's right column #}
+{% block right_col %}
+    <div class="row">
+        <article class="top col-xs-12">
+            {% if content is defined and content.contact_form is defined %}
+                <h4>Say Hi!</h4>
+                <div class="meta">
+                    <span>Write me a message</span>
+                </div>
+                {% set cform = buildForm(content.contact_form) %}
+                <div class="form-main">
+                {{ cform.form_start|raw }}
+
+                <div class="form-group">
+                    {{ cform.name.label|raw }}
+                    {{ cform.name.control|raw }}
+                </div>
+
+                <div class="form-group">
+                    {{ cform.email.label|raw }}
+                    {{ cform.email.control|raw }}
+                </div>
+
+                <div class="form-group">
+                    {{ cform.message.label|raw}}
+                    {{ cform.message.control|raw }}
+                </div>
+
+                <div class="form-group">
+                    {{ cform.submit.control|raw}}
+                </div>
+
+                {{ cform.form_end|raw }}
+
+                <div class="form-error-box">
+                    <div class="form-loader">
+                        <img src="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/images/circle-load.png"/>
+                    </div>
+                </div>
+                </div>
+            {% endif  %}
+        </article>
+
+        <article class="recent col-xs-12">
+            {% if content.recent is defined %}
+                <h4>Recent Posts</h4>
+                <div class="row">
+                    <ul>
+                        {% for item in content.recent %}
+                            <li class="col-xs-4 col-sm-12">
+                                {% include "site/blog-simple/widgets/post-recent.html.twig" with {'item': item} %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif  %}
+        </article>
+    </div>
+{% endblock %}

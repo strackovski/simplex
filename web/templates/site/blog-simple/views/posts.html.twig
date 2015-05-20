@@ -1,0 +1,73 @@
+{% extends page is defined ? "site/blog-simple/masters/" ~ page.getMaster ~ ".html.twig" : "site/blog-simple/masters/layout-default.html.twig" %}
+
+
+
+{% block content %}
+    <div class="data-list row post-item">
+        {% for post in content.posts %}
+            {% if post.getExposed %}
+                <a href="{{ app.request.baseUrl ~ '/post/' ~ post.getSlug }}" class="post-exposed clearfix">
+                <div class="col-xs-6 post-wrapper">
+                    <div class=""><h4>{{ post.getTitle }}</h4></div>
+                    <p class="body">{{ post.getBody|striptags|slice(0,180) }}...</p>
+                    <div class="post-meta">
+                        <p class="post-meta-main small text-muted">
+                            <span class="post-author">{{ post.getAuthor.displayName }}</span> on <span class="post-date-created">{{ post.getCreatedAt|date }}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-xs-6 media-wrapper">
+                    {% if post.getMediaItems.count > 0 %}
+                        <img src="{{ app.request.basepath ~ '/uploads/' ~ post.getMediaItems.0.getWebPath('medium') }}" alt=""/>
+                    {% endif %}
+                </div>
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="post-items">
+        {% for index, post in content.posts %}
+            {% if index == 0 %}
+                <div class="row trio">
+            {% elseif index % 3 == 0 %}
+                </div>
+                <div class="row trio">
+            {% endif %}
+
+            <a href="{{ app.request.baseUrl ~ '/post/' ~ post.getSlug }}">
+            <div class="col-xs-6 col-sm-4 item">
+                <div class="row">
+                    <div class="col-xs-12 media-wrapper">
+                        {% if post.getMediaItems.count > 0 %}
+                            <img src="{{ app.request.basepath ~ '/uploads/' ~ post.getMediaItems.0.getWebPath('medium') }}" alt=""/>
+                        {% endif %}
+                    </div>
+                    <div class="col-xs-12 post-wrapper">
+                        <div class=""><h4>{{ post.getTitle }}</h4></div>
+                        <div class="post-meta">
+                            <p class="post-meta-main small text-muted">
+                                <span class="post-author">{{ post.getAuthor.displayName }}</span> on <span class="post-date-created">{{ post.getCreatedAt|date }}</span>
+                            </p>
+                        </div>
+                        <p class="body">{{ post.getBody|striptags|slice(0,180) }}...</p>
+                    </div>
+                </div>
+            </div>
+            </a>
+
+            {% if loop.index == content.posts|length %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block right_col %}
+    {% if content.images is defined and content.images|length > 0 %}
+        <article class="media">
+            <h4>Latest images</h4>
+            {% include "site/blog-simple/widgets/media-recent-list.html.twig" with {'images': content.images} %}
+        </article>
+    {% endif %}
+{% endblock %}

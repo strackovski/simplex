@@ -1,0 +1,58 @@
+{% extends page is defined ? "site/blog-simple/masters/" ~ page.getMaster ~ ".html.twig" : "site/blog-simple/masters/layout-default.html.twig" %}
+
+{% block content %}
+    {% for item in content.home %}
+    <div class="post">
+        <div class="media">
+            {% if item.getMediaItems.count > 0 %}
+                <img src="{{ app.request.basepath ~ '/uploads/' ~ item.getMediaItems.0.getWebPath('crop') }}" alt=""/>
+            {% endif %}
+        </div>
+        <h2 class="post-title">{{ item.getTitle }}</h2>
+        <div class="extract">
+            <p>
+                {{ item.getSubtitle }}
+            </p>
+        </div>
+        <p>
+            {{ item.getBody|raw }}
+        </p>
+        <div class="meta">
+            <span>Posted by <a href="#">{{ item.getAuthor.displayName }}</a></span> |
+            <span><i class="fa fa-edit"></i> {{ item.getCreatedAt|date }}</span> |
+            <span><a href="#"><i class="fa fa-comment-o"></i> 3 comments</a></span>
+        </div>
+        <div class="tags">
+            {% if item.getTags %}
+                <div class="post-tags">
+                    {% for tag in item.getTags %}
+                        <a href="#">{{ tag.getName }}</a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if content.contact_form is defined %}
+        {% for uform in content.contact_form %}
+            {% set fields = buildForm(uform) %}
+            {{ fields.form_start|raw }}
+            {% for field in fields %}
+                {{ field|raw }}
+            {% endfor %}
+            {{ fields.form_end|raw }}
+        {% endfor %}
+    {% endif %}
+
+    <div class="controls">
+        <a href="#"><i class="fa fa-angle-left"></i></a>
+        <a href="#"><i class="fa fa-angle-right"></i></a>
+    </div>
+
+
+{% endblock %}
+
+{% block right_col %}
+
+{% endblock %}

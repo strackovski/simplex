@@ -1,0 +1,15 @@
+{% if item is defined and item is not empty %}
+    <div class="row">
+        <a href="{{ app.request.baseUrl ~ '/post/' ~ item.getSlug }}">
+            <div class="col-xs-4">
+                {% if item.getMediaItems.count > 0 %}
+                    <img src="{{ app.request.basepath ~ '/uploads/' ~ item.getMediaItems.0.getWebPath('crop') }}" alt=""/>
+                {% endif %}
+            </div>
+            <div class="col-xs-8">
+                <h5>{{ item.getTitle }}</h5>
+                <p>{{ item.getSubtitle|slice(0,40) }}...</p>
+            </div>
+        </a>
+    </div>
+{% endif %}

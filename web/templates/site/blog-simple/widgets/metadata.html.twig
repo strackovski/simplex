@@ -1,0 +1,14 @@
+{% if post.getMetadata and post.getMetadata.getData(1).a is defined %}
+    <h4>Annotations</h4>
+    <div class="post-tags">
+    {% for dataKey, data in post.getMetadata.getData(1).a %}
+        {% if dataKey != 'doc' %}
+            {% if data._typeGroup == 'socialTag' %}
+                <a class="href" href="{{ dataKey }}">{{ data.name|capitalize }}</a>
+            {% elseif data._typeGroup == 'entities' %}
+                <a class="href" href="http://en.wikipedia.org/wiki/{{ data.name }}"><i class="fa fa-{{ data._type|lower }}"></i> {{ data.name }}</a>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    </div>
+{% endif %}

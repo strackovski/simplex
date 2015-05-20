@@ -1,0 +1,49 @@
+<footer>
+    <div class="container-fluid">
+        {% spaceless %}
+        <div class="row">
+            <div class="col-xs-4 col-sm-4 col-md-3 col-md-offset-1 vcenter">
+                <ul class="menu">
+                    <h4>Explore</h4>
+                    {# Use the site menu array to easily render navigation elements #}
+                    {% if menu is defined %}
+                        {% for page in menu %}
+                            <li>
+                                <a href="{{ app.request.baseUrl ~ '/' ~ page.getSlug }}"
+                                        {% if page.getSlug in app.request.attributes.get('slug') %} class="active" {% endif %}>
+                                    {{ page.getTitle }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 vcenter">
+                <div class="text-center social">
+                    <h4>Social me</h4>
+                    <a href="#"><i class="fa fa-facebook"></i></a>
+                    <a href="#"><i class="fa fa-twitter"></i></a>
+                    <a href="#"><i class="fa fa-pinterest"></i></a>
+                    <a href="#"><i class="fa fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-3 copy text-right vcenter">
+                <h4>More</h4>
+                <p>&copy; 2015 {{ settings.getSiteOwner }}</p>
+            </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 bottom">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <a href="#">Privacy</a> <a href="#">Terms of use</a>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <a href="http://www.nv3.si">Theme developed by NV3</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% endspaceless %}
+    </div>
+</footer>

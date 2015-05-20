@@ -1,0 +1,105 @@
+{% extends page is defined ? "site/blog-simple/masters/" ~ page.getMaster ~ ".html.twig" : "site/blog-simple/masters/layout-default.html.twig" %}
+
+{% block header %}
+    {% if content is defined %}
+        <header class="row">
+            <div class="col-md-10 col-md-offset-1 col-sm-12">
+                <h1 class="section-header">{{ content.getTitle }}</h1>
+            </div>
+        </header>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if content is defined %}
+    <div class="post media-view">
+        <div class="media-item">
+            <img src="{{ app.request.basepath ~ '/uploads/' ~ content.getWebPath('large') }}" alt=""/>
+            {% if content.getOriginalAuthor is not empty %}
+                <div class="media-overlay">{{ content.getOriginalAuthor }}</div>
+            {% endif %}
+            <p>{{ content.getDescription }}</p>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block right_col %}
+    <div class="meta">
+        <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-user"></i> {{ content.getAuthor.displayName }}</li>
+        <li class="list-group-item"><i class="fa fa-upload"></i> {{ content.getCreatedAt|date }}</li>
+        {% if content.getMetadata %}
+            {% for metakey, metaval in content.getMetadata.getData %}
+                {% if content.getType == 'image' and metaval != '@todo' and metakey != 'gps' %}
+                    <li class="list-group-item">
+                    {% if metakey == 'time_originated' %}
+                        <i class="fa fa-{{ metakey }}"></i> {{ metaval|date('M d, Y H:i') }}
+                    {% else %}
+                        <i class="fa fa-{{ metakey }}"></i> {{ metaval }}
+                    {% endif %}
+                    </li>
+                {% elseif content.getType == 'video' %}
+                    {% if metakey != 'video_stream' and metakey != 'audio_stream' and metakey != 'audio' and metakey != 'video' and metakey != 'height' and metakey != 'gps' %}
+                        {% if metakey == 'width' and metaval < 1280 %}
+                            <div class="section-entity">
+                                <div class="dt">
+                                    Format
+                                </div>
+                                <div class="dd">
+                                    Standard definition
+                                </div>
+                            </div>
+                        {% elseif metakey == 'width' and metaval >= 1280 %}
+                            <div class="section-entity">
+                                <div class="dt">
+                                    Format
+                                </div>
+                                <div class="dd">
+                                    High definition
+                                </div>
+                            </div>
+                        {% elseif metakey == 'size' or metakey == 'bit_rate' %}
+                            <div class="section-entity">
+                                <div class="dt">
+                                    {{ metakey|capitalize|replace('_', ' ') }}
+                                </div>
+                                <div class="dd">
+                                    {{ metaval.0|round(2, 'ceil') ~ ' ' ~ metaval.1 }}
+                                </div>
+                            </div>
+                        {% elseif metakey == 'time_originated' %}
+                            <div class="section-entity">
+                                <div class="dt">
+                                    Captured
+                                </div>
+                                <div class="dd">
+                                    {{ metaval|date('M d, Y H:i') }}
+                                </div>
+                            </div>
+
+                            <div class="section-entity">
+                                <div class="dt">
+                                    Uploaded
+                                </div>
+                                <div class="dd">
+                                    {{ content.getCreatedAt|date('M d, Y') }}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="section-entity">
+                                <div class="dt">
+                                    {{ metakey|capitalize|replace('_', ' ') }}
+                                </div>
+                                <div class="dd">
+                                    {{ metaval|join(' ') }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}

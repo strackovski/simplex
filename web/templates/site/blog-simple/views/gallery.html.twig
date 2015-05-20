@@ -1,0 +1,57 @@
+{% extends page is defined ? "site/blog-simple/masters/" ~ page.getMaster ~ ".html.twig" : "site/blog-simple/masters/layout-default.html.twig" %}
+
+{% block header %}
+    <header class="row">
+        <div class="col-md-10 col-md-offset-1 col-sm-12">
+        {% if content.media is not empty and content.media|length == 1 %}
+            <h1 class="section-header">{{ content.media.getTitle }}</h1>
+        {% endif %}
+        </div>
+    </header>
+{% endblock %}
+
+{% block content %}
+    <div class="row thumbnails">
+        {% if content.media is not empty %}
+            {% for media in content.media.getMediaItems %}
+                <div class="col-xs-4 col-md-3">
+                    <a href="{{ app.request.baseUrl ~ '/media/' ~ media.getId }}" class="thumbnail">
+                        <img src="{{ app.request.basepath ~ '/uploads/' ~ media.getWebPath('crop') }}" alt="{{ media.getTitle }}">
+                        <div class="thumb-overlay">{{ media.getTitle }}</div>
+                    </a>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block right_col %}
+    {% if content.media is not empty and content.media|length == 1 %}
+        <article class="main right top">
+            <p>{{ content.media.getSubtitle }}</p>
+            <p>{{ content.media.getBody|raw }}</p>
+        </article>
+    {% endif %}
+    {% if content is defined and content.recent is defined%}
+        <article>
+            <h4>Recent Posts</h4>
+            <ul>
+                {% for item in content.recent %}
+                    <li><a href="#">{{ item.getTitle }}</a></li>
+                {% endfor %}
+            </ul>
+        </article>
+    {% endif  %}
+    {% if content.media is not empty and content.media|length == 1 %}
+        <article class="tags">
+            <h4>Tags</h4>
+            {% if content.media.getTags.count > 0 %}
+                {% for tag in content.media.getTags %}
+                    <a href="#">{{ tag.getName }}</a>
+                {% endfor %}
+            {% else %}
+                <span>No tags</span>
+            {% endif %}
+        </article>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+
+    <script type="text/javascript" src="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/scripts/html5shiv.min.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/scripts/selectivizr-min.js"></script>
+
+    <title>{{ settings.getSiteName }}</title>
+    {% if page is defined %}
+        <meta name="description" content="{{ page.getDescription }}" />
+        <meta name="keywords" content="{{ page.getKeywords }}" />
+    {% else %}
+        <meta name="description" content="{{ settings.getSiteDescription }}" />
+        <meta name="keywords" content="{{ settings.getKeywords }}" />
+    {% endif %}
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300|Karla:400,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/fonts/font-awesome-4.2.0/css/font-awesome.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/styles/reset.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/styles/bootstrap.min.css"/>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/styles/main.css"/>
+    <script type="text/javascript" src="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/scripts/respond.min.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/scripts/modernizr.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/scripts/jquery-1.11.1.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/scripts/jquery.form.min.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/scripts/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="{{ app.request.basepath }}/templates/site/{{ settings.getPublicTheme }}/assets/scripts/main.js"></script>
+</head>
+<body>
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-KGCDLF"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-KGCDLF');</script>
+<!-- End Google Tag Manager -->
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
+        <div class="admin container-fluid">
+            <div class="row admin-bar">
+                <div class="col-xs-9 text-left"><p>Welcome, {{ app.security.getToken().getUser() }}</p></div>
+                <div class="col-xs-3 text-right">
+                    <a href="{{ app.request.baseUrl ~ '/admin/dashboard' }}" target="_blank"><i class="fa fa-sign-in fa-lg"></i></a>
+                    <a href="{{ app.request.baseUrl ~ '/admin/logout' }}" target="_blank"><i class="fa fa-sign-out fa-lg"></i></a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="container-fluid top-header">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 col-sm-12">
+                {% include "site/blog-simple/blocks/top-nav.html.twig" %}
+            </div>
+        </div>
+        {# Top header #}
+        {% block header %}
+            <header class="row">
+                <div class="col-md-10 col-md-offset-1 col-sm-12">
+                    <h1 class="section-header">{{ settings.getSiteName }}</h1>
+                </div>
+            </header>
+        {% endblock %}
+    </div>
+
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 col-sm-12">
+                {# Main content area placeholder #}
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    {% include "site/blog-simple/blocks/footer.html.twig" %}
+</body>
+</html>

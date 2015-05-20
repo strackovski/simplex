@@ -1,0 +1,62 @@
+{#
+<nav class="row">
+    <div class="col-xs-6">
+        <ul class="left-nav">
+            <li><a class="logo" href="{{ app.request.baseUrl  ~ '/'  }}">Logo</a></li>
+        </ul>
+    </div>
+
+    <div class="col-xs-6">
+        <ul class="right-nav pull-right">
+            {% if menu is defined %}
+                {% for page in menu %}
+                    <li>
+                        <a href="{{ app.request.baseUrl ~ '/' ~ page.getSlug }}"
+                            {% if page.getSlug in app.request.attributes.get('slug') %} class="active" {% endif %}>
+                            {{ page.getTitle }}
+                        </a>
+                    </li>
+                {% endfor %}
+            {% endif %}
+            <li><input type="text"/></li>
+        </ul>
+    </div>
+</nav>
+#}
+
+<nav class="navbar navbar-default row">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ app.request.baseUrl ~ '/' }}">Brand</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <form class="navbar-form navbar-right" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                {% if menu is defined %}
+                    {% for page in menu %}
+                        <li>
+                            <a href="{{ app.request.baseUrl ~ '/' ~ page.getSlug }}"
+                                    {% if page.getSlug in app.request.attributes.get('slug') %} class="active" {% endif %}>
+                                {{ page.getTitle }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>

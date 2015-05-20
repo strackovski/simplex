@@ -1,0 +1,78 @@
+{% extends page is defined ? "site/blog-simple/masters/" ~ page.getMaster ~ ".html.twig" : "site/blog-simple/masters/layout-default.html.twig" %}
+
+{% block header %}
+    <header class="row">
+        <div class="col-md-10 col-md-offset-1 col-sm-12">
+            <h1 class="section-header">{{ settings.getSiteName }}</h1>
+        </div>
+    </header>
+{% endblock %}
+
+{% block content %}
+    {% if content.exposed is not null and content.exposed|length == 1 %}
+        <div class="row landing-item">
+            {% if content.exposed.getExposed %}
+                <div class="col-xs-12 col-sm-9 post-exposed">
+                    <a href="{{ app.request.baseUrl ~ '/post/' ~ content.exposed.getSlug }}">
+                    {% if content.exposed.getMediaItems.count > 0 %}
+                        <div class="item">
+                            <img src="{{ app.request.basepath ~ '/uploads/' ~ content.exposed.getMediaItems.0.getWebPath('medium') }}" alt=""/>
+                            <div class="img-overlay">
+                                <h3>{{ content.exposed.getTitle }}</h3>
+                            </div>
+                        </div>
+                        <div class="item-bottom"><p>{{ content.exposed.getSubtitle() }}...</p></div>
+                    {% endif %}
+                    </a>
+                </div>
+            {% endif %}
+            {% if content.recent_media is not empty %}
+                <div class="col-xs-12 col-sm-3 recent-exposed">
+                    <article class="media">
+                        {% include "site/blog-simple/widgets/media-recent-list.html.twig" with {'images': content.recent_media } %}
+                    </article>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <div class="row post-items landing-items">
+        {% for index, post in content.posts %}
+            {% if index == 0 %}
+                <div class="col-xs-12 trio">
+                    <div class="row">
+            {% elseif index % 3 == 0 %}
+                </div>
+                </div>
+                <div class="col-xs-12 trio">
+                    <div class="row">
+            {% endif %}
+
+            {% if not post.getExposed %}
+                <div class="col-xs-4 item">
+                    <a href="{{ app.request.baseUrl ~ '/post/' ~ post.getSlug }}">
+                    <div class="row">
+                        <div class="col-xs-12 media-wrapper">
+                            {% if post.getMediaItems.count > 0 %}
+                                <img src="{{ app.request.basepath ~ '/uploads/' ~ post.getMediaItems.0.getWebPath('medium') }}" alt=""/>
+                            {% endif %}
+                        </div>
+                        <div class="col-xs-12 post-wrapper">
+                            <div class=""><h4>{{ post.getTitle }}</h4></div>
+                        </div>
+                    </div>
+                    </a>
+                </div>
+            {% endif %}
+            {% if loop.index == content.posts|length %}
+                </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+{% block right_col %}
+
+{% endblock %}

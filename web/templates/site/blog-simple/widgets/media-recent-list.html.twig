@@ -1,0 +1,13 @@
+<div class="row">
+<ul>
+    {% for image in images %}
+        <li class="col-xs-6 col-sm-12">
+            <a href="{{ app.request.baseUrl ~ '/media/' ~ image.getId }}">
+                <img src="{{ app.request.basepath ~ '/uploads/' ~ image.getWebPath('small') }}" alt="{{ image.getTitle }}">
+                <p>{{ image.getTitle|capitalize }}</p>
+                <p><i class="fa fa-clock-o"></i> {{ image.getCreatedAt|date('M d') }}</p>
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+</div>

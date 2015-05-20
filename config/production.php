@@ -19,8 +19,8 @@
  * the License.
  */
 
-ini_set('display_errors', '0');
-$app['debug'] = false;
+ini_set('display_errors', '1');
+$app['debug'] = true;
 
 $app['root_cache_dir'] = APPLICATION_ROOT_PATH.'/var/cache';
 $app['http_cache.cache_dir'] = APPLICATION_ROOT_PATH.'/var/cache/http';
@@ -32,7 +32,6 @@ $config = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR .'paramete
 $app['db.options'] = $config['database'];
 $app['orm.options'] = array(
     'orm.proxies_dir' => APPLICATION_ROOT_PATH.'/var/cache/doctrine/proxy',
-    //'orm.default_cache' => 'memcache',
     'orm.em.options' => array(
         "mappings" => array(
             array(

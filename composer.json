@@ -32,7 +32,7 @@
         "symfony/validator": "~2.3",
         "doctrine/dbal": "2.*",
         "dflydev/doctrine-orm-service-provider": "1.0.6",
-        "mheap/Silex-Assetic": "*",
+        "mheap/Silex-Assetic": "1.0.4",
         "lmammino/jsmin4assetic": "1.0.*",
         "patchwork/jsqueeze": "dev-master",
         "natxet/CssMin": "dev-master",

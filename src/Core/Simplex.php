@@ -256,10 +256,8 @@ class Simplex extends Application
             array('orm.entity_listener_resolver' => $this['listener.resolver'])
         );
 
-        if ($this['debug']) {
-            $this->register(new AsseticServiceProvider());
-            new AsseticSimplexBridge($this);
-        }
+        $this->register(new AsseticServiceProvider());
+        new AsseticSimplexBridge($this);
 
         $this->register(new MonologServiceProvider(), array(
             'monolog.logfile' => APPLICATION_ROOT_PATH.'/var/logs/app.log',

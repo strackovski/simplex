@@ -19,6 +19,14 @@
  * the License.
  */
 
+if (isset($_SERVER['HTTP_CLIENT_IP'])
+    || isset($_SERVER['HTTP_X_FORWARDED_FOR'])
+    || !in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', 'fe80::1', '::1', '93.103.107.253'))
+) {
+    header('HTTP/1.0 403 Forbidden');
+    exit('Authorized access only.');
+}
+
 define('APPLICATION_ENVIRONMENT', 'production');
 
 if (!file_exists(dirname(__DIR__) . '/config/parameters.json')) {
@@ -27,5 +35,4 @@ if (!file_exists(dirname(__DIR__) . '/config/parameters.json')) {
 }
 
 require __DIR__.'/../src/bootstrap.php';
-$app['debug'] = false;
 $app->run();

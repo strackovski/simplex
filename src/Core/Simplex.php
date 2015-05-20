@@ -215,6 +215,7 @@ class Simplex extends Application
         $this->register(new SecurityServiceProvider());
         $this->register(new RememberMeServiceProvider());
 
+        // Route access rules
         $this['security.firewalls'] = array(
             'main' => array(
                 'pattern' => '^/',
@@ -298,17 +299,6 @@ class Simplex extends Application
 
         $this->match('/login', 'nv\Simplex\Controller\Admin\SecurityController::loginAction')
             ->bind('login');
-
-        /*
-        $this->match('/help/password', 'nv\Simplex\Controller\Admin\UserController::forgotPasswordAction')
-            ->bind('help/password');
-
-        $this->match('/help/reset', 'nv\Simplex\Controller\Admin\UserController::resetPasswordAction')
-            ->bind('help/reset');
-
-        $this->match('/account/activate', 'nv\Simplex\Controller\Admin\UserController::activateAccountAction')
-            ->bind('account/activate');
-        */
 
         $this->register($siteProvider = new SiteServiceProvider());
         $this->mount('/', $siteProvider);

@@ -99,7 +99,7 @@ class UserManager
         $notification = array(
             'title' => 'Account password change requested',
             'message' => 'You received this email because you requested to change '.
-                         'your password. Please follow the link below to change your password.',
+                         'your password. Please follow the link below to change your password now.',
             'link' => array(
                 'href' => $this->url->generate(
                     'help/reset',

@@ -1,0 +1,10 @@
+{% extends app.request.isXmlHttpRequest ? "admin/material/masters/layout-ajax.html.twig" : "admin/material/masters/layout-min.html.twig" %}
+
+{% block content %}
+    <div class="login-wrap">
+        <div class="center-box info-box">
+            <h2 class="page-header top">Status Notification</h2>
+            <p>{{ message }}</p>
+        </div>
+    </div>
+{% endblock %}

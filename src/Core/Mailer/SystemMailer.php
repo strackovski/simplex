@@ -60,7 +60,7 @@ class SystemMailer
             $emailMessage = \Swift_Message::newInstance()
                 ->setSubject('[Simplex] Feedback')
                 ->setFrom($this->settings->getAdminEmail())
-                ->setTo(array($address))
+                ->setTo($address)
                 ->setBody(
                     $this->renderer->render(
                         'admin/'.$this->settings->getAdminTheme().'/email/notification.html.twig',

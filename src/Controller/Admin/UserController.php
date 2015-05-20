@@ -261,13 +261,16 @@ class UserController extends ActionControllerAbstract
     public function forgotPasswordAction(Request $request)
     {
         $form = $this->form->createBuilder('form', array())
-            ->add('email')
-            ->add('save', 'submit', array(
-                'label' =>  'Send'
-            ))
-            ->add('cancel', 'button', array(
+            ->add('email', 'text', array(
+                'label' => 'Your email',
                 'attr' => array(
-                    'class' => 'btn-cmd cmd-cancel btn-cancel'
+                    'placeholder' => 'Your email address'
+                )
+            ))
+            ->add('save', 'submit', array(
+                'label' =>  'Request new password',
+                'attr' => array(
+                    'class' => 'btn-save'
                 )
             ))->getForm();
 
@@ -279,7 +282,10 @@ class UserController extends ActionControllerAbstract
 
             /** @var $user User */
             if (is_null($user = $this->users->userExists($form->get('email')->getData()))) {
-                throw new \Exception("The user with email {$form->get('email')->getData()} does not exist.");
+                return $this->twig->render(
+                    'admin/'.$this->settings->getAdminTheme().'/views/notification-public.html.twig',
+                    array('message' => "The user with email {$form->get('email')->getData()} does not exist.")
+                );
             }
 
             $this->manager->resetPassword($user);
@@ -292,7 +298,7 @@ class UserController extends ActionControllerAbstract
         }
 
         return $this->twig->render(
-            'admin/'.$this->settings->getAdminTheme().'/views/form-public.html.twig',
+            'admin/'.$this->settings->getAdminTheme().'/views/form-user-password.html.twig',
             array('form' => $form->createView())
         );
     }
@@ -323,8 +329,18 @@ class UserController extends ActionControllerAbstract
 
         /** @var $form Form */
         $form = $this->form->createBuilder('form', array(), array('method' => 'post'))
-            ->add('password', 'password')
-            ->add('save', 'submit')
+            ->add('password', 'password', array(
+                'label' => 'Password',
+                'attr' => array(
+                    'placeholder' => 'Type a password'
+                )
+            ))
+            ->add('save', 'submit', array(
+                'label' =>  'Save',
+                'attr' => array(
+                    'class' => 'btn-save btn-block'
+                )
+            ))
             ->getForm();
 
         $form->handleRequest($request);
@@ -339,7 +355,7 @@ class UserController extends ActionControllerAbstract
         }
 
         return $this->twig->render(
-            'admin/'.$this->settings->getAdminTheme().'/views/form-public2.html.twig',
+            'admin/'.$this->settings->getAdminTheme().'/views/form-user-activation.html.twig',
             array('form' => $form->createView())
         );
     }
@@ -457,7 +473,7 @@ class UserController extends ActionControllerAbstract
             'request' => $request
         );
 
-        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/form-public.html.twig', $data);
+        return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/form-user-password.html.twig', $data);
     }
 
     /**

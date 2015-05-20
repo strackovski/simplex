@@ -1,0 +1,32 @@
+{% extends app.request.isXmlHttpRequest ? "admin/material/masters/layout-ajax.html.twig" : "admin/material/masters/layout-min.html.twig" %}
+
+{% form_theme form "bootstrap.html.twig" %}
+
+{% block content %}
+    <div class="flash-messages">
+        {% for message in app.session.getFlashBag.get('success') %}
+            <span class="alert alert-flash-message alert-success">{{ message|raw }}</span>
+        {% endfor %}
+    </div>
+
+    <div class="login-wrap">
+        {{ form_start(form, {'class': 'form-signin'}) }}
+        <h4 class="text-center">Account activation</h4>
+        <div class="text-center">
+            <img src="{{ app.request.basepath ~ '/assets/images/tetra_gray.png' }}" alt="logo" width="50"/>
+        </div>
+
+        <p>Please choose your new password to log into Simplex.</p>
+
+        <div class="form-group form-element">
+            {{ form_label(form.password) }}
+            {{ form_widget(form.password) }}
+        </div>
+
+        <div class="form-group text-center">
+            {{ form_widget(form.save) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

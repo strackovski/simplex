@@ -87,7 +87,16 @@ class UserServiceProvider implements ServiceProviderInterface, ControllerProvide
             ->bind('admin/user/get');
 
         $controllers->match('/user/delete/{user}', 'user.controller:deleteAction')
-            ->bind('admin/user/delete');
+            ->bind('user/delete');
+
+        $controllers->match('/help/password', 'user.controller:forgotPasswordAction')
+            ->bind('help/password');
+
+        $controllers->match('/help/reset', 'user.controller:resetPasswordAction')
+            ->bind('help/reset');
+
+        $controllers->match('/account/activate', 'user.controller:activateAccountAction')
+            ->bind('account/activate');
 
         return $controllers;
     }

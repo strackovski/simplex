@@ -2,7 +2,9 @@
 <IfModule mod_rewrite.c>
     Options -MultiViews
     RewriteEngine On
+    # Set rewrite base if Simplex is not in site root dir
     # RewriteBase /
     RewriteCond %{REQUEST_FILENAME} !-f
+    # Rewrite all requests to index.php
     RewriteRule ^ index.php [QSA,L]
 </IfModule>

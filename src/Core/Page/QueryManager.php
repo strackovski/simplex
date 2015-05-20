@@ -56,14 +56,9 @@ class QueryManager
      * @return \Doctrine\ORM\Query
      */
     public function buildQuery2(EntityManager $em) {
-        // content should be transparent (exception is tags for form)
-        // all content has same columns
-        // operator defines methods
         $qb = $em->createQueryBuilder();
         $contentType = $this->query->getContentType(1);
 
-        // select from [contentType] where [column] [operator] [value]
-        // authors and tags need joining
         if ($this->query->getColumn() == 'author' || $this->query->getColumn() == 'tags') {
             // build join query
             $qb->select(array('u'))
@@ -78,7 +73,6 @@ class QueryManager
                     2 => true
                 )
             );
-
         } else {
             $qb->select(array('u'))->from($contentType, 'u');
             switch ($this->query->getOperator()) {

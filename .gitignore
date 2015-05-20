@@ -18,7 +18,6 @@ web/templates/site/*
 !web/templates/site/default
 
 # NODEJS
-npm-debug.log
 node_modules
 
 *.iml

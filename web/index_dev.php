@@ -19,10 +19,6 @@
  * the License.
  */
 
-if ($_SERVER['REMOTE_ADDR'] !== '93.103.107.253') {
-    die();
-}
-
 ini_set('display_errors', 1);
 
 if (!file_exists(dirname(__DIR__) . '/config/parameters.json')) {

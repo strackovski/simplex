@@ -440,6 +440,17 @@ $(document).ready(function ()
         });
     }
 
+    /*
+    if ($('#testChart').length) {
+        var ctx = $("#testChart").get(0).getContext("2d");
+        var data = $.get(baseURL + "/admin/service/analytics/test", function(data) {
+            var myLineChart = new Chart(ctx).Line(data);
+        });
+    }
+    */
+
+    $('.datepicker').datepicker();
+
     /**
      * PAGE FORM HANDLERS
      */
@@ -618,8 +629,8 @@ $(document).ready(function ()
     $('.toggle-icon').on('click', function(e){
         e.preventDefault();
         var $this = $(this);
-        var $title = $this.find('i.fa').attr('title');
-        $('.confirm-modal .modal-body').html("<p>This action will publish this post on your public site. Are you sure?</p><p>Don\'t remind me again</p>");
+        var $title = $(this).attr('title');
+        $('.confirm-modal .modal-body').html("<p>This action will <strong>"+ $title +"</strong> this post on your public site. Are you sure?</p>");
         $('.confirm-modal').modal();
         $('.confirm-modal .btn-confirm').off('click').on('click', function (e) {
             $this.find('i.fa').toggleClass('active');
@@ -884,7 +895,7 @@ $(document).ready(function ()
         }).done(function (html) {
             $('.page-loader').hide(0);
             $('#' + realTabHref).html(html);
-            if(realTabHref == 'media' || realTabHref == 'settings') {
+            if(realTabHref == 'media' || realTabHref == 'settings' || realTabHref == 'services') {
                 fileInputAction();
             }
             if(realTabHref == 'themes') {
@@ -1085,6 +1096,7 @@ $(document).ready(function ()
         e.preventDefault();
         var href = $(this).attr('href');
         $('.confirm-modal').modal();
+        $('.confirm-modal .modal-body').html("<p>Are you sure you would like to delete this item permanently?</p>");
         $('.confirm-modal .btn-confirm').off('click').on('click', function (e) {
             e.preventDefault();
 
@@ -1114,6 +1126,7 @@ $(document).ready(function ()
         e.preventDefault();
         var href = $(this).attr('href');
         $('.confirm-modal').modal();
+        $('.confirm-modal .modal-body').html("<p>Are you sure you would like to delete the selected item(s) permanently?</p>");
         $('.confirm-modal .btn-confirm').off('click').on('click', function (e) {
             e.preventDefault();
 
@@ -1142,6 +1155,7 @@ $(document).ready(function ()
         var href = $(this).attr('href');
         if ( $(e.target).closest('.right-aux-toolbar').length > 0 ) {
             $('.confirm-modal').modal();
+            $('.confirm-modal .modal-body').html("<p>Are you sure you would like to delete the selected item(s) permanently?</p>");
             $('.confirm-modal .btn-confirm').off('click').on('click', function (e) {
                 e.preventDefault();
                 $.ajax({

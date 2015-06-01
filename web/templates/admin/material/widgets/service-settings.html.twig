@@ -1,0 +1,99 @@
+{% extends app.request.isXmlHttpRequest ? "admin/material/masters/layout-tabs-panel.html.twig" : "admin/material/views/settings.html.twig" %}
+
+{% block tabPaneHeader %}
+    <div class="controls-group controls-group-fixed">
+        <div class="left-controls">
+            <h3>Integration services</h3>
+        </div>
+        <div class="right-controls">
+        </div>
+    </div>
+{% endblock %}
+
+{% block tabPaneContent %}
+    {{ form_start(form, {'action': app.url_generator.generate('admin/settings/services') }) }}
+        <div class="settings-section">
+            <div class="settings-name">
+                <h3 id="google">Google</h3>
+                <p class="small">Service status</p>
+                <div class="google-status"></div>
+            </div>
+
+            <div class="settings-content">
+                <div class="des">
+                    Integration with Google APIs provides access to Analytics, Drive, and YouTube services.
+                </div>
+            </div>
+        </div>
+        <div class="settings-section">
+            <div class="settings-name">
+                <h4>Google Application Client ID</h4>
+            </div>
+
+            <div class="settings-content">
+                <div class="des">
+                    Provide OAuth 2.0 application data from Google Developer Console.
+                </div>
+                <div class="form-group form-element">
+                    {{ form_label(form.appName) }}
+                    {% if settings.getServiceConnection('google') %}
+                        {{ form_widget(form.appName, {'value' : settings.getServiceConnections.google.appName}) }}
+                    {% else %}
+                        {{ form_widget(form.appName) }}
+                    {% endif %}
+                    {{ form_errors(form.appName) }}
+                </div>
+                <div class="form-group form-element">
+                    {{ form_label(form.clientId) }}
+                    {% if settings.getServiceConnection('google') %}
+                        {{ form_widget(form.clientId, {'value' : settings.getServiceConnections.google.clientId}) }}
+                    {% else %}
+                        {{ form_widget(form.clientId) }}
+                    {% endif %}
+                    {{ form_errors(form.clientId) }}
+                </div>
+                <div class="form-group form-element">
+                    {{ form_label(form.emailAddress) }}
+                    {% if settings.getServiceConnection('google') %}
+                        {{ form_widget(form.emailAddress, {'value' : settings.getServiceConnections.google.emailAddress }) }}
+                    {% else %}
+                        {{ form_widget(form.emailAddress) }}
+                    {% endif %}
+                    {{ form_errors(form.emailAddress) }}
+                </div>
+
+                <div class="form-group field option form-element">
+                    {% if settings.getServiceConnection('google') %}
+                        {{ dump(settings.getServiceConnections.google.scopes) }}
+                        {{ form_row(form.scopes, {'values' : settings.getServiceConnections.google.scopes }) }}
+                    {% else %}
+                        {{ form_row(form.scopes) }}
+                    {% endif %}
+                    {{ form_errors(form.scopes) }}
+                </div>
+
+                <div class="form-group form-element">
+                    {{ form_label(form.privateKey) }}
+                    {% if settings.getServiceConnection('google') %}
+                        <div class="single-item-box">
+                            {% set keyFilePath = settings.getServiceConnections.google.privateKey|split('/') %}
+                            <p><i class="fi fi-key"></i> {{ keyFilePath[keyFilePath|length-1] }}</p>
+                        </div>
+
+                    {% else %}
+                        <div class="single-item-box">
+                            Select private key file
+                        </div>
+                    {% endif %}
+                    {{ form_widget(form.privateKey) }}
+                    {{ form_errors(form.privateKey) }}
+                </div>
+                <div class="form-btn raised-btn select-file select-watermark">Choose file</div>
+            </div>
+        </div>
+        <div class="form-action">
+            {{ form_row(form.cancel) }}
+            {{ form_row(form.save) }}
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

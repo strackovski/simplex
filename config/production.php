@@ -20,7 +20,7 @@
  */
 
 ini_set('display_errors', '1');
-$app['debug'] = true;
+$app['debug'] = false;
 
 $app['root_cache_dir'] = APPLICATION_ROOT_PATH.'/var/cache';
 $app['http_cache.cache_dir'] = APPLICATION_ROOT_PATH.'/var/cache/http';

@@ -15,15 +15,15 @@
 
                 <div class="status-div">
                     {% if post.getPublished %}
-                        <div data-action="{{ app.url_generator.generate('admin/post/toggle', {id:post.getId, status:'published'}) }}" class="status-icon toggle-icon"><i class="fa fa-eye active tooltipped" data-toggle="tooltip" data-placement="bottom" title="Publish"></i></div>
+                        <div data-action="{{ app.url_generator.generate('admin/post/toggle', {id:post.getId, status:'published'}) }}" class="status-icon toggle-icon" title="un-publish"><i class="fa fa-eye active tooltipped" data-toggle="tooltip" data-placement="bottom" title="Publish"></i></div>
                     {% else %}
-                        <div data-action="{{ app.url_generator.generate('admin/post/toggle', {id:post.getId, status:'published'}) }}" class="status-icon toggle-icon"><i class="fa fa-eye tooltipped" data-toggle="tooltip" data-placement="bottom" title="Publish"></i></div>
+                        <div data-action="{{ app.url_generator.generate('admin/post/toggle', {id:post.getId, status:'published'}) }}" class="status-icon toggle-icon" title="publish"><i class="fa fa-eye tooltipped" data-toggle="tooltip" data-placement="bottom" title="Publish"></i></div>
                     {% endif %}
 
                     {% if post.getExposed %}
-                        <div data-action="{{ app.url_generator.generate('admin/post/toggle', {id:post.getId, status:'exposed'}) }}" class="status-icon toggle-icon"><i class="fa fa-star active tooltipped"  data-toggle="tooltip" data-placement="bottom" title="Expose"></i></div>
+                        <div data-action="{{ app.url_generator.generate('admin/post/toggle', {id:post.getId, status:'exposed'}) }}" class="status-icon toggle-icon" title="un-expose"><i class="fa fa-star active tooltipped"  data-toggle="tooltip" data-placement="bottom" title="Expose"></i></div>
                     {% else %}
-                        <div data-action="{{ app.url_generator.generate('admin/post/toggle', {id:post.getId, status:'exposed'}) }}" class="status-icon toggle-icon"><i class="fa fa-star tooltipped"  data-toggle="tooltip" data-placement="bottom" title="Expose"></i></div>
+                        <div data-action="{{ app.url_generator.generate('admin/post/toggle', {id:post.getId, status:'exposed'}) }}" class="status-icon toggle-icon" title="expose"><i class="fa fa-star tooltipped"  data-toggle="tooltip" data-placement="bottom" title="Expose"></i></div>
                     {% endif %}
                 </div>
             </div>

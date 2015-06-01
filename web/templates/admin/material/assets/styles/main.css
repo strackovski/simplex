@@ -576,7 +576,7 @@ header.big-header {
 
 .header-box.info-box:last-child {
     width: 50%;
-    height: 96px;
+    height: 95px;
     float: right;
 }
 
@@ -968,6 +968,8 @@ header.big-header {
 /*=============================
     PAGE LOADER
 =============================*/
+
+
 
 .page-loader {
     background-color: rgba(255,255,255,0.5);
@@ -2383,6 +2385,10 @@ span.empty {
 .card a {
     display: inline-block;
 }
+
+
+
+
 
 .media-overview td {
     line-height: 64px;

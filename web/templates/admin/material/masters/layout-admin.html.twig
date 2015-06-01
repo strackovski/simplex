@@ -48,7 +48,15 @@
         <div class="side-nav-wrapper">
             <span class="logo">
                 <a href="#">
+                    {#
+                    {% if settings.getSiteLogo %}
+                        <img src="{{ app.request.getBasePath() ~ '/uploads/thumbnails/small/' ~ settings.getSiteLogo }}.{{ settings.getSiteLogo.getFileExtension }}" alt="Simplex Logo"/>
+                    {% else %}
+                        <img src="{{ app.request.basePath ~ '/assets/images/tetra_gray.png' }}" alt="Simplex Logo"/>
+                    {% endif %}
+                    #}
                     <img src="{{ app.request.basePath ~ '/assets/images/tetra_gray.png' }}" alt="Simplex Logo"/>
+
                 </a>
             </span>
 
@@ -85,7 +93,7 @@
                         <a class="{% if 'media/settings' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/media/settings') }}">Media</a>
                         <a class="{% if 'settings/themes' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/themes') }}">Themes</a>
                         <a class="{% if 'settings/mail' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/mail') }}">Mailing</a>
-                        <a class="{% if 'settings/api' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/api') }}">Integration</a>
+                        <a class="{% if 'settings/services' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/settings/services') }}">Services</a>
                     </div>
                     <a class="{% if 'admin/users' in app.request.attributes.get('_route') %}active{% endif %}" href="{{ app.url_generator.generate('admin/users') }}">Users</a>
                 {% endif %}
@@ -181,7 +189,7 @@
                     <p>The items you delete cannot be restored.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-confirm btn-primary form-btn">Remove</button>
+                    <button type="button" class="btn btn-confirm btn-primary form-btn">Confirm</button>
                     <button type="button" class="btn btn-default form-btn" data-dismiss="modal">Cancel</button>
                 </div>
             </div>

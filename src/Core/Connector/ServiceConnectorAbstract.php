@@ -19,19 +19,13 @@
  * the License.
  */
 
-if ($_SERVER['REMOTE_ADDR'] !== '93.103.107.253') {
-    die();
+namespace nv\Simplex\Core\Connector;
+
+/**
+ * Abstract Class ServiceConnector
+ * @package nv\Simplex\Core\Connector
+ */
+abstract class ServiceConnectorAbstract
+{
+
 }
-
-ini_set('display_errors', 1);
-
-if (!file_exists(dirname(__DIR__) . '/config/parameters.json')) {
-    header('HTTP/1.0 404 Not found');
-    exit('Invalid configuration. Check manual for more information.');
-}
-
-define('APPLICATION_ENVIRONMENT', 'development');
-
-require __DIR__.'/../src/bootstrap.php';
-
-$app->run();

@@ -2,6 +2,9 @@
 
 namespace nv\Simplex\Model\Entity;
 
+use nv\Simplex\Core\Connector\ApiConnectorAbstract;
+use nv\Simplex\Core\Connector\GoogleApiConnector;
+use nv\Simplex\Core\Connector\TwitterApiConnector;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -102,6 +105,15 @@ class User implements UserInterface
      * @Column(name="login_count", type="integer", nullable=true)
      */
     protected $loginCount;
+
+    /**
+     * API Accounts
+     *
+     * @var array
+     *
+     * @Column(name="api_accounts", type="json_array", nullable=true)
+     */
+    protected $apiAccounts;
 
     /**
      * @param Image $image
@@ -475,5 +487,46 @@ class User implements UserInterface
     public function setLoginCount($loginCount)
     {
         $this->loginCount = $loginCount;
+    }
+
+    public function addApiAccount(ApiConnectorAbstract $type)
+    {
+        if ($type instanceof GoogleApiConnector) {
+            $this->apiAccounts['google'] = $type->toArray();
+            return;
+        } elseif ($type instanceof TwitterApiConnector) {
+            $this->apiAccounts['twitter'] = $type->toArray();
+            return;
+        }
+
+        throw new \InvalidArgumentException("{$type} API not supported.");
+    }
+
+    public function getApiAccounts()
+    {
+        return $this->apiAccounts;
+    }
+
+    public function getApiAccount($provider, $obj = false)
+    {
+        if (array_key_exists($provider, $this->apiAccounts)) {
+            if ($obj) {
+                $c = "\\nv\\Simplex\\Core\\Connector\\".ucfirst($provider)."ApiConnector";
+                $o = new $c();
+
+                foreach ($this->apiAccounts[$provider] as $key => $value) {
+                    $m = 'set'.ucfirst($key);
+                    if (method_exists($o, $m)) {
+                        $o->$m($value);
+                    }
+                }
+
+                return $o;
+            }
+
+            return $this->apiAccounts[$provider];
+        }
+
+        return false;
     }
 }

@@ -22,9 +22,8 @@
 namespace nv\Simplex\Model\Entity;
 
 use nv\Simplex\Common\TimestampableAbstract;
-use nv\Simplex\Core\Service\ApiAccountAbstract;
-use nv\Simplex\Core\Service\GoogleApiAccount;
-use nv\Simplex\Core\Service\TwitterApiAccount;
+use nv\Simplex\Core\Connector\GoogleServiceConnector;
+use nv\Simplex\Core\Connector\ServiceConnectorAbstract;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -253,13 +252,13 @@ class Settings extends TimestampableAbstract
     protected $adminTheme;
 
     /**
-     * Public theme
+     * Service Connections
      *
      * @var array
      *
-     * @Column(name="api_accounts", type="json_array", nullable=true)
+     * @Column(name="service_connections", type="json_array", nullable=true)
      */
-    protected $apiAccounts;
+    protected $serviceConnections;
 
     /**
      * Constructor
@@ -298,32 +297,40 @@ class Settings extends TimestampableAbstract
         ));
     }
 
-    public function addApiAccount(ApiAccountAbstract $type)
+    /**
+     * @param ServiceConnectorAbstract $type
+     */
+    public function addServiceConnection(ServiceConnectorAbstract $type)
     {
-        if ($type instanceof GoogleApiAccount) {
-            $this->apiAccounts['google'] = $type->toArray();
-            return;
-        } elseif ($type instanceof TwitterApiAccount) {
-            $this->apiAccounts['twitter'] = $type->toArray();
+        if ($type instanceof GoogleServiceConnector) {
+            $this->serviceConnections['google'] = $type->toArray();
             return;
         }
 
-        throw new \InvalidArgumentException("{$type} API not supported.");
+        throw new \InvalidArgumentException("{$type} service not supported.");
     }
 
-    public function getApiAccounts()
+    /**
+     * @return array
+     */
+    public function getServiceConnections()
     {
-        return $this->apiAccounts;
+        return $this->serviceConnections;
     }
 
-    public function getApiAccount($provider, $obj = false)
+    /**
+     * @param $provider
+     * @param bool $obj
+     * @return bool
+     */
+    public function getServiceConnection($provider, $obj = false)
     {
-        if (array_key_exists($provider, $this->apiAccounts)) {
+        if (array_key_exists($provider, $this->serviceConnections)) {
             if ($obj) {
-                $c = "\\nv\\Simplex\\Core\\Service\\".ucfirst($provider)."ApiAccount";
+                $c = "\\nv\\Simplex\\Core\\Connector\\".ucfirst($provider)."ServiceConnector";
                 $o = new $c();
 
-                foreach ($this->apiAccounts[$provider] as $key => $value) {
+                foreach ($this->serviceConnections[$provider] as $key => $value) {
                     $m = 'set'.ucfirst($key);
                     if (method_exists($o, $m)) {
                         $o->$m($value);
@@ -333,7 +340,7 @@ class Settings extends TimestampableAbstract
                 return $o;
             }
 
-            return $this->apiAccounts[$provider];
+            return $this->serviceConnections[$provider];
         }
 
         return false;

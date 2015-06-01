@@ -60,8 +60,8 @@ class SettingsServiceProvider implements ServiceProviderInterface, ControllerPro
         $controllers->match('/settings/mail', 'settings.controller:mailSettingsAction')
             ->bind('admin/settings/mail');
 
-        $controllers->match('/settings/api', 'settings.controller:apiSettingsAction')
-            ->bind('admin/settings/api');
+        $controllers->match('/settings/services', 'settings.controller:serviceSettingsAction')
+            ->bind('admin/settings/services');
 
         $controllers->match('/settings/delete/{id}', 'settings.controller:deleteAction')
             ->bind('admin/settings/delete');
@@ -81,26 +81,14 @@ class SettingsServiceProvider implements ServiceProviderInterface, ControllerPro
         $controllers->match('/settings/save', 'settings.controller:saveAction')
             ->bind('admin/settings/save');
 
-        $controllers->match('/settings/mp', 'settings.controller:analyzeMediaAction')
-            ->bind('admin/settings/mp');
-
-        $controllers->match('/settings/apg', 'settings.controller:analyzePagesAction')
-            ->bind('admin/settings/apg');
-
         $controllers->match('/settings/themes/add', 'settings.controller:addThemeAction')
             ->bind('admin/settings/themes/add');
 
         $controllers->match('/settings/theme/upload/{type}', 'settings.controller:uploadThemeFile')
             ->bind('admin/settings/theme/upload');
 
-        $controllers->match('/settings/google/oauth', 'settings.controller:authenticateGoogleApi')
-            ->bind('admin/settings/google/oauth');
-
-        $controllers->match('/settings/twitter/oauth', 'settings.controller:authenticateTwitterApi')
-            ->bind('admin/settings/twitter/oauth');
-
-        $controllers->match('/settings/twitter/oauthcb', 'settings.controller:twitterCallback')
-            ->bind('admin/settings/twitter/oauthcb');
+        $controllers->match('/settings/stats/interactions', 'settings.controller:getInteractionStats')
+            ->bind('admin/settings/stats/interactions');
 
         return $controllers;
     }

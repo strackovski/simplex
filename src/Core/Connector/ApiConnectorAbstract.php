@@ -19,13 +19,13 @@
  * the License.
  */
 
-namespace nv\Simplex\Core\Service;
+namespace nv\Simplex\Core\Connector;
 
 /**
- * Abstract Class API Account
- * @package nv\Simplex\Core\Service
+ * Abstract Class API Connector
+ * @package nv\Simplex\Core\Connector
  */
-abstract class ApiAccountAbstract
+abstract class ApiConnectorAbstract
 {
     protected $enabled;
 

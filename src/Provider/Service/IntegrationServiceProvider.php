@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Provides integration services
  *
+ * @todo Rename to AnalyticsServiceProvider
+ *
  * @author Vladimir Stračkovski <vlado@nv3.org>
  */
 class IntegrationServiceProvider implements ServiceProviderInterface, ControllerProviderInterface
@@ -62,18 +64,14 @@ class IntegrationServiceProvider implements ServiceProviderInterface, Controller
         /** @var $controllers ControllerCollection */
         $controllers = $app['controllers_factory'];
 
-        $controllers->match('/service/google/connect', 'integration.controller:googleConnectAction')
-            ->bind('admin/service/google/connect');
+        $controllers->match('/service/analytics/test', 'integration.controller:analyticsTest')
+            ->bind('admin/service/analytics/test');
 
-        $controllers->match('/service/google/check', 'integration.controller:googleCheckAction')
-            ->bind('admin/service/google/check');
+        $controllers->match('/service/analytics/os', 'integration.controller:getOsAnalytics')
+            ->bind('admin/service/analytics/os');
 
-        $controllers->match('/service/twitter/check', 'integration.controller:twitterCheckAction')
-            ->bind('admin/service/twitter/check');
-
-        $controllers->match('/service/twitter/connect', 'integration.controller:twitterConnectAction')
-            ->bind('admin/service/twitter/connect');
-
+        $controllers->match('/service/analytics/browser', 'integration.controller:getBrowserAnalytics')
+            ->bind('admin/service/analytics/browser');
         return $controllers;
     }
 

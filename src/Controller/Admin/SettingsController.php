@@ -21,10 +21,9 @@
 
 namespace nv\Simplex\Controller\Admin;
 
-use nv\Simplex\Core\Service\GoogleApiAccount;
-use nv\Simplex\Core\Service\TwitterApiAccount;
-use nv\Simplex\Form\ApiSettingsType;
+use nv\Simplex\Core\Service\GoogleServiceConnector;
 use nv\Simplex\Form\MailSettingsType;
+use nv\Simplex\Form\ServiceSettingsType;
 use nv\Simplex\Form\ThemeSettingsType;
 use nv\Simplex\Model\Entity\Settings;
 use nv\Simplex\Model\Repository\SettingsRepository;
@@ -108,9 +107,24 @@ class SettingsController
         $latest['pages'] = $app['repository.page']->getLatest(5);
         $settings = $this->settingsRepository->getCurrent();
 
+        $forms = $app['repository.form']->findAll();
+        $postCount = 0;
+        /** @var \nv\Simplex\Model\Entity\Form $form */
+        foreach ($forms as $form) {
+            $postCount = $postCount + count($form->getResults());
+            foreach ($form->getResults() as $result) {
+                $formPosts[$form->getId()]['form'] = $result->getForm();
+                $formPosts[$form->getId()]['date_posted'] = $result->getCreatedAt();
+            }
+        }
+
+        $formsData['postCount'] = $postCount;
+        $formsData['formCount'] = count($forms);
+
         $data = array(
             'latest' => $latest,
-            'settings' => $settings
+            'settings' => $settings,
+            'forms' => $formsData
         );
 
         if (null !== $app['security']->getToken()) {
@@ -118,6 +132,73 @@ class SettingsController
         }
 
         return $this->twig->render('admin/'.$this->settings->getAdminTheme().'/views/dashboard.html.twig', $data);
+    }
+
+    public function getInteractionStats(Request $request, Application $app)
+    {
+        $forms = $app['repository.form']->findAll();
+        $postCount = 0;
+        $formPosts = array();
+        $formLabels = array();
+        $postTimeData = array();
+        $resultDates = array();
+
+        $end = new \DateTime();
+        $begin = new \DateTime();
+        $begin = $begin->sub(new \DateInterval('P14D'));
+        $interval = new \DateInterval('P1D');
+        $daterange = new \DatePeriod($begin, $interval ,$end);
+
+        foreach($daterange as $date){
+            $formPosts['labels'][] = $date->format("d");
+        }
+
+        /** @var \nv\Simplex\Model\Entity\Form $form */
+        foreach ($forms as $form) {
+            $postCount = $postCount + count($form->getResults());
+            foreach ($form->getResults() as $result) {
+                $resultDates[] = $result->getCreatedAt()->format('d');
+            }
+
+
+
+            $values = array_count_values($resultDates);
+            $rvals = array();
+            foreach ($formPosts['labels'] as $key => $label) {
+                $rvals[$label] = 0;
+            }
+
+
+            foreach ($rvals as $key => $val) {
+                if (array_key_exists($key, $values)) {
+                    $rvals[$key] = $values[$key];
+                }
+            }
+
+
+            $formPosts['datasets'][] = array(
+                'label' => $form->getId(),
+                'fillColor' => "rgba(220,220,220,0.2)",
+                'strokeColor' => "rgba(220,220,220,1)",
+                'pointColor' => "rgba(220,220,220,1)",
+                'pointStrokeColor' => "#fff",
+                'pointHighlightFill' => "#fff",
+                'pointHighlightStroke' => "rgba(220,220,220,1)",
+                'data' =>  array_values($rvals)
+            );
+        }
+
+        $data['postCount'] = $postCount;
+        $data['formCount'] = count($forms);
+        $data['interaction'] = $formPosts;
+
+        /*
+        echo '<pre>';
+        print_r($data['interaction']);
+        echo '</pre>';
+        */
+
+        return new JsonResponse($data['interaction']);
     }
 
     /**
@@ -277,8 +358,8 @@ class SettingsController
                     'mailing' => array(
                         'active' => false, 'url' => $this->url->generate('admin/settings/mail')
                     ),
-                    'integration_services' => array(
-                        'active' => false, 'url' => $this->url->generate('admin/settings/api')
+                    'services' => array(
+                        'active' => false, 'url' => $this->url->generate('admin/settings/services')
                     )
                 )
             );
@@ -290,59 +371,56 @@ class SettingsController
         );
     }
 
-    /**
-     * Integration services section
-     *
-     * @param Request $request
-     * @return string
-     */
-    public function apiSettingsAction(Request $request)
+    public function serviceSettingsAction(Request $request)
     {
         /** @var \nv\Simplex\Model\Entity\Settings $settings */
         $settings = $this->settingsRepository->getCurrent();
-        $form = $this->form->create(new ApiSettingsType($this->settingsRepository), $settings);
+        $currentServices = $settings->getServiceConnections();
+        $form = $this->form->create(new ServiceSettingsType($this->settingsRepository), $settings);
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
+            $files = $request->files;
 
             $params = $request->request->get('settings');
             if ($form->isValid()) {
-                $ga = new GoogleApiAccount($params['clientId'], $params['clientSecret']);
-                if (array_key_exists('enableGoogleApi', $params)) {
-                    $ga->setEnabled($params['enableGoogleApi']);
-                } else {
-                    $ga->setEnabled(false);
+
+                if (!empty($params['appName']) and !empty($params['clientId']) and !empty($params['emailAddress'])) {
+                    $ga = new GoogleServiceConnector(
+                        $params['appName'],
+                        $params['clientId'],
+                        $params['emailAddress']
+                    );
+
+                    if (array_key_exists('scopes', $params)) {
+                        foreach ($params['scopes'] as $scope) {
+                            $ga->addScope($scope);
+                        }
+                    }
+
+                    foreach ($files as $uploadedFile) {
+                        if (array_key_exists('privateKey', $uploadedFile)) {
+                            if ($uploadedFile['privateKey'] instanceof UploadedFile) {
+                                $keyName = $uploadedFile['privateKey']->getClientOriginalName();
+                                $uploadedFile['privateKey']->move(__DIR__.'/../../../config/', $keyName);
+                                $ga->setPrivateKey(__DIR__.'/../../../config/'.$keyName);
+                            } else {
+                                if (array_key_exists('google', $currentServices)) {
+                                    if (!is_null($currentServices['google']['privateKey'])) {
+                                        $ga->setPrivateKey($currentServices['google']['privateKey']);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                    $settings->addServiceConnection($ga);
                 }
 
-                $ga->setAppName($params['appName']);
-                $ga->setRedirectUri($params['redirectUri']);
-                $ga->setAccountLogin($params['accountLogin']);
-                $ga->setApiKey($params['apiKey']);
-
-                if ($existing_ga = $this->settings->getApiAccount('google', 1)) {
-                    $ga->setAccessToken($existing_ga->getAccessToken());
-                    $ga->setRefreshToken($existing_ga->getRefreshToken());
-                }
-
-                $settings->addApiAccount($ga);
-
-                $ta = new TwitterApiAccount($params['twitter_ConsumerKey'], $params['twitter_ConsumerSecret']);
-                if (array_key_exists('enableTwitterApi', $params)) {
-                    $ta->setEnabled($params['enableTwitterApi']);
-                } else {
-                    $ta->setEnabled(false);
-                }
-
-                $ta->setAccountLogin($params['twitter_AccountLogin']);
-                $ta->setOauthCallback($params['twitter_OauthCallback']);
-
-                if ($existing_ta = $this->settings->getApiAccount('twitter', 1)) {
-                    $ta->setAccessToken($existing_ta->getAccessToken());
-                }
-
-                $settings->addApiAccount($ta);
                 $this->settingsRepository->save($settings);
             }
+
         }
 
         $data = array(
@@ -366,18 +444,19 @@ class SettingsController
                     'mailing' => array(
                         'active' => false, 'url' => $this->url->generate('admin/settings/mail')
                     ),
-                    'integration_services' => array(
-                        'active' => true, 'url' => $this->url->generate('admin/settings/api')
+                    'services' => array(
+                        'active' => true, 'url' => $this->url->generate('admin/settings/services')
                     )
                 )
             );
         }
 
         return $this->twig->render(
-            'admin/'.$this->settings->getAdminTheme().'/widgets/api-settings.html.twig',
+            'admin/'.$this->settings->getAdminTheme().'/widgets/service-settings.html.twig',
             $data
         );
     }
+
 
     /**
      * Configure system mailing settings
@@ -420,8 +499,8 @@ class SettingsController
                     'mailing' => array(
                         'active' => true, 'url' => $this->url->generate('admin/settings/mail')
                     ),
-                    'integration_services' => array(
-                        'active' => false, 'url' => $this->url->generate('admin/settings/api')
+                    'services' => array(
+                        'active' => false, 'url' => $this->url->generate('admin/settings/services')
                     )
                 )
             );
@@ -485,8 +564,8 @@ class SettingsController
                     'mailing' => array(
                         'active' => false, 'url' => $this->url->generate('admin/settings/mail')
                     ),
-                    'integration_services' => array(
-                        'active' => false, 'url' => $this->url->generate('admin/settings/api')
+                    'services' => array(
+                        'active' => false, 'url' => $this->url->generate('admin/settings/services')
                     )
                 )
             )

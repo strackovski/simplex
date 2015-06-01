@@ -19,13 +19,13 @@
  * the License.
  */
 
-namespace nv\Simplex\Core\Service;
+namespace nv\Simplex\Core\Connector;
 
 /**
  * Class Google API Account
- * @package nv\Simplex\Core\Service
+ * @package nv\Simplex\Core\Connector
  */
-class GoogleApiAccount extends ApiAccountAbstract
+class GoogleApiConnector extends ApiConnectorAbstract
 {
     protected $clientId;
 

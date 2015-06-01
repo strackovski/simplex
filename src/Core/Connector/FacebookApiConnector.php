@@ -19,40 +19,24 @@
  * the License.
  */
 
-namespace nv\Simplex\Core\Service;
+namespace nv\Simplex\Core\Connector;
 
 /**
- * Class Twitter API Account
- * @package nv\Simplex\Core\Service
+ * Class Facebook API Account
+ * @package nv\Simplex\Core\Connector
  */
-class TwitterApiAccount extends ApiAccountAbstract
+class FacebookApiConnector extends ApiConnectorAbstract
 {
-    /**
-     * Twitter Consumer Key
-     *
-     * @var string
-     */
     private $consumerKey;
 
-    /**
-     * Twitter Consumer Secret
-     *
-     * @var string
-     */
     private $consumerSecret;
 
-    /**
-     * Twitter oAuth Callback URL
-     *
-     * @var string
-     */
     private $oauthCallback;
 
-    /**
-     * Access token
-     *
-     * @var array
-     */
+    private $oauthToken;
+
+    private $oauthTokenSecret;
+
     private $accessToken;
 
     public function __construct($consumer_key = null, $consumer_secret = null, $oauth_callback = null)
@@ -68,6 +52,8 @@ class TwitterApiAccount extends ApiAccountAbstract
         $r['consumerKey'] = $this->consumerKey;
         $r['consumerSecret'] = $this->consumerSecret;
         $r['oauthCallback'] = $this->oauthCallback;
+        $r['oauthToken'] = $this->oauthToken;
+        $r['oauthTokenSecret'] = $this->oauthTokenSecret;
         $r['accessToken'] = $this->accessToken;
 
         return $r;
@@ -124,12 +110,41 @@ class TwitterApiAccount extends ApiAccountAbstract
     /**
      * @return mixed
      */
+    public function getOauthToken()
+    {
+        return $this->oauthToken;
+    }
+
+    /**
+     * @param mixed $oauthToken
+     */
+    public function setOauthToken($oauthToken)
+    {
+        $this->oauthToken = $oauthToken;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOauthTokenSecret()
+    {
+        return $this->oauthTokenSecret;
+    }
+
+    /**
+     * @param mixed $oauthTokenSecret
+     */
+    public function setOauthTokenSecret($oauthTokenSecret)
+    {
+        $this->oauthTokenSecret = $oauthTokenSecret;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getAccessToken()
     {
-        if (!is_null($this->accessToken)) {
-            return $this->accessToken;
-        }
-        return false;
+        return $this->accessToken;
     }
 
     /**

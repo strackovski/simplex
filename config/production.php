@@ -19,7 +19,7 @@
  * the License.
  */
 
-ini_set('display_errors', '1');
+ini_set('display_errors', '0');
 $app['debug'] = false;
 
 $app['root_cache_dir'] = APPLICATION_ROOT_PATH.'/var/cache';

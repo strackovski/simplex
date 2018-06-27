@@ -8,7 +8,7 @@ Features
    
 Click the issues tab to see features currently under development.
    
-####Content features
+#### Content features
 
    * Intuitive content management and publishing
    * Powerful content publishing options
@@ -16,14 +16,14 @@ Click the issues tab to see features currently under development.
    * Automatic content enrichment and classification
    * Per-content keywords and metadata specification
    
-####Form features
+#### Form features
 
    * Support for user defined web forms
    * Forms get posted to database
    * Form results available in admin panel
    * Simple Twig form helper included
   
-####Media features
+#### Media features
 
    * Drag and drop media import
    * Automatic media thumbnail generation
@@ -31,21 +31,21 @@ Click the issues tab to see features currently under development.
    * Automatic image watermarking if enabled
    * User defined image sampling quality
 
-####Page features
+#### Page features
 
    * Structure defined with user-defined SEO-friendly URLs
    * Page Queries define dynamic data to display on pages
    * Static content can be included in pages directly
    * Page-specific metadata supported for every page
    
-####Templating and theming
+#### Templating and themes
 
    * Supports templates written in pure PHP and Twig
    * Templates receive data as defined in pages
    * Creating your own templates is as easy as HTML
    * Assetic is available for theme asset management
    
-####Users and security
+#### Users and security
 
    * User groups for editors and administrators
    * Full user profile for each user
@@ -78,18 +78,7 @@ Uses the following software packages:
    * Imagine imaging library for image processing
    * Composer for dependency management and installation
 
-Online Demo
-----
-A core instance of Simplex WCM is available [online](http://simplex.envee.eu/admin/dashboard). Sign in with the following credentials:
-
-   * Email: test@envee.eu
-   * Password: testing123
-
-Documentation
-----
-For complete Simplex documentation visit [the docs page](http://projects.envee.eu/simplex/docs)).
-
-####Installation
+#### Installation
 
   1. Clone or download the source files from the repository to your web server
   2. Run composer install in the directory to which the sources have been downloaded
@@ -97,7 +86,7 @@ For complete Simplex documentation visit [the docs page](http://projects.envee.e
   4. Depending upon the configuration of your web server, the Simplex application should be available at your-root/admin/dashboard (see web/htacess.dist if you need it)
   5. web/uploads and var/ directories should have appropriate permissions and owner settings to enable file uploads, cache and logging (required)
   
-#####Possible installation issues
+##### Possible installation issues
 
    * Memory limit / proc_open fork failed error: see [this guide](https://getcomposer.org/doc/articles/troubleshooting.md#proc-open-fork-failed-errors) for solution
    * Database connection errors: correct database driver must be selected during first installation, [click here for supported drivers](http://doctrine-dbal.readthedocs.org/en/latest/reference/configuration.html#driver)
